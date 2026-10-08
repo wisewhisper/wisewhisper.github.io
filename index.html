@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="WiseWhisper 온라인 과학실험실 - 물리·통합과학 인터랙티브 시뮬레이션" />
+  <title>WiseWhisper 온라인 과학실험실</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", Arial, sans-serif;
+      background: linear-gradient(135deg, #eef7ff 0%, #f8fbff 45%, #eefaf4 100%);
+      color: #17324d;
+    }
+    header {
+      padding: 64px 20px 40px;
+      text-align: center;
+    }
+    .badge {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.85);
+      box-shadow: 0 8px 24px rgba(23,50,77,.08);
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 18px;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(34px, 6vw, 64px);
+      line-height: 1.1;
+      letter-spacing: -0.04em;
+    }
+    .subtitle {
+      max-width: 760px;
+      margin: 20px auto 0;
+      font-size: 18px;
+      line-height: 1.7;
+      color: #4d6881;
+    }
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      padding: 0 20px 28px;
+    }
+    .filter-btn {
+      border: 1px solid rgba(23,50,77,.12);
+      background: rgba(255,255,255,.85);
+      color: #17324d;
+      padding: 10px 16px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: .2s ease;
+    }
+    .filter-btn:hover, .filter-btn.active {
+      transform: translateY(-1px);
+      background: #17324d;
+      color: white;
+    }
+    main {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 10px 20px 70px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 22px;
+    }
+    .card {
+      background: rgba(255,255,255,.94);
+      border: 1px solid rgba(23,50,77,.08);
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 16px 50px rgba(23,50,77,.08);
+      transition: .25s ease;
+      display: flex;
+      flex-direction: column;
+      min-height: 300px;
+    }
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 22px 60px rgba(23,50,77,.13);
+    }
+    .icon {
+      font-size: 44px;
+      margin-bottom: 14px;
+    }
+    .category {
+      font-size: 13px;
+      font-weight: 800;
+      color: #54708b;
+      letter-spacing: .03em;
+      margin-bottom: 8px;
+    }
+    .card h2 {
+      margin: 0 0 12px;
+      font-size: 24px;
+      letter-spacing: -0.02em;
+    }
+    .card p {
+      color: #5d7287;
+      line-height: 1.65;
+      margin: 0 0 22px;
+      flex: 1;
+    }
+    .launch {
+      text-decoration: none;
+      text-align: center;
+      padding: 13px 16px;
+      border-radius: 14px;
+      background: #17324d;
+      color: white;
+      font-weight: 800;
+      transition: .2s ease;
+    }
+    .launch:hover {
+      transform: scale(1.015);
+      opacity: .94;
+    }
+    .guide {
+      margin-top: 32px;
+      background: rgba(255,255,255,.8);
+      border-radius: 22px;
+      padding: 24px;
+      box-shadow: 0 14px 40px rgba(23,50,77,.06);
+    }
+    .guide h3 {
+      margin-top: 0;
+      font-size: 22px;
+    }
+    .guide code {
+      background: #edf3f8;
+      padding: 3px 7px;
+      border-radius: 6px;
+    }
+    footer {
+      text-align: center;
+      color: #718396;
+      padding: 0 20px 40px;
+      font-size: 14px;
+    }
+    @media (max-width: 640px) {
+      header { padding-top: 42px; }
+      .card { min-height: 270px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="badge">🔬 Interactive Science Lab</div>
+    <h1>WiseWhisper<br>온라인 과학실험실</h1>
+    <p class="subtitle">
+      물리·통합과학 개념을 직접 조작하고 관찰하며 이해하는 웹 기반 실험실입니다.
+      아래 실험을 선택해 바로 시작하세요.
+    </p>
+  </header>
+
+  <div class="filters">
+    <button class="filter-btn active" data-filter="all">전체</button>
+    <button class="filter-btn" data-filter="역학">역학</button>
+    <button class="filter-btn" data-filter="파동">파동</button>
+    <button class="filter-btn" data-filter="전기">전기</button>
+    <button class="filter-btn" data-filter="현대물리">현대물리</button>
+  </div>
+
+  <main>
+    <section class="grid" id="labGrid">
+
+      <article class="card" data-category="파동">
+        <div class="icon">🚑</div>
+        <div class="category">파동</div>
+        <h2>도플러 효과</h2>
+        <p>움직이는 음원과 관측자의 상대운동에 따라 파장과 관측 주파수가 어떻게 변하는지 탐구합니다.</p>
+        <a class="launch" href="https://YOUR_GITHUB_ID.github.io/doppler-lab/" target="_blank">실험 시작</a>
+      </article>
+
+      <article class="card" data-category="역학">
+        <div class="icon">🏀</div>
+        <div class="category">역학</div>
+        <h2>포물선 운동</h2>
+        <p>발사 속도와 각도를 바꾸며 최고점, 비행시간, 수평도달거리의 변화를 확인합니다.</p>
+        <a class="launch" href="https://YOUR_GITHUB_ID.github.io/projectile-lab/" target="_blank">실험 시작</a>
+      </article>
+
+      <article class="card" data-category="역학">
+        <div class="icon">🚗</div>
+        <div class="category">역학</div>
+        <h2>운동량 보존</h2>
+        <p>두 물체의 질량과 속도를 조절하며 충돌 전후의 운동량 보존을 시각적으로 확인합니다.</p>
+        <a class="launch" href="https://YOUR_GITHUB_ID.github.io/momentum-lab/" target="_blank">실험 시작</a>
+      </article>
+
+      <article class="card" data-category="전기">
+        <div class="icon">⚡</div>
+        <div class="category">전기</div>
+        <h2>전기회로</h2>
+        <p>직렬·병렬 연결에 따른 전압, 전류, 저항의 관계를 비교하며 옴의 법칙을 탐구합니다.</p>
+        <a class="launch" href="https://YOUR_GITHUB_ID.github.io/circuit-lab/" target="_blank">실험 시작</a>
+      </article>
+
+      <article class="card" data-category="파동">
+        <div class="icon">🌊</div>
+        <div class="category">파동</div>
+        <h2>정상파</h2>
+        <p>파동의 중첩으로 생성되는 마디와 배를 관찰하고 진동수와 파장의 관계를 탐구합니다.</p>
+        <a class="launch" href="https://YOUR_GITHUB_ID.github.io/wave-lab/" target="_blank">실험 시작</a>
+      </article>
+
+      <article class="card" data-category="현대물리">
+        <div class="icon">⚛️</div>
+        <div class="category">현대물리</div>
+        <h2>보어 원자모형</h2>
+        <p>전자의 에너지 준위와 전이에 따른 빛의 방출·흡수를 보어 원자모형으로 살펴봅니다.</p>
+        <a class="launch" href="https://YOUR_GITHUB_ID.github.io/bohr-model/" target="_blank">실험 시작</a>
+      </article>
+
+    </section>
+
+    <section class="guide">
+      <h3>🛠 사용 전 한 번만 수정하세요</h3>
+      <p>
+        이 파일에서 <code>YOUR_GITHUB_ID</code>를 자신의 GitHub 아이디로 바꾸면 됩니다.
+        예를 들어 아이디가 <code>wisewhisper</code>라면
+        <code>https://wisewhisper.github.io/doppler-lab/</code> 형태로 연결됩니다.
+      </p>
+      <p>
+        새로운 실험을 추가할 때는 기존 <code>&lt;article class="card"&gt;</code> 블록을 복사해
+        제목·설명·주소만 바꾸면 됩니다.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    © WiseWhisper Online Science Lab · 물리·통합과학 인터랙티브 학습
+  </footer>
+
+  <script>
+    const buttons = document.querySelectorAll('.filter-btn');
+    const cards = document.querySelectorAll('.card');
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        buttons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const filter = btn.dataset.filter;
+        cards.forEach(card => {
+          const show = filter === 'all' || card.dataset.category === filter;
+          card.style.display = show ? 'flex' : 'none';
+        });
+      });
+    });
+  </script>
+</body>
+</html>
