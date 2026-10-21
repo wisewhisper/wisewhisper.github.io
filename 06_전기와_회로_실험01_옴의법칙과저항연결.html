@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3번 실험실 | 옴의 법칙과 직렬·병렬 회로</title>
+<style>
+:root{font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif;color:#e9f1ff;background:#0c1221;font-variant-numeric:tabular-nums;--panel:#152039;--line:#354761;--a:#55d6d0;--b:#ffa96b}
+*{box-sizing:border-box}body{margin:0}button,input{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible{outline:3px solid #fff;outline-offset:2px}
+.wrap{max-width:1240px;margin:auto;padding:24px 16px 44px}header{margin-bottom:20px}h1{font-size:clamp(1.65rem,3vw,2.45rem);margin:4px 0 7px}h2{font-size:1.17rem;margin:0 0 15px;color:#f6f8ff}p{line-height:1.65}.sub{color:#afbfda;margin:0}.badge{color:#142936;background:#83e4dd;border-radius:99px;font-size:.78rem;padding:5px 10px;font-weight:800}.grid{display:grid;grid-template-columns:minmax(260px,350px) minmax(0,1fr);gap:16px}.card{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:0 12px 24px #0002}.controls{grid-row:span 2}.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;padding:5px;background:#0d182c;border-radius:13px}.seg button{background:none;border:0;color:#b8c6dc;border-radius:9px;padding:12px 3px;font-size:.94rem;font-weight:700;min-height:46px}.seg button[aria-pressed=true]{background:#307a87;color:#fff}.field{margin-top:22px}label{display:flex;justify-content:space-between;gap:12px;font-weight:700;margin-bottom:11px}output{color:#8de7e2}input[type=range]{width:100%;height:30px;accent-color:#65d8d3;touch-action:pan-x}.ends{display:flex;justify-content:space-between;font-size:.8rem;color:#aabbd5;margin-top:-5px}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:24px}.actions button,.recordbtn{border:1px solid #72ded7;background:#1e6875;color:#fff;border-radius:10px;padding:10px 14px;min-height:44px;font-weight:700}.actions button.secondary{background:#24334e;border-color:#60708c}.hint{background:#0e192d;border-left:3px solid #64d5d0;padding:10px 12px;border-radius:5px;color:#c7d4e7;margin:18px 0 0;font-size:.9rem}.view{min-width:0}.canvasbox{background:#0e192b;border:1px solid #34465d;border-radius:14px;overflow-x:auto;overflow-y:hidden}.canvasbox canvas{display:block;width:100%;height:auto;touch-action:manipulation}.meters{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:12px}.meter{background:#0e192b;border:1px solid #34465d;border-radius:12px;padding:12px}.meter small{display:block;color:#aabbd0;font-size:.77rem}.meter strong{display:block;font-size:clamp(.97rem,2vw,1.35rem);margin-top:4px;white-space:nowrap}.detail{margin-top:12px;border-collapse:collapse;width:100%;font-size:.89rem}.detail th,.detail td{padding:8px;text-align:right;border-bottom:1px solid #32425d}.detail th:first-child,.detail td:first-child{text-align:left}.detail th{color:#aebdd1}.charthead{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}.chartnote{font-size:.8rem;color:#b8c8db}.full{grid-column:1/-1}.activity{display:grid;grid-template-columns:1fr 1fr;gap:18px}.activity ol{padding-left:22px;line-height:1.8;margin:5px 0}.activity li{padding-left:4px}.formula{background:#0d192c;border-radius:9px;padding:12px;line-height:1.7;color:#ccebe9}.tablewrap{overflow:auto}.history{width:100%;border-collapse:collapse;font-size:.86rem;min-width:570px}.history td,.history th{padding:9px 8px;border-bottom:1px solid #33435d;text-align:right}.history td:first-child,.history th:first-child{text-align:left}.empty{color:#afbdd4}.fine{color:#aebdd2;font-size:.84rem;margin-bottom:0}.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:clip;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:830px){.grid{grid-template-columns:1fr}.controls{grid-row:auto}.activity{grid-template-columns:1fr}}@media(max-width:670px){.canvasbox canvas{min-width:650px}}@media(max-width:520px){.card{padding:15px}.meters{grid-template-columns:repeat(2,minmax(0,1fr))}.wrap{padding:15px 10px}.detail{font-size:.8rem}.detail th,.detail td{padding:7px 4px}}
+</style>
+</head>
+<body>
+<main class="wrap">
+<header><span class="badge">물리 수업 · 3번 실험실</span><h1>옴의 법칙과 직렬·병렬 회로</h1><p class="sub">전압과 저항을 바꾸며 전류의 흐름, 계기값, I–V 그래프를 비교해 보세요.</p></header>
+<div class="grid">
+<section class="card controls" aria-label="실험 조작"><h2>실험 조건</h2><div class="seg" role="group" aria-label="연결 방식"><button type="button" data-mode="single" aria-pressed="true">단일</button><button type="button" data-mode="series" aria-pressed="false">직렬</button><button type="button" data-mode="parallel" aria-pressed="false">병렬</button></div>
+<div class="field"><label for="voltage">전원 전압 <output id="voltageOut">12.0 V</output></label><input id="voltage" type="range" min="0" max="24" step="0.5" value="12"><div class="ends"><span>0 V</span><span>24 V</span></div></div>
+<div class="field"><label for="r1">저항 R₁ <output id="r1Out">6 Ω</output></label><input id="r1" type="range" min="2" max="40" step="1" value="6"><div class="ends"><span>2 Ω</span><span>40 Ω</span></div></div>
+<div class="field" id="r2Field"><label for="r2">저항 R₂ <output id="r2Out">6 Ω</output></label><input id="r2" type="range" min="2" max="40" step="1" value="6"><div class="ends"><span>2 Ω</span><span>40 Ω</span></div></div>
+<div class="actions"><button id="toggle" type="button">▶ 시작</button><button id="reset" class="secondary" type="button">↺ 초기화</button><button id="save" class="secondary" type="button">＋ 측정 기록</button></div>
+<p class="hint" id="modeHint">단일: R₁ 하나에 전원 전압 전체가 걸립니다.</p></section>
+<section class="card view"><h2>회로와 계기</h2><div class="canvasbox"><canvas id="circuit" width="820" height="400" role="img" aria-label="전류계가 직렬, 전압계가 첫 번째 저항 양끝에 병렬로 연결된 회로도"></canvas></div><div class="meters" aria-live="polite"><div class="meter"><small>전원 전압 V</small><strong id="mV">12.00 V</strong></div><div class="meter"><small>전체 전류 I</small><strong id="mI">2.000 A</strong></div><div class="meter"><small>합성 저항 R</small><strong id="mR">6.00 Ω</strong></div><div class="meter"><small>전압계 V₁</small><strong id="mV1">12.00 V</strong></div></div><table class="detail"><thead><tr><th>소자</th><th>저항</th><th>양단 전압</th><th>흐르는 전류</th></tr></thead><tbody><tr><td>R₁</td><td id="dR1"></td><td id="dV1"></td><td id="dI1"></td></tr><tr id="r2Row"><td>R₂</td><td id="dR2"></td><td id="dV2"></td><td id="dI2"></td></tr></tbody></table></section>
+<section class="card view"><div class="charthead"><h2>I–V 그래프</h2><span class="chartnote">가로: 전압 V · 세로: 전체 전류 I (A)</span></div><div class="canvasbox"><canvas id="graph" width="820" height="330" role="img" aria-label="전압에 따른 전체 전류를 나타낸 I-V 그래프"></canvas></div><p class="fine" id="slope">기울기 ΔI/ΔV = 1/R</p><p class="fine">노란 점은 현재 회로 방식·저항값과 일치하는 측정 기록입니다.</p></section>
+<section class="card full activity"><div><h2>탐구 활동 · 10분</h2><ol><li>단일 모드에서 R₁을 6 Ω으로 고정하고 전압을 3, 6, 9, 12 V로 바꾸며 측정 기록을 누르세요. 전압이 두 배면 전류는 어떻게 되나요?</li><li>12 V, R₁ = R₂ = 6 Ω으로 맞추고 단일·직렬·병렬의 전체 전류를 비교하세요.</li><li>직렬에서는 각 저항의 <strong>전압</strong>, 병렬에서는 각 저항의 <strong>전류</strong>를 합하여 전체 값과 비교하세요.</li></ol></div><div><h2>계산과 해석</h2><div class="formula">옴의 법칙: I = V / R<br>직렬: R합 = R₁ + R₂, &nbsp; I₁ = I₂ = I전체<br>병렬: 1/R합 = 1/R₁ + 1/R₂, &nbsp; V₁ = V₂ = V전원</div><p class="fine">이상적인 직류 전원과 온도에 따라 저항값이 변하지 않는 저항을 가정합니다. 회로의 움직이는 점은 전하 흐름을 개념적으로 표현하며 실제 속도나 방향의 축척을 뜻하지 않습니다. 전류계 A는 주 회로에 직렬, 전압계 V는 R₁ 양끝에 병렬로 놓았습니다.</p></div></section>
+<section class="card full"><div class="charthead"><h2>측정 기록</h2><button id="clear" type="button" class="recordbtn">기록 지우기</button></div><div class="tablewrap"><table class="history"><thead><tr><th>번호 · 방식</th><th>전원 V</th><th>R₁ / R₂</th><th>R합</th><th>I전체</th></tr></thead><tbody id="records"><tr><td colspan="5" class="empty">‘＋ 측정 기록’을 누르면 결과가 쌓입니다.</td></tr></tbody></table></div></section>
+</div></main>
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+const controls={voltage:$('voltage'),r1:$('r1'),r2:$('r2')};
+const names={single:'단일',series:'직렬',parallel:'병렬'};
+let mode='single',running=false,phase=0,lastFrame=0,measurements=[];
+const ctx=$('circuit').getContext('2d'),g=$('graph').getContext('2d');
+function calculate(v,r1,r2,type){
+  let req,i1,i2,v1,v2;
+  if(type==='series'){req=r1+r2;i1=i2=v/req;v1=i1*r1;v2=i2*r2;}
+  else if(type==='parallel'){req=r1*r2/(r1+r2);v1=v2=v;i1=v/r1;i2=v/r2;}
+  else{req=r1;v1=v;i1=v/r1;v2=i2=0;}
+  const total=v/req;return {v,r1,r2,req,total,i1,i2,v1,v2,mode:type};
+}
+function state(){return calculate(+controls.voltage.value,+controls.r1.value,+controls.r2.value,mode);}
+const vf=x=>x.toFixed(2)+' V',rf=x=>x.toFixed(2)+' Ω',af=x=>x.toFixed(3)+' A';
+function update(){const s=state();$('voltageOut').textContent=s.v.toFixed(1)+' V';$('r1Out').textContent=s.r1+' Ω';$('r2Out').textContent=s.r2+' Ω';$('r2Field').hidden=mode==='single';$('r2Row').hidden=mode==='single';$('mV').textContent=vf(s.v);$('mI').textContent=af(s.total);$('mR').textContent=rf(s.req);$('mV1').textContent=vf(s.v1);$('dR1').textContent=rf(s.r1);$('dV1').textContent=vf(s.v1);$('dI1').textContent=af(s.i1);$('dR2').textContent=rf(s.r2);$('dV2').textContent=vf(s.v2);$('dI2').textContent=af(s.i2);$('slope').textContent='기울기 ΔI/ΔV = 1/R합 = '+(1/s.req).toFixed(4)+' A/V';$('modeHint').textContent=mode==='single'?'단일: R₁ 하나에 전원 전압 전체가 걸립니다.':mode==='series'?'직렬: 두 저항의 전류가 같고 전압은 나뉩니다.':'병렬: 두 저항의 전압이 같고 전류는 갈라집니다.';drawCircuit(s);drawGraph(s);}
+function line(points,color='#92b4c5',width=4){ctx.beginPath();ctx.moveTo(...points[0]);for(let i=1;i<points.length;i++)ctx.lineTo(...points[i]);ctx.strokeStyle=color;ctx.lineWidth=width;ctx.lineCap='round';ctx.lineJoin='round';ctx.stroke();}
+function textC(str,x,y,color='#edf4ff',size=16,align='center'){ctx.fillStyle=color;ctx.font=`600 ${size}px system-ui`;ctx.textAlign=align;ctx.fillText(str,x,y);}
+function circle(x,y,r,stroke='#99c3ce',fill='#172943'){ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fillStyle=fill;ctx.fill();ctx.lineWidth=3;ctx.strokeStyle=stroke;ctx.stroke();}
+function resistor(x,y,w,label,value,vertical=false){ctx.save();ctx.translate(x,y);if(vertical)ctx.rotate(Math.PI/2);ctx.fillStyle='#f6b76f';ctx.strokeStyle='#ffe3b9';ctx.lineWidth=2;ctx.beginPath();ctx.roundRect(-w/2,-15,w,30,5);ctx.fill();ctx.stroke();ctx.restore();textC(label,vertical?x+42:x,vertical?y-1:y-23,'#ffe0ae',17);textC(value+' Ω',vertical?x+42:x,vertical?y+19:y+42,'#ffd6a2',14);}
+function drawDots(path,count,offset,speed){if(speed<0.0001)return;let lengths=[],total=0;for(let i=1;i<path.length;i++){let d=Math.hypot(path[i][0]-path[i-1][0],path[i][1]-path[i-1][1]);lengths.push(d);total+=d;}for(let j=0;j<count;j++){let pos=((j/count+offset)%1)*total;for(let i=0;i<lengths.length;i++){if(pos<=lengths[i]){let t=pos/lengths[i],x=path[i][0]+(path[i+1][0]-path[i][0])*t,y=path[i][1]+(path[i+1][1]-path[i][1])*t;ctx.beginPath();ctx.arc(x,y,5,0,7);ctx.fillStyle='#6ff6e3';ctx.shadowColor='#5df1d6';ctx.shadowBlur=11;ctx.fill();ctx.shadowBlur=0;break;}pos-=lengths[i];}}}
+function drawCircuit(s){ctx.clearRect(0,0,820,400);ctx.fillStyle='#0e192b';ctx.fillRect(0,0,820,400);let path,branch1,branch2;
+  // The indicated current follows conventional current around an ideal DC circuit.
+  if(mode==='parallel'){
+    line([[115,190],[115,75],[250,75]]);line([[310,75],[665,75],[665,190],[665,318],[115,318],[115,255]]);
+    line([[355,75],[355,157]]);line([[355,225],[355,318]]);line([[555,75],[555,157]]);line([[555,225],[555,318]]);
+    resistor(355,190,67,'R₁',s.r1,true);resistor(555,190,67,'R₂',s.r2,true);
+    // Volt meter branches between the same two nodes as R1; ideal voltmeter carries no current.
+    line([[355,130],[242,130],[242,165]],'#82a9ba',2);line([[242,215],[242,245],[355,245]],'#82a9ba',2);circle(242,190,25,'#8ae5dd');textC('V',242,196,'#9bfff2',18);
+    path=[[115,75],[665,75],[665,318],[115,318]];
+    branch1=[[355,75],[355,318]];branch2=[[555,75],[555,318]];
+  } else if(mode==='series'){
+    line([[115,190],[115,75],[250,75]]);line([[310,75],[375,75]]);line([[445,75],[665,75],[665,162]]);line([[665,230],[665,318],[115,318],[115,255]]);
+    resistor(410,75,70,'R₁',s.r1);resistor(665,196,68,'R₂',s.r2,true);
+    line([[375,75],[375,161],[395,161]],'#82a9ba',2);line([[425,161],[445,161],[445,75]],'#82a9ba',2);circle(410,161,25,'#8ae5dd');textC('V',410,167,'#9bfff2',18);
+    path=[[115,75],[665,75],[665,318],[115,318]];
+  } else {
+    line([[115,190],[115,75],[250,75]]);line([[310,75],[375,75]]);line([[445,75],[665,75],[665,318],[115,318],[115,255]]);
+    resistor(410,75,70,'R₁',s.r1);
+    line([[375,75],[375,161],[395,161]],'#82a9ba',2);line([[425,161],[445,161],[445,75]],'#82a9ba',2);circle(410,161,25,'#8ae5dd');textC('V',410,167,'#9bfff2',18);
+    path=[[115,75],[665,75],[665,318],[115,318]];
+  }
+  circle(280,75,29,'#7ecbe8');textC('A',280,82,'#b7efff',20);textC('I = '+af(s.total),280,37,'#a0e8e5',15);
+  // Battery on the left vertical conductor, positive terminal toward the top.
+  line([[88,190],[142,190]],'#ffcc80',5);line([[98,255],[132,255]],'#ffcc80',5);textC('+',160,193,'#ffdf94',18);textC('−',160,259,'#ffdf94',18);textC('전원 '+s.v.toFixed(1)+' V',115,286,'#c6d9f7',15);
+  textC('전류계: 직렬',705,367,'#adc2d9',14,'right');textC('전압계: R₁ 양끝 병렬',30,367,'#adc2d9',14,'left');
+  if(running && s.total>0){drawDots(path,13,phase,.1);if(mode==='parallel'){drawDots(branch1,4,phase*1.7,s.i1);drawDots(branch2,4,phase*1.7,s.i2);}}
+  if(mode==='parallel'){textC('I₁ = '+af(s.i1),360,296,'#a0e8e5',13);textC('I₂ = '+af(s.i2),555,296,'#a0e8e5',13);}
+}
+function graphText(str,x,y,color='#b7cce0',size=13,align='center'){g.fillStyle=color;g.font=`${size}px system-ui`;g.textAlign=align;g.fillText(str,x,y);}
+function drawGraph(s){g.clearRect(0,0,820,330);g.fillStyle='#0e192b';g.fillRect(0,0,820,330);const L=76,R=780,T=27,B=273,W=R-L,H=B-T;let ymax=Math.max(1,Math.ceil((24/s.req)*1.15));
+  g.lineWidth=1;g.strokeStyle='#2d4358';for(let n=0;n<=4;n++){let x=L+n*W/4,y=B-n*H/4;g.beginPath();g.moveTo(x,T);g.lineTo(x,B);g.moveTo(L,y);g.lineTo(R,y);g.stroke();graphText(String(n*6),x,B+24);graphText((n*ymax/4).toFixed(ymax<4?2:1),L-12,y+5,'#b7cce0',12,'right');}
+  g.strokeStyle='#b7cce0';g.lineWidth=2;g.beginPath();g.moveTo(L,T);g.lineTo(L,B);g.lineTo(R,B);g.stroke();graphText('V (V)',R,B+40,'#ddedf9',15,'right');graphText('I (A)',8,22,'#ddedf9',15,'left');
+  let plot=(v,i)=>[L+v/24*W,B-i/ymax*H];g.strokeStyle='#62ddd2';g.lineWidth=3.5;g.beginPath();g.moveTo(...plot(0,0));g.lineTo(...plot(24,24/s.req));g.stroke();
+  // Record dots only when mode and both resistors match the current theoretical line.
+  measurements.filter(m=>m.mode===mode&&m.r1===s.r1&&(mode==='single'||m.r2===s.r2)).forEach(m=>{const [x,y]=plot(m.v,m.total);g.fillStyle='#ffca86';g.beginPath();g.arc(x,y,4.5,0,7);g.fill();});
+  let [x,y]=plot(s.v,s.total);g.fillStyle='#63efdd';g.beginPath();g.arc(x,y,8,0,7);g.fill();g.strokeStyle='#effffc';g.lineWidth=2;g.stroke();let lx=Math.min(x+12,R-130),ly=Math.max(y-13,T+17);graphText('('+s.v.toFixed(1)+' V, '+s.total.toFixed(2)+' A)',lx,ly,'#efffff',14,'left');}
+function showRecords(){let tbody=$('records');tbody.replaceChildren();if(!measurements.length){let row=tbody.insertRow(),cell=row.insertCell();cell.colSpan=5;cell.className='empty';cell.textContent='‘＋ 측정 기록’을 누르면 결과가 쌓입니다.';return;}measurements.forEach((m,index)=>{let tr=tbody.insertRow();[`${index+1} · ${names[m.mode]}`,vf(m.v),m.mode==='single'?`${m.r1} Ω / —`:`${m.r1} Ω / ${m.r2} Ω`,rf(m.req),af(m.total)].forEach(value=>{let td=tr.insertCell();td.textContent=value;});});}
+document.querySelectorAll('[data-mode]').forEach(btn=>btn.addEventListener('click',()=>{mode=btn.dataset.mode;document.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b===btn)));update();}));
+Object.values(controls).forEach(el=>el.addEventListener('input',update));
+$('toggle').addEventListener('click',()=>{running=!running;$('toggle').textContent=running?'Ⅱ 일시정지':'▶ 시작';update();});
+$('reset').addEventListener('click',()=>{controls.voltage.value=12;controls.r1.value=6;controls.r2.value=6;mode='single';phase=0;running=false;measurements=[];$('toggle').textContent='▶ 시작';document.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===mode)));showRecords();update();});
+$('save').addEventListener('click',()=>{measurements.push(state());if(measurements.length>30)measurements.shift();showRecords();drawGraph(state());});
+$('clear').addEventListener('click',()=>{measurements=[];showRecords();drawGraph(state());});
+function tick(t){if(lastFrame){let dt=Math.min((t-lastFrame)/1000,.1);if(running){let s=state();phase=(phase+dt*Math.min(.55,.055+s.total*.025))%1;drawCircuit(s);}}lastFrame=t;requestAnimationFrame(tick);}requestAnimationFrame(tick);update();
+</script>
+</body>
+</html>

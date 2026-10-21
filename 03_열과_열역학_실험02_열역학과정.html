@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>열역학 과정 실험실</title>
+  <style>
+    :root{
+      --bg:#08111f;--panel:#111d30;--panel2:#17263d;--line:#2e4565;
+      --text:#edf6ff;--muted:#a9bbd2;--cyan:#57d6ff;--orange:#ffac5b;
+      --green:#70e3ae;--red:#ff758a;--yellow:#f8da6a;--shadow:0 16px 44px #0007;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:radial-gradient(circle at 20% 0,#193253 0,#08111f 42%);color:var(--text);font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif;min-height:100vh}
+    button,input,select{font:inherit}
+    button{touch-action:manipulation}
+    .wrap{max-width:1240px;margin:auto;padding:20px}
+    header{display:flex;justify-content:space-between;gap:20px;align-items:end;margin-bottom:16px}
+    h1{font-size:clamp(1.5rem,4vw,2.35rem);margin:0}.sub{color:var(--muted);margin:.4rem 0 0}
+    .law{border:1px solid #315071;background:#0d1a2c;padding:10px 14px;border-radius:13px;color:#cfeaff;white-space:nowrap}
+    .layout{display:grid;grid-template-columns:340px 1fr;gap:16px}.panel{background:linear-gradient(150deg,var(--panel2),var(--panel));border:1px solid #29405e;border-radius:18px;box-shadow:var(--shadow)}
+    .controls{padding:17px}.section-title{font-size:.84rem;letter-spacing:.08em;color:#8fb0d3;font-weight:800;margin:0 0 9px;text-transform:uppercase}
+    .process-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.process-btn{color:var(--text);background:#0f1a2b;border:1px solid #344d6c;border-radius:12px;padding:11px 7px;cursor:pointer}.process-btn.active{color:#06111d;background:var(--cyan);border-color:var(--cyan);font-weight:900}.process-btn:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #fff8;outline-offset:2px}
+    .desc{min-height:74px;margin:11px 0 15px;padding:11px;border-radius:12px;background:#0a1626;color:#c8d8ea;font-size:.9rem;line-height:1.55}.formula{color:var(--yellow);font-weight:750}
+    .control-row{margin:14px 0}.control-row label{display:flex;justify-content:space-between;color:#d5e3f2;font-size:.9rem;margin-bottom:6px}.value{color:var(--cyan);font-variant-numeric:tabular-nums;font-weight:750}input[type=range]{width:100%;accent-color:var(--cyan);height:28px}
+    .buttons{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:8px;margin-top:13px}.buttons button{border:0;border-radius:12px;padding:12px 5px;font-weight:850;cursor:pointer}.start{background:var(--green);color:#062117}.pause{background:#f7ca5a;color:#2a1c00}.reset{background:#344760;color:white}.buttons button:disabled{opacity:.44;cursor:not-allowed}
+    .sign{font-size:.79rem;color:var(--muted);border-top:1px solid var(--line);margin-top:14px;padding-top:11px;line-height:1.5}
+    .main{padding:16px;display:grid;gap:14px}.visuals{display:grid;grid-template-columns:minmax(270px,.9fr) minmax(360px,1.25fr);gap:14px}.stage,.chartbox{background:#091524;border:1px solid #273f5c;border-radius:15px;padding:12px;min-height:330px;position:relative}.stage h2,.chartbox h2{font-size:1rem;margin:0 0 6px;color:#dcecff}.chartbox canvas{width:100%;height:275px;display:block}.stage canvas{width:100%;height:275px;display:block}
+    .stats{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}.stat{background:#0b1728;border:1px solid #2b425f;border-radius:13px;padding:11px 9px;min-width:0}.stat .sym{color:#9db2ca;font-size:.8rem}.stat .num{display:block;font-size:clamp(.96rem,1.7vw,1.2rem);font-weight:850;margin-top:3px;white-space:nowrap;font-variant-numeric:tabular-nums}.stat:nth-child(4) .num{color:var(--orange)}.stat:nth-child(5) .num{color:var(--green)}.stat:nth-child(6) .num{color:var(--cyan)}
+    .progress{height:9px;background:#07101d;border-radius:9px;overflow:hidden}.progress>div{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--green));transition:width .08s linear}.status{display:flex;justify-content:space-between;color:var(--muted);font-size:.82rem;margin-top:6px}.mission{padding:16px}.mission-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:14px}.mission-card{background:#0b1728;border-left:4px solid var(--yellow);padding:13px;border-radius:10px}.mission-card h3{margin:0 0 7px;font-size:1rem}.mission-card p{color:#cbd9e8;margin:0;line-height:1.55}.quiz{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.quiz select,.quiz button{background:#142640;color:white;border:1px solid #3b5779;border-radius:10px;padding:9px}.quiz button{background:#2e75a5;font-weight:750;cursor:pointer}.feedback{min-height:1.4em;font-size:.87rem;color:var(--yellow);margin-top:7px}
+    .legend{position:absolute;right:17px;top:42px;font-size:.74rem;color:#bcd0e5;background:#06111dcc;padding:6px 8px;border-radius:8px;display:grid;gap:4px}.legend span{display:flex;align-items:center;gap:5px}.key{display:inline-block;width:14px;height:3px;border-radius:3px}.key.expected{background:var(--orange)}.key.done{background:var(--cyan)}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--cyan)}
+    @media(max-width:920px){.layout{grid-template-columns:1fr}.visuals{grid-template-columns:1fr 1fr}.stats{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:680px){.wrap{padding:10px}header{align-items:start;flex-direction:column}.law{white-space:normal}.visuals{grid-template-columns:1fr}.stage,.chartbox{min-height:300px}.stats{grid-template-columns:repeat(2,1fr)}.mission-grid{grid-template-columns:1fr}.process-btn{min-height:48px}.buttons button{min-height:48px}}
+    @media(prefers-reduced-motion:reduce){.progress>div{transition:none}}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div><h1>열역학 과정 실험실</h1><p class="sub">피스톤을 움직이며 상태 변화와 에너지 이동을 동시에 관찰하세요.</p></div>
+    <div class="law">열역학 제1법칙: <b>ΔU = Q − W</b></div>
+  </header>
+
+  <div class="layout">
+    <aside class="panel controls">
+      <p class="section-title">1. 과정 선택</p>
+      <div class="process-grid" role="group" aria-label="열역학 과정 선택">
+        <button class="process-btn active" data-process="isothermal">등온 과정</button>
+        <button class="process-btn" data-process="isobaric">등압 과정</button>
+        <button class="process-btn" data-process="isochoric">등적 과정</button>
+        <button class="process-btn" data-process="adiabatic">단열 과정</button>
+      </div>
+      <div class="desc" id="description"></div>
+
+      <p class="section-title">2. 조건 조절</p>
+      <div class="control-row">
+        <label for="target"><span id="targetLabel">목표 부피</span><span class="value" id="targetValue"></span></label>
+        <input id="target" type="range" min="50" max="200" value="160" step="1">
+      </div>
+      <div class="control-row">
+        <label for="speed"><span>실험 속도</span><span class="value" id="speedValue">1.0×</span></label>
+        <input id="speed" type="range" min="0.25" max="2" value="1" step="0.25">
+      </div>
+      <div class="buttons">
+        <button id="start" class="start">▶ 시작</button>
+        <button id="pause" class="pause" disabled>Ⅱ 일시정지</button>
+        <button id="reset" class="reset">↺ 초기화</button>
+      </div>
+      <div class="sign">기준: 닫힌계의 이상 이원자 기체 1 mol(γ=1.40), 초기 상태 300 K·100 kPa. 과정은 준정적으로 진행하며 단열 과정은 가역으로 가정합니다. <b>1 kPa·L = 1 J</b>.<br><b>W &gt; 0</b>: 기체가 외부에 한 일, <b>Q &gt; 0</b>: 기체가 받은 열.</div>
+    </aside>
+
+    <main class="panel main">
+      <div class="visuals">
+        <section class="stage"><h2>피스톤 모형</h2><canvas id="pistonCanvas" role="img" aria-label="피스톤 속 기체 상태 애니메이션"></canvas></section>
+        <section class="chartbox"><h2>P–V 상태 경로</h2><canvas id="graphCanvas" role="img" aria-label="압력 부피 그래프"></canvas><div class="legend" aria-label="그래프 범례"><span><i class="key expected"></i>전체 예상 경로</span><span><i class="key done"></i>진행한 경로</span><span><i class="dot"></i>현재 상태</span></div></section>
+      </div>
+      <div class="stats">
+        <div class="stat"><span class="sym">압력 P</span><span class="num" id="pVal">100.0 kPa</span></div>
+        <div class="stat"><span class="sym">부피 V</span><span class="num" id="vVal">24.94 L</span></div>
+        <div class="stat"><span class="sym">온도 T</span><span class="num" id="tVal">300.0 K</span></div>
+        <div class="stat"><span class="sym">받은 열 Q</span><span class="num" id="qVal">0.0 J</span></div>
+        <div class="stat"><span class="sym">기체가 한 일 W</span><span class="num" id="wVal">0.0 J</span></div>
+        <div class="stat"><span class="sym">내부 에너지 ΔU</span><span class="num" id="uVal">0.0 J</span></div>
+      </div>
+      <div><div class="progress"><div id="progressBar"></div></div><div class="status"><span id="statusText" role="status" aria-live="polite">준비됨</span><span id="progressText">0%</span></div></div>
+    </main>
+  </div>
+
+  <section class="panel mission" style="margin-top:16px">
+    <p class="section-title">수업 미션</p>
+    <div class="mission-grid">
+      <div class="mission-card"><h3>🔎 미션: 그래프의 넓이와 에너지</h3><p>같은 시작 상태에서 네 과정을 실행해 보세요. 등온·등압·단열 과정에서는 팽창과 압축을 비교하고, 등적 과정에서는 부피가 변하지 않음을 확인하세요. P–V 그래프에서 처음 부피부터 나중 부피까지의 <b>부호 있는 면적 W = ∫P dV</b>가 기체가 한 일입니다. 압축에서는 적분 방향이 반대이므로 W&lt;0입니다. Q, W, ΔU의 관계도 관찰 기록지에 설명해 보세요.</p></div>
+      <div><div class="quiz"><label for="quizSelect">일이 항상 0인 과정은?</label><select id="quizSelect"><option value="">선택</option><option value="isothermal">등온</option><option value="isobaric">등압</option><option value="isochoric">등적</option><option value="adiabatic">단열</option></select><button id="checkQuiz">확인</button></div><div class="feedback" id="feedback"></div></div>
+    </div>
+  </section>
+</div>
+
+<script>
+(() => {
+  'use strict';
+  const R = 8.314462618; // kPa·L/(mol·K) = J/(mol·K)
+  const n = 1, gamma = 1.40, Cv = R / (gamma - 1);
+  const initial = Object.freeze({ P: 100, T: 300, V: n * R * 300 / 100 });
+  const meta = {
+    isothermal:{name:'등온', desc:'온도가 일정합니다. <span class="formula">PV = 일정, ΔU = 0, Q = W</span>', label:'목표 부피', type:'volume'},
+    isobaric:{name:'등압', desc:'압력이 일정합니다. <span class="formula">V/T = 일정, Q = ΔU + W</span>', label:'목표 온도', type:'temperature'},
+    isochoric:{name:'등적', desc:'부피가 일정해 피스톤이 움직이지 않습니다. <span class="formula">P/T = 일정, W = 0</span>', label:'목표 온도', type:'temperature'},
+    adiabatic:{name:'단열', desc:'열이 드나들지 않습니다. <span class="formula">PV<sup>γ</sup> = 일정, Q = 0</span>', label:'목표 부피', type:'volume'}
+  };
+  const $ = id => document.getElementById(id);
+  const target = $('target'), speed = $('speed');
+  const pCanvas = $('pistonCanvas'), gCanvas = $('graphCanvas');
+  const pCtx = pCanvas.getContext('2d'), gCtx = gCanvas.getContext('2d');
+  let process = 'isothermal', progress = 0, running = false, raf = 0, lastTime = 0;
+  let state = {...initial,Q:0,W:0,dU:0};
+
+  function targetSetting(){
+    if(meta[process].type === 'volume') return {ratio:Number(target.value)/100};
+    return {temperature:Number(target.value)};
+  }
+  function configureTarget(){
+    const isV = meta[process].type === 'volume';
+    target.min = isV ? 50 : 180; target.max = isV ? 200 : 480;
+    target.step = isV ? 1 : 2; target.value = isV ? 160 : 420;
+    $('targetLabel').textContent = meta[process].label;
+    updateTargetText();
+  }
+  function updateTargetText(){
+    $('targetValue').textContent = meta[process].type === 'volume'
+      ? `${(Number(target.value)/100).toFixed(2)} V₀ (${(initial.V*Number(target.value)/100).toFixed(1)} L)`
+      : `${Number(target.value).toFixed(0)} K`;
+  }
+  function calculate(x){
+    x = Math.max(0,Math.min(1,x));
+    let P=initial.P,V=initial.V,T=initial.T,Q=0,W=0,dU=0;
+    const goal=targetSetting();
+    if(process==='isothermal'){
+      V=initial.V*(1+(goal.ratio-1)*x); P=n*R*T/V;
+      W=n*R*T*Math.log(V/initial.V); Q=W;
+    }else if(process==='isobaric'){
+      T=initial.T+(goal.temperature-initial.T)*x; V=n*R*T/P;
+      W=P*(V-initial.V); dU=n*Cv*(T-initial.T); Q=dU+W;
+    }else if(process==='isochoric'){
+      T=initial.T+(goal.temperature-initial.T)*x; P=n*R*T/V;
+      dU=n*Cv*(T-initial.T); Q=dU;
+    }else{
+      V=initial.V*(1+(goal.ratio-1)*x);
+      P=initial.P*Math.pow(initial.V/V,gamma); T=P*V/(n*R);
+      W=(initial.P*initial.V-P*V)/(gamma-1); dU=-W;
+    }
+    return {P,V,T,Q,W,dU};
+  }
+  function reset(){
+    cancelAnimationFrame(raf); running=false; progress=0; lastTime=0; state=calculate(0);
+    $('start').textContent='▶ 시작'; $('pause').disabled=true; $('target').disabled=false;
+    $('statusText').textContent='준비됨'; render();
+  }
+  function start(){
+    if(progress>=1){progress=0;render();}
+    if(running) return;
+    running=true; lastTime=0; $('pause').disabled=false; $('target').disabled=true;
+    $('start').textContent='▶ 실행 중'; $('statusText').textContent=`${meta[process].name} 과정 진행 중`;
+    raf=requestAnimationFrame(tick);
+  }
+  function pause(){
+    if(!running) return; running=false; cancelAnimationFrame(raf); lastTime=0;
+    $('start').textContent='▶ 계속'; $('pause').disabled=true; $('statusText').textContent='일시정지됨'; render();
+  }
+  function tick(ts){
+    if(!running) return;
+    if(lastTime) progress += ((ts-lastTime)/5000)*Number(speed.value);
+    lastTime=ts;
+    if(progress>=1){progress=1;running=false;lastTime=0;$('start').textContent='↻ 다시 실행';$('pause').disabled=true;$('target').disabled=false;$('statusText').textContent='실험 완료';render();return;}
+    render(); raf=requestAnimationFrame(tick);
+  }
+  function fmt(x,d=1){ return (Math.abs(x)<0.05?0:x).toFixed(d); }
+  function render(){
+    state=calculate(progress);
+    $('pVal').textContent=`${fmt(state.P)} kPa`; $('vVal').textContent=`${fmt(state.V,2)} L`; $('tVal').textContent=`${fmt(state.T)} K`;
+    $('qVal').textContent=`${fmt(state.Q)} J`; $('wVal').textContent=`${fmt(state.W)} J`; $('uVal').textContent=`${fmt(state.dU)} J`;
+    $('progressBar').style.width=`${progress*100}%`; $('progressText').textContent=`${Math.round(progress*100)}%`;
+    pCanvas.setAttribute('aria-label', `피스톤 모형: 압력 ${fmt(state.P)} kPa, 부피 ${fmt(state.V,2)} L, 온도 ${fmt(state.T)} K`);
+    gCanvas.setAttribute('aria-label', `${meta[process].name} 과정 P-V 그래프: 초기 부피 ${fmt(initial.V,2)} L에서 현재 부피 ${fmt(state.V,2)} L, 기체가 한 일 ${fmt(state.W)} J`);
+    drawPiston();drawGraph();
+  }
+  function resizeCanvas(canvas,ctx){
+    const rect=canvas.getBoundingClientRect(), dpr=Math.min(devicePixelRatio||1,2);
+    const w=Math.max(1,Math.round(rect.width*dpr)),h=Math.max(1,Math.round(rect.height*dpr));
+    if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;}
+    ctx.setTransform(dpr,0,0,dpr,0,0); return {w:rect.width,h:rect.height};
+  }
+  function drawPiston(){
+    const {w,h}=resizeCanvas(pCanvas,pCtx); const c=pCtx;c.clearRect(0,0,w,h);
+    const cx=w/2, cylW=Math.min(190,w*.68), left=cx-cylW/2, bottom=h-25;
+    const ratio=Math.max(.5,Math.min(2,state.V/initial.V)); const gasH=75+(ratio-.5)/1.5*100; const py=bottom-gasH;
+    const tempNorm=Math.max(0,Math.min(1,(state.T-150)/380));
+    const grad=c.createLinearGradient(0,py,0,bottom);grad.addColorStop(0,`rgba(255,${Math.round(170-90*tempNorm)},70,.78)`);grad.addColorStop(1,'rgba(60,170,255,.43)');
+    c.fillStyle=grad;c.fillRect(left+5,py+8,cylW-10,bottom-py-8);
+    c.strokeStyle='#8aa5c3';c.lineWidth=5;c.beginPath();c.moveTo(left,25);c.lineTo(left,bottom);c.lineTo(left+cylW,bottom);c.lineTo(left+cylW,25);c.stroke();
+    c.fillStyle='#c5d8ec';c.fillRect(left-6,py,cylW+12,12);c.fillStyle='#6e89a8';c.fillRect(cx-8,12,16,py-12);
+    c.fillStyle='#d9edff';c.font='700 13px system-ui';c.textAlign='center';c.fillText(`${fmt(state.T)} K`,cx,bottom-26);
+    // deterministic particles to avoid flicker
+    c.fillStyle='rgba(255,255,255,.82)';
+    for(let i=0;i<23;i++){const fx=((i*47)%101)/101,fy=((i*71)%97)/97;const x=left+12+fx*(cylW-24),y=py+19+fy*Math.max(10,bottom-py-33);c.beginPath();c.arc(x,y,2.1,0,Math.PI*2);c.fill();}
+    const qArrow=state.Q;
+    if(Math.abs(qArrow)>1){c.strokeStyle=qArrow>0?'#ffac5b':'#67d3ff';c.fillStyle=c.strokeStyle;c.lineWidth=4;const ay=bottom-48;c.beginPath();c.moveTo(12,ay);c.lineTo(left-10,ay);c.stroke();c.beginPath();const dir=qArrow>0?1:-1;const tip=qArrow>0?left-10:12;c.moveTo(tip,ay);c.lineTo(tip-9*dir,ay-6);c.lineTo(tip-9*dir,ay+6);c.fill();c.font='700 12px system-ui';c.textAlign='left';c.fillText(qArrow>0?'열 유입':'열 방출',10,ay-10);}
+    if(process==='isochoric'){c.fillStyle='#f8da6a';c.font='700 12px system-ui';c.textAlign='center';c.fillText('피스톤 고정',cx,py-12);}
+  }
+  function getPath(samples=90,end=1){const arr=[];for(let i=0;i<=samples;i++)arr.push(calculate(end*i/samples));return arr;}
+  function drawGraph(){
+    const {w,h}=resizeCanvas(gCanvas,gCtx),c=gCtx;c.clearRect(0,0,w,h);const ml=55,mr=16,mt=18,mb=42,pw=w-ml-mr,ph=h-mt-mb;
+    const path=getPath(); const all=[...path,initial,state];
+    let minV=Math.min(...all.map(s=>s.V)),maxV=Math.max(...all.map(s=>s.V)),maxP=Math.max(...all.map(s=>s.P));
+    const vPad=Math.max(2,(maxV-minV)*.2);minV=Math.max(0,minV-vPad);maxV+=vPad;maxP=Math.max(140,maxP*1.15);
+    const X=v=>ml+(v-minV)/(maxV-minV)*pw,Y=p=>mt+ph-p/maxP*ph;
+    c.strokeStyle='#243a55';c.lineWidth=1;c.fillStyle='#8ea5bf';c.font='11px system-ui';
+    for(let i=0;i<=5;i++){let x=ml+pw*i/5;c.beginPath();c.moveTo(x,mt);c.lineTo(x,mt+ph);c.stroke();c.textAlign='center';c.fillText((minV+(maxV-minV)*i/5).toFixed(0),x,h-20);}
+    for(let i=0;i<=5;i++){let y=mt+ph-ph*i/5;c.beginPath();c.moveTo(ml,y);c.lineTo(ml+pw,y);c.stroke();c.textAlign='right';c.fillText((maxP*i/5).toFixed(0),ml-7,y+4);}
+    c.strokeStyle='#9bb1c9';c.lineWidth=2;c.beginPath();c.moveTo(ml,mt);c.lineTo(ml,mt+ph);c.lineTo(ml+pw,mt+ph);c.stroke();
+    c.fillStyle='#b7cae0';c.textAlign='center';c.fillText('부피 V (L)',ml+pw/2,h-3);c.save();c.translate(13,mt+ph/2);c.rotate(-Math.PI/2);c.fillText('압력 P (kPa)',0,0);c.restore();
+    c.strokeStyle='#ffac5b';c.lineWidth=3;c.beginPath();path.forEach((s,i)=>i?c.lineTo(X(s.V),Y(s.P)):c.moveTo(X(s.V),Y(s.P)));c.stroke();
+    const done=getPath(Math.max(2,Math.round(90*progress)),progress);c.strokeStyle='#57d6ff';c.lineWidth=4;c.beginPath();done.forEach((s,i)=>i?c.lineTo(X(s.V),Y(s.P)):c.moveTo(X(s.V),Y(s.P)));c.stroke();
+    c.fillStyle='#57d6ff';c.beginPath();c.arc(X(state.V),Y(state.P),6,0,Math.PI*2);c.fill();c.strokeStyle='#fff';c.lineWidth=2;c.stroke();
+    c.fillStyle='#dbeafe';c.font='700 11px system-ui';c.textAlign='left';c.fillText('A',X(initial.V)+8,Y(initial.P)-8);c.fillText('B',X(path[path.length-1].V)+8,Y(path[path.length-1].P)-8);
+  }
+  document.querySelectorAll('.process-btn').forEach(btn=>btn.addEventListener('click',()=>{
+    process=btn.dataset.process;document.querySelectorAll('.process-btn').forEach(b=>b.classList.toggle('active',b===btn));
+    $('description').innerHTML=meta[process].desc;configureTarget();reset();
+  }));
+  target.addEventListener('input',()=>{updateTargetText();if(!running)render();});
+  speed.addEventListener('input',()=>{$('speedValue').textContent=`${Number(speed.value).toFixed(2).replace(/0$/,'')}×`;});
+  $('start').addEventListener('click',start);$('pause').addEventListener('click',pause);$('reset').addEventListener('click',reset);
+  $('checkQuiz').addEventListener('click',()=>{$('feedback').textContent=$('quizSelect').value==='isochoric'?'정답! 부피 변화가 없어 W = ∫P dV = 0입니다.':'다시 생각해 보세요. P–V 그래프에서 가로 방향 변화가 없는 과정입니다.';});
+  let resizeTimer;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(render,80);});
+  document.addEventListener('visibilitychange',()=>{if(document.hidden&&running)pause();});
+  $('description').innerHTML=meta[process].desc;configureTarget();reset();
+})();
+</script>
+</body>
+</html>

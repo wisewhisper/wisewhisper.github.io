@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="description" content="음원과 관찰자의 운동을 조작하며 소리의 도플러 효과를 탐구하는 고등학교 물리 실험실">
+  <title>도플러 효과 실험실</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23090f1f'/%3E%3Ccircle cx='20' cy='32' r='6' fill='%23ffcf5c'/%3E%3Cpath d='M30 22a14 14 0 010 20M38 15a23 23 0 010 34' fill='none' stroke='%235bd7ff' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E">
+  <style>
+    :root{color-scheme:dark;--bg:#07101f;--panel:#101d33;--panel2:#14233d;--line:#2a3b58;--ink:#eef7ff;--muted:#a9bdd2;--cyan:#5bd7ff;--yellow:#ffcf5c;--red:#ff6b7d;--green:#55e6a5;--radius:18px;--shadow:0 18px 50px rgba(0,0,0,.28)}
+    *{box-sizing:border-box}html{font-size:16px;scroll-behavior:smooth}body{margin:0;min-width:320px;background:radial-gradient(circle at 20% 0,#13294a 0,transparent 34rem),var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif;line-height:1.55}button,input,select{font:inherit}button,select,input[type=range]{min-height:44px}button{touch-action:manipulation}.wrap{width:min(1480px,100%);margin:auto;padding:18px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:14px}.titlebox h1{margin:0;font-size:clamp(1.5rem,3vw,2.35rem);letter-spacing:-.04em}.titlebox p{margin:.15rem 0 0;color:var(--muted)}.badge{display:inline-flex;align-items:center;gap:8px;border:1px solid #365070;border-radius:999px;padding:8px 13px;background:#0c1729;font-weight:750;white-space:nowrap}.badge i{width:9px;height:9px;border-radius:50%;background:var(--yellow);box-shadow:0 0 15px var(--yellow)}.layout{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(330px,.75fr);gap:14px}.card{background:linear-gradient(145deg,rgba(20,35,61,.96),rgba(12,25,45,.96));border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}.stage{padding:12px;min-width:0}.canvas-wrap{position:relative;border-radius:14px;overflow:hidden;background:#060d19;border:1px solid #263a57}.canvas-wrap canvas{display:block;width:100%;height:460px}.legend{position:absolute;left:12px;top:12px;display:flex;flex-wrap:wrap;gap:8px;font-size:.82rem}.tag{padding:4px 8px;background:rgba(6,13,25,.82);border:1px solid #344c6d;border-radius:8px}.caption{display:flex;justify-content:space-between;gap:12px;color:var(--muted);font-size:.84rem;padding:8px 3px 0}.actions{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}.btn{border:1px solid #3b5578;border-radius:12px;background:#152845;color:var(--ink);font-weight:750;cursor:pointer;padding:10px 12px;transition:.15s transform,.15s background}.btn:hover{background:#1c3458}.btn:active{transform:translateY(1px)}.btn.primary{background:var(--cyan);color:#03111b;border-color:transparent}.btn.primary:hover{background:#8ae4ff}.btn:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid var(--yellow);outline-offset:2px}.side{padding:14px;display:flex;flex-direction:column;gap:12px}.section-title{margin:0 0 8px;font-size:1rem;color:#dcecff}.preset{width:100%;padding:9px 12px;border:1px solid #3b5578;border-radius:12px;background:#0b1729;color:var(--ink)}.control{padding:10px;border:1px solid #2b405f;border-radius:12px;background:#0c192c}.control-head{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:5px}.control label{font-weight:720}.value{font-variant-numeric:tabular-nums;color:var(--cyan);font-weight:780}.control input{width:100%;accent-color:var(--cyan)}.hint{color:var(--muted);font-size:.8rem}.toggle{display:flex;align-items:center;justify-content:space-between;gap:10px}.toggle input{width:22px;height:22px;accent-color:var(--cyan)}.metrics{grid-column:1/-1;display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.metric{padding:13px 14px;min-height:105px}.metric .k{color:var(--muted);font-size:.85rem}.metric .v{font-size:clamp(1.25rem,2.6vw,1.9rem);font-weight:820;letter-spacing:-.03em;font-variant-numeric:tabular-nums}.metric .s{font-size:.78rem;color:#c3d4e5}.cyan{color:var(--cyan)}.yellow{color:var(--yellow)}.green{color:var(--green)}.lower{grid-column:1/-1;display:grid;grid-template-columns:1.2fr .8fr;gap:14px}.graph{padding:14px}.graph canvas{display:block;width:100%;height:220px;border-radius:12px;background:#081321;border:1px solid #283e5d}.explain{padding:16px}.explain h2,.graph h2{font-size:1.05rem;margin:0 0 10px}.formula{padding:12px;border-radius:12px;background:#081525;border:1px solid #294262;text-align:center;font-family:Georgia,serif;font-size:1.1rem}.interpretation{border-left:4px solid var(--cyan);padding:10px 12px;margin:11px 0;background:#0b182a;border-radius:0 10px 10px 0}.compare{display:grid;grid-template-columns:1fr 1fr;gap:8px}.mini{padding:9px;border:1px solid #2d4463;border-radius:10px;background:#0b1728}.mini strong{display:block;color:var(--yellow);font-size:1.12rem}.mission{grid-column:1/-1;padding:16px}.mission summary{cursor:pointer;font-weight:820;font-size:1.05rem}.mission-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:12px}.mission ol{margin:.4rem 0;padding-left:1.25rem}.quiz{border:1px solid #304969;border-radius:12px;padding:12px;background:#0b182b}.quiz button{margin-top:8px}.feedback{min-height:1.5em;margin-top:8px;font-weight:700}.sources{grid-column:1/-1;color:var(--muted);font-size:.82rem;padding:4px 4px 18px}.sources a{color:#98e5ff}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    @media(min-width:981px){
+      .wrap{width:min(1600px,100%);padding:8px 12px}
+      .topbar{min-height:48px;margin-bottom:7px}
+      .titlebox{display:flex;align-items:baseline;gap:14px;min-width:0}
+      .titlebox h1{font-size:clamp(1.45rem,2.2vw,1.95rem);white-space:nowrap}
+      .titlebox p{font-size:.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+      .badge{padding:6px 11px;font-size:.88rem}
+      .layout{grid-template-columns:minmax(0,1.65fr) minmax(360px,.72fr);gap:7px}
+      .stage{padding:8px}
+      .canvas-wrap canvas{height:clamp(270px,36vh,340px)}
+      .legend{left:8px;top:8px;gap:5px;font-size:.74rem}
+      .tag{padding:3px 6px}
+      .caption{padding-top:4px;font-size:.73rem}
+      .actions{gap:6px;margin-top:5px}
+      .btn{min-height:38px;padding:6px 9px;font-size:.88rem}
+      .side{padding:8px;display:grid;grid-template-columns:1fr 1fr;align-content:start;gap:6px}
+      .side>h2,.side>.preset-wrap,.side>.audio-row,.side>#audioStatus{grid-column:1/-1}
+      .section-title{margin:0;font-size:.9rem}
+      .preset{min-height:38px;padding:5px 9px;font-size:.86rem}
+      .control{padding:5px 7px;border-radius:10px}
+      .control-head{margin-bottom:0;gap:7px}
+      .control label,.control .value{font-size:.79rem}
+      .control input[type=range]{min-height:28px;height:28px}
+      .control .hint,.audio-row .hint{font-size:.69rem;line-height:1.25}
+      .audio-row{padding:5px 8px}
+      .metrics{gap:6px}
+      .metric{padding:7px 9px;min-height:72px}
+      .metric .k{font-size:.74rem}
+      .metric .v{font-size:clamp(1.05rem,1.65vw,1.42rem);line-height:1.22}
+      .metric .s{font-size:.69rem}
+      .lower{gap:7px}
+      .graph,.explain{padding:8px 10px}
+      .graph canvas{height:clamp(112px,15vh,145px)}
+      .explain h2,.graph h2{font-size:.9rem;margin:0 0 5px}
+      .formula{padding:6px;font-size:.95rem}
+      .interpretation{padding:6px 8px;margin:6px 0;font-size:.82rem}
+      .compare{gap:5px}
+      .mini{padding:5px 7px;font-size:.74rem}
+      .mini strong{display:inline;margin-left:5px;font-size:.92rem}
+      .explain>.hint{margin:5px 0 0;font-size:.69rem;line-height:1.3}
+      .mission{padding:9px 12px}
+      .mission summary{font-size:.9rem}
+      .sources{padding:2px 4px 8px;font-size:.72rem}
+    }
+    @media(max-width:980px){.layout{grid-template-columns:1fr}.side{display:grid;grid-template-columns:1fr 1fr}.side>h2,.side>.preset-wrap,.side>.audio-row,.side>#audioStatus{grid-column:1/-1}.metrics{grid-template-columns:repeat(3,1fr)}.lower{grid-template-columns:1fr}.canvas-wrap canvas{height:400px}}
+    @media(max-width:620px){.wrap{padding:10px}.topbar{align-items:flex-start;flex-direction:column}.layout{gap:10px}.side{grid-template-columns:1fr}.side>h2,.side>.preset-wrap,.side>.audio-row{grid-column:auto}.actions{grid-template-columns:1fr 1fr}.metrics{grid-template-columns:1fr 1fr}.metric{min-height:92px}.lower,.mission-grid{grid-template-columns:1fr}.canvas-wrap canvas{height:330px}.caption{display:block}.caption span{display:block}.compare{grid-template-columns:1fr}.badge{font-size:.9rem}}
+    @media(max-width:400px){.metrics{grid-template-columns:1fr}.metric .v{overflow-wrap:anywhere}}
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+  </style>
+</head>
+<body>
+<main class="wrap">
+  <header class="topbar">
+    <div class="titlebox"><h1>도플러 효과 실험실</h1><p>음원과 관찰자를 움직여, 단위 시간에 만나는 파면 수의 변화를 확인하세요.</p></div>
+    <div class="badge" aria-live="polite"><i></i><span id="statusText">실험 준비</span></div>
+  </header>
+
+  <section class="layout">
+    <section class="card stage" aria-labelledby="labHeading">
+      <h2 id="labHeading" class="sr-only">도플러 효과 시뮬레이션</h2>
+      <div class="canvas-wrap">
+        <canvas id="simCanvas" role="img" aria-label="음원, 관찰자와 대표 파면의 움직임"></canvas>
+        <div class="legend"><span class="tag">● 음원</span><span class="tag">◆ 관찰자</span><span class="tag">│ 대표 파면</span></div>
+      </div>
+      <div class="caption"><span>오른쪽이 +방향 · 정지한 공기 · 1차원 등속 운동</span><span>파면 간격은 관찰을 위해 확대했습니다.</span></div>
+      <div class="actions">
+        <button class="btn primary" id="startBtn">▶ 시작</button>
+        <button class="btn" id="pauseBtn">Ⅱ 일시정지</button>
+        <button class="btn" id="stepBtn">▸ 한 단계</button>
+        <button class="btn" id="resetBtn">↺ 처음부터</button>
+      </div>
+    </section>
+
+    <aside class="card side" aria-labelledby="controlHeading">
+      <h2 id="controlHeading" class="section-title">실험 조건</h2>
+      <div class="preset-wrap"><label for="preset" class="hint">빠른 실험</label><select id="preset" class="preset"><option value="sourceApproach">음원이 접근</option><option value="stationary">모두 정지</option><option value="sourceRecede">음원이 멀어짐</option><option value="observerApproach">관찰자가 접근</option><option value="observerRecede">관찰자가 멀어짐</option><option value="bothApproach">서로 접근</option><option value="chase">같은 방향 추격</option><option value="custom" disabled>사용자 설정</option></select></div>
+      <div class="control"><div class="control-head"><label for="frequency">음원 진동수 fₛ</label><output id="frequencyOut" for="frequency" class="value">500 Hz</output></div><input id="frequency" type="range" min="200" max="1000" step="10" value="500"></div>
+      <div class="control"><div class="control-head"><label for="sourceSpeed">음원 속도 vₛ</label><output id="sourceSpeedOut" for="sourceSpeed" class="value">+30 m/s →</output></div><input id="sourceSpeed" type="range" min="-100" max="100" step="5" value="30"><div class="hint">음수 ← · 양수 →</div></div>
+      <div class="control"><div class="control-head"><label for="observerSpeed">관찰자 속도 vₒ</label><output id="observerSpeedOut" for="observerSpeed" class="value">0 m/s</output></div><input id="observerSpeed" type="range" min="-50" max="50" step="5" value="0"><div class="hint">음수 ← · 양수 →</div></div>
+      <div class="control"><div class="control-head"><label for="temperature">공기 온도 T</label><output id="temperatureOut" for="temperature" class="value">20 ℃</output></div><input id="temperature" type="range" min="0" max="40" step="1" value="20"></div>
+      <div class="control"><div class="control-head"><label for="timeScale">시간 배율</label><output id="timeScaleOut" for="timeScale" class="value">1.0×</output></div><input id="timeScale" type="range" min="0.25" max="2" step="0.25" value="1"></div>
+      <div class="control audio-row toggle"><div><label for="soundToggle">관측음 듣기</label><div class="hint">기본 음량을 낮게 설정했습니다.</div></div><input id="soundToggle" type="checkbox" aria-label="관측음 듣기"></div>
+      <div id="audioStatus" class="hint" role="status" aria-live="polite"></div>
+    </aside>
+
+    <section class="metrics" aria-label="실시간 측정값">
+      <article class="card metric"><div class="k">관측 진동수 fₒ</div><div id="observed" class="v cyan">548.0 Hz</div><div id="pitchLabel" class="s">▲ 원래보다 높음</div></article>
+      <article class="card metric"><div class="k">진동수 변화 Δf</div><div id="delta" class="v yellow">+48.0 Hz</div><div id="ratio" class="s">fₒ/fₛ = 1.096</div></article>
+      <article class="card metric"><div class="k">음속 c</div><div id="soundSpeed" class="v">343.0 m/s</div><div class="s">c ≈ 331 + 0.6T</div></article>
+      <article class="card metric"><div class="k">음원–관찰자 거리</div><div id="distance" class="v">130.0 m</div><div id="relation" class="s">서로 접근 중</div></article>
+      <article class="card metric"><div class="k">오른쪽/왼쪽 파장</div><div id="wavelengths" class="v green">0.626 / 0.746 m</div><div class="s">λ→ / λ←</div></article>
+    </section>
+
+    <section class="lower">
+      <article class="card graph"><h2>시간에 따른 관측 진동수</h2><canvas id="graphCanvas" role="img" aria-label="시간에 따른 관측 진동수 그래프"></canvas><div class="hint">— 관측 진동수　- - 원래 진동수　│ 통과 순간</div></article>
+      <article class="card explain"><h2>지금의 물리 해석</h2><div class="formula">fₒ = fₛ × (c − vₒn) / (c − vₛn)</div><p id="interpretation" class="interpretation">음원이 관찰자 쪽으로 움직여 파면 간격이 좁아집니다.</p><div class="compare"><div class="mini">음원 30 m/s 접근<strong id="sourceCompare">548.0 Hz</strong></div><div class="mini">관찰자 30 m/s 접근<strong id="observerCompare">543.7 Hz</strong></div></div><p class="hint">같은 상대속도라도 값이 조금 다릅니다. 소리는 공기라는 기준 매질을 통해 전파되기 때문입니다.</p></article>
+    </section>
+
+    <details class="card mission">
+      <summary>탐구 미션 펼치기 · 예상하고 확인하기</summary>
+      <div class="mission-grid">
+        <div><ol><li><b>모두 정지</b>에서 fₒ = fₛ인지 확인합니다.</li><li><b>음원이 접근</b>할 때 앞뒤 파면 간격을 비교합니다.</li><li>음원이 관찰자를 통과하기 전후의 음높이를 비교합니다.</li><li><b>음원 접근</b>과 <b>관찰자 접근</b>을 같은 속도로 비교합니다.</li></ol><p class="hint">거리 자체가 아니라 두 물체의 매질 기준 운동과 파면 조우율이 진동수를 바꿉니다.</p></div>
+        <div class="quiz"><b>확인 문제</b><p>음원을 관찰자 가까이에 옮겨 놓고 둘 다 정지시키면, 멀리 정지해 있을 때와 비교해 음높이는 어떻게 될까요?</p><select id="quizAnswer" class="preset"><option value="">답 선택</option><option value="up">높아진다</option><option value="same">같다</option><option value="down">낮아진다</option></select><button id="checkQuiz" class="btn">정답 확인</button><div id="quizFeedback" class="feedback" aria-live="polite"></div></div>
+      </div>
+    </details>
+    <footer class="sources">모델 범위: 정지·균일한 공기, 1차원 고전 음파, |vₛ| &lt; c. 바람·반사·가속·충격파는 제외합니다. 참고: <a href="https://openstax.org/books/university-physics-volume-1/pages/17-7-the-doppler-effect" target="_blank" rel="noreferrer">OpenStax University Physics</a> · <a href="https://www.jpl.nasa.gov/edu/resources/lesson-plan/exploring-the-doppler-effect-with-nasa/" target="_blank" rel="noreferrer">NASA/JPL 수업 자료</a></footer>
+  </section>
+</main>
+<script>
+(()=>{'use strict';
+const $=id=>document.getElementById(id), sim=$('simCanvas'), ctx=sim.getContext('2d'), graph=$('graphCanvas'), g=graph.getContext('2d');
+const els={frequency:$('frequency'),sourceSpeed:$('sourceSpeed'),observerSpeed:$('observerSpeed'),temperature:$('temperature'),timeScale:$('timeScale')};
+const presets={sourceApproach:[500,30,0,20],stationary:[500,0,0,20],sourceRecede:[500,-30,0,20],observerApproach:[500,0,-30,20],observerRecede:[500,0,30,20],bothApproach:[500,30,-20,20],chase:[500,40,20,20]};
+const state={status:'idle',t:0,last:0,raf:0,token:0,xs:-75,xo:55,waves:[],emitAcc:0,history:[],cross:null,audio:null,osc:null,gain:null};
+let W=800,H=460,GW=700,GH=220,dpr=1;
+function vals(){const fs=+els.frequency.value,vs=+els.sourceSpeed.value,vo=+els.observerSpeed.value,T=+els.temperature.value,c=331+.6*T;return{fs,vs,vo,T,c,time:+els.timeScale.value}}
+function physics(){const p=vals(),dx=state.xo-state.xs,n=Math.abs(dx)<.05?0:Math.sign(dx);let fo=p.fs;if(n)fo=p.fs*(p.c-p.vo*n)/(p.c-p.vs*n);fo=Math.max(0,Math.min(4000,fo));return{...p,n,fo,delta:fo-p.fs,front:(p.c-p.vs)/p.fs,rear:(p.c+p.vs)/p.fs,distance:Math.abs(dx),closing:n? -n*(p.vo-p.vs):0}}
+function direction(v){return v>0?`+${v} m/s →`:v<0?`${v} m/s ←`:'0 m/s'}
+function relation(q){if(Math.abs(state.xo-state.xs)<1)return'통과 순간';if(Math.abs(q.closing)<.1)return'거리 변화 없음';return q.closing>0?'서로 접근 중':'서로 멀어지는 중'}
+function updateReadout(){const q=physics();$('frequencyOut').textContent=q.fs+' Hz';$('sourceSpeedOut').textContent=direction(q.vs);$('observerSpeedOut').textContent=direction(q.vo);$('temperatureOut').textContent=q.T+' ℃';$('timeScaleOut').textContent=q.time.toFixed(2)+'×';els.frequency.setAttribute('aria-valuetext',q.fs+' 헤르츠');els.sourceSpeed.setAttribute('aria-valuetext',direction(q.vs));els.observerSpeed.setAttribute('aria-valuetext',direction(q.vo));els.temperature.setAttribute('aria-valuetext',q.T+' 도');els.timeScale.setAttribute('aria-valuetext',q.time.toFixed(2)+' 배');$('observed').textContent=q.fo.toFixed(1)+' Hz';$('delta').textContent=(q.delta>=0?'+':'')+q.delta.toFixed(1)+' Hz';$('ratio').textContent='fₒ/fₛ = '+(q.fo/q.fs).toFixed(3);$('soundSpeed').textContent=q.c.toFixed(1)+' m/s';$('distance').textContent=q.distance.toFixed(1)+' m';$('relation').textContent=relation(q);$('wavelengths').textContent=q.front.toFixed(3)+' / '+q.rear.toFixed(3)+' m';$('pitchLabel').textContent=Math.abs(q.delta)<.05?'＝ 원래와 같음':q.delta>0?'▲ 원래보다 높음':'▼ 원래보다 낮음';
+let text;if(!q.n)text='1차원 정면 통과 순간입니다. 통과 직후 파동 진행 방향과 관측 진동수가 바뀝니다.';else if(Math.abs(q.delta)<.05)text='단위 시간에 관찰자가 만나는 파면 수가 음원의 발생 진동수와 같습니다.';else if(q.delta>0)text='서로 접근하여 관찰자가 단위 시간에 더 많은 파면을 만나므로 높은 음으로 듣습니다.';else text='서로 멀어져 관찰자가 단위 시간에 더 적은 파면을 만나므로 낮은 음으로 듣습니다.';$('interpretation').textContent=text;
+$('sourceCompare').textContent=(q.fs*q.c/(q.c-30)).toFixed(1)+' Hz';$('observerCompare').textContent=(q.fs*(q.c+30)/q.c).toFixed(1)+' Hz';if(state.osc&&state.audio)state.osc.frequency.setTargetAtTime(q.fo,state.audio.currentTime,.025);updateStatus();}
+function updateStatus(){let t=state.status==='running'?'실험 중':state.status==='paused'?'일시정지':state.status==='complete'?'실험 완료':'실험 준비';if(state.status==='running')t+=' · '+relation(physics());$('statusText').textContent=t;$('startBtn').textContent=state.status==='paused'?'▶ 계속':'▶ 시작'}
+function reset(keep=true){state.token++;if(state.raf)cancelAnimationFrame(state.raf);Object.assign(state,{status:'idle',t:0,last:0,raf:0,xs:-75,xo:55,waves:[],emitAcc:0,history:[],cross:null});if(!keep){els.frequency.value=500;els.sourceSpeed.value=30;els.observerSpeed.value=0;els.temperature.value=20;els.timeScale.value=1;$('preset').value='sourceApproach'}quiet();updateReadout();draw();drawGraph()}
+function emit(){state.waves.push({x:state.xs,t:state.t})}
+function advance(dt){const q=vals(),before=state.xo-state.xs;state.t+=dt;state.xs+=q.vs*dt;state.xo+=q.vo*dt;const after=state.xo-state.xs;if(!state.cross&&(Math.abs(before)<1e-9||Math.abs(after)<1e-9||Math.sign(before)!==Math.sign(after)))state.cross=state.t;state.emitAcc+=dt;while(state.emitAcc>=.16){state.emitAcc-=.16;emit()}state.waves=state.waves.filter(w=>q.c*(state.t-w.t)<300);const ph=physics();state.history.push({t:state.t,f:ph.fo});if(state.history.length>500)state.history.shift();if(Math.abs(state.xs)>125||Math.abs(state.xo)>125||state.t>15){state.status='complete';state.token++;quiet()}updateReadout();}
+function loop(now,token){if(token!==state.token||state.status!=='running')return;if(!state.last)state.last=now;const real=Math.min((now-state.last)/1000,.05);state.last=now;advance(real*vals().time);draw();drawGraph();if(token!==state.token||state.status!=='running')return;state.raf=requestAnimationFrame(n=>loop(n,token))}
+function start(){if(state.status==='running')return;if(state.status==='complete')reset(true);state.status='running';state.last=0;const token=++state.token;if($('soundToggle').checked)startAudio();state.raf=requestAnimationFrame(n=>loop(n,token));updateStatus()}
+function pause(){if(state.status!=='running')return;state.status='paused';state.token++;if(state.raf)cancelAnimationFrame(state.raf);state.raf=0;state.last=0;quiet();updateStatus()}
+function worldX(x){return 54+(x+120)/240*(W-108)}
+function resizeCanvas(c,context,heightSetter){const r=c.getBoundingClientRect();dpr=Math.min(devicePixelRatio||1,2);c.width=Math.round(r.width*dpr);c.height=Math.round(r.height*dpr);context.setTransform(dpr,0,0,dpr,0,0);heightSetter(r.width,r.height)}
+function drawArrow(x,y,v,color){if(!v)return;const len=Math.min(54,Math.abs(v)*1.15),dir=Math.sign(v);ctx.strokeStyle=color;ctx.fillStyle=color;ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+dir*len,y);ctx.stroke();ctx.beginPath();ctx.moveTo(x+dir*len,y);ctx.lineTo(x+dir*(len-9),y-6);ctx.lineTo(x+dir*(len-9),y+6);ctx.fill()}
+function draw(){ctx.clearRect(0,0,W,H);const grd=ctx.createLinearGradient(0,0,0,H);grd.addColorStop(0,'#09172a');grd.addColorStop(1,'#06101d');ctx.fillStyle=grd;ctx.fillRect(0,0,W,H);const y=H*.58;ctx.strokeStyle='#324967';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(35,y+45);ctx.lineTo(W-35,y+45);ctx.stroke();for(let i=0;i<9;i++){const x=35+i*(W-70)/8;ctx.strokeStyle='#233853';ctx.beginPath();ctx.moveTo(x,y+39);ctx.lineTo(x,y+52);ctx.stroke()}
+const q=vals();for(const w of state.waves){const rad=q.c*(state.t-w.t),a=Math.max(.12,1-rad/300),left=worldX(w.x-rad),right=worldX(w.x+rad);ctx.strokeStyle=`rgba(91,215,255,${a})`;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(left,y-115);ctx.lineTo(left,y+34);ctx.stroke();ctx.beginPath();ctx.moveTo(right,y-115);ctx.lineTo(right,y+34);ctx.stroke()}
+const sx=worldX(state.xs),ox=worldX(state.xo);ctx.setLineDash([5,5]);ctx.strokeStyle='#526b89';ctx.beginPath();ctx.moveTo(sx,y+72);ctx.lineTo(ox,y+72);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle='#b8cbe0';ctx.textAlign='center';ctx.font='14px system-ui';ctx.fillText(Math.abs(state.xo-state.xs).toFixed(1)+' m',(sx+ox)/2,y+92);
+ctx.fillStyle='#ffcf5c';ctx.beginPath();ctx.arc(sx,y,18,0,Math.PI*2);ctx.fill();ctx.fillStyle='#07101f';ctx.font='bold 19px system-ui';ctx.fillText('S',sx,y+7);ctx.fillStyle='#ffcf5c';ctx.font='bold 14px system-ui';ctx.fillText('음원',sx,y-29);drawArrow(sx,y-50,q.vs,'#ffcf5c');
+ctx.save();ctx.translate(ox,y);ctx.rotate(Math.PI/4);ctx.fillStyle='#ff6b7d';ctx.fillRect(-14,-14,28,28);ctx.restore();ctx.fillStyle='#07101f';ctx.font='bold 18px system-ui';ctx.fillText('O',ox,y+6);ctx.fillStyle='#ff9aaa';ctx.font='bold 14px system-ui';ctx.fillText('관찰자',ox,y-29);drawArrow(ox,y-50,q.vo,'#ff6b7d');
+ctx.fillStyle='#9fb4ca';ctx.textAlign='left';ctx.font='13px system-ui';ctx.fillText('파면은 방출 위치에서 공기 기준 음속으로 전파',18,H-18)}
+function drawGraph(){g.clearRect(0,0,GW,GH);g.fillStyle='#081321';g.fillRect(0,0,GW,GH);const p=vals(),hist=state.history,tmax=Math.max(8,state.t),all=hist.map(x=>x.f).concat([p.fs]),min=Math.max(0,Math.min(...all)-70),max=Math.max(...all)+70;const X=t=>45+t/tmax*(GW-65),Y=f=>18+(max-f)/(max-min)*(GH-48);g.strokeStyle='#29415e';g.lineWidth=1;for(let i=0;i<4;i++){const y=18+i*(GH-48)/3;g.beginPath();g.moveTo(44,y);g.lineTo(GW-20,y);g.stroke()}g.strokeStyle='#9aacbe';g.setLineDash([7,6]);g.beginPath();g.moveTo(45,Y(p.fs));g.lineTo(GW-20,Y(p.fs));g.stroke();g.setLineDash([]);if(state.cross){g.strokeStyle='#ff6b7d';g.beginPath();g.moveTo(X(state.cross),18);g.lineTo(X(state.cross),GH-30);g.stroke()}if(hist.length){g.strokeStyle='#5bd7ff';g.lineWidth=3;g.beginPath();hist.forEach((d,i)=>i?g.lineTo(X(d.t),Y(d.f)):g.moveTo(X(d.t),Y(d.f)));g.stroke()}g.fillStyle='#a9bdd2';g.font='12px system-ui';g.fillText(max.toFixed(0)+' Hz',4,22);g.fillText(min.toFixed(0)+' Hz',4,GH-30);g.fillText(tmax.toFixed(1)+' s',GW-48,GH-8)}
+async function startAudio(){try{if(!state.audio){const AC=window.AudioContext||window.webkitAudioContext;if(!AC)throw new Error('unsupported');state.audio=new AC();state.osc=state.audio.createOscillator();state.gain=state.audio.createGain();state.osc.type='sine';state.gain.gain.value=0;state.osc.connect(state.gain).connect(state.audio.destination);state.osc.start()}await state.audio.resume();state.gain.gain.setTargetAtTime(.025,state.audio.currentTime,.03);$('audioStatus').textContent='관측음을 재생하고 있습니다.';updateReadout()}catch(e){$('soundToggle').checked=false;$('soundToggle').disabled=true;$('audioStatus').textContent='이 브라우저에서는 소리를 재생할 수 없습니다. 시각 실험은 계속 사용할 수 있습니다.'}}
+function quiet(){if(state.gain&&state.audio)state.gain.gain.setTargetAtTime(0,state.audio.currentTime,.02)}
+Object.values(els).forEach(el=>el.addEventListener('input',()=>{$('preset').value='custom';if(state.status==='running')pause();reset(true)}));$('preset').addEventListener('change',e=>{if(e.target.value==='custom')return;const [f,vs,vo,T]=presets[e.target.value];els.frequency.value=f;els.sourceSpeed.value=vs;els.observerSpeed.value=vo;els.temperature.value=T;reset(true)});$('startBtn').onclick=start;$('pauseBtn').onclick=pause;$('resetBtn').onclick=()=>reset(true);$('stepBtn').onclick=()=>{if(state.status==='running')pause();if(state.status==='complete')reset(true);state.status='paused';advance(.08*vals().time);draw();drawGraph()};$('soundToggle').addEventListener('change',e=>{if(e.target.checked)startAudio();else{quiet();$('audioStatus').textContent='관측음을 껐습니다.'}});$('checkQuiz').onclick=()=>{const ok=$('quizAnswer').value==='same';$('quizFeedback').textContent=ok?'정답입니다. 정지해 있다면 파면 도달 간격은 변하지 않고, 가까워지면 주로 음량만 커집니다.':'다시 생각해 보세요. 거리 자체가 아니라 파면을 만나는 빈도가 음높이를 바꿉니다.';$('quizFeedback').style.color=ok?'#55e6a5':'#ffcf5c'};
+addEventListener('keydown',e=>{if(e.target.matches('input,select,button'))return;if(e.code==='Space'){e.preventDefault();state.status==='running'?pause():start()}if(e.key.toLowerCase()==='r')reset(true)});new ResizeObserver(()=>{resizeCanvas(sim,ctx,(w,h)=>{W=w;H=h});resizeCanvas(graph,g,(w,h)=>{GW=w;GH=h});draw();drawGraph()}).observe(document.querySelector('.layout'));document.addEventListener('visibilitychange',()=>{if(document.hidden&&state.status==='running')pause()});reset(true);
+})();
+</script>
+</body>
+</html>

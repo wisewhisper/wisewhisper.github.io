@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#07111f">
+  <meta name="description" content="케플러 방정식과 제3법칙을 직접 조작하며 탐구하는 고등학교 물리학 실험실">
+  <title>케플러 제3법칙 실험실</title>
+  <style>
+    :root{
+      color-scheme:dark; --bg:#050b14; --panel:#0c1928; --panel2:#10243a;
+      --line:#24445e; --text:#f1f7ff; --muted:#a7bbca; --cyan:#66e1ff;
+      --blue:#66a8ff; --mint:#8fffc1; --gold:#ffd166; --orange:#ff9c56; --rose:#ff8fa7;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;min-height:100vh;background:
+      radial-gradient(circle at 18% -10%,#173c63 0,transparent 34%),
+      radial-gradient(circle at 100% 20%,#172c52 0,transparent 25%),var(--bg);
+      color:var(--text);font:16px/1.55 system-ui,-apple-system,"Noto Sans KR",sans-serif}
+    button,input,select,textarea{font:inherit} button,select,input[type=range]{touch-action:manipulation}
+    button{cursor:pointer}.app{width:min(1480px,100%);margin:auto;padding:clamp(10px,2vw,24px)}
+    .top{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:3px 0 17px}
+    .title{display:flex;align-items:center;gap:13px}.sun-logo{width:49px;aspect-ratio:1;border-radius:50%;flex:0 0 auto;
+      background:radial-gradient(circle at 32% 30%,#fffbd1 0,#ffd65f 31%,#ff932f 64%,#8d3f16 100%);
+      box-shadow:0 0 26px #ffaf4277}.title h1{margin:0;font-size:clamp(1.45rem,3.4vw,2.2rem);letter-spacing:-.045em}
+    .title p{margin:1px 0 0;color:var(--muted);font-size:.92rem}.law-pill{padding:10px 15px;border:1px solid #3c6682;
+      background:#0b2135d9;border-radius:14px;white-space:nowrap}.law-pill strong{color:var(--gold);font-size:1.15rem}
+    .main-grid{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(330px,.82fr);gap:16px}
+    .card{border:1px solid var(--line);border-radius:19px;background:linear-gradient(145deg,#0e2135ed,#081522f2);
+      box-shadow:0 18px 45px #0006;overflow:hidden}.head{min-height:53px;padding:13px 17px;border-bottom:1px solid #203c52;
+      display:flex;align-items:center;justify-content:space-between;gap:10px;background:#0c1d2daa}.head h2{font-size:1rem;margin:0}
+    .badge{font-size:.78rem;padding:4px 9px;border:1px solid #387557;border-radius:999px;color:var(--mint);white-space:nowrap}
+    .orbit-wrap{height:clamp(390px,49vw,580px);position:relative;background:radial-gradient(circle at 50% 50%,#102a45 0,#071421 52%,#02070d 100%)}
+    canvas{display:block;width:100%;height:100%}.metrics{position:absolute;left:14px;bottom:13px;right:14px;display:flex;flex-wrap:wrap;gap:7px;pointer-events:none}
+    .metric{min-width:115px;padding:7px 10px;background:#061421e8;border:1px solid #2b5068;border-radius:10px;backdrop-filter:blur(6px)}
+    .metric small{display:block;color:var(--muted);font-size:.7rem}.metric b{font-variant-numeric:tabular-nums;font-size:.94rem}
+    .legend{position:absolute;right:14px;top:13px;background:#061421d9;border:1px solid #294b63;border-radius:9px;padding:6px 9px;color:#c5d5df;font-size:.74rem}
+    .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--cyan);margin-right:5px;box-shadow:0 0 8px var(--cyan)}
+    .side{display:grid;gap:16px;align-content:start}.controls{padding:17px}.control{margin-bottom:14px}.label-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+    label{font-weight:700}.value{color:var(--cyan);font-variant-numeric:tabular-nums}.hint{display:flex;justify-content:space-between;color:#708da2;font-size:.69rem;margin-top:-5px}
+    input[type=range]{width:100%;height:44px;margin:0;accent-color:var(--cyan)}select{width:100%;min-height:44px;padding:9px 11px;border:1px solid #315772;background:#091a29;color:var(--text);border-radius:10px}
+    .button-row{display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:8px}.btn{min-height:45px;padding:9px 7px;border:1px solid #345a75;border-radius:11px;background:#102a42;color:var(--text)}
+    .btn:hover,.btn:focus-visible,.choice:hover,.choice:focus-visible,.tab:hover,.tab:focus-visible{outline:3px solid #66e1ff55;outline-offset:1px;border-color:var(--cyan)}
+    .btn.primary{background:linear-gradient(135deg,#1689aa,#125c79);border-color:#62dffb}.btn[aria-pressed=true]{box-shadow:0 0 0 2px #6de5ff55 inset}
+    .speed-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:11px}.speed-row label{font-size:.86rem;color:var(--muted)}.speed-row select{width:auto;min-width:142px}
+    .learn{padding:17px}.learn h3{font-size:1rem;margin:0 0 9px}.learn p{margin:0 0 10px;color:var(--muted);font-size:.91rem}.choices{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+    .choice{min-height:43px;border:1px solid #34536b;border-radius:10px;background:#0d2236;color:var(--text)}.choice[aria-pressed=true]{border-color:var(--gold);background:#3a301a}
+    .feedback{margin-top:10px;min-height:49px;padding:8px 10px;border-left:3px solid var(--cyan);border-radius:0 8px 8px 0;background:#081827;color:#d3e3ed;font-size:.88rem}
+    .lower{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(310px,.75fr);gap:16px;margin-top:16px}.graph-area{height:340px;padding:8px 10px 12px}.tabs{display:flex;gap:6px}
+    .tab{padding:6px 10px;border:1px solid #35536a;border-radius:999px;background:#0b1a2a;color:#c8d8e4;font-size:.78rem}.tab[aria-selected=true]{background:#163a54;border-color:var(--cyan);color:#fff}
+    .reader{padding:18px}.reader h3{margin:0 0 8px;font-size:1rem}.ratio{font-size:clamp(1.6rem,3.5vw,2.4rem);font-weight:850;color:var(--mint);font-variant-numeric:tabular-nums;letter-spacing:-.03em}.ratio small{font-size:.4em;color:var(--muted);font-weight:500}
+    .equation{margin:12px 0;padding:12px;border:1px solid #24465e;border-radius:11px;background:#071624;text-align:center;font:1.13rem Georgia,serif;color:#fff1bf}
+    .readout{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:13px 0}.readout div{padding:8px;border:1px solid #233f54;border-radius:9px;background:#091827}.readout small{display:block;color:var(--muted);font-size:.72rem}.readout b{font-size:.9rem;font-variant-numeric:tabular-nums}
+    .observe{margin-top:12px;padding-top:12px;border-top:1px solid #27465c}.observe strong{color:var(--gold)}.observe label{display:block;margin:6px 0 5px;font-size:.86rem}
+    textarea{width:100%;min-height:72px;resize:vertical;padding:9px;border:1px solid #315670;border-radius:9px;background:#081827;color:var(--text)}
+    .note{margin:7px 0 0;color:var(--muted);font-size:.78rem}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    @media(max-width:940px){.main-grid,.lower{grid-template-columns:1fr}.orbit-wrap{height:min(62vh,520px)}.law-pill{display:none}}
+    @media(max-width:560px){.app{padding:8px}.title p{display:none}.sun-logo{width:41px}.card{border-radius:14px}.orbit-wrap{height:405px}.legend{display:none}.metrics{left:8px;right:8px;bottom:8px}.metric{min-width:calc(50% - 4px);padding:5px 8px}.metric:nth-child(4){display:none}.button-row{grid-template-columns:1fr 1fr}.button-row .btn:last-child{grid-column:1/-1}.choices{grid-template-columns:1fr}.graph-area{height:305px}}
+    @media(max-width:360px){.top{align-items:flex-start;gap:8px}.title{gap:8px;min-width:0}.sun-logo{width:34px}.title h1{font-size:1.25rem;line-height:1.2}.head{padding-inline:11px}.tab{padding:6px 8px}.orbit-wrap{height:380px}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  </style>
+</head>
+<body>
+<main class="app">
+  <header class="top">
+    <div class="title"><div class="sun-logo" aria-hidden="true"></div><div><h1>케플러 제3법칙 실험실</h1><p>궤도의 크기·주기·중심별 질량 사이의 질서를 발견하세요.</p></div></div>
+    <div class="law-pill">핵심 관계&nbsp; <strong>T²/a³ = 1/M★</strong></div>
+  </header>
+
+  <section class="main-grid" aria-label="궤도 실험">
+    <article class="card">
+      <div class="head"><h2>궤도 관측 창</h2><span class="badge" id="status">● 관측 중</span></div>
+      <div class="orbit-wrap">
+        <canvas id="orbitCanvas" role="img" aria-label="한 초점의 중심별 주위를 타원 궤도로 공전하는 행성"></canvas>
+        <div class="legend"><span class="dot"></span>같은 시간 간격의 이동 흔적</div>
+        <div class="metrics" aria-hidden="true">
+          <div class="metric"><small>긴반지름 a</small><b id="metricA">1.000 AU</b></div>
+          <div class="metric"><small>공전주기 T</small><b id="metricT">1.000 년</b></div>
+          <div class="metric"><small>별과의 거리 r</small><b id="metricR">— AU</b></div>
+          <div class="metric"><small>현재 속력 v</small><b id="metricV">— km/s</b></div>
+        </div>
+      </div>
+      <p class="sr-only" id="liveOrbit" aria-live="polite"></p>
+    </article>
+
+    <aside class="side">
+      <section class="card controls" aria-label="실험 조건">
+        <div class="control">
+          <div class="label-row"><label for="semiMajor">긴반지름 a</label><output id="aOut" class="value">1.000 AU</output></div>
+          <input id="semiMajor" type="range" min="0.3" max="30.1" step="0.001" value="1" aria-describedby="aHint">
+          <div class="hint" id="aHint"><span>0.3 AU</span><span>30.1 AU</span></div>
+        </div>
+        <div class="control">
+          <div class="label-row"><label for="eccentricity">이심률 e</label><output id="eOut" class="value">0.017</output></div>
+          <input id="eccentricity" type="range" min="0" max="0.82" step="0.001" value="0.017">
+          <div class="hint"><span>0 원</span><span>0.82 긴 타원</span></div>
+        </div>
+        <div class="control">
+          <div class="label-row"><label for="starMass">중심별 질량 M★</label><output id="mOut" class="value">1.00 M☉</output></div>
+          <input id="starMass" type="range" min="0.2" max="3" step="0.01" value="1">
+          <div class="hint"><span>0.2 M☉</span><span>3.0 M☉</span></div>
+        </div>
+        <div class="control">
+          <label for="preset">실제 태양계 행성 불러오기</label>
+          <select id="preset">
+            <option value="custom">직접 설정</option>
+            <option value="0.3871,0.2056">수성 · 0.387 AU · e 0.206</option>
+            <option value="0.7233,0.0068">금성 · 0.723 AU · e 0.007</option>
+            <option value="1,0.0167" selected>지구 · 1.000 AU · e 0.017</option>
+            <option value="1.5237,0.0934">화성 · 1.524 AU · e 0.093</option>
+            <option value="5.2028,0.0489">목성 · 5.203 AU · e 0.049</option>
+            <option value="9.5388,0.0565">토성 · 9.539 AU · e 0.057</option>
+            <option value="19.1914,0.0472">천왕성 · 19.191 AU · e 0.047</option>
+            <option value="30.0611,0.0086">해왕성 · 30.061 AU · e 0.009</option>
+          </select>
+        </div>
+        <div class="button-row">
+          <button id="playBtn" class="btn primary" aria-pressed="true">⏸ 일시정지</button>
+          <button id="stepBtn" class="btn" aria-label="평균근점이각 5도만큼 한 단계 이동">⏭ 한 단계(5°)</button>
+          <button id="resetBtn" class="btn">↺ 초기화</button>
+        </div>
+        <div class="speed-row"><label for="speed">관측 시간 배율</label><select id="speed"><option value="15">15일/초</option><option value="45" selected>45일/초</option><option value="120">120일/초</option><option value="365.25">1년/초</option></select></div>
+      </section>
+
+      <section class="card learn" aria-labelledby="predictTitle">
+        <h3 id="predictTitle">1. 먼저 예측하기</h3>
+        <p>같은 별에서 a를 2배로 하면 T는 몇 배가 될까요?</p>
+        <div class="choices">
+          <button class="choice" data-correct="false" aria-pressed="false">2배</button>
+          <button class="choice" data-correct="true" aria-pressed="false">약 2.83배</button>
+          <button class="choice" data-correct="false" aria-pressed="false">4배</button>
+          <button class="choice" data-correct="false" aria-pressed="false">8배</button>
+        </div>
+        <div class="feedback" id="feedback" role="status">예측한 뒤 긴반지름을 바꾸어 확인해 보세요.</div>
+      </section>
+    </aside>
+  </section>
+
+  <section class="lower" aria-label="자료 분석">
+    <article class="card">
+      <div class="head"><h2>자료 분석 그래프</h2><div class="tabs" role="tablist" aria-label="그래프 종류">
+        <button class="tab" role="tab" aria-selected="true" data-mode="log">로그 관계</button>
+        <button class="tab" role="tab" aria-selected="false" data-mode="ratio">일정한 비율</button>
+      </div></div>
+      <div class="graph-area"><canvas id="graphCanvas" role="img" aria-label="긴반지름과 공전주기의 로그 관계 그래프"></canvas></div>
+    </article>
+
+    <article class="card reader">
+      <h3>2. 관찰하고 설명하기</h3>
+      <div id="ratio" class="ratio">1.000 <small>년²/AU³</small></div>
+      <div class="equation">T = √(a³/M★) &nbsp; · &nbsp; T²/a³ = 1/M★</div>
+      <div class="readout">
+        <div><small>속력 (AU/년)</small><b id="vAu">—</b></div>
+        <div><small>속력 (km/s)</small><b id="vKm">—</b></div>
+        <div><small>근일점 속력</small><b id="periV">—</b></div>
+        <div><small>원일점 속력</small><b id="apheV">—</b></div>
+      </div>
+      <p id="insight" class="note">태양을 도는 행성은 T²/a³ ≈ 1입니다.</p>
+      <div class="observe">
+        <strong>탐구 질문</strong>
+        <label for="observation" id="question">M★=1.00 M☉일 때 a=4 AU로 바꾸면 T≈8년인지 확인하고, 그래프의 변화를 설명해 보세요.</label>
+        <textarea id="observation" placeholder="나의 관찰과 근거를 기록하세요."></textarea>
+      </div>
+      <p class="note">단위: a(AU), T(년), M★(태양 질량). 행성 질량은 중심별보다 매우 작다고 가정합니다. 화면의 궤도·별 크기는 실제 축척이 아니며 시간은 선택한 배율로 가속됩니다. 이심률 e만 바꾸면 궤도 모양은 달라지지만 a와 M★가 같으므로 T는 변하지 않습니다.</p>
+    </article>
+  </section>
+</main>
+
+<script>
+(()=>{
+  'use strict';
+  const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+  const orbit=$('#orbitCanvas'), graph=$('#graphCanvas');
+  const oc=orbit.getContext('2d'), gc=graph.getContext('2d');
+  const aInput=$('#semiMajor'), eInput=$('#eccentricity'), mInput=$('#starMass');
+  const TAU=Math.PI*2, DAYS_PER_YEAR=365.25, AUYR_TO_KMS=4.74047;
+  let running=!matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let meanAnomaly=0.15, lastTime=performance.now(), graphMode='log', trail=[], lastTrailM=-1;
+
+  function state(){
+    const a=+aInput.value, e=+eInput.value, mass=+mInput.value;
+    const T=Math.sqrt(a*a*a/mass);
+    return {a,e,mass,T};
+  }
+  function normAngle(x){return ((x%TAU)+TAU)%TAU}
+  function solveKepler(M,e){
+    M=normAngle(M);
+    let E=e<0.8?M:Math.PI;
+    for(let i=0;i<15;i++){
+      const d=(E-e*Math.sin(E)-M)/(1-e*Math.cos(E));
+      E-=d;
+      if(Math.abs(d)<1e-11) break;
+    }
+    return E;
+  }
+  function physics(){
+    const s=state(), E=solveKepler(meanAnomaly,s.e);
+    // 초점을 원점으로 둔 케플러 타원의 정확한 매개화
+    const x=s.a*(Math.cos(E)-s.e);
+    const y=s.a*Math.sqrt(1-s.e*s.e)*Math.sin(E);
+    const r=s.a*(1-s.e*Math.cos(E));
+    // G=4π² AU³/(M☉·yr²)인 단위계의 vis-viva 식
+    const vAu=TAU*Math.sqrt(s.mass*(2/r-1/s.a));
+    return {...s,E,x,y,r,vAu,vKm:vAu*AUYR_TO_KMS};
+  }
+  function fitCanvas(canvas,ctx){
+    const rect=canvas.getBoundingClientRect(), dpr=Math.min(devicePixelRatio||1,2);
+    const w=Math.max(1,Math.round(rect.width*dpr)), h=Math.max(1,Math.round(rect.height*dpr));
+    if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h}
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    return {w:rect.width,h:rect.height};
+  }
+  function drawStar(ctx,x,y,r,mass){
+    const glow=ctx.createRadialGradient(x-r*.25,y-r*.25,1,x,y,r*2.7);
+    glow.addColorStop(0,'#fffbd5');glow.addColorStop(.23,'#ffd361');glow.addColorStop(.55,'#ff9134');glow.addColorStop(1,'#ff700000');
+    ctx.fillStyle=glow;ctx.beginPath();ctx.arc(x,y,r*2.7,0,TAU);ctx.fill();
+    ctx.fillStyle='#ffd15b';ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.fill();
+  }
+  function drawStars(w,h){
+    for(let i=0;i<88;i++){
+      const x=((i*173+37)%997)/997*w, y=((i*277+61)%991)/991*h;
+      const alpha=.22+(i%7)/12, size=i%13===0?1.7:1;
+      oc.fillStyle=`rgba(214,235,255,${alpha})`;oc.fillRect(x,y,size,size);
+    }
+  }
+  function drawOrbit(){
+    const {w,h}=fitCanvas(orbit,oc), p=physics(); oc.clearRect(0,0,w,h);drawStars(w,h);
+    const scale=Math.min(
+      Math.max(40,w-90)/(2*p.a*(1+p.e)),
+      Math.max(40,h-105)/(2*p.a*Math.sqrt(1-p.e*p.e))
+    );
+    const sx=w/2, sy=h*.45, cx=sx-p.a*p.e*scale, rx=p.a*scale, ry=rx*Math.sqrt(1-p.e*p.e);
+    oc.lineWidth=2;oc.strokeStyle='#4d809e';oc.setLineDash([7,7]);oc.beginPath();oc.ellipse(cx,sy,rx,ry,0,0,TAU);oc.stroke();oc.setLineDash([]);
+    oc.strokeStyle='#31536a';oc.lineWidth=1;oc.beginPath();oc.moveTo(cx-rx,sy);oc.lineTo(cx+rx,sy);oc.stroke();
+    const periX=sx+p.a*(1-p.e)*scale, apheX=sx-p.a*(1+p.e)*scale;
+    oc.fillStyle='#ffd277';oc.font='12px system-ui';oc.fillText('근일점 · 빠름',Math.min(periX-34,w-94),sy-13);
+    oc.fillStyle='#9db8c9';oc.fillText('원일점 · 느림',Math.max(7,apheX-35),sy-13);
+    drawStar(oc,sx,sy,12+3*Math.sqrt(p.mass),p.mass);
+    const px=sx+p.x*scale, py=sy-p.y*scale;
+    if(lastTrailM<0||Math.abs(normAngle(meanAnomaly-lastTrailM))>.035){trail.push({x:p.x,y:p.y});lastTrailM=meanAnomaly;if(trail.length>70)trail.shift()}
+    if(trail.length>1){oc.lineWidth=2.5;oc.beginPath();trail.forEach((q,i)=>{const x=sx+q.x*scale,y=sy-q.y*scale;i?oc.lineTo(x,y):oc.moveTo(x,y)});oc.strokeStyle='#67e4ff77';oc.stroke()}
+    trail.forEach((q,i)=>{if(i%7)return;oc.fillStyle=`rgba(107,229,255,${.15+.6*i/trail.length})`;oc.beginPath();oc.arc(sx+q.x*scale,sy-q.y*scale,2.2,0,TAU);oc.fill()});
+    oc.shadowColor='#67e5ff';oc.shadowBlur=18;oc.fillStyle='#79ecff';oc.beginPath();oc.arc(px,py,8,0,TAU);oc.fill();oc.shadowBlur=0;
+    oc.fillStyle='#d9edf7';oc.font='13px system-ui';oc.fillText('행성',px+11,py-9);oc.fillText('중심별',sx-21,sy+31);
+    $('#metricR').textContent=p.r.toFixed(3)+' AU';$('#metricV').textContent=p.vKm.toFixed(1)+' km/s';
+    $('#vAu').textContent=p.vAu.toFixed(3)+' AU/년';$('#vKm').textContent=p.vKm.toFixed(2)+' km/s';
+  }
+  function drawAxes(ctx,w,h,pad,xTicks,yTicks,X,Y,xLabel,yLabel){
+    ctx.font='11px system-ui';ctx.fillStyle='#9db5c5';ctx.strokeStyle='#27475c';ctx.lineWidth=1;
+    xTicks.forEach(([v,label])=>{const x=X(v);ctx.beginPath();ctx.moveTo(x,pad.t);ctx.lineTo(x,h-pad.b);ctx.stroke();ctx.fillText(label,x-ctx.measureText(label).width/2,h-20)});
+    yTicks.forEach(([v,label])=>{const y=Y(v);ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(w-pad.r,y);ctx.stroke();ctx.fillText(label,7,y+4)});
+    ctx.fillStyle='#c9d9e4';ctx.fillText(xLabel,Math.max(pad.l,w/2-45),h-4);ctx.save();ctx.translate(14,h/2+42);ctx.rotate(-Math.PI/2);ctx.fillText(yLabel,0,0);ctx.restore();
+  }
+  const planets=[['수',.387],['금',.723],['지',1],['화',1.524],['목',5.203],['토',9.539],['천',19.191],['해',30.061]];
+  function drawGraph(){
+    const {w,h}=fitCanvas(graph,gc), s=state(), pad={l:58,r:20,t:25,b:43};gc.clearRect(0,0,w,h);
+    if(graphMode==='log'){
+      // 전체 조절 범위: a=0.3~30.1, M★=0.2~3.0 → T≈0.0949~369.3년
+      const lx0=Math.log10(.3),lx1=Math.log10(30.1),ly0=Math.log10(.09),ly1=Math.log10(400);
+      const X=v=>pad.l+(Math.log10(v)-lx0)/(lx1-lx0)*(w-pad.l-pad.r),Y=v=>h-pad.b-(Math.log10(v)-ly0)/(ly1-ly0)*(h-pad.t-pad.b);
+      drawAxes(gc,w,h,pad,[[.3,'.3'],[1,'1'],[3,'3'],[10,'10'],[30,'30']],[[.1,'.1'],[1,'1'],[10,'10'],[100,'100'],[400,'400']],X,Y,'긴반지름 a (AU, 로그)','공전주기 T (년, 로그)');
+      gc.save();gc.beginPath();gc.rect(pad.l,pad.t,w-pad.l-pad.r,h-pad.t-pad.b);gc.clip();
+      gc.strokeStyle='#68e2ff';gc.lineWidth=3;gc.beginPath();for(let i=0;i<=160;i++){const a=.3*Math.pow(30.1/.3,i/160),t=Math.sqrt(a*a*a/s.mass);i?gc.lineTo(X(a),Y(t)):gc.moveTo(X(a),Y(t))}gc.stroke();
+      if(Math.abs(s.mass-1)<.001){gc.font='10px system-ui';planets.forEach(([name,a])=>{const t=Math.sqrt(a*a*a);gc.fillStyle='#7fa8c2';gc.beginPath();gc.arc(X(a),Y(t),3,0,TAU);gc.fill();gc.fillText(name,X(a)+4,Y(t)-4)})}
+      gc.fillStyle='#ffd166';gc.shadowColor='#ffd166';gc.shadowBlur=12;gc.beginPath();gc.arc(X(s.a),Y(s.T),7,0,TAU);gc.fill();gc.shadowBlur=0;gc.restore();gc.fillStyle='#ffe19a';gc.font='12px system-ui';gc.fillText('현재 실험',Math.min(X(s.a)+10,w-78),Math.max(Y(s.T)-8,pad.t+12));
+      gc.fillStyle='#a9c0cf';gc.fillText('로그 그래프 기울기 = 3/2',pad.l+8,pad.t+13);
+    }else{
+      const maxY=Math.max(5.5,1/s.mass*1.3), X=i=>pad.l+i/(planets.length-1)*(w-pad.l-pad.r), Y=v=>h-pad.b-v/maxY*(h-pad.t-pad.b);
+      drawAxes(gc,w,h,pad,planets.map((p,i)=>[i,p[0]]),[[0,'0'],[maxY*.5,(maxY*.5).toFixed(1)],[maxY,maxY.toFixed(1)]],X,Y,Math.abs(s.mass-1)<.001?'태양계 행성':'비교 행성(동일 중심별 가정)','T²/a³ (년²/AU³)');
+      planets.forEach((p,i)=>{const val=1/s.mass,x=X(i),y=Y(val),base=Y(0);gc.fillStyle='#5ccbe9';gc.fillRect(x-10,y,20,base-y);gc.fillStyle='#ffd166';gc.beginPath();gc.arc(x,y,4,0,TAU);gc.fill()});
+      gc.strokeStyle='#ffd16688';gc.setLineDash([6,5]);gc.beginPath();gc.moveTo(pad.l,Y(1/s.mass));gc.lineTo(w-pad.r,Y(1/s.mass));gc.stroke();gc.setLineDash([]);gc.fillStyle='#d5e4ec';gc.fillText(`모두 ${(1/s.mass).toFixed(3)}`,pad.l+8,Y(1/s.mass)-7);
+    }
+  }
+  function updateAll(resetTrail=true){
+    const s=state(), ratio=s.T*s.T/(s.a*s.a*s.a), peri=s.a*(1-s.e), aphe=s.a*(1+s.e);
+    const periV=TAU*Math.sqrt(s.mass*(2/peri-1/s.a))*AUYR_TO_KMS, apheV=TAU*Math.sqrt(s.mass*(2/aphe-1/s.a))*AUYR_TO_KMS;
+    $('#aOut').textContent=s.a.toFixed(3)+' AU';$('#eOut').textContent=s.e.toFixed(3);$('#mOut').textContent=s.mass.toFixed(2)+' M☉';
+    $('#metricA').textContent=s.a.toFixed(3)+' AU';$('#metricT').textContent=s.T.toFixed(s.T<10?3:2)+' 년';
+    $('#ratio').innerHTML=ratio.toFixed(3)+' <small>년²/AU³</small>';
+    $('#periV').textContent=periV.toFixed(1)+' km/s';$('#apheV').textContent=apheV.toFixed(1)+' km/s';
+    $('#insight').textContent=Math.abs(s.mass-1)<.005?'태양을 도는 행성들은 T²/a³ ≈ 1로 일정합니다.':`중심별 질량이 ${s.mass.toFixed(2)} M☉이므로 일정값은 1/M★ = ${ratio.toFixed(3)}입니다.`;
+    $('#liveOrbit').textContent=`긴반지름 ${s.a.toFixed(3)} AU, 이심률 ${s.e.toFixed(3)}, 중심별 질량 ${s.mass.toFixed(2)}, 공전주기 ${s.T.toFixed(3)}년`;
+    if(resetTrail){trail=[];lastTrailM=-1} drawGraph();drawOrbit();
+  }
+  function setRunning(value,status){
+    running=value;const b=$('#playBtn');b.setAttribute('aria-pressed',String(value));b.textContent=value?'⏸ 일시정지':'▶ 재생';$('#status').textContent=status||(value?'● 관측 중':'Ⅱ 일시정지');lastTime=performance.now();
+  }
+  function advanceYears(years){const s=state(), n=TAU/s.T;meanAnomaly=normAngle(meanAnomaly+n*years)}
+  function frame(now){
+    const dt=Math.min((now-lastTime)/1000,.08);lastTime=now;
+    if(running)advanceYears(dt*(+$('#speed').value)/DAYS_PER_YEAR);
+    drawOrbit();requestAnimationFrame(frame);
+  }
+  [aInput,eInput,mInput].forEach(el=>el.addEventListener('input',()=>{$('#preset').value='custom';updateAll()}));
+  $('#preset').addEventListener('change',e=>{if(e.target.value==='custom')return;const [a,ec]=e.target.value.split(',').map(Number);aInput.value=a;eInput.value=ec;mInput.value=1;meanAnomaly=.15;updateAll()});
+  $('#playBtn').addEventListener('click',()=>setRunning(!running));
+  $('#stepBtn').addEventListener('click',()=>{setRunning(false,'Ⅱ 한 단계 관측 · 평균근점이각 +5°');meanAnomaly=normAngle(meanAnomaly+5*Math.PI/180);drawOrbit()});
+  $('#resetBtn').addEventListener('click',()=>{aInput.value=1;eInput.value=.0167;mInput.value=1;$('#preset').value='1,0.0167';$('#speed').value='45';meanAnomaly=.15;$('#observation').value='';$$('.choice').forEach(x=>x.setAttribute('aria-pressed','false'));$('#feedback').textContent='예측한 뒤 긴반지름을 바꾸어 확인해 보세요.';setRunning(!matchMedia('(prefers-reduced-motion: reduce)').matches);updateAll()});
+  $$('.choice').forEach(b=>b.addEventListener('click',()=>{$$('.choice').forEach(x=>x.setAttribute('aria-pressed','false'));b.setAttribute('aria-pressed','true');$('#feedback').textContent=b.dataset.correct==='true'?'맞습니다. T = √(2³) = √8 ≈ 2.83이므로 약 2.83배입니다.':'다시 생각해 보세요. T² ∝ a³에서 마지막에 제곱근을 취해야 합니다.'}));
+  function activateTab(t){$$('.tab').forEach(x=>{x.setAttribute('aria-selected','false');x.tabIndex=-1});t.setAttribute('aria-selected','true');t.tabIndex=0;t.focus();graphMode=t.dataset.mode;graph.setAttribute('aria-label',graphMode==='log'?'긴반지름과 공전주기의 로그 관계 그래프':'비교 행성의 T제곱 나누기 a세제곱 비율 그래프');drawGraph()}
+  $$('.tab').forEach((t,i)=>{t.tabIndex=i? -1:0;t.addEventListener('click',()=>activateTab(t));t.addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;e.preventDefault();const tabs=$$('.tab');let n=e.key==='Home'?0:e.key==='End'?tabs.length-1:(i+(e.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length;activateTab(tabs[n])})});
+  addEventListener('resize',()=>{drawGraph();drawOrbit()},{passive:true});
+  setRunning(running);updateAll();requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

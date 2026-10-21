@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>뉴턴 제3법칙 실험실 | 자석 카트의 작용·반작용</title>
+  <style>
+    :root{font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif;color:#15243a;background:#f3f7fc;line-height:1.5}
+    *{box-sizing:border-box}body{margin:0}header{background:#12345a;color:#fff;padding:18px max(18px,calc((100vw - 1100px)/2))}h1{font-size:clamp(1.4rem,3vw,2rem);margin:0}header p{margin:6px 0 0;color:#d6e7ff}main{max-width:1100px;margin:16px auto;padding:0 14px 32px;display:grid;gap:14px}.card{background:#fff;border:1px solid #d9e4f2;border-radius:16px;padding:16px;box-shadow:0 3px 12px #163d6710}h2{font-size:1.17rem;margin:0 0 10px}p{margin:7px 0}.layout{display:grid;grid-template-columns:minmax(260px,300px) minmax(0,1fr);gap:14px}.control{padding:8px 0 12px;border-bottom:1px solid #e9eff7}.control:last-child{border:0}.control label{display:flex;justify-content:space-between;font-weight:650;gap:8px}.control output{color:#245bad;font-variant-numeric:tabular-nums}.control input{width:100%;accent-color:#2776c6;margin-top:6px;min-height:26px}.row{display:flex;gap:7px;flex-wrap:wrap}.buttons{margin-top:14px}button{border:0;border-radius:9px;padding:10px 14px;background:#1968be;color:#fff;font-weight:700;cursor:pointer;min-height:44px}button:hover{filter:brightness(.94)}button.secondary{background:#e8f0fa;color:#133b68}button:disabled{opacity:.5;cursor:not-allowed}.stage{width:100%;height:clamp(240px,35vw,350px);display:block;background:linear-gradient(#f6fbff,#fff);border:1px solid #d9e4f2;border-radius:11px}.graph{width:100%;height:205px;display:block;background:#fff;border:1px solid #e0e8f1;border-radius:10px}.metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}.metric{background:#f3f7fd;border-radius:10px;padding:9px 11px;min-width:0}.metric small{display:block;color:#52647c}.metric strong{font-variant-numeric:tabular-nums;font-size:clamp(.9rem,2vw,1.1rem);overflow-wrap:anywhere}.blue{color:#1771ba}.orange{color:#c35214}.muted{color:#52647c;font-size:.92rem}.notice{border-left:4px solid #2e76be;background:#f1f7ff;padding:10px 12px;border-radius:6px}.questions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.question{padding:12px;background:#f5f8fd;border-radius:10px}.question p{font-weight:700;margin-top:0}.question label{display:block;padding:5px 0;cursor:pointer}.question input{accent-color:#176cbd}.feedback{font-size:.93rem;min-height:2.2em;margin-top:7px}.formula{font-family:ui-monospace,monospace;background:#f0f4fa;padding:2px 5px;border-radius:4px}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}@media(max-width:740px){.layout,.questions{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.card{padding:13px}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+  </style>
+</head>
+<body>
+<header><h1>뉴턴 제3법칙 실험실</h1><p>마주보는 자석 카트가 서로를 밀 때, 힘과 운동을 관찰해 보세요.</p></header>
+<main>
+  <div class="layout">
+    <section class="card" aria-labelledby="controls-title">
+      <h2 id="controls-title">실험 조건</h2>
+      <div class="control"><label for="massA">파란 카트 A의 질량 <output id="massAOut"></output></label><input type="range" id="massA" min="0.5" max="5" step="0.1" value="1"></div>
+      <div class="control"><label for="massB">주황 카트 B의 질량 <output id="massBOut"></output></label><input type="range" id="massB" min="0.5" max="5" step="0.1" value="2"></div>
+      <div class="control"><label for="force">처음 자기력 <output id="forceOut"></output></label><input type="range" id="force" min="1" max="12" step="0.5" value="6"></div>
+      <div class="control"><label for="range">자기력 작용 거리 <output id="rangeOut"></output></label><input type="range" id="range" min="0.2" max="1.4" step="0.1" value="0.7"></div>
+      <div class="row buttons"><button id="play" type="button">▶ 시작</button><button id="pause" class="secondary" type="button">⏸ 일시정지</button><button id="reset" class="secondary" type="button">↺ 초기화</button></div>
+      <p class="muted">실험 조건을 바꾸면 시간과 운동이 처음으로 돌아갑니다. 질량을 바꾸어 힘과 가속도를 비교해 보세요.</p>
+    </section>
+    <section class="card" aria-labelledby="sim-title">
+      <h2 id="sim-title">같은 극 자석 카트의 반발</h2>
+      <canvas id="stage" class="stage" role="img" aria-label="서로 마주보는 같은 극의 자석이 부착된 두 카트와 각 카트에 작용하는 힘 화살표"></canvas>
+      <div class="metrics" aria-live="polite">
+        <div class="metric"><small>경과 시간</small><strong id="timeRead">0.00 s</strong></div>
+        <div class="metric"><small>상호작용 상태</small><strong id="statusRead">출발 전</strong></div>
+        <div class="metric"><small>힘의 크기</small><strong id="forceRead">0.00 N</strong></div>
+        <div class="metric"><small>A 가속도 (왼쪽 −)</small><strong class="blue" id="accARead">0.00 m/s²</strong></div>
+        <div class="metric"><small>B 가속도 (오른쪽 +)</small><strong class="orange" id="accBRead">0.00 m/s²</strong></div>
+        <div class="metric"><small>속도 A / B</small><strong id="speedRead">0.00 / 0.00 m/s</strong></div>
+      </div>
+      <p class="notice" id="lessonRead">A가 받는 왼쪽 힘과 B가 받는 오른쪽 힘은 <strong>크기가 같고 방향이 반대</strong>입니다. 서로 다른 물체에 작용하므로 두 힘을 더해 상쇄할 수 없습니다.</p>
+    </section>
+  </div>
+  <section class="card" aria-labelledby="graph-title"><h2 id="graph-title">시간에 따른 힘과 가속도</h2><p class="muted">위 그래프는 각 카트에 작용하는 수평 힘, 아래 그래프는 가속도입니다. 아래쪽은 왼쪽 방향(음수)입니다.</p><canvas id="graph" class="graph" role="img" aria-label="시간에 따른 두 카트의 힘과 가속도를 나타내는 그래프"></canvas><p class="muted"><span class="blue">● A: 왼쪽 힘·가속도</span>　<span class="orange">● B: 오른쪽 힘·가속도</span>　아래 그래프의 선은 점선입니다.</p></section>
+  <section class="card" aria-labelledby="predict-title"><h2 id="predict-title">예측 → 실행 → 설명</h2><div class="questions">
+    <div class="question" id="q1"><p>① A의 질량을 2배로 바꾸면, 두 카트가 서로 미는 힘은?</p><label><input type="radio" name="q1" value="larger"> A가 받는 힘만 커진다</label><label><input type="radio" name="q1" value="same"> 두 힘의 크기는 여전히 같다</label><label><input type="radio" name="q1" value="smaller"> B가 받는 힘만 커진다</label><div class="feedback" id="f1" aria-live="polite"></div></div>
+    <div class="question" id="q2"><p>② 같은 크기의 힘을 받을 때 더 가벼운 카트는?</p><label><input type="radio" name="q2" value="equal"> 가속도가 같다</label><label><input type="radio" name="q2" value="light"> 가속도 크기가 더 크다</label><label><input type="radio" name="q2" value="heavy"> 가속도 크기가 더 작다</label><div class="feedback" id="f2" aria-live="polite"></div></div>
+  </div><p class="muted">탐구: 질량을 같게 설정하여 관찰한 뒤 한 카트의 질량만 바꾸세요. 힘 그래프와 가속도 그래프 중 무엇이 달라지나요?</p></section>
+  <section class="card" aria-labelledby="info-title"><h2 id="info-title">교사용 모형 안내</h2><p>두 카트의 마주보는 면에 자석의 같은 극을 붙였습니다. 자기력으로 카트 A와 B가 <strong>직접 서로를 밀어</strong> 떨어집니다. 수평면의 마찰과 공기 저항을 무시하며, 중력과 바닥의 수직항력은 각 카트에서 평형을 이룹니다.</p><p>이 실험의 자기력은 거리 의존성을 쉽게 비교하도록 단순화한 <span class="formula">F = F₀ exp(−Δd/L)</span>을 사용합니다. Δd는 최초 위치에서 두 카트 사이의 간격이 늘어난 거리, L은 ‘자기력 작용 거리’입니다. 실제 자석의 정확한 힘 법칙은 아닙니다. 힘이 최초 값의 0.7% 미만이 되면 화면에서 0으로 간주합니다. 매 순간 <span class="formula">F<sub>B→A</sub>=−F</span>, <span class="formula">F<sub>A→B</sub>=+F</span>, <span class="formula">a<sub>A</sub>=−F/m<sub>A</sub></span>, <span class="formula">a<sub>B</sub>=+F/m<sub>B</sub></span>입니다. 수치 운동은 짧은 시간 간격으로 계산합니다.</p><p>작용·반작용은 <strong>한 물체에 걸린 두 평형력</strong>과 다릅니다. 힘의 화살표는 각각 해당 카트 위에 그려집니다. 화면상 카트의 위치는 그래프 가독성을 위해 동일한 축척으로 줄여 표시합니다.</p><p class="muted">제3법칙 참고: <a href="https://openstax.org/books/physics/pages/4-4-newtons-third-law-of-motion" target="_blank" rel="noopener">OpenStax Physics 4.4, Newton’s Third Law of Motion</a></p></section>
+</main>
+<script>
+(()=>{'use strict';
+  const $=id=>document.getElementById(id), stage=$('stage'), graph=$('graph');
+  const sliders=['massA','massB','force','range'];
+  let t=0, running=false, previous=0, frame=0, trajectory=[], totalTime=3;
+  const step=1/240;
+  const p=()=>({mA:+$('massA').value,mB:+$('massB').value,F:+$('force').value,L:+$('range').value});
+  function endTime(){return totalTime}
+  function makeTrajectory(){
+    const {mA,mB,F,L}=p();trajectory=[];let xA=0,xB=0,vA=0,vB=0,stopAt=0;
+    for(let n=0;n<=Math.ceil(13/step);n++){
+      const time=n*step,sep=xB-xA,f=sep>=5*L?0:F*Math.exp(-sep/L);
+      trajectory.push({f,aA:-f/mA,aB:f/mB,vA,vB,xA,xB});
+      if(f===0&&!stopAt)stopAt=time;
+      if(stopAt&&time>=stopAt+0.7)break;
+      // 속도 Verlet: 마주보는 자석이 양쪽에 가하는 힘의 크기는 항상 동일하다.
+      const newXA=xA+vA*step-f/mA*step*step/2,newXB=xB+vB*step+f/mB*step*step/2;
+      const nextF=(newXB-newXA)>=5*L?0:F*Math.exp(-(newXB-newXA)/L);
+      vA-=((f+nextF)/2/mA)*step;vB+=((f+nextF)/2/mB)*step;
+      xA=newXA;xB=newXB;
+    }
+    totalTime=(trajectory.length-1)*step;
+  }
+  function sample(time){const i=Math.max(0,Math.min(trajectory.length-1,Math.round(time/step)));return trajectory[i]}
+  function syncControls(){const {mA,mB,F,L}=p();$('massAOut').textContent=mA.toFixed(1)+' kg';$('massBOut').textContent=mB.toFixed(1)+' kg';$('forceOut').textContent=F.toFixed(1)+' N';$('rangeOut').textContent=L.toFixed(1)+' m'}
+  function fit(canvas){const r=canvas.getBoundingClientRect(), scale=window.devicePixelRatio||1, w=Math.max(1,Math.round(r.width*scale)),h=Math.max(1,Math.round(r.height*scale));if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h}const ctx=canvas.getContext('2d');ctx.setTransform(scale,0,0,scale,0,0);return {ctx,w:r.width,h:r.height}}
+  function line(ctx,x1,y1,x2,y2,color,width=2,dash=[]){ctx.beginPath();ctx.setLineDash(dash);ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.strokeStyle=color;ctx.lineWidth=width;ctx.stroke();ctx.setLineDash([])}
+  function arrow(ctx,x,y,dir,len,color,label){const end=x+dir*len;line(ctx,x,y,end,y,color,4);ctx.beginPath();ctx.moveTo(end,y);ctx.lineTo(end-dir*10,y-7);ctx.lineTo(end-dir*10,y+7);ctx.closePath();ctx.fillStyle=color;ctx.fill();ctx.fillStyle=color;ctx.font='bold 12px system-ui';ctx.textAlign='center';ctx.fillText(label,x+dir*len/2,y-12)}
+  function rounded(ctx,x,y,w,h,r){ctx.beginPath();ctx.roundRect(x,y,w,h,r)}
+  function drawStage(){const {ctx,w,h}=fit(stage), s=sample(t),{mA,mB,F}=p();ctx.clearRect(0,0,w,h);const floor=h*.77, center=w/2;
+    line(ctx,12,floor+15,w-12,floor+15,'#adc2d7',3);
+    ctx.fillStyle='#647891';ctx.textAlign='left';ctx.font='12px system-ui';ctx.fillText('마찰 없는 수평면 (모형)',15,h-13);
+    const total=sample(endTime()), extent=Math.max(Math.abs(total.xA),Math.abs(total.xB),2), pxPerUnit=Math.max(0.5,(w*.36-35)/extent);
+    const cartW=Math.min(64,Math.max(40,w*.12)), cartH=42, gap=12;
+    const ax=center-gap-cartW+s.xA*pxPerUnit,bx=center+gap+s.xB*pxPerUnit;
+    function cart(x,color,name,mass){ctx.fillStyle=color;rounded(ctx,x,floor-cartH,cartW,cartH,7);ctx.fill();ctx.fillStyle='#fff';ctx.font='bold 14px system-ui';ctx.textAlign='center';ctx.fillText(name,x+cartW/2,floor-16);ctx.fillStyle='#2a3c54';for(const cx of [x+12,x+cartW-12]){ctx.beginPath();ctx.arc(cx,floor+5,6,0,2*Math.PI);ctx.fill()}ctx.font='12px system-ui';ctx.fillText(mass.toFixed(1)+' kg',x+cartW/2,floor-55)}
+    cart(ax,'#277abf','A',mA);cart(bx,'#e1793a','B',mB);
+    for(const x of [ax+cartW-4,bx-5]){ctx.fillStyle='#db4c75';rounded(ctx,x,floor-cartH+8,9,26,2);ctx.fill();ctx.fillStyle='#fff';ctx.font='bold 12px system-ui';ctx.textAlign='center';ctx.fillText('N',x+4.5,floor-cartH+26)}
+    if(s.f>0.01){
+      const len=18+Math.min(48,44*s.f/F), y=Math.max(63,floor-cartH-42);arrow(ctx,ax+cartW/2,y,-1,len,'#176fb9','B→A');arrow(ctx,bx+cartW/2,y,1,len,'#c55316','A→B');
+    }
+    ctx.fillStyle='#45566b';ctx.textAlign='center';ctx.font='bold 13px system-ui';ctx.fillText(s.f>0?(w<470?'힘은 같고 방향은 반대':'자석이 직접 서로를 밈: 두 힘의 크기는 같음'):(w<470?'자기력≈0, 등속 운동':'자기력≈0: 두 카트는 등속 운동'),center,27);
+    if(w<470){ctx.font='11px system-ui';ctx.fillText('화살표는 각 카트가 받는 힘',center,47)}
+  }
+  function drawGraph(){const {ctx,w,h}=fit(graph),{F,mA,mB}=p(), left=53,right=w-15,top=25,half=(h-38)/2, mid1=top+half*.5,mid2=top+half*1.5, amplitude=half*.35, maxA=F/Math.min(mA,mB);ctx.clearRect(0,0,w,h);
+    const toX=x=>left+(right-left)*x/endTime();
+    for(let i=0;i<2;i++){let cy=i?mid2:mid1;line(ctx,left,cy,right,cy,'#a7b8c9',1);line(ctx,left,cy-amplitude,left,cy+amplitude,'#a7b8c9',1);ctx.fillStyle='#344861';ctx.textAlign='left';ctx.font='11px system-ui';ctx.fillText(i?'가속도 (m/s²)':'힘 (N)',left+3,cy-amplitude-5);ctx.textAlign='right';ctx.fillText((i?maxA:F).toFixed(1),left-5,cy-amplitude+4);ctx.fillText('0',left-5,cy+4);ctx.fillText('−'+(i?maxA:F).toFixed(1),left-5,cy+amplitude+4)}
+    for(let k=0;k<2;k++){const cy=k?mid2:mid1,max=k?maxA:F;for(const [type,color,sign] of [['A','#1771ba',-1],['B','#d26923',1]]){ctx.beginPath();ctx.setLineDash(k?[5,3]:[]);for(let i=0;i<=180;i++){const x=endTime()*i/180,s=sample(x),val=k?(type==='A'?s.aA:s.aB):sign*s.f,xx=toX(x),yy=cy-val/max*amplitude;i?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy)}ctx.strokeStyle=color;ctx.lineWidth=2.5;ctx.stroke();ctx.setLineDash([])}}
+    line(ctx,toX(t),top-2,toX(t),h-16,'#2a3345',1.5,[3,3]);ctx.fillStyle='#344861';ctx.textAlign='right';ctx.font='11px system-ui';ctx.fillText('시간 (s)',right,h-2);ctx.textAlign='left';ctx.fillText('0',left,h-2);ctx.textAlign='center';ctx.fillText(endTime().toFixed(1),right-29,h-2);
+  }
+  function drawReadouts(){const s=sample(t);$('timeRead').textContent=t.toFixed(2)+' s';$('statusRead').textContent=s.f===0?'힘 거의 0':t===0?'출발 직전':'자기력 작용 중';$('forceRead').textContent=s.f.toFixed(2)+' N (각각)';$('accARead').textContent=s.aA.toFixed(2)+' m/s²';$('accBRead').textContent='+'+s.aB.toFixed(2)+' m/s²';$('speedRead').textContent=s.vA.toFixed(2)+' / +'+s.vB.toFixed(2)+' m/s';$('play').textContent=t>=endTime()?'↻ 다시 실행':running?'▶ 실행 중':t>0?'▶ 계속':'▶ 시작';$('pause').disabled=!running;}
+  function render(){drawStage();drawGraph();drawReadouts()}
+  function stop(){running=false;if(frame)cancelAnimationFrame(frame);frame=0;previous=0}
+  function tick(now){if(!running)return;if(previous)t=Math.min(endTime(),t+Math.min((now-previous)/1000,.05));previous=now;render();if(t>=endTime()){stop();render()}else frame=requestAnimationFrame(tick)}
+  $('play').addEventListener('click',()=>{if(running)return;if(t>=endTime())t=0;running=true;previous=0;frame=requestAnimationFrame(tick);render()});
+  $('pause').addEventListener('click',()=>{stop();render()});
+  $('reset').addEventListener('click',()=>{stop();t=0;render()});
+  sliders.forEach(id=>$(id).addEventListener('input',()=>{stop();t=0;syncControls();makeTrajectory();render()}));
+  for(const [name,correct,id,message] of [['q1','same','f1','맞습니다. 질량이 달라도 서로 주고받는 힘은 항상 같은 크기입니다.'],['q2','light','f2','맞습니다. 같은 힘이면 a=F/m에 따라 질량이 작은 카트의 가속도가 더 큽니다.']])document.querySelectorAll('input[name="'+name+'"]').forEach(el=>el.addEventListener('change',()=>{const out=$(id);out.textContent=el.value===correct?message:'다시 생각해 보세요. 힘쌍은 서로 다른 카트에 작용하며, 각 카트의 a=F/m입니다.';out.style.color=el.value===correct?'#176331':'#9b4c10'}));
+  window.addEventListener('resize',render);syncControls();makeTrajectory();render();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#07131f">
+  <title>등속 원운동 탐구실</title>
+  <style>
+    :root{--bg:#06111d;--panel:#0d1d2c;--line:#27415a;--text:#f3f8fc;--muted:#a8bfd1;--cyan:#47dce8;--yellow:#ffd166;--red:#ff6b6b;--green:#77e5a1;--shadow:0 18px 60px #0008}
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:radial-gradient(circle at 45% 25%,#12354c 0,#081927 36%,var(--bg) 75%);color:var(--text);font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif}
+    body{padding:clamp(12px,2vw,26px)}button,input{font:inherit}button{touch-action:manipulation}
+    .app{max-width:1240px;margin:auto}.top{display:flex;align-items:end;justify-content:space-between;gap:16px;margin-bottom:14px}.eyebrow{font-size:.78rem;letter-spacing:.18em;color:var(--cyan);font-weight:800}.top h1{font-size:clamp(1.65rem,3vw,2.55rem);margin:.16rem 0 0;line-height:1.1}.question{color:var(--muted);margin:0;max-width:500px;text-align:right;line-height:1.55}
+    .workspace{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(300px,.8fr);gap:16px}.card{background:linear-gradient(145deg,#112639e8,#091724ee);border:1px solid #29465f;border-radius:22px;box-shadow:var(--shadow)}
+    .stage{position:relative;min-height:570px;overflow:hidden}.stage canvas{display:block;width:100%;height:570px;touch-action:none}.legend{position:absolute;top:15px;left:15px;display:flex;gap:7px;flex-wrap:wrap;pointer-events:none}.pill{border:1px solid #ffffff22;background:#07131fcc;border-radius:999px;padding:7px 10px;font-size:.78rem}.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px}
+    .status{position:absolute;right:15px;top:15px;background:#07131fdc;border:1px solid #ffffff22;border-radius:13px;padding:8px 11px;font-weight:750;color:var(--cyan)}
+    .hint{position:absolute;left:50%;bottom:68px;transform:translateX(-50%);width:max-content;max-width:90%;text-align:center;color:#d8e9f5;background:#07131fdd;border:1px solid #ffffff20;border-radius:12px;padding:7px 10px;font-size:.82rem;pointer-events:none}
+    .transport{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);display:flex;gap:8px;background:#07131fdd;border:1px solid #ffffff24;border-radius:16px;padding:7px}.btn{border:1px solid #36556d;background:#132b3f;color:#eef8ff;border-radius:10px;min-height:40px;padding:8px 12px;font-weight:700;cursor:pointer}.btn:hover{background:#1a3b55}.btn:focus-visible,input:focus-visible{outline:3px solid #80ebf2;outline-offset:2px}.btn.primary{background:var(--cyan);color:#03202a;border-color:var(--cyan)}
+    .side{display:grid;gap:14px;align-content:start}.controls,.readings,.challenge{padding:18px}.section-title{margin:0 0 13px;font-size:1rem}.control{margin:0 0 17px}.control:last-child{margin-bottom:0}.control-head{display:flex;justify-content:space-between;gap:12px;font-size:.9rem;margin-bottom:7px}.value{color:var(--cyan);font-variant-numeric:tabular-nums;font-weight:800}input[type=range]{width:100%;accent-color:var(--cyan);height:28px;cursor:pointer}.ticks{display:flex;justify-content:space-between;color:#7891a5;font-size:.7rem;margin-top:-5px}
+    .read-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.read{border:1px solid #25445c;background:#081827;border-radius:13px;padding:11px}.read.wide{grid-column:1/-1}.read .label{font-size:.74rem;color:var(--muted)}.read strong{display:block;margin-top:3px;font-size:1.14rem;font-variant-numeric:tabular-nums}.read small{color:#88a7bd}.formula{font-family:Georgia,serif;color:var(--yellow)}
+    .toggle-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:14px}.toggle{display:flex;align-items:center;gap:7px;border:1px solid #29475f;border-radius:10px;padding:8px;font-size:.8rem;color:#d6e6f0}.toggle input{accent-color:var(--cyan);width:18px;height:18px}
+    .challenge p{color:var(--muted);font-size:.87rem;line-height:1.5;margin:0 0 10px}.answers{display:grid;grid-template-columns:1fr 1fr;gap:7px}.answer{min-height:42px}.feedback{min-height:42px;margin-top:9px;border-radius:10px;background:#071621;padding:9px 10px;font-size:.82rem;line-height:1.45;color:#c8dce9}.footer-note{margin:14px 2px 0;color:#8ba4b6;font-size:.78rem;text-align:center}
+    @media(max-width:820px){body{padding:10px}.top{align-items:start;flex-direction:column}.question{text-align:left}.workspace{grid-template-columns:1fr}.stage{min-height:480px}.stage canvas{height:480px}.side{grid-template-columns:1fr 1fr}.challenge{grid-column:1/-1}}
+    @media(max-width:560px){.top h1{font-size:1.55rem}.question{font-size:.86rem}.stage{min-height:430px}.stage canvas{height:430px}.legend{right:12px;top:10px}.pill{padding:5px 8px;font-size:.7rem}.status{top:72px;font-size:.78rem}.transport{bottom:10px;width:calc(100% - 20px);justify-content:center}.btn{padding:7px 9px;font-size:.84rem}.hint{bottom:65px}.side{grid-template-columns:1fr}.controls,.readings,.challenge{padding:15px}.read strong{font-size:1.03rem}}
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}.status{transition:none}}
+  </style>
+</head>
+<body>
+<main class="app">
+  <header class="top"><div><div class="eyebrow">PHYSICS · VECTOR LAB</div><h1>등속 원운동 탐구실</h1></div><p class="question">속력은 일정한데 왜 가속도가 생길까요? 물체를 움직이며 벡터의 방향을 관찰해 보세요.</p></header>
+  <div class="workspace">
+    <section class="card stage" aria-label="등속 원운동 시뮬레이션">
+      <canvas id="canvas" role="img" aria-label="물체가 원을 따라 돌며 접선 방향 속도 벡터와 중심 방향 구심가속도 벡터가 표시됩니다"></canvas>
+      <div class="legend" aria-hidden="true"><span class="pill"><i class="dot" style="background:var(--red)"></i>속도 v</span><span class="pill"><i class="dot" style="background:var(--yellow)"></i>구심가속도 a<sub>c</sub></span><span class="pill"><i class="dot" style="background:var(--green)"></i>구심력 F<sub>c</sub></span></div>
+      <div class="status" id="status">● 운동 중</div>
+      <div class="hint">원을 직접 눌러 물체의 위치를 바꿀 수도 있습니다.</div>
+      <div class="transport"><button class="btn primary" id="play" aria-label="재생 또는 일시정지">⏸ 일시정지</button><button class="btn" id="step">+5° 한 단계</button><button class="btn" id="reset">↺ 처음으로</button></div>
+    </section>
+    <aside class="side">
+      <section class="card controls"><h2 class="section-title">조건 조절</h2>
+        <div class="control"><div class="control-head"><label for="radius">반지름 r</label><span class="value" id="radiusVal"></span></div><input id="radius" type="range" min="0.5" max="3" step="0.1" value="2"><div class="ticks"><span>0.5 m</span><span>3.0 m</span></div></div>
+        <div class="control"><div class="control-head"><label for="omega">각속도 ω</label><span class="value" id="omegaVal"></span></div><input id="omega" type="range" min="0.5" max="4" step="0.1" value="1.5"><div class="ticks"><span>0.5 rad/s</span><span>4.0 rad/s</span></div></div>
+        <div class="control"><div class="control-head"><label for="mass">질량 m</label><span class="value" id="massVal"></span></div><input id="mass" type="range" min="0.2" max="5" step="0.1" value="1"><div class="ticks"><span>0.2 kg</span><span>5.0 kg</span></div></div>
+        <div class="toggle-grid"><label class="toggle"><input id="showV" type="checkbox" checked>속도 벡터</label><label class="toggle"><input id="showA" type="checkbox" checked>가속도 벡터</label><label class="toggle"><input id="showF" type="checkbox">힘 벡터</label><label class="toggle"><input id="trail" type="checkbox" checked>이동 흔적</label></div>
+      </section>
+      <section class="card readings"><h2 class="section-title">실시간 물리량</h2><div class="read-grid">
+        <div class="read"><span class="label">접선 속력</span><strong id="speed"></strong><small class="formula">v = ωr</small></div>
+        <div class="read"><span class="label">구심가속도</span><strong id="accel"></strong><small class="formula">a<sub>c</sub> = ω²r</small></div>
+        <div class="read"><span class="label">구심력</span><strong id="force"></strong><small class="formula">F<sub>c</sub> = mω²r</small></div>
+        <div class="read"><span class="label">주기</span><strong id="period"></strong><small class="formula">T = 2π/ω</small></div>
+        <div class="read wide"><span class="label">현재 관찰</span><strong id="observation">속도는 궤도의 접선 방향, 가속도는 중심 방향입니다.</strong></div>
+      </div></section>
+      <section class="card challenge"><h2 class="section-title">예측하고 확인하기</h2><p>반지름은 그대로 두고 각속도를 2배로 하면 구심가속도는 몇 배가 될까요?</p><div class="answers"><button class="btn answer" data-answer="2">2배</button><button class="btn answer" data-answer="4">4배</button></div><div class="feedback" id="feedback" aria-live="polite">답을 선택한 뒤 식의 변화를 확인해 보세요.</div></section>
+    </aside>
+  </div>
+  <p class="footer-note">핵심: 등속 원운동은 속력은 일정하지만 속도의 방향이 계속 변하므로 가속도 운동입니다.</p>
+</main>
+<script>
+(()=>{
+  const $=id=>document.getElementById(id), canvas=$('canvas'),ctx=canvas.getContext('2d');
+  const els={radius:$('radius'),omega:$('omega'),mass:$('mass'),radiusVal:$('radiusVal'),omegaVal:$('omegaVal'),massVal:$('massVal'),speed:$('speed'),accel:$('accel'),force:$('force'),period:$('period'),play:$('play'),step:$('step'),reset:$('reset'),status:$('status'),showV:$('showV'),showA:$('showA'),showF:$('showF'),trail:$('trail'),observation:$('observation'),feedback:$('feedback')};
+  let theta=Math.PI, playing=true,last=performance.now(),points=[];
+  const val=()=>({r:+els.radius.value,w:+els.omega.value,m:+els.mass.value});
+  function updateReadings(){const {r,w,m}=val(),v=w*r,a=w*w*r,f=m*a,t=2*Math.PI/w;els.radiusVal.textContent=r.toFixed(1)+' m';els.omegaVal.textContent=w.toFixed(1)+' rad/s';els.massVal.textContent=m.toFixed(1)+' kg';els.speed.textContent=v.toFixed(2)+' m/s';els.accel.textContent=a.toFixed(2)+' m/s²';els.force.textContent=f.toFixed(2)+' N';els.period.textContent=t.toFixed(2)+' s';els.observation.textContent=w>3?'각속도가 커서 속도와 구심가속도 벡터가 크게 나타납니다.':r<1?'반지름이 작아 궤도가 좁지만 벡터 방향 관계는 같습니다.':'속도는 접선 방향, 가속도는 언제나 중심 방향입니다.'}
+  function resize(){const dpr=Math.min(devicePixelRatio||1,2),rect=canvas.getBoundingClientRect();canvas.width=Math.round(rect.width*dpr);canvas.height=Math.round(rect.height*dpr);ctx.setTransform(dpr,0,0,dpr,0,0)}
+  function arrow(x1,y1,x2,y2,color,label){const dx=x2-x1,dy=y2-y1,L=Math.hypot(dx,dy);if(L<2)return;const ux=dx/L,uy=dy/L,head=11;ctx.save();ctx.strokeStyle=color;ctx.fillStyle=color;ctx.lineWidth=4;ctx.lineCap='round';ctx.shadowColor=color;ctx.shadowBlur=8;ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-head*ux+head*.55*uy,y2-head*uy-head*.55*ux);ctx.lineTo(x2-head*ux-head*.55*uy,y2-head*uy+head*.55*ux);ctx.closePath();ctx.fill();ctx.shadowBlur=0;ctx.font='700 16px system-ui';ctx.fillText(label,x2+8*uy,y2-8*ux);ctx.restore()}
+  function draw(){const W=canvas.clientWidth,H=canvas.clientHeight,cx=W/2,cy=H/2-4,{r,w,m}=val();const R=Math.min(W*.34,H*.34)*(r/2.2),px=cx+R*Math.cos(theta),py=cy+R*Math.sin(theta);ctx.clearRect(0,0,W,H);
+    const glow=ctx.createRadialGradient(cx,cy,0,cx,cy,Math.max(W,H)*.55);glow.addColorStop(0,'#17456555');glow.addColorStop(1,'#06111d00');ctx.fillStyle=glow;ctx.fillRect(0,0,W,H);
+    ctx.strokeStyle='#7393aa55';ctx.lineWidth=1;for(let rr=50;rr<Math.min(W,H)*.43;rr+=50){ctx.beginPath();ctx.arc(cx,cy,rr,0,Math.PI*2);ctx.stroke()}
+    ctx.save();ctx.setLineDash([3,7]);ctx.strokeStyle='#d9f4ffbb';ctx.lineWidth=2;ctx.beginPath();ctx.arc(cx,cy,R,0,Math.PI*2);ctx.stroke();ctx.restore();
+    ctx.strokeStyle='#a9c3d355';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(px,py);ctx.stroke();ctx.fillStyle='#d9edf7';ctx.font='italic 18px Georgia';ctx.fillText('r',(cx+px)/2+7,(cy+py)/2-7);
+    if(els.trail.checked&&points.length>1){ctx.strokeStyle='#47dce866';ctx.lineWidth=3;ctx.beginPath();points.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.stroke()}
+    ctx.fillStyle='#fff';ctx.shadowColor='#47dce8';ctx.shadowBlur=18;ctx.beginPath();ctx.arc(px,py,10,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;ctx.fillStyle='#edf7fc';ctx.beginPath();ctx.arc(cx,cy,5,0,Math.PI*2);ctx.fill();ctx.font='14px system-ui';ctx.fillText('O',cx+9,cy+18);
+    const v=w*r,a=w*w*r,f=m*a,scaleV=Math.min(105,35+v*10),scaleA=Math.min(120,30+a*8),scaleF=Math.min(110,28+f*5);const tx=-Math.sin(theta),ty=Math.cos(theta),ix=-Math.cos(theta),iy=-Math.sin(theta);
+    if(els.showV.checked)arrow(px,py,px+tx*scaleV,py+ty*scaleV,'#ff6b6b','v');if(els.showA.checked)arrow(px,py,px+ix*scaleA,py+iy*scaleA,'#ffd166','aᶜ');if(els.showF.checked)arrow(px,py,px+ix*scaleF,py+iy*scaleF,'#77e5a1','Fᶜ')}
+  function frame(now){const dt=Math.min((now-last)/1000,.04);last=now;if(playing){theta=(theta+val().w*dt)%(Math.PI*2);const W=canvas.clientWidth,H=canvas.clientHeight,R=Math.min(W*.34,H*.34)*(val().r/2.2);points.push({x:W/2+R*Math.cos(theta),y:H/2-4+R*Math.sin(theta)});if(points.length>90)points.shift()}draw();requestAnimationFrame(frame)}
+  function setPlaying(x){playing=x;els.play.textContent=x?'⏸ 일시정지':'▶ 재생';els.status.textContent=x?'● 운동 중':'Ⅱ 일시정지';els.status.style.color=x?'var(--cyan)':'var(--yellow)'}
+  ['radius','omega','mass'].forEach(k=>els[k].addEventListener('input',()=>{points=[];updateReadings()}));['showV','showA','showF','trail'].forEach(k=>els[k].addEventListener('change',()=>{if(k==='trail'&&!els.trail.checked)points=[]}));
+  els.play.onclick=()=>setPlaying(!playing);els.step.onclick=()=>{setPlaying(false);theta=(theta+Math.PI/36)%(Math.PI*2);points=[]};els.reset.onclick=()=>{els.radius.value=2;els.omega.value=1.5;els.mass.value=1;theta=Math.PI;points=[];els.showV.checked=els.showA.checked=els.trail.checked=true;els.showF.checked=false;setPlaying(true);updateReadings()};
+  document.querySelectorAll('.answer').forEach(b=>b.onclick=()=>{const ok=b.dataset.answer==='4';els.feedback.textContent=ok?'맞습니다. aᶜ=ω²r이므로 각속도가 2배이면 구심가속도는 2²=4배가 됩니다.':'다시 생각해 보세요. 각속도 ω는 식에서 제곱됩니다.';els.feedback.style.color=ok?'var(--green)':'var(--yellow)'});
+  function place(e){const rect=canvas.getBoundingClientRect(),x=(e.touches?e.touches[0].clientX:e.clientX)-rect.left,y=(e.touches?e.touches[0].clientY:e.clientY)-rect.top;theta=Math.atan2(y-(rect.height/2-4),x-rect.width/2);points=[];setPlaying(false)}canvas.addEventListener('pointerdown',place);
+  addEventListener('resize',resize);resize();updateReadings();requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

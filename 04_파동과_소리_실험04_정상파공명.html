@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#07131e">
+  <meta name="description" content="현, 개관, 폐관의 경계 조건과 정상파·공명 주파수를 탐구하는 인터랙티브 실험실">
+  <title>정상파 공명 실험실</title>
+  <style>
+    :root{--bg:#06111b;--panel:#0c1b29;--panel2:#102536;--line:#1d3a4d;--ink:#f3f8fb;--muted:#9fb7c6;--cyan:#35d6d0;--cyan2:#8df4ec;--amber:#ffc768;--pink:#ff6f91;--blue:#68a8ff;--green:#75e6a5;--shadow:0 18px 55px #0007;--r:22px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 8% 0%,#14324a 0,transparent 26%),radial-gradient(circle at 95% 8%,#123f45 0,transparent 24%),var(--bg);color:var(--ink);font-family:Pretendard,"Noto Sans KR",system-ui,-apple-system,sans-serif;min-height:100vh}
+    button,input,select{font:inherit}button{color:inherit}.shell{width:min(1440px,100%);margin:auto;padding:18px clamp(14px,3vw,42px) 52px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}.brand{display:flex;align-items:center;gap:13px}.logo{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,var(--cyan),#2678a9);box-shadow:0 0 30px #35d6d044}.logo svg{width:27px}.eyebrow{font-size:.76rem;letter-spacing:.15em;text-transform:uppercase;color:var(--cyan2);font-weight:800}.brand h1{font-size:clamp(1.15rem,3vw,1.7rem);line-height:1.15;margin:2px 0 0}.header-actions{display:flex;gap:8px}.icon-btn,.ghost-btn{min-height:42px;border:1px solid var(--line);background:#0a1824cc;border-radius:12px;padding:0 14px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:.2s}.icon-btn{width:42px;padding:0;justify-content:center}.icon-btn:hover,.ghost-btn:hover{border-color:#3f718b;background:#102637}.icon-btn:focus-visible,.ghost-btn:focus-visible,.tab:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #35d6d066;outline-offset:2px}
+    .mode-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:7px;background:#071621;border:1px solid var(--line);border-radius:18px;margin-bottom:16px}.tab{border:0;border-radius:12px;background:transparent;padding:13px 10px;cursor:pointer;color:var(--muted);font-weight:800;display:flex;align-items:center;justify-content:center;gap:9px;transition:.2s}.tab .mini{font-size:.72rem;padding:3px 7px;border-radius:99px;background:#ffffff0b;color:#bdd0dc}.tab.active{color:#062029;background:linear-gradient(135deg,var(--cyan2),var(--cyan));box-shadow:0 7px 24px #35d6d02e}.tab.active .mini{background:#0620291d;color:#062029}
+    .workspace{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(290px,.78fr);gap:16px}.card{background:linear-gradient(160deg,#102536e8,#091a27ed);border:1px solid #1d3c50;border-radius:var(--r);box-shadow:var(--shadow)}.stage{overflow:hidden;min-height:560px;display:flex;flex-direction:column}.stage-head{padding:20px 22px 13px;display:flex;align-items:flex-start;justify-content:space-between;gap:16px}.stage-title h2{font-size:clamp(1.12rem,2.3vw,1.45rem);margin:0 0 6px}.stage-title p{margin:0;color:var(--muted);font-size:.93rem;line-height:1.5}.condition-badge{white-space:nowrap;border:1px solid #ffc76855;background:#ffc76812;color:#ffd78f;border-radius:999px;padding:8px 11px;font-size:.8rem;font-weight:800}.canvas-wrap{position:relative;flex:1;min-height:355px;margin:0 16px;border-radius:17px;overflow:hidden;background:linear-gradient(180deg,#06131e,#081a27);border:1px solid #173548}.canvas-wrap:before{content:"";position:absolute;inset:0;background-image:linear-gradient(#ffffff08 1px,transparent 1px),linear-gradient(90deg,#ffffff08 1px,transparent 1px);background-size:34px 34px;mask-image:linear-gradient(to bottom,#000,transparent 90%);pointer-events:none}canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none}.canvas-tip{position:absolute;left:14px;bottom:13px;background:#05111bd9;border:1px solid #244357;border-radius:10px;padding:7px 10px;color:#bcd0dc;font-size:.76rem;pointer-events:none}.transport{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 20px 18px}.transport-group{display:flex;align-items:center;gap:8px}.round{width:45px;height:45px;border-radius:50%;border:1px solid #315268;background:#102536;cursor:pointer;display:grid;place-items:center}.round.primary{width:51px;height:51px;border:0;background:linear-gradient(135deg,var(--cyan2),var(--cyan));color:#062029;box-shadow:0 7px 25px #35d6d03c}.round:hover{filter:brightness(1.14)}.legend{display:flex;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:.78rem}.legend span{display:flex;align-items:center;gap:6px}.dot{width:9px;height:9px;border-radius:50%;display:inline-block}.dot.node{background:var(--pink)}.dot.anti{background:var(--cyan)}.dot.eq{background:var(--amber)}
+    .controls{padding:21px;display:flex;flex-direction:column;gap:18px}.controls h2{font-size:1.03rem;margin:0}.control{display:grid;gap:9px}.label-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px}.label-row label{font-size:.87rem;color:#d8e7ef;font-weight:700}.value{font-variant-numeric:tabular-nums;color:var(--cyan2);font-size:.9rem;font-weight:850}.range{appearance:none;width:100%;height:6px;border-radius:99px;background:linear-gradient(90deg,var(--cyan) var(--pct,50%),#294355 var(--pct,50%));outline:none}.range::-webkit-slider-thumb{appearance:none;width:21px;height:21px;border-radius:50%;background:#e9ffff;border:5px solid var(--cyan);box-shadow:0 2px 10px #0008;cursor:pointer}.range::-moz-range-thumb{width:12px;height:12px;border-radius:50%;background:#e9ffff;border:5px solid var(--cyan);cursor:pointer}.mode-stepper{display:grid;grid-template-columns:42px 1fr 42px;gap:8px}.square{border:1px solid #315268;background:#112839;border-radius:11px;color:var(--ink);font-size:1.15rem;cursor:pointer}.mode-display{background:#081824;border:1px solid #234256;border-radius:11px;padding:9px;text-align:center;font-weight:850}.mode-display small{display:block;color:var(--muted);font-size:.68rem;font-weight:650;margin-top:2px}.seg{display:grid;grid-template-columns:1fr 1fr;padding:4px;background:#071621;border:1px solid #244053;border-radius:12px}.seg button{border:0;border-radius:9px;padding:9px 6px;background:transparent;color:var(--muted);font-size:.8rem;font-weight:800;cursor:pointer}.seg button.active{background:#17374a;color:#fff}.seg button:disabled{opacity:.38;cursor:not-allowed}.data-panel{display:grid;grid-template-columns:1fr 1fr;gap:9px}.metric{background:#071722;border:1px solid #1b384b;border-radius:14px;padding:12px}.metric small{display:block;color:var(--muted);font-size:.73rem;margin-bottom:5px}.metric strong{font-size:1.12rem;font-variant-numeric:tabular-nums}.metric strong.cyan{color:var(--cyan2)}.metric strong.amber{color:var(--amber)}.formula{background:linear-gradient(135deg,#102f3e,#0b202e);border:1px solid #2b566b;border-radius:15px;padding:13px 14px;display:flex;justify-content:space-between;align-items:center;gap:10px}.formula span{color:var(--muted);font-size:.75rem}.formula strong{font-family:Georgia,"Times New Roman",serif;font-size:1.18rem;font-weight:600;color:#fff}.hint{font-size:.8rem;line-height:1.5;color:#aac0cd;background:#ffffff05;border-left:3px solid var(--amber);padding:9px 11px;border-radius:0 9px 9px 0}
+    .lower{display:grid;grid-template-columns:1.12fr .88fr;gap:16px;margin-top:16px}.compare,.challenge{padding:21px}.section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}.section-head h2{margin:0;font-size:1.04rem}.section-head p{margin:0;color:var(--muted);font-size:.78rem}.compare-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.compare-item{position:relative;overflow:hidden;background:#071722;border:1px solid #1d3a4c;border-radius:15px;padding:14px;cursor:pointer;transition:.2s}.compare-item:hover{transform:translateY(-2px);border-color:#3a718a}.compare-item.selected{border-color:var(--cyan);box-shadow:inset 0 0 0 1px var(--cyan)}.compare-item h3{font-size:.87rem;margin:0 0 10px}.tube-icon{height:50px;margin-bottom:10px;position:relative}.tube{position:absolute;left:4px;right:4px;top:20px;height:14px;border-block:2px solid #7895a6}.tube.closed-left:before,.tube.closed-right:after{content:"";position:absolute;top:-6px;height:22px;width:3px;background:#7895a6}.tube.closed-left:before{left:0}.tube.closed-right:after{right:0}.wave{position:absolute;left:7px;right:7px;top:12px;height:30px}.compare-item p{margin:0;color:var(--muted);font-size:.73rem;line-height:1.48}.compare-item b{color:var(--ink)}.spectrum{margin-top:14px;border-top:1px solid #1c394b;padding-top:13px}.spectrum-labels{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;align-items:end;height:78px}.bar-wrap{height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px}.bar{width:min(24px,70%);border-radius:5px 5px 2px 2px;background:linear-gradient(var(--cyan2),#258a92);min-height:4px;transition:.35s}.bar.off{background:#263b49;height:4px!important}.bar-wrap small{color:#88a4b4;font-size:.62rem}.challenge{display:flex;flex-direction:column}.question-tag{font-size:.72rem;color:var(--amber);font-weight:850;letter-spacing:.08em}.question{font-size:1rem;line-height:1.6;margin:8px 0 14px}.choices{display:grid;grid-template-columns:1fr 1fr;gap:8px}.choice{border:1px solid #29485b;background:#0b1e2c;border-radius:12px;padding:11px 8px;cursor:pointer;color:#d9e8ef;font-weight:750}.choice:hover{border-color:#56849c}.choice.correct{border-color:var(--green);background:#75e6a518;color:#a9f7c7}.choice.wrong{border-color:var(--pink);background:#ff6f9115;color:#ffb4c4}.feedback{min-height:57px;margin-top:12px;border-radius:12px;background:#071722;padding:11px 12px;color:var(--muted);font-size:.82rem;line-height:1.55}.feedback.success{color:#b6f7cf;border:1px solid #75e6a54a}.new-q{margin-top:10px;align-self:flex-end;border:0;background:transparent;color:var(--cyan2);font-weight:800;cursor:pointer;padding:8px 0}.concept-strip{margin-top:16px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.concept{padding:14px;background:#0a1b28;border:1px solid #1b394b;border-radius:14px}.concept strong{display:block;font-size:.82rem;margin-bottom:5px}.concept p{margin:0;color:var(--muted);font-size:.74rem;line-height:1.45}.footer-note{text-align:center;color:#6f8998;font-size:.72rem;margin-top:18px}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    @media(max-width:900px){.workspace,.lower{grid-template-columns:1fr}.stage{min-height:530px}.controls{display:grid;grid-template-columns:1fr 1fr}.controls>h2,.data-panel,.formula,.hint{grid-column:1/-1}.header-actions .ghost-btn span{display:none}}
+    @media(max-width:620px){.shell{padding:12px 10px 36px}.topbar{margin-bottom:12px}.brand h1{font-size:1.08rem}.eyebrow{font-size:.65rem}.logo{width:37px;height:37px}.mode-tabs{gap:5px;padding:5px}.tab{padding:11px 5px;font-size:.8rem;gap:4px}.tab .mini{display:none}.stage-head{padding:16px 15px 11px;display:block}.condition-badge{display:inline-block;margin-top:9px}.canvas-wrap{margin:0 8px;min-height:330px}.transport{padding:12px 12px 15px}.legend{gap:7px;font-size:.68rem}.controls{display:flex;padding:17px}.compare,.challenge{padding:17px}.compare-grid{grid-template-columns:1fr}.compare-item{display:grid;grid-template-columns:76px 1fr;column-gap:8px}.compare-item h3{grid-column:1/-1}.tube-icon{grid-row:2}.choices{grid-template-columns:1fr}.concept-strip{grid-template-columns:1fr}.canvas-tip{font-size:.68rem}}
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+  </style>
+</head>
+<body>
+<main class="shell">
+  <header class="topbar">
+    <div class="brand"><div class="logo" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none"><path d="M3 20c5-18 9 18 14 0s9 18 14 0 5 4 6 0" stroke="#05212b" stroke-width="3.2" stroke-linecap="round"/></svg></div><div><div class="eyebrow">Wave Lab · 물리학</div><h1>정상파 공명 실험실</h1></div></div>
+    <div class="header-actions"><button class="ghost-btn" id="soundBtn" aria-pressed="false" title="소리 켜기"><b id="soundIcon">♬</b><span id="soundText">소리 듣기</span></button><button class="icon-btn" id="resetBtn" title="모든 값 초기화" aria-label="모든 값 초기화">↻</button></div>
+  </header>
+
+  <nav class="mode-tabs" aria-label="실험 장치 선택">
+    <button class="tab active" data-kind="string"><span>현</span><span class="mini">양끝 고정</span></button>
+    <button class="tab" data-kind="open"><span>개관</span><span class="mini">양끝 열림</span></button>
+    <button class="tab" data-kind="closed"><span>폐관</span><span class="mini">한쪽 닫힘</span></button>
+  </nav>
+
+  <section class="workspace">
+    <article class="card stage">
+      <div class="stage-head"><div class="stage-title"><h2 id="stageTitle">현의 정상파</h2><p id="stageDesc">양끝이 고정되어 두 끝에서 변위가 0인 마디가 생깁니다.</p></div><span class="condition-badge" id="conditionBadge">마디 ┃ 마디</span></div>
+      <div class="canvas-wrap"><canvas id="waveCanvas" role="img" aria-label="현의 정상파 애니메이션"></canvas><div class="canvas-tip" id="canvasTip">붉은 점: 마디 · 청록 점: 배</div></div>
+      <div class="transport">
+        <div class="transport-group"><button class="round primary" id="playBtn" aria-label="일시정지">Ⅱ</button><button class="round" id="stepBtn" aria-label="한 단계 진행">▷│</button></div>
+        <div class="legend"><span><i class="dot node"></i>마디</span><span><i class="dot anti"></i>배</span><span><i class="dot eq"></i>평형 위치</span></div>
+      </div>
+    </article>
+
+    <aside class="card controls">
+      <h2>실험 조건</h2>
+      <div class="control"><div class="label-row"><label for="length">길이 L</label><output class="value" id="lengthVal">1.00 m</output></div><input class="range" id="length" type="range" min="0.4" max="2" value="1" step="0.05" style="--pct:37.5%"></div>
+      <div class="control"><div class="label-row"><label for="speed">파동 속력 v</label><output class="value" id="speedVal">120 m/s</output></div><input class="range" id="speed" type="range" min="60" max="360" value="120" step="5" style="--pct:20%"></div>
+      <div class="control"><div class="label-row"><label>공명 모드</label><span class="value" id="harmonicLabel">제1배음</span></div><div class="mode-stepper"><button class="square" id="minusMode" aria-label="모드 낮추기">−</button><div class="mode-display"><span id="modeNumber">n = 1</span><small id="modeHint">기본 진동</small></div><button class="square" id="plusMode" aria-label="모드 높이기">＋</button></div></div>
+      <div class="control" id="viewControl"><div class="label-row"><label>관찰량</label><span class="value" id="viewStatus">변위</span></div><div class="seg"><button class="active" data-view="displacement">입자 변위</button><button data-view="pressure">압력 변화</button></div></div>
+      <div class="data-panel"><div class="metric"><small>공명 주파수</small><strong class="cyan" id="freq">60.0 Hz</strong></div><div class="metric"><small>파장</small><strong class="amber" id="wavelength">2.00 m</strong></div><div class="metric"><small>마디 수</small><strong id="nodes">2개</strong></div><div class="metric"><small>배 수</small><strong id="antinodes">1개</strong></div></div>
+      <div class="formula"><span>공명 조건</span><strong id="formula">fₙ = nv / 2L</strong></div>
+      <div class="hint" id="hint">길이를 늘리면 같은 모드의 공명 주파수는 낮아집니다.</div>
+    </aside>
+  </section>
+
+  <section class="lower">
+    <article class="card compare">
+      <div class="section-head"><h2>세 장치 한눈에 비교</h2><p>카드를 눌러 실험 전환</p></div>
+      <div class="compare-grid">
+        <div class="compare-item selected" data-kind="string" tabindex="0" role="button"><h3>현 · 양끝 고정</h3><div class="tube-icon"><div class="tube closed-left closed-right"></div><svg class="wave" viewBox="0 0 100 30" preserveAspectRatio="none"><path d="M0 15 Q25 -2 50 15 T100 15" fill="none" stroke="#35d6d0" stroke-width="3"/></svg></div><p><b>모든 정수배</b><br>fₙ = nv / 2L</p></div>
+        <div class="compare-item" data-kind="open" tabindex="0" role="button"><h3>개관 · 양끝 열림</h3><div class="tube-icon"><div class="tube"></div><svg class="wave" viewBox="0 0 100 30" preserveAspectRatio="none"><path d="M0 1 Q25 29 50 1 T100 1" fill="none" stroke="#68a8ff" stroke-width="3"/></svg></div><p><b>모든 정수배</b><br>fₙ = nv / 2L</p></div>
+        <div class="compare-item" data-kind="closed" tabindex="0" role="button"><h3>폐관 · 한쪽 닫힘</h3><div class="tube-icon"><div class="tube closed-left"></div><svg class="wave" viewBox="0 0 100 30" preserveAspectRatio="none"><path d="M0 15 Q50 15 100 1" fill="none" stroke="#ffc768" stroke-width="3"/></svg></div><p><b>홀수 배음만</b><br>fₙ = (2n−1)v / 4L</p></div>
+      </div>
+      <div class="spectrum"><div class="section-head"><h2>배음 스펙트럼</h2><p id="spectrumText">기본 진동수의 모든 정수배</p></div><div class="spectrum-labels" id="spectrumBars"></div></div>
+    </article>
+
+    <article class="card challenge">
+      <span class="question-tag">예측하고 확인하기</span><p class="question" id="question">현의 길이를 2배로 늘리면 기본 진동수는 어떻게 될까요?</p><div class="choices" id="choices"></div><div class="feedback" id="feedback" aria-live="polite">먼저 결과를 예상해 보세요. 조건을 직접 바꾸어 확인해도 좋습니다.</div><button class="new-q" id="newQuestion">다른 질문 →</button>
+      <div class="concept-strip"><div class="concept"><strong>마디</strong><p>진폭이 항상 0인 곳</p></div><div class="concept"><strong>배</strong><p>진폭이 가장 큰 곳</p></div><div class="concept"><strong>공명</strong><p>고유 진동수와 일치해 진폭이 커지는 현상</p></div></div>
+    </article>
+  </section>
+  <p class="footer-note">소리는 이해를 돕기 위한 순음입니다. 큰 음량으로 오래 듣지 마세요.</p>
+</main>
+<script>
+(()=>{
+  const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+  const canvas=$('#waveCanvas'), ctx=canvas.getContext('2d');
+  const initial={kind:'string',length:1,speed:120,mode:1,view:'displacement',playing:true,sound:false};
+  const state={...initial,time:0}; let raf,last=performance.now(),audioCtx,osc,gain;
+  const info={
+    string:{title:'현의 정상파',desc:'양끝이 고정되어 두 끝에서 변위가 0인 마디가 생깁니다.',badge:'마디 ┃ 마디',color:'#35d6d0'},
+    open:{title:'개관의 정상파',desc:'양끝이 열린 관입니다. 입자 변위는 양끝에서 최대인 배가 됩니다.',badge:'배 ◯ 배',color:'#68a8ff'},
+    closed:{title:'폐관의 정상파',desc:'닫힌 끝은 변위 마디, 열린 끝은 변위 배가 됩니다.',badge:'마디 ┃ ◯ 배',color:'#ffc768'}
+  };
+  const questions=[
+    {q:'현의 길이를 2배로 늘리면 기본 진동수는 어떻게 될까요?',a:'절반이 된다',o:['2배가 된다','절반이 된다','변하지 않는다','4배가 된다'],why:'f₁ = v/(2L)이므로 길이와 진동수는 반비례합니다.'},
+    {q:'같은 길이와 파동 속력에서 개관과 폐관의 기본 진동수를 비교하면?',a:'개관이 2배 높다',o:['서로 같다','폐관이 2배 높다','개관이 2배 높다','비교할 수 없다'],why:'개관은 v/(2L), 폐관은 v/(4L)이므로 개관의 기본 진동수가 2배입니다.'},
+    {q:'폐관에서 나타날 수 없는 배음은 무엇일까요?',a:'제2배음',o:['제1배음','제2배음','제3배음','제5배음'],why:'폐관에는 기본 진동수의 1, 3, 5…배인 홀수 배음만 나타납니다.'},
+    {q:'개관의 열린 끝에서 공기 입자 변위는 어떤 상태일까요?',a:'배',o:['마디','배','항상 0','정지 상태'],why:'열린 끝은 공기가 자유롭게 움직일 수 있어 변위의 배가 됩니다.'}
+  ]; let qi=0;
+  function freq(){return state.kind==='closed'?(2*state.mode-1)*state.speed/(4*state.length):state.mode*state.speed/(2*state.length)}
+  function lambda(){return state.speed/freq()}
+  function harmonic(){return state.kind==='closed'?2*state.mode-1:state.mode}
+  function resize(){const r=canvas.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2);canvas.width=Math.round(r.width*d);canvas.height=Math.round(r.height*d);ctx.setTransform(d,0,0,d,0,0);draw()}
+  function pathAmplitude(u){
+    let y;
+    if(state.kind==='string') y=Math.sin(state.mode*Math.PI*u);
+    else if(state.kind==='open') y=Math.cos(state.mode*Math.PI*u);
+    else y=Math.sin((2*state.mode-1)*Math.PI*u/2);
+    if(state.view==='pressure'&&state.kind!=='string'){
+      if(state.kind==='open')y=Math.sin(state.mode*Math.PI*u);
+      else y=Math.cos((2*state.mode-1)*Math.PI*u/2);
+    }
+    return y;
+  }
+  function getSpecialPoints(){
+    const pts=[]; const samples=1600; let prevA=Math.abs(pathAmplitude(0)),prevSlope=0;
+    for(let i=0;i<=samples;i++){const u=i/samples,a=Math.abs(pathAmplitude(u));
+      if(a<.004 && (pts.length===0||Math.abs(u-pts.at(-1).u)>.015))pts.push({u,type:'node'});
+      const slope=a-prevA;if(i>1&&prevSlope>0&&slope<=0&&a>.95)pts.push({u:(i-1)/samples,type:'anti'});prevSlope=slope;prevA=a;
+    }
+    [0,1].forEach(u=>{const type=Math.abs(pathAmplitude(u))<.01?'node':'anti';if(!pts.some(p=>Math.abs(p.u-u)<.01))pts.push({u,type})});
+    return pts.sort((a,b)=>a.u-b.u);
+  }
+  function draw(){
+    const w=canvas.clientWidth,h=canvas.clientHeight;ctx.clearRect(0,0,w,h);if(!w||!h)return;
+    const pad=Math.max(36,w*.07),x0=pad,x1=w-pad,mid=h*.53,amp=Math.min(h*.24,86),c=info[state.kind].color;
+    ctx.save();ctx.strokeStyle='#ffc76888';ctx.setLineDash([6,8]);ctx.lineWidth=1.2;ctx.beginPath();ctx.moveTo(x0,mid);ctx.lineTo(x1,mid);ctx.stroke();ctx.setLineDash([]);
+    if(state.kind!=='string'){
+      ctx.fillStyle='#0b2635bb';ctx.fillRect(x0,mid-amp-30,x1-x0,2*amp+60);ctx.strokeStyle='#6d8c9e';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(x0,mid-amp-30);ctx.lineTo(x1,mid-amp-30);ctx.moveTo(x0,mid+amp+30);ctx.lineTo(x1,mid+amp+30);ctx.stroke();
+      if(state.kind==='closed'){ctx.fillStyle='#7894a4';ctx.fillRect(x0-5,mid-amp-34,7,2*amp+68)}
+      const parts=Math.max(22,Math.round((x1-x0)/25));
+      for(let i=0;i<=parts;i++){const u=i/parts,base=x0+u*(x1-x0),a=pathAmplitude(u),move=state.view==='displacement'?a*Math.cos(state.time)*12:0;const density=state.view==='pressure'?1+.55*a*Math.cos(state.time):1;ctx.beginPath();ctx.fillStyle=state.view==='pressure'?(density>1?'#ffcb70':'#68a8ff'):'#bfe9f0';ctx.globalAlpha=.35+Math.abs(density-1)*.75;ctx.arc(base+move,mid+(i%3-1)*9,2.3,0,Math.PI*2);ctx.fill()}
+      ctx.globalAlpha=1;
+    }else{
+      ctx.strokeStyle='#758e9d';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(x0,mid-amp-18);ctx.lineTo(x0,mid+amp+18);ctx.moveTo(x1,mid-amp-18);ctx.lineTo(x1,mid+amp+18);ctx.stroke();
+    }
+    const scale=Math.cos(state.time);ctx.strokeStyle=c;ctx.lineWidth=4;ctx.shadowColor=c;ctx.shadowBlur=14;ctx.beginPath();for(let i=0;i<=500;i++){const u=i/500,x=x0+u*(x1-x0),y=mid-pathAmplitude(u)*amp*scale;i?ctx.lineTo(x,y):ctx.moveTo(x,y)}ctx.stroke();ctx.shadowBlur=0;
+    ctx.strokeStyle=c+'55';ctx.lineWidth=1.4;ctx.beginPath();for(let i=0;i<=500;i++){const u=i/500,x=x0+u*(x1-x0),y=mid+pathAmplitude(u)*amp*scale;i?ctx.lineTo(x,y):ctx.moveTo(x,y)}ctx.stroke();
+    const pts=getSpecialPoints();pts.forEach(p=>{const x=x0+p.u*(x1-x0),isN=p.type==='node';ctx.fillStyle=isN?'#ff6f91':'#35d6d0';ctx.beginPath();ctx.arc(x,mid,isN?5:4.5,0,Math.PI*2);ctx.fill();ctx.font='700 12px system-ui';ctx.textAlign='center';ctx.fillText(isN?'마디':'배',x,mid+amp+55)});
+    ctx.fillStyle='#9fb7c6';ctx.font='12px system-ui';ctx.textAlign='left';ctx.fillText('0',x0,25);ctx.textAlign='right';ctx.fillText(`L = ${state.length.toFixed(2)} m`,x1,25);
+    if(state.kind!=='string'){ctx.font='700 12px system-ui';ctx.textAlign='center';ctx.fillStyle='#d9e8ef';ctx.fillText(state.kind==='closed'?'닫힌 끝':'열린 끝',x0,mid-amp-43);ctx.fillText('열린 끝',x1,mid-amp-43)}ctx.restore();
+  }
+  function updateRange(el){const p=(el.value-el.min)/(el.max-el.min)*100;el.style.setProperty('--pct',p+'%')}
+  function updateAudio(){if(!osc)return;osc.frequency.setTargetAtTime(Math.min(freq(),1000),audioCtx.currentTime,.025)}
+  function update(){
+    const i=info[state.kind],f=freq(),lam=lambda(),pts=getSpecialPoints();
+    $('#stageTitle').textContent=i.title;$('#stageDesc').textContent=i.desc;$('#conditionBadge').textContent=i.badge;canvas.setAttribute('aria-label',`${i.title}, ${harmonic()}배음, ${f.toFixed(1)}헤르츠`);
+    $('#lengthVal').textContent=state.length.toFixed(2)+' m';$('#speedVal').textContent=Math.round(state.speed)+' m/s';$('#freq').textContent=f.toFixed(1)+' Hz';$('#wavelength').textContent=lam.toFixed(2)+' m';
+    $('#nodes').textContent=pts.filter(p=>p.type==='node').length+'개';$('#antinodes').textContent=pts.filter(p=>p.type==='anti').length+'개';
+    $('#modeNumber').textContent='n = '+state.mode;$('#modeHint').textContent=state.mode===1?'기본 진동':`${state.mode}번째 공명 모드`;$('#harmonicLabel').textContent=`제${harmonic()}배음`;
+    $('#formula').textContent=state.kind==='closed'?'fₙ = (2n−1)v / 4L':'fₙ = nv / 2L';$('#hint').textContent=state.kind==='closed'?'폐관은 기본 진동수의 홀수 배음만 공명합니다.':'길이를 늘리면 같은 모드의 공명 주파수는 낮아집니다.';
+    $('#viewControl').style.opacity=state.kind==='string'?'.45':'1';$$('[data-view]').forEach(b=>{b.disabled=state.kind==='string';b.classList.toggle('active',b.dataset.view===state.view)});$('#viewStatus').textContent=state.view==='pressure'?'압력':'변위';
+    $('#canvasTip').textContent=state.view==='pressure'&&state.kind!=='string'?'관 끝에서 변위와 압력의 마디·배는 서로 반대입니다.':'붉은 점: 마디 · 청록 점: 배';
+    $$('.tab').forEach(t=>t.classList.toggle('active',t.dataset.kind===state.kind));$$('.compare-item').forEach(t=>t.classList.toggle('selected',t.dataset.kind===state.kind));updateSpectrum();updateAudio();draw();
+  }
+  function setKind(k){state.kind=k;if(k==='string')state.view='displacement';state.mode=Math.min(state.mode,6);update()}
+  function updateSpectrum(){const box=$('#spectrumBars');box.innerHTML='';for(let n=1;n<=8;n++){const on=state.kind!=='closed'||n%2===1;const wrap=document.createElement('div');wrap.className='bar-wrap';wrap.innerHTML=`<div class="bar ${on?'':'off'}" style="height:${on?Math.max(13,72/n):4}px"></div><small>${n}f₁</small>`;box.append(wrap)}$('#spectrumText').textContent=state.kind==='closed'?'홀수 배음(1, 3, 5…)만 형성':'기본 진동수의 모든 정수배'}
+  function animate(now){const dt=Math.min((now-last)/1000,.05);last=now;if(state.playing)state.time+=dt*3.2;draw();raf=requestAnimationFrame(animate)}
+  function togglePlay(){state.playing=!state.playing;$('#playBtn').textContent=state.playing?'Ⅱ':'▶';$('#playBtn').setAttribute('aria-label',state.playing?'일시정지':'재생')}
+  async function toggleSound(){if(!state.sound){audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();osc=audioCtx.createOscillator();gain=audioCtx.createGain();osc.type=state.kind==='string'?'triangle':'sine';gain.gain.value=.035;osc.connect(gain).connect(audioCtx.destination);osc.start();state.sound=true;updateAudio()}else{gain.gain.setTargetAtTime(0,audioCtx.currentTime,.02);const old=osc;setTimeout(()=>old.stop(),80);osc=null;state.sound=false}$('#soundBtn').setAttribute('aria-pressed',state.sound);$('#soundText').textContent=state.sound?'소리 끄기':'소리 듣기';$('#soundIcon').textContent=state.sound?'♪':'♬'}
+  function renderQuestion(){const q=questions[qi];$('#question').textContent=q.q;const box=$('#choices');box.innerHTML='';q.o.forEach(o=>{const b=document.createElement('button');b.className='choice';b.textContent=o;b.onclick=()=>answer(b,o);box.append(b)});const fb=$('#feedback');fb.className='feedback';fb.textContent='먼저 결과를 예상해 보세요. 조건을 직접 바꾸어 확인해도 좋습니다.'}
+  function answer(btn,o){const q=questions[qi],ok=o===q.a;$$('.choice').forEach(b=>b.disabled=true);btn.classList.add(ok?'correct':'wrong');if(!ok)$$('.choice').find(b=>b.textContent===q.a)?.classList.add('correct');const fb=$('#feedback');fb.className='feedback '+(ok?'success':'');fb.textContent=(ok?'좋은 예측입니다. ':'다시 핵심 관계를 살펴봅시다. ')+q.why}
+  $$('.tab,.compare-item').forEach(el=>{el.addEventListener('click',()=>setKind(el.dataset.kind));el.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&el.classList.contains('compare-item')){e.preventDefault();setKind(el.dataset.kind)}})});
+  $('#length').oninput=e=>{state.length=+e.target.value;updateRange(e.target);update()};$('#speed').oninput=e=>{state.speed=+e.target.value;updateRange(e.target);update()};
+  $('#minusMode').onclick=()=>{state.mode=Math.max(1,state.mode-1);update()};$('#plusMode').onclick=()=>{state.mode=Math.min(6,state.mode+1);update()};
+  $$('[data-view]').forEach(b=>b.onclick=()=>{state.view=b.dataset.view;update()});$('#playBtn').onclick=togglePlay;$('#stepBtn').onclick=()=>{state.playing=false;state.time+=Math.PI/8;$('#playBtn').textContent='▶';draw()};$('#soundBtn').onclick=toggleSound;
+  $('#resetBtn').onclick=()=>{Object.assign(state,{...initial,time:0});$('#length').value=1;$('#speed').value=120;updateRange($('#length'));updateRange($('#speed'));if(osc)toggleSound();$('#playBtn').textContent='Ⅱ';update();renderQuestion()};
+  $('#newQuestion').onclick=()=>{qi=(qi+1)%questions.length;renderQuestion()};window.addEventListener('resize',resize);document.addEventListener('visibilitychange',()=>{if(document.hidden&&state.playing)last=performance.now()});
+  update();renderQuestion();resize();raf=requestAnimationFrame(animate);
+})();
+</script>
+</body>
+</html>

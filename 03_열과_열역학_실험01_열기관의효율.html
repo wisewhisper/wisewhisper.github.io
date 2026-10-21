@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>열기관 효율 실험실</title>
+<style>
+:root{
+  --bg:#08111f; --panel:#101c2f; --panel2:#14243c; --text:#edf5ff; --muted:#a9bdd6;
+  --hot:#ff775f; --cold:#65b9ff; --work:#ffd15c; --good:#66e0a3; --line:#2c4360;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; font-family:system-ui,-apple-system,"Pretendard","Noto Sans KR",sans-serif;
+  background:radial-gradient(circle at top,#142744 0,#08111f 48%,#050b14 100%);
+  color:var(--text); min-height:100vh;
+}
+header{max-width:1300px;margin:auto;padding:24px 18px 10px}
+h1{margin:0;font-size:clamp(1.7rem,4vw,2.6rem);letter-spacing:-.04em}
+.subtitle{margin-top:8px;color:var(--muted);line-height:1.55}
+main{max-width:1300px;margin:auto;padding:12px 18px 40px;display:grid;grid-template-columns:330px 1fr;gap:16px}
+.panel{background:linear-gradient(180deg,rgba(20,36,60,.97),rgba(11,22,38,.97));border:1px solid #27405d;border-radius:20px;box-shadow:0 18px 45px rgba(0,0,0,.25)}
+.controls{padding:18px;align-self:start;position:sticky;top:12px}
+.control{margin:15px 0}
+.labelrow{display:flex;justify-content:space-between;gap:12px;font-weight:700}
+.value{font-variant-numeric:tabular-nums;color:#fff}
+small,.hint{color:var(--muted)}
+input[type="range"]{width:100%;accent-color:#7dc9ff}
+.mode{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+button{
+  appearance:none;border:1px solid #38536f;background:#172a44;color:var(--text);border-radius:12px;
+  padding:11px 12px;font-weight:800;cursor:pointer;touch-action:manipulation
+}
+button:hover{filter:brightness(1.12)}
+button.active{background:#245e7d;border-color:#64c8ff}
+button.primary{background:#1d7657;border-color:#52d89b}
+button.danger{background:#4a2730;border-color:#9d5262}
+.buttons{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
+.stage{padding:14px;min-width:0}
+.canvasWrap{position:relative;background:#07111e;border:1px solid #223955;border-radius:16px;overflow:hidden}
+#sim{display:block;width:100%;height:440px}
+.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:12px}
+.metric{background:#0b1728;border:1px solid #263c57;border-radius:14px;padding:13px}
+.metric b{display:block;font-size:1.4rem;margin-top:4px;font-variant-numeric:tabular-nums}
+.metric span{color:var(--muted);font-size:.85rem}
+.hot{color:var(--hot)} .cold{color:var(--cold)} .work{color:var(--work)} .good{color:var(--good)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.section{padding:16px}
+.section h2{font-size:1.05rem;margin:0 0 12px}
+#graph{width:100%;height:250px;display:block;background:#081421;border-radius:12px}
+.formula{display:grid;gap:8px}
+.eq{background:#081421;border:1px solid #263c57;border-radius:12px;padding:11px 12px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.insight{margin-top:10px;padding:12px;border-radius:12px;background:#102b29;border:1px solid #27594f;line-height:1.55}
+.energyBars{display:grid;gap:9px;margin-top:10px}
+.barrow{display:grid;grid-template-columns:78px 1fr 82px;gap:8px;align-items:center;font-size:.9rem}
+.track{height:14px;border-radius:999px;background:#09131f;overflow:hidden;border:1px solid #23374e}
+.fill{height:100%;border-radius:999px;transition:width .25s}
+#barQh{background:var(--hot)} #barW{background:var(--work)} #barQc{background:var(--cold)}
+.tableWrap{overflow:auto;max-height:260px;border:1px solid #2a425f;border-radius:12px}
+table{width:100%;border-collapse:collapse;min-width:680px;font-size:.9rem}
+th,td{padding:9px 10px;border-bottom:1px solid #233a55;text-align:right}
+th:first-child,td:first-child{text-align:center}
+th{position:sticky;top:0;background:#13243a;color:#cde3fb}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.challenge{display:grid;gap:8px}
+.task{padding:10px 12px;border-radius:12px;background:#0a1727;border:1px solid #253d59}
+.task.done{border-color:#3f9e75;background:#0d2a22}
+.task strong{display:block;margin-bottom:3px}
+.footerNote{color:var(--muted);font-size:.82rem;line-height:1.55;margin-top:10px}
+.badge{display:inline-block;padding:4px 8px;border-radius:999px;background:#183452;color:#aedaFF;font-size:.78rem;margin-left:6px}
+@media(max-width:900px){
+  main{grid-template-columns:1fr}.controls{position:static}.grid2{grid-template-columns:1fr}
+  .metrics{grid-template-columns:1fr 1fr}#sim{height:390px}
+}
+@media(max-width:520px){
+  header{padding-top:18px}.buttons{grid-template-columns:1fr 1fr}.buttons button:last-child{grid-column:1/-1}
+  #sim{height:350px}.metrics{grid-template-columns:1fr 1fr}.metric b{font-size:1.15rem}
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>🔥 열기관 효율 실험실</h1>
+  <div class="subtitle">고온 열원에서 받은 열 중 얼마가 일로 바뀌는지 실험하고, 실제 효율을 카르노 한계와 비교해 보세요.</div>
+</header>
+
+<main>
+  <aside class="panel controls">
+    <div class="labelrow"><span>운전 모드</span><span id="modeText" class="badge">실제 열기관</span></div>
+    <div class="mode">
+      <button id="realBtn" class="active">실제 열기관</button>
+      <button id="carnotBtn">이상적 카르노</button>
+    </div>
+
+    <div class="control">
+      <div class="labelrow"><label for="th">고온 열원 T<sub>h</sub></label><span id="thv" class="value hot">700 K</span></div>
+      <input id="th" type="range" min="350" max="1200" step="10" value="700">
+      <small id="thc">426.9 °C</small>
+    </div>
+
+    <div class="control">
+      <div class="labelrow"><label for="tc">저온 열원 T<sub>c</sub></label><span id="tcv" class="value cold">300 K</span></div>
+      <input id="tc" type="range" min="200" max="500" step="5" value="300">
+      <small id="tcc">26.9 °C</small>
+    </div>
+
+    <div class="control">
+      <div class="labelrow"><label for="qin">흡수 열 Q<sub>h</sub></label><span id="qinv" class="value">1000 J</span></div>
+      <input id="qin" type="range" min="100" max="5000" step="50" value="1000">
+    </div>
+
+    <div class="control" id="realismWrap">
+      <div class="labelrow"><label for="realism">카르노 한계 대비 성능</label><span id="realismv" class="value good">75%</span></div>
+      <input id="realism" type="range" min="40" max="95" step="1" value="75">
+      <small>마찰·열손실 등 비가역성을 간단히 나타낸 모형입니다.</small>
+    </div>
+
+    <div id="warning" class="hint" style="min-height:42px"></div>
+
+    <div class="buttons">
+      <button class="primary" id="startBtn">▶ 시작</button>
+      <button id="pauseBtn">⏸ 일시정지</button>
+      <button id="resetBtn">↺ 초기화</button>
+    </div>
+  </aside>
+
+  <section class="stage panel">
+    <div class="canvasWrap"><canvas id="sim"></canvas></div>
+
+    <div class="metrics">
+      <div class="metric"><span>카르노 최대 효율</span><b id="etaC" class="good">57.1%</b></div>
+      <div class="metric"><span>현재 열기관 효율</span><b id="eta" class="work">42.9%</b></div>
+      <div class="metric"><span>한 주기 한 일 W</span><b id="work">429 J</b></div>
+      <div class="metric"><span>방출 열 \(Q_c\)</span><b id="qout" class="cold">571 J</b></div>
+    </div>
+
+    <div class="grid2">
+      <div class="panel section">
+        <h2>에너지 분배</h2>
+        <div class="energyBars">
+          <div class="barrow"><span>흡수열 Qh</span><div class="track"><div class="fill" id="barQh"></div></div><b id="barQhTxt">1000 J</b></div>
+          <div class="barrow"><span>유용한 일 W</span><div class="track"><div class="fill" id="barW"></div></div><b id="barWTxt">429 J</b></div>
+          <div class="barrow"><span>방출열 Qc</span><div class="track"><div class="fill" id="barQc"></div></div><b id="barQcTxt">571 J</b></div>
+        </div>
+        <div class="insight" id="insight">온도 차가 클수록 가능한 최대 효율이 커집니다.</div>
+      </div>
+
+      <div class="panel section">
+        <h2>핵심 관계식</h2>
+        <div class="formula">
+          <div class="eq">W = Qh − Qc</div>
+          <div class="eq">η = W / Qh</div>
+          <div class="eq">η<sub>Carnot</sub> = 1 − Tc / Th &nbsp; (T는 K)</div>
+        </div>
+        <div class="footerNote">실제 열기관은 같은 두 열원 사이에서 카르노 효율을 넘을 수 없습니다. 이 실험실의 ‘실제 열기관’은 교육용 단순 모형으로, 실제 엔진의 세부 손실 메커니즘 전체를 모델링하지는 않습니다.</div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="panel section">
+        <h2>효율 그래프 <span class="badge">Tc 고정, Th 변화</span></h2>
+        <canvas id="graph"></canvas>
+      </div>
+      <div class="panel section">
+        <h2>탐구 미션</h2>
+        <div class="challenge">
+          <div class="task" id="task1"><strong>미션 1</strong>카르노 최대 효율을 60% 이상으로 만들어 보세요.</div>
+          <div class="task" id="task2"><strong>미션 2</strong>실제 열기관에서 한 주기 일이 500 J 이상이 되게 해 보세요.</div>
+          <div class="task" id="task3"><strong>미션 3</strong>같은 Qh에서 Tc를 낮추면 효율이 어떻게 변하는지 확인해 보세요.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel section" style="margin-top:16px">
+      <h2>실험 기록</h2>
+      <div class="tableWrap">
+        <table>
+          <thead><tr><th>#</th><th>모드</th><th>Th (K)</th><th>Tc (K)</th><th>Qh (J)</th><th>ηCarnot</th><th>η</th><th>W (J)</th><th>Qc (J)</th></tr></thead>
+          <tbody id="records"></tbody>
+        </table>
+      </div>
+      <div class="actions">
+        <button id="recordBtn">＋ 현재값 기록</button>
+        <button id="csvBtn">CSV 저장</button>
+        <button class="danger" id="clearBtn">기록 지우기</button>
+      </div>
+      <div class="footerNote">추천 탐구: ① Tc를 고정하고 Th만 변화 ② Th를 고정하고 Tc만 변화 ③ 같은 온도 조건에서 ‘실제’와 ‘카르노’ 모드 비교</div>
+    </div>
+  </section>
+</main>
+
+<script>
+(() => {
+  const $ = s => document.querySelector(s);
+  const th=$('#th'), tc=$('#tc'), qin=$('#qin'), realism=$('#realism');
+  const sim=$('#sim'), graph=$('#graph');
+  const sctx=sim.getContext('2d'), gctx=graph.getContext('2d');
+  let mode='real', running=false, raf=null, phase=0, last=0, records=[];
+  let tcLowered=false, previousTc=Number(tc.value);
+
+  function calc(){
+    let Th=Number(th.value), Tc=Number(tc.value), Qh=Number(qin.value);
+    let valid=Th>Tc;
+    let etaC=valid ? 1-Tc/Th : 0;
+    let factor=mode==='carnot'?1:Number(realism.value)/100;
+    let eta=Math.max(0, Math.min(etaC, etaC*factor));
+    let W=Qh*eta, Qc=Qh-W;
+    return {Th,Tc,Qh,etaC,eta,W,Qc,valid,factor};
+  }
+  const pct=v=>(v*100).toFixed(1)+'%';
+  const j=v=>Math.round(v).toLocaleString('ko-KR')+' J';
+  const celsius=k=>(k-273.15).toFixed(1)+' °C';
+
+  function syncConstraint(){
+    const Th=Number(th.value), Tc=Number(tc.value);
+    if(Tc>=Th){
+      if(document.activeElement===tc) tc.value=Math.max(Number(tc.min),Th-10);
+      else th.value=Math.min(Number(th.max),Tc+10);
+    }
+  }
+
+  function update(){
+    syncConstraint();
+    const d=calc();
+    $('#thv').textContent=d.Th+' K'; $('#tcv').textContent=d.Tc+' K'; $('#qinv').textContent=d.Qh.toLocaleString('ko-KR')+' J';
+    $('#thc').textContent=celsius(d.Th); $('#tcc').textContent=celsius(d.Tc);
+    $('#realismv').textContent=Math.round(d.factor*100)+'%';
+    $('#etaC').textContent=pct(d.etaC); $('#eta').textContent=pct(d.eta);
+    $('#work').textContent=j(d.W); $('#qout').textContent=j(d.Qc);
+    $('#barQhTxt').textContent=j(d.Qh); $('#barWTxt').textContent=j(d.W); $('#barQcTxt').textContent=j(d.Qc);
+    $('#barQh').style.width='100%'; $('#barW').style.width=(100*d.W/d.Qh)+'%'; $('#barQc').style.width=(100*d.Qc/d.Qh)+'%';
+    $('#warning').innerHTML = d.valid
+      ? `현재 온도차: <b>${d.Th-d.Tc} K</b> · ${mode==='real'?'실제 모형 효율은 카르노 한계의 '+Math.round(d.factor*100)+'%':'가역적 이상 열기관의 최대 효율'}`
+      : '고온 열원의 온도는 저온 열원보다 높아야 합니다.';
+    let msg='';
+    if(d.etaC<0.25) msg='두 열원의 온도가 비교적 비슷해 카르노 한계가 낮습니다. Th를 높이거나 Tc를 낮춰 보세요.';
+    else if(d.etaC<0.60) msg='온도 차가 커지면서 가능한 최대 효율도 증가하고 있습니다.';
+    else msg='큰 온도 차로 카르노 한계가 높아졌습니다. 그래도 Tc > 0 K인 한 100% 효율에는 도달하지 않습니다.';
+    if(mode==='real') msg += ` 현재 실제 모형은 이론적 최대치의 ${Math.round(d.factor*100)}%만 사용합니다.`;
+    $('#insight').textContent=msg;
+    $('#task1').classList.toggle('done',d.etaC>=0.60);
+    $('#task2').classList.toggle('done',mode==='real' && d.W>=500);
+    if(d.Tc<previousTc) tcLowered=true;
+    previousTc=d.Tc;
+    $('#task3').classList.toggle('done',tcLowered);
+    drawGraph(d); drawSim(d);
+  }
+
+  function setMode(m){
+    mode=m;
+    $('#realBtn').classList.toggle('active',m==='real');
+    $('#carnotBtn').classList.toggle('active',m==='carnot');
+    $('#realismWrap').style.opacity=m==='real'?'1':'.45';
+    realism.disabled=m!=='real';
+    $('#modeText').textContent=m==='real'?'실제 열기관':'이상적 카르노';
+    update();
+  }
+
+  function fitCanvas(canvas, ctx){
+    const rect=canvas.getBoundingClientRect(), dpr=Math.max(1,Math.min(2,window.devicePixelRatio||1));
+    const w=Math.round(rect.width*dpr), h=Math.round(rect.height*dpr);
+    if(canvas.width!==w || canvas.height!==h){canvas.width=w;canvas.height=h;}
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    return {w:rect.width,h:rect.height};
+  }
+  function rr(ctx,x,y,w,h,r){
+    const q=Math.min(r,w/2,h/2);
+    ctx.beginPath(); ctx.moveTo(x+q,y); ctx.arcTo(x+w,y,x+w,y+h,q); ctx.arcTo(x+w,y+h,x,y+h,q);
+    ctx.arcTo(x,y+h,x,y,q); ctx.arcTo(x,y,x+w,y,q); ctx.closePath();
+  }
+  function arrow(ctx,x1,y1,x2,y2,color,width=5){
+    const a=Math.atan2(y2-y1,x2-x1), head=12;
+    ctx.strokeStyle=color; ctx.fillStyle=color; ctx.lineWidth=width; ctx.lineCap='round';
+    ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-head*Math.cos(a-Math.PI/6),y2-head*Math.sin(a-Math.PI/6));
+    ctx.lineTo(x2-head*Math.cos(a+Math.PI/6),y2-head*Math.sin(a+Math.PI/6));ctx.closePath();ctx.fill();
+  }
+  function drawSim(d){
+    const {w,h}=fitCanvas(sim,sctx); const ctx=sctx;
+    ctx.clearRect(0,0,w,h);
+    const compact=w<600;
+    const cx=w*.5, engineY=h*.47, resW=Math.min(compact?w*.72:260,280), resH=70;
+    const hotY=28, coldY=h-resH-28;
+    // reservoirs
+    ctx.fillStyle='#3b1820';ctx.strokeStyle='#ff775f';ctx.lineWidth=2;rr(ctx,cx-resW/2,hotY,resW,resH,16);ctx.fill();ctx.stroke();
+    ctx.fillStyle='#0e2a45';ctx.strokeStyle='#65b9ff';rr(ctx,cx-resW/2,coldY,resW,resH,16);ctx.fill();ctx.stroke();
+    ctx.fillStyle='#fff';ctx.textAlign='center';ctx.font='700 16px system-ui';
+    ctx.fillText('고온 열원  Th = '+d.Th+' K',cx,hotY+30);ctx.fillStyle='#ffc2b7';ctx.font='13px system-ui';ctx.fillText(celsius(d.Th),cx,hotY+51);
+    ctx.fillStyle='#fff';ctx.font='700 16px system-ui';ctx.fillText('저온 열원  Tc = '+d.Tc+' K',cx,coldY+30);ctx.fillStyle='#b9dcff';ctx.font='13px system-ui';ctx.fillText(celsius(d.Tc),cx,coldY+51);
+    // engine
+    const r=compact?50:58;
+    ctx.fillStyle='#162942';ctx.strokeStyle='#8fc9ff';ctx.lineWidth=3;ctx.beginPath();ctx.arc(cx,engineY,r,0,Math.PI*2);ctx.fill();ctx.stroke();
+    ctx.save();ctx.translate(cx,engineY);ctx.rotate(phase);
+    for(let i=0;i<6;i++){ctx.rotate(Math.PI/3);ctx.fillStyle='#d6eaff';ctx.fillRect(10,-4,r-18,8)}
+    ctx.fillStyle='#ffd15c';ctx.beginPath();ctx.arc(0,0,15,0,Math.PI*2);ctx.fill();ctx.restore();
+    ctx.fillStyle='#eef6ff';ctx.font='800 14px system-ui';ctx.fillText('열기관',cx,engineY+r+21);
+    // arrows
+    arrow(ctx,cx,hotY+resH+6,cx,engineY-r-8,'#ff775f',6);
+    arrow(ctx,cx,engineY+r+8,cx,coldY-6,'#65b9ff',6);
+    const workX=compact?w-35:Math.min(w-70,cx+230);
+    arrow(ctx,cx+r+8,engineY,workX,engineY,'#ffd15c',6);
+    ctx.textAlign=compact?'right':'left';ctx.font='700 13px system-ui';
+    ctx.fillStyle='#ffad9e';ctx.fillText('Qh '+j(d.Qh),compact?w-12:cx+18,(hotY+resH+engineY-r)/2);
+    ctx.fillStyle='#8dcbff';ctx.fillText('Qc '+j(d.Qc),compact?w-12:cx+18,(engineY+r+coldY)/2);
+    ctx.fillStyle='#ffe293';
+    if(compact){ctx.fillText('W '+j(d.W),w-12,engineY-12)}
+    else{ctx.fillText('W = '+j(d.W),cx+r+35,engineY-12)}
+    // moving packets
+    if(running){
+      const t=(phase%(Math.PI*2))/(Math.PI*2);
+      const y1=(hotY+resH+12)+(engineY-r-hotY-resH-20)*t;
+      ctx.fillStyle='#ff8b72';ctx.beginPath();ctx.arc(cx-13,y1,7,0,Math.PI*2);ctx.fill();
+      const y2=(engineY+r+12)+(coldY-engineY-r-20)*t;
+      ctx.fillStyle='#72c5ff';ctx.beginPath();ctx.arc(cx+13,y2,7,0,Math.PI*2);ctx.fill();
+      const wx=(cx+r+12)+(workX-cx-r-20)*t;
+      ctx.fillStyle='#ffd15c';ctx.beginPath();ctx.arc(wx,engineY,7,0,Math.PI*2);ctx.fill();
+    }
+  }
+
+  function drawGraph(d){
+    const {w,h}=fitCanvas(graph,gctx), ctx=gctx;ctx.clearRect(0,0,w,h);
+    const m={l:48,r:16,t:20,b:38}, pw=w-m.l-m.r, ph=h-m.t-m.b;
+    ctx.strokeStyle='#35506d';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(m.l,m.t);ctx.lineTo(m.l,h-m.b);ctx.lineTo(w-m.r,h-m.b);ctx.stroke();
+    ctx.fillStyle='#a9bdd6';ctx.font='12px system-ui';ctx.textAlign='center';
+    [400,600,800,1000,1200].forEach(x=>{
+      const px=m.l+(x-350)/(1200-350)*pw;ctx.fillText(x+'K',px,h-14);
+      ctx.strokeStyle='#1e334a';ctx.beginPath();ctx.moveTo(px,m.t);ctx.lineTo(px,h-m.b);ctx.stroke();
+    });
+    ctx.textAlign='right';
+    [0,.25,.5,.75,1].forEach(y=>{
+      const py=h-m.b-y*ph;ctx.fillText(Math.round(y*100)+'%',m.l-7,py+4);
+      ctx.strokeStyle='#1e334a';ctx.beginPath();ctx.moveTo(m.l,py);ctx.lineTo(w-m.r,py);ctx.stroke();
+    });
+    ctx.strokeStyle='#66e0a3';ctx.lineWidth=3;ctx.beginPath();let started=false;
+    for(let x=350;x<=1200;x+=5){
+      if(x<=d.Tc) continue;
+      const eta=1-d.Tc/x, px=m.l+(x-350)/(1200-350)*pw, py=h-m.b-eta*ph;
+      if(!started){ctx.moveTo(px,py);started=true}else ctx.lineTo(px,py);
+    }ctx.stroke();
+    const px=m.l+(d.Th-350)/(1200-350)*pw, pyC=h-m.b-d.etaC*ph, py=h-m.b-d.eta*ph;
+    ctx.fillStyle='#66e0a3';ctx.beginPath();ctx.arc(px,pyC,6,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#ffd15c';ctx.beginPath();ctx.arc(px,py,6,0,Math.PI*2);ctx.fill();
+    ctx.textAlign='left';ctx.fillStyle='#66e0a3';ctx.fillText('— 카르노 한계',m.l+8,m.t+12);
+    ctx.fillStyle='#ffd15c';ctx.fillText('● 현재 효율',m.l+8,m.t+29);
+  }
+
+  function loop(ts){
+    if(!running) return;
+    const dt=Math.min(40,ts-last||16); last=ts;
+    phase=(phase+dt*0.0045)%(Math.PI*2);
+    drawSim(calc());
+    raf=requestAnimationFrame(loop);
+  }
+  function start(){
+    if(running) return;
+    running=true; last=performance.now();
+    cancelAnimationFrame(raf); raf=requestAnimationFrame(loop);
+  }
+  function pause(){running=false;cancelAnimationFrame(raf);raf=null;drawSim(calc())}
+  function reset(){
+    pause(); th.value=700;tc.value=300;qin.value=1000;realism.value=75;phase=0;tcLowered=false;previousTc=300;setMode('real');update();
+  }
+
+  function addRecord(){
+    const d=calc();
+    records.push({mode:mode==='real'?'실제':'카르노',...d});
+    renderRecords();
+  }
+  function renderRecords(){
+    $('#records').innerHTML=records.map((r,i)=>`<tr>
+      <td>${i+1}</td><td>${r.mode}</td><td>${r.Th}</td><td>${r.Tc}</td><td>${Math.round(r.Qh)}</td>
+      <td>${pct(r.etaC)}</td><td>${pct(r.eta)}</td><td>${Math.round(r.W)}</td><td>${Math.round(r.Qc)}</td>
+    </tr>`).join('');
+  }
+  function saveCSV(){
+    if(!records.length) addRecord();
+    const rows=[['번호','모드','Th(K)','Tc(K)','Qh(J)','카르노효율(%)','실제효율(%)','W(J)','Qc(J)']];
+    records.forEach((r,i)=>rows.push([i+1,r.mode,r.Th,r.Tc,r.Qh,(r.etaC*100).toFixed(2),(r.eta*100).toFixed(2),r.W.toFixed(2),r.Qc.toFixed(2)]));
+    const csv='\ufeff'+rows.map(row=>row.join(',')).join('\n');
+    const blob=new Blob([csv],{type:'text/csv;charset=utf-8'}), url=URL.createObjectURL(blob);
+    const a=document.createElement('a');a.href=url;a.download='heat_engine_experiment.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  }
+
+  [th,tc,qin,realism].forEach(el=>el.addEventListener('input',update));
+  $('#realBtn').addEventListener('click',()=>setMode('real'));
+  $('#carnotBtn').addEventListener('click',()=>setMode('carnot'));
+  $('#startBtn').addEventListener('click',start);$('#pauseBtn').addEventListener('click',pause);$('#resetBtn').addEventListener('click',reset);
+  $('#recordBtn').addEventListener('click',addRecord);$('#csvBtn').addEventListener('click',saveCSV);
+  $('#clearBtn').addEventListener('click',()=>{records=[];renderRecords()});
+  window.addEventListener('resize',update);
+  update();
+})();
+</script>
+</body>
+</html>

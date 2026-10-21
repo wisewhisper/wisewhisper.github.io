@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>축전기 RC 충전·방전 실험실</title>
+<style>
+:root{--bg:#071427;--panel:#0e233a;--line:#2b4764;--text:#e9f6ff;--muted:#a5bfd2;--teal:#38e8d4;--orange:#ffb260;--violet:#b394ff;--red:#ff6988;--blue:#55c4ff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 18% -10%,#1b4665 0,transparent 44%),radial-gradient(ellipse at 98% 12%,#302556 0,transparent 40%),var(--bg);color:var(--text);font-family:Pretendard,"Noto Sans KR",system-ui,sans-serif;line-height:1.55}button,input{font:inherit}button{cursor:pointer}
+.wrap{max-width:1210px;margin:0 auto;padding:22px 18px 52px}.over{display:flex;align-items:center;gap:10px;color:#8fe8e8;font-weight:750;letter-spacing:.14em;font-size:12px}.over b{background:linear-gradient(120deg,#0ccbb9,#508de8);color:#061626;padding:4px 10px;border-radius:20px;letter-spacing:.02em}h1{font-size:clamp(26px,4vw,43px);letter-spacing:-.05em;line-height:1.2;margin:15px 0 9px}.lead{max-width:800px;color:#bed4e3;margin:0 0 22px;font-size:15px}.lead strong{color:#fff}
+.card{background:linear-gradient(150deg,rgba(19,49,74,.97),rgba(11,29,48,.98));border:1px solid #35526c;border-radius:18px;box-shadow:0 12px 35px #0002;min-width:0;overflow:hidden}.boxpad{padding:18px 20px}.sectionHead{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}.sectionHead h2{font-size:18px;margin:0;letter-spacing:-.03em}.hint{font-size:12px;color:var(--muted)}
+.top{display:grid;grid-template-columns: 1fr 1fr;gap:16px;margin-bottom:16px}.controlGrid{display:grid;grid-template-columns:1fr 1fr;gap:15px 23px}.controlHead{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:7px;font-size:13px;color:#d1e5f3}.controlHead output{font-weight:800;font-size:15px;color:#fff}input[type=range]{width:100%;accent-color:var(--teal);cursor:pointer}.miniNote{font-size:12px;color:var(--muted);margin:10px 0 0}.controlsBtns{display:flex;gap:8px;flex-wrap:wrap}.action{border:1px solid #3d6684;background:#1b3c56;color:white;border-radius:10px;font-weight:720;padding:10px 14px;min-height:43px}.action.primary{background:linear-gradient(110deg,#16b8ac,#1e99c7);border-color:#45dccc;color:#041724}.action.orange{background:linear-gradient(110deg,#cc8252,#e7aa65);border-color:#e7aa65;color:#251300}.action:hover{filter:brightness(1.13)}.action:focus-visible,input:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.status{margin:12px 0 9px;display:flex;align-items:center;gap:8px;font-size:13px;color:#c7e4f2}.light{width:9px;height:9px;border-radius:50%;background:#92a9bb;box-shadow:0 0 0 3px #92a9bb22}.light.on{background:var(--teal);box-shadow:0 0 0 4px #38e8d428}.snap{display:flex;gap:7px;flex-wrap:wrap}.snap button{border:1px solid #3c5b76;color:#bfdcf2;background:#0c293e;padding:7px 12px;border-radius:8px;font-size:12px}
+.meters{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:0 0 16px}.meter{padding:13px 13px 12px;border:1px solid #30516c;background:linear-gradient(135deg,#122b46,#0b1e33);border-radius:13px;min-width:0}.meter .lab{font-size:11px;color:#a5c6d9;white-space:nowrap}.meter .val{font-weight:800;font-size:clamp(16px,2vw,23px);letter-spacing:-.04em;white-space:nowrap;font-variant-numeric:tabular-nums;margin-top:3px}.meter .val.blue{color:var(--blue)}.meter .val.coral{color:var(--red)}.meter .val.tur{color:var(--teal)}.meter .val.amber{color:var(--orange)}
+.visuals{display:grid;grid-template-columns:1.08fr .92fr;gap:16px}.diagramwrap{padding:10px;background:radial-gradient(ellipse at 55% 50%,#15365155,transparent 70%)}svg{display:block;width:100%;height:auto}.wire{fill:none;stroke:#8bbed3;stroke-width:5;stroke-linecap:round;stroke-linejoin:round}.component{fill:none;stroke:#ffca7c;stroke-width:6;stroke-linecap:round}.bright{font-weight:800;fill:#c8e3f3;font-size:17px}.svgTiny{fill:#9ebccf;font-size:14px;font-weight:650}.platePos{stroke:#ff6988;stroke-width:9;stroke-linecap:round}.plateNeg{stroke:#55c4ff;stroke-width:9;stroke-linecap:round}.symbolPos{fill:#ff829a;font-size:24px;font-weight:850}.symbolNeg{fill:#75d4ff;font-size:27px;font-weight:850}.elec{fill:#79d7ff;filter:drop-shadow(0 0 5px #40caff)}.fillTrack{height:11px;border-radius:40px;background:#21435a;overflow:hidden;margin-top:11px}.fill{height:100%;width:0;background:linear-gradient(90deg,#22cbde,#54e6b6,#f7c567);border-radius:40px;transition:width .08s linear}.progressMeta{font-size:12px;color:#c4deeb;display:flex;justify-content:space-between;margin-top:5px}
+.chartBox{padding:14px 12px 10px}.legend{display:flex;gap:14px;flex-wrap:wrap;margin:2px 0 2px;font-size:12px;color:#c2dded}.swatch{display:inline-block;width:10px;height:10px;border-radius:100%;margin-right:6px}.chartCanvas{width:100%;height:295px;display:block}.chartExplain{font-size:12px;color:#abc6d9;margin:4px 4px 0}.equation{margin:16px 0 0;border:1px solid #2d5974;border-radius:13px;padding:13px 16px;background:#0d2a42;color:#e1f2ff;font-size:14px;overflow-wrap:anywhere}.equation b{color:#88ebdb}.bottom{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}.copy{margin:0;color:#bcd7e6;font-size:13px}.steps{margin:0;padding-left:21px;color:#c8ddeb;font-size:14px}.steps li+li{margin-top:7px}.em{font-weight:800;color:#ffcf8c}.foot{margin-top:19px;color:#8cabbe;font-size:11px}.foot a{color:#8fe6d7}.tag{font-size:12px;color:#76edca;background:#123b45;border:1px solid #2e8279;border-radius:40px;padding:4px 9px}
+@media(max-width:890px){.top,.visuals,.bottom{grid-template-columns:1fr}.meters{grid-template-columns:repeat(3,1fr)}}@media(max-width:530px){.wrap{padding:17px 10px 40px}.boxpad{padding:14px}.controlGrid{grid-template-columns:1fr 1fr;gap:10px}.meters{grid-template-columns:repeat(2,1fr);gap:7px}.meter{padding:10px}.meter .val{font-size:20px}.controlsBtns{display:grid;grid-template-columns:1fr 1fr}.action{width:100%;padding:9px 10px}.chartCanvas{height:250px}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="over"><b>PHYSICS LAB</b> 전기와 자기 · 인터랙티브 실험</div>
+  <h1>축전기는 어떻게 충전될까?</h1>
+  <p class="lead">전지·저항·축전기로 연결된 <strong>RC 회로</strong>에서 전하가 쌓이는 모습을 관찰하세요. 시간이 흐를수록 <strong>축전기 전압은 올라가고 전류는 줄어듭니다.</strong></p>
+  <div class="top">
+    <section class="card boxpad" aria-label="실험 조건">
+      <div class="sectionHead"><h2>① 실험 조건 조절</h2><span class="tag">값 변경 시 초기화</span></div>
+      <div class="controlGrid">
+        <label><span class="controlHead">저항 R <output id="rOut">10 kΩ</output></span><input id="r" type="range" min="1" max="30" step="1" value="10" /></label>
+        <label><span class="controlHead">전기 용량 C <output id="cOut">220 µF</output></span><input id="c" type="range" min="20" max="1000" step="20" value="220" /></label>
+        <label><span class="controlHead">전지 전압 V₀ <output id="vOut">9 V</output></span><input id="v" type="range" min="1" max="12" step="1" value="9" /></label>
+        <label><span class="controlHead">재생 속도 <output id="speedOut">1.0×</output></span><input id="speed" type="range" min="0.25" max="5" step="0.25" value="1" /></label>
+      </div>
+      <p class="miniNote">R은 전류를 제한하고, C는 같은 전압에서 저장할 수 있는 전하량을 결정합니다. 각 값의 효과를 비교해 보세요.</p>
+    </section>
+    <section class="card boxpad" aria-label="실험 제어">
+      <div class="sectionHead"><h2>② 충전·방전 실험</h2><span class="hint" id="modeLabel">충전 모드</span></div>
+      <div class="controlsBtns">
+        <button id="play" class="action primary" type="button">▶ 시작</button>
+        <button id="charge" class="action" type="button">⚡ 다시 충전</button>
+        <button id="discharge" class="action orange" type="button">↘ 방전</button>
+        <button id="reset" class="action" type="button">↺ 초기화</button>
+      </div>
+      <div class="status"><i id="light" class="light"></i><span id="statusText" aria-live="polite">준비 완료 · 시작 버튼을 누르세요.</span></div>
+      <div class="snap"><button type="button" id="snap1">1τ 시점 관찰</button><button type="button" id="snap5">5τ 시점 관찰</button></div>
+      <p class="miniNote">시간 이동: 아래 막대를 움직이면 일시정지 상태로 해당 순간을 살펴볼 수 있습니다.</p>
+      <label style="display:block;margin-top:8px"><span class="controlHead">시뮬레이션 시간 <output id="scrubOut">0.00 s</output></span><input id="scrub" type="range" min="0" max="1000" value="0" step="1" /></label>
+    </section>
+  </div>
+  <section class="meters" aria-label="실시간 측정값">
+    <div class="meter"><div class="lab">경과 시간 t</div><div id="tMeter" class="val">0.00 s</div></div>
+    <div class="meter"><div class="lab">시간상수 τ = RC</div><div id="tauMeter" class="val amber">2.20 s</div></div>
+    <div class="meter"><div class="lab">축전기 전압 V꜀</div><div id="vcMeter" class="val coral">0.00 V</div></div>
+    <div class="meter"><div class="lab">전류 크기 |I|</div><div id="iMeter" class="val blue">0.900 mA</div></div>
+    <div class="meter"><div class="lab">극판 전하량 |Q|</div><div id="qMeter" class="val tur">0.000 mC</div></div>
+  </section>
+  <div class="visuals">
+    <section class="card boxpad">
+      <div class="sectionHead"><h2>③ 전하 이동 관찰</h2><span class="hint">파란 점 = 전자 이동 모식도</span></div>
+      <div class="diagramwrap">
+        <svg id="circuit" viewBox="0 0 780 338" role="img" aria-label="전지, 저항, 축전기로 구성된 RC 회로: 축전기 위 극판은 양전하, 아래 극판은 음전하로 표현된다">
+          <defs><linearGradient id="glow" x1="0" x2="1"><stop stop-color="#ff9e6d"/><stop offset="1" stop-color="#ff6e91"/></linearGradient></defs>
+          <rect x="12" y="14" width="756" height="308" rx="23" fill="#092239" opacity=".42" />
+          <g class="wire"><path d="M108 91 H261 M408 91 H651 V157 M651 202 V265 H108 V188"/><path d="M108 91 V158" id="leftWireTop"/></g>
+          <g id="batteryG"><line x1="108" y1="158" x2="108" y2="163" class="wire"/><line x1="108" y1="181" x2="108" y2="188" class="wire"/><line x1="74" y1="163" x2="142" y2="163" stroke="#ff9b93" stroke-width="7" stroke-linecap="round"/><line x1="88" y1="181" x2="129" y2="181" stroke="#7ad5ff" stroke-width="7" stroke-linecap="round"/><text x="51" y="151" class="symbolPos">+</text><text x="50" y="205" class="symbolNeg">−</text><text x="37" y="237" class="svgTiny">전지</text></g>
+          <path id="dischargeBridge" d="M108 158 V188" stroke="#8bbed3" stroke-width="5" fill="none" style="display:none" />
+          <path class="component" d="M261 91 h13 l11 -18 18 36 18 -36 18 36 18 -36 18 36 16 -18 h17" />
+          <text x="337" y="54" text-anchor="middle" class="bright">저항 R</text>
+          <line id="positivePlate" x1="604" y1="157" x2="699" y2="157" class="platePos"/>
+          <line id="negativePlate" x1="604" y1="202" x2="699" y2="202" class="plateNeg"/>
+          <text x="721" y="180" class="bright">C</text>
+          <g id="plusGroup"></g><g id="minusGroup"></g>
+          <g id="electrons"></g>
+          <text x="382" y="175" text-anchor="middle" font-size="20" font-weight="800" fill="#eaf7ff" id="insideLabel">충전 중</text>
+          <text x="382" y="201" text-anchor="middle" font-size="15" font-weight="700" fill="#a8cfe4" id="insideSub">두 극판에 크기가 같은 ±Q가 쌓임</text>
+          <text x="381" y="300" text-anchor="middle" font-size="14" fill="#c0dcea" id="directionText">전자: 위쪽 ← / 아래쪽 → (전류와 반대)</text>
+        </svg>
+      </div>
+      <div class="fillTrack" aria-hidden="true"><div id="fill" class="fill"></div></div>
+      <div class="progressMeta"><span id="progressCaption">최종 전하량 대비 충전율</span><b id="progressText">0.0%</b></div>
+    </section>
+    <section class="card chartBox">
+      <div class="sectionHead" style="padding:0 7px"><h2>④ 전압·전류 그래프</h2><span id="chartSubtitle" class="hint">가로축: 시간 / 세로축: 초기·최종값 대비 비율</span></div>
+      <div class="legend" style="padding:0 7px"><span><i class="swatch" style="background:#ffb260"></i>축전기 전압 V꜀</span><span><i class="swatch" style="background:#55c4ff"></i>전류 크기 |I|</span></div>
+      <canvas id="chart" class="chartCanvas" aria-label="충전 시간에 따른 축전기 전압 증가와 전류 감소 곡선"></canvas>
+      <p class="chartExplain" id="chartExplain">같은 축에 초기·최종값에 대한 비율로 표시합니다. 점선은 1τ입니다.</p>
+    </section>
+  </div>
+  <div class="equation" id="equation" aria-live="polite"><b>충전 법칙</b> · Q(t) = CV₀(1 − e<sup>−t/RC</sup>) · V꜀(t) = V₀(1 − e<sup>−t/RC</sup>) · I(t) = (V₀/R)e<sup>−t/RC</sup></div>
+  <div class="bottom">
+    <section class="card boxpad"><div class="sectionHead"><h2>🔍 실험에서 확인할 사실</h2></div><ol class="steps"><li>처음 충전할 때는 축전기 전압이 0이므로 <span class="em">전류가 가장 큽니다.</span></li><li>극판에 전하가 쌓이면 축전기 전압이 커져 <span class="em">전류는 점점 줄어듭니다.</span></li><li><span class="em">t = 1τ</span>에서 약 63.2%, <span class="em">t = 5τ</span>에서 약 99.3% 충전됩니다.</li><li>전기용량이 클수록 최종 전하량은 커지고, RC가 클수록 충전은 느립니다.</li></ol></section>
+    <section class="card boxpad"><div class="sectionHead"><h2>💡 생각해 볼 문제</h2></div><ol class="steps"><li>저항을 두 배로 늘리면 충전 속도와 <strong>초기 전류</strong>는 어떻게 달라질까요?</li><li>전기용량을 두 배로 늘리고 저항은 고정하면 <strong>최종 전하량</strong>과 <strong>시간상수</strong>는 어떻게 될까요?</li><li>전하가 극판에 쌓이는데, <strong>절연체 사이로 전자가 건너갈까요?</strong></li></ol></section>
+  </div>
+  <p class="foot">과학 모델 안내: 이상적인 직류 RC 회로(일정 전원, 일정 저항·전기용량, 누설전류 없음)를 가정합니다. 전자가 축전기의 절연층을 통과하는 것은 아닙니다. 전자 점은 실제 입자 수와 이동 속도를 그대로 나타내지 않는 개념 모형입니다. · 물리식 근거: <a href="https://openstax.org/books/university-physics-volume-2/pages/10-5-rc-circuits" target="_blank" rel="noopener">OpenStax University Physics 10.5 RC Circuits</a></p>
+</main>
+<script>
+(() => {
+'use strict';
+const $ = id => document.getElementById(id);
+const inputs = {r:$('r'),c:$('c'),v:$('v'),speed:$('speed')};
+const ns='http://www.w3.org/2000/svg';
+let mode='charge',run=false,t=0,startVoltage=0,phase=0,lastFrame=null,message='준비 완료 · 시작 버튼을 누르세요.';
+const getParams=()=>({R:Number(inputs.r.value)*1000,C:Number(inputs.c.value)*1e-6,V:Number(inputs.v.value),speed:Number(inputs.speed.value)});
+const tau=()=>{const p=getParams();return p.R*p.C};
+const valueAt=(time=t)=>{const p=getParams(), decay=Math.exp(-Math.max(0,time)/(p.R*p.C));if(mode==='charge'){const vc=p.V*(1-decay);return {vc,charge:p.C*vc,I:(p.V/p.R)*decay,ratio:vc/p.V,plotV:1-decay,plotI:decay};}const vc=startVoltage*decay;return {vc,charge:p.C*vc,I:-startVoltage/p.R*decay,ratio:vc/p.V,plotV:decay,plotI:decay};};
+const unitTime=x=>x>=10?x.toFixed(1):x.toFixed(2);
+function sget(id,val){$(id).textContent=val}
+function configLabels(){const p=getParams();sget('rOut',(p.R/1000).toFixed(0)+' kΩ');sget('cOut',Math.round(p.C*1e6)+' µF');sget('vOut',p.V.toFixed(0)+' V');sget('speedOut',p.speed.toFixed(2).replace(/0+$/,'').replace(/\.$/,'')+'×');}
+function status(msg){message=msg;sget('statusText',msg);$('light').classList.toggle('on',run);sget('play',run?'Ⅱ 일시정지':'▶ 시작')}
+function beginCharge(auto=true){mode='charge';startVoltage=0;t=0;phase=0;run=auto;status(auto?'충전 진행 중 · 파란 점은 전자 이동 모식도입니다.':'초기화 완료 · 시작 버튼을 누르세요.');render();}
+function beginDischarge(){const current=valueAt().vc;if(current<0.02){status('먼저 축전기를 충전한 다음 방전해 보세요.');return;}startVoltage=current;mode='discharge';t=0;phase=0;run=true;status('방전 진행 중 · 전류 방향이 충전할 때와 반대입니다.');render();}
+function seek(frac){run=false;t=tau()*5*frac;status('시간을 이동했습니다 · 시작 버튼으로 계속 진행하세요.');render()}
+$('play').onclick=()=>{if(run){run=false;status('일시정지 · 현재 상태를 관찰하세요.');}else{if(t>=5*tau())t=0;run=true;status(mode==='charge'?'충전 진행 중':'방전 진행 중');}render();};
+$('charge').onclick=()=>beginCharge(true);
+$('discharge').onclick=()=>beginDischarge();
+$('reset').onclick=()=>beginCharge(false);
+$('snap1').onclick=()=>seek(1/5);
+$('snap5').onclick=()=>seek(1);
+$('scrub').addEventListener('input',e=>seek(Number(e.target.value)/1000));
+for(const k of ['r','c','v'])inputs[k].addEventListener('input',()=>{configLabels();beginCharge(false)});
+inputs.speed.addEventListener('input',()=>{configLabels();render()});
+function makeSvg(txt,x,y,cls){const e=document.createElementNS(ns,'text');e.setAttribute('x',x);e.setAttribute('y',y);e.setAttribute('text-anchor','middle');e.setAttribute('class',cls);e.textContent=txt;return e;}
+function updateCircuit(v){const count=Math.floor(v.ratio*9+0.001);const gp=$('plusGroup'),gm=$('minusGroup');gp.replaceChildren();gm.replaceChildren();for(let j=0;j<count;j++){let px=617+(j%5)*17,dy=Math.floor(j/5)*18;gp.appendChild(makeSvg('+',px,145-dy,'symbolPos'));gm.appendChild(makeSvg('−',px,235+dy,'symbolNeg'));}
+$('batteryG').style.display=mode==='charge'?'':'none';$('dischargeBridge').style.display=mode==='charge'?'none':'';
+sget('insideLabel',mode==='charge'?'충전 중':'방전 중');sget('insideSub',mode==='charge'?'두 극판에 크기가 같은 ±Q가 쌓임':'저장된 전하가 도선을 통해 이동함');sget('directionText',mode==='charge'?'전자: 위쪽 ← / 아래쪽 → (전류와 반대)':'전자: 위쪽 → / 아래쪽 ← (전류와 반대)');
+const layer=$('electrons');layer.replaceChildren();const scale=Math.max(0.1,Math.abs(v.I)/(mode==='charge'?(getParams().V/getParams().R):(Math.max(.02,startVoltage)/getParams().R)));if(scale<0.018)return;
+for(let i=0;i<7;i++){const f=((i/7+phase)%1),coord=mode==='charge'?{topX:620-f*485,bottomX:135+f*485}:{topX:135+f*485,bottomX:620-f*485};for(const [x,y] of [[coord.topX,91],[coord.bottomX,265]]){const e=document.createElementNS(ns,'circle');e.setAttribute('cx',x);e.setAttribute('cy',y);e.setAttribute('r','5.2');e.setAttribute('class','elec');e.style.opacity=String(.32+.65*Math.sqrt(scale));layer.appendChild(e);}}}
+let resizeObserver=null;const ctx=$('chart').getContext('2d');
+function drawChart(){const can=$('chart'),dpr=Math.min(2,devicePixelRatio||1),box=can.getBoundingClientRect(),w=Math.max(200,box.width),h=Math.max(180,box.height);const pixW=Math.round(w*dpr),pixH=Math.round(h*dpr);if(can.width!==pixW||can.height!==pixH){can.width=pixW;can.height=pixH;}ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
+const x0=46,x1=w-16,y0=18,y1=h-35,pw=x1-x0,ph=y1-y0,T=tau()*5;
+ctx.font='12px system-ui,sans-serif';ctx.textAlign='right';ctx.textBaseline='middle';for(let j=0;j<=4;j++){const val=j/4,yy=y1-ph*val;ctx.strokeStyle='#345571';ctx.lineWidth=.75;ctx.beginPath();ctx.moveTo(x0,yy);ctx.lineTo(x1,yy);ctx.stroke();ctx.fillStyle='#b4cada';ctx.fillText(Math.round(100*val)+'%',x0-8,yy)}
+ctx.textAlign='center';ctx.textBaseline='top';for(let j=0;j<=5;j++){const xx=x0+pw*j/5;ctx.fillStyle='#b1c7d6';ctx.fillText(unitTime(j*tau()),xx,y1+10)}
+ctx.fillStyle='#b1c7d6';ctx.textAlign='left';ctx.fillText('t (s)',x1-28,h-16);
+const one=x0+pw/5;ctx.setLineDash([5,4]);ctx.strokeStyle='#e5d4a1aa';ctx.beginPath();ctx.moveTo(one,y0);ctx.lineTo(one,y1);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle='#fae0b0';ctx.textAlign='left';ctx.fillText('1τ',one+4,y0+1);
+for (const field of [{key:'plotV',stroke:'#ffb260'},{key:'plotI',stroke:'#55c4ff'}]){ctx.beginPath();ctx.lineWidth=3.2;ctx.strokeStyle=field.stroke;for(let j=0;j<=220;j++){const xt=j/220*T,v=valueAt(xt)[field.key],xx=x0+pw*j/220,yy=y1-ph*v;if(j===0)ctx.moveTo(xx,yy);else ctx.lineTo(xx,yy);}ctx.stroke();}
+const tm=Math.min(T,t),markX=x0+pw*tm/T;ctx.setLineDash([3,5]);ctx.strokeStyle='#e5efff99';ctx.beginPath();ctx.moveTo(markX,y0);ctx.lineTo(markX,y1);ctx.stroke();ctx.setLineDash([]);
+const live=valueAt();for (const [key,color] of [['plotV','#ffb260'],['plotI','#55c4ff']]){const yy=y1-ph*live[key];ctx.beginPath();ctx.arc(markX,yy,5.2,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();ctx.strokeStyle='#082036';ctx.lineWidth=2;ctx.stroke();}}
+function render(){const p=getParams(),v=valueAt();sget('modeLabel',mode==='charge'?'충전 모드':'방전 모드');sget('tMeter',unitTime(t)+' s');sget('tauMeter',unitTime(tau())+' s');sget('vcMeter',v.vc.toFixed(2)+' V');sget('iMeter',(Math.abs(v.I)*1000).toFixed(3)+' mA');sget('qMeter',(v.charge*1000).toFixed(3)+' mC');sget('scrubOut',unitTime(t)+' s');$('scrub').value=String(Math.min(1000,Math.round(t/(5*tau())*1000)));
+$('fill').style.width=(v.ratio*100).toFixed(2)+'%';sget('progressCaption',mode==='charge'?'최종 전하량 대비 충전율':'전지 전압 기준 남은 전하 비율');sget('progressText',(v.ratio*100).toFixed(1)+'%');
+if(mode==='charge'){$('equation').innerHTML='<b>충전 법칙</b> · Q(t) = CV₀(1 − e<sup>−t/RC</sup>) · V꜀(t) = V₀(1 − e<sup>−t/RC</sup>) · I(t) = (V₀/R)e<sup>−t/RC</sup>';$('chartExplain').textContent='충전 전압과 전하량은 증가하고, 전류는 감소합니다. 점선은 1τ 지점입니다.'}
+else{$('equation').innerHTML='<b>방전 법칙</b> · Q(t) = Qₛe<sup>−t/RC</sup> · V꜀(t) = Vₛe<sup>−t/RC</sup> · I(t) = −(Vₛ/R)e<sup>−t/RC</sup> (I는 충전 방향을 +로 정의)';$('chartExplain').textContent='방전에서는 전압과 전류 크기가 모두 지수적으로 감소합니다. 곡선은 시작 값으로 정규화되어 겹칩니다.'}
+updateCircuit(v);drawChart();}
+function animate(ms){if(lastFrame===null){lastFrame=ms;requestAnimationFrame(animate);return;}const dt=Math.min(.05,Math.max(0,(ms-lastFrame)/1000));lastFrame=ms;if(run){const p=getParams(),cur=valueAt();const base=(mode==='charge'?p.V:startVoltage)/p.R;const normalized=Math.abs(cur.I)/Math.max(1e-10,base);phase+=dt*(.35+1.6*normalized)*p.speed*.4;t=Math.min(5*tau(),t+dt*p.speed);if(t>=5*tau()){run=false;status(mode==='charge'?'5τ 도달 · 최종 전하량의 약 99.3% 충전':'5τ 도달 · 초기 전하량의 약 0.7% 남음');}render();}requestAnimationFrame(animate);}
+configLabels();beginCharge(false);if(typeof ResizeObserver==='function'){resizeObserver=new ResizeObserver(()=>drawChart());resizeObserver.observe($('chart'));}else window.addEventListener('resize',drawChart);document.addEventListener('visibilitychange',()=>{lastFrame=null});requestAnimationFrame(animate);
+})();
+</script>
+</body>
+</html>

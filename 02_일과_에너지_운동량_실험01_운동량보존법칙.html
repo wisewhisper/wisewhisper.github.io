@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>운동량 보존 법칙 실험실</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232563eb'/%3E%3Ccircle cx='20' cy='32' r='11' fill='white'/%3E%3Ccircle cx='47' cy='32' r='8' fill='%23fca5a5'/%3E%3Cpath d='M28 18l12 14-12 14' fill='none' stroke='white' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <style>
+    :root{--bg:#f4f7fb;--panel:#fff;--ink:#172033;--muted:#657086;--line:#d9e2ef;--a:#2563eb;--b:#ef4444;--good:#087a55;--warn:#b45309;--shadow:0 10px 28px #1e3a5f14}
+    *{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif;background:linear-gradient(135deg,#eef5ff,#f9fbff 42%,#f5f3ff);color:var(--ink)}
+    button,input,select{font:inherit} button{touch-action:manipulation}button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid #f59e0b;outline-offset:3px}.wrap{width:min(1180px,100%);margin:auto;padding:18px}
+    header{display:flex;gap:16px;align-items:flex-start;justify-content:space-between;margin-bottom:14px}h1{font-size:clamp(1.45rem,3vw,2.2rem);margin:0 0 5px}.lead{margin:0;color:var(--muted)}
+    .law{white-space:nowrap;background:#e8f0ff;color:#1745aa;border:1px solid #c8d9ff;padding:9px 13px;border-radius:999px;font-weight:800}
+    .grid{display:grid;grid-template-columns:minmax(275px,340px) 1fr;gap:14px}.card{background:var(--panel);border:1px solid #e5ebf4;border-radius:18px;box-shadow:var(--shadow);padding:16px}.card h2{font-size:1.05rem;margin:0 0 12px}
+    .controls{display:grid;gap:13px}.rowhead{display:flex;align-items:center;justify-content:space-between;gap:8px}.val{font-variant-numeric:tabular-nums;font-weight:800;color:#1745aa;background:#edf4ff;padding:2px 8px;border-radius:8px}.control label{font-weight:700;font-size:.92rem}.control small{display:block;color:var(--muted);margin-top:3px}.range{display:grid;grid-template-columns:1fr 72px;gap:8px;align-items:center;margin-top:6px}.range input[type=range]{width:100%;accent-color:var(--a)}input[type=number],select{width:100%;border:1px solid #cfd9e8;border-radius:9px;padding:7px;background:#fff;color:var(--ink)}
+    .presets{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.presets button,.actions button{min-height:44px;border:1px solid #cad5e5;background:#fff;color:var(--ink);border-radius:10px;padding:9px 7px;font-weight:750;cursor:pointer}.presets button[aria-pressed=true]{background:#e8f0ff;border-color:#7ca5ff;color:#163f9e}.actions{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.actions button.primary{background:var(--a);color:#fff;border-color:var(--a)}.actions button:disabled{opacity:.45;cursor:not-allowed}.tip{border-left:4px solid #8b5cf6;background:#f5f1ff;border-radius:8px;padding:10px;color:#4c3977;font-size:.87rem}
+    .stage{padding:12px}.stagebar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}.status{font-weight:800;color:#1745aa}.time{font-variant-numeric:tabular-nums;color:var(--muted)}canvas{display:block;width:100%;border-radius:13px;background:#f8fbff}.sim{height:300px;border:1px solid var(--line)}
+    .legend{display:flex;flex-wrap:wrap;gap:12px;margin:8px 2px 0;font-size:.84rem;color:var(--muted)}.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px}.dot.a{background:var(--a)}.dot.b{background:var(--b)}
+    .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:14px}.metric{border:1px solid var(--line);border-radius:12px;padding:10px;background:#fbfdff}.metric span{display:block;color:var(--muted);font-size:.78rem}.metric strong{display:block;margin-top:4px;font-size:1rem;font-variant-numeric:tabular-nums}.metric.good strong{color:var(--good)}
+    .lower{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}.chart{height:225px;border:1px solid var(--line)}
+    table{width:100%;border-collapse:collapse;font-size:.87rem}th,td{border-bottom:1px solid #e8edf4;padding:8px 6px;text-align:right;font-variant-numeric:tabular-nums}th:first-child,td:first-child{text-align:left}thead th{color:var(--muted);font-size:.78rem}.scroll{overflow:auto;max-height:215px}.empty{text-align:center!important;color:var(--muted);padding:28px!important}.footer-note{margin-top:12px;color:var(--muted);font-size:.83rem}.questions{margin-top:14px}.questions details{border-top:1px solid var(--line);padding:10px 2px}.questions summary{cursor:pointer;font-weight:750}.questions p{margin:8px 4px 2px;color:var(--muted);line-height:1.55}.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    @media(max-width:820px){.grid,.lower{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(2,1fr)}header{display:block}.law{display:inline-block;margin-top:10px}.sim{height:250px}.wrap{padding:10px}.card{border-radius:14px;padding:13px}}
+    @media(max-width:430px){.presets{grid-template-columns:1fr}.actions{grid-template-columns:repeat(2,1fr)}.metrics{grid-template-columns:1fr 1fr}.metric strong{font-size:.9rem}}
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+  </style>
+</head>
+<body>
+<main class="wrap">
+  <header><div><h1>⚙️ 운동량 보존 법칙 실험실</h1><p class="lead">두 물체의 1차원 충돌을 조작하며 운동량과 운동에너지의 변화를 비교하세요.</p></div><div class="law" aria-label="운동량 보존 식">Σp<sub>전</sub> = Σp<sub>후</sub></div></header>
+  <div class="grid">
+    <section class="card" aria-labelledby="control-title"><h2 id="control-title">실험 조건</h2><div class="controls">
+      <div><div class="rowhead"><strong>충돌 유형 프리셋</strong></div><div class="presets" role="group" aria-label="충돌 유형">
+        <button type="button" data-e="1" aria-pressed="true">탄성</button><button type="button" data-e="0.5" aria-pressed="false">비탄성</button><button type="button" data-e="0" aria-pressed="false">완전 비탄성</button>
+      </div></div>
+      <div class="control"><div class="rowhead"><label for="m1">파란 물체 질량 m₁</label><output class="val" id="m1o">2.0 kg</output></div><div class="range"><input id="m1" type="range" min="0.5" max="5" step="0.1" value="2"><input id="m1n" aria-label="파란 물체 질량 직접 입력" type="number" min="0.5" max="5" step="0.1" value="2"></div></div>
+      <div class="control"><div class="rowhead"><label for="u1">파란 물체 초기 속도 u₁</label><output class="val" id="u1o">+3.0 m/s</output></div><div class="range"><input id="u1" type="range" min="-5" max="5" step="0.1" value="3"><input id="u1n" aria-label="파란 물체 초기 속도 직접 입력" type="number" min="-5" max="5" step="0.1" value="3"></div></div>
+      <div class="control"><div class="rowhead"><label for="m2">빨간 물체 질량 m₂</label><output class="val" id="m2o">1.0 kg</output></div><div class="range"><input id="m2" type="range" min="0.5" max="5" step="0.1" value="1"><input id="m2n" aria-label="빨간 물체 질량 직접 입력" type="number" min="0.5" max="5" step="0.1" value="1"></div></div>
+      <div class="control"><div class="rowhead"><label for="u2">빨간 물체 초기 속도 u₂</label><output class="val" id="u2o">−1.0 m/s</output></div><div class="range"><input id="u2" type="range" min="-5" max="5" step="0.1" value="-1"><input id="u2n" aria-label="빨간 물체 초기 속도 직접 입력" type="number" min="-5" max="5" step="0.1" value="-1"></div></div>
+      <div class="control"><div class="rowhead"><label for="e">반발계수 e</label><output class="val" id="eo">1.00</output></div><div class="range"><input id="e" type="range" min="0" max="1" step="0.05" value="1"><input id="en" aria-label="반발계수 직접 입력" type="number" min="0" max="1" step="0.05" value="1"></div><small>e = (분리 상대속도)/(접근 상대속도)</small></div>
+      <div class="actions" aria-label="실험 조작"><button id="start" class="primary">▶ 시작</button><button id="pause">⏸ 일시정지</button><button id="step">⏭ 한 단계</button><button id="reset">↺ 초기화</button><button id="rerun">⟳ 다시 실행</button><button id="clear">기록 지우기</button></div>
+      <div class="tip"><strong>성립 조건:</strong> 외부 알짜힘의 충격량을 무시할 수 있는 고립계에서 총운동량이 보존됩니다. 오른쪽을 (+)로 정했으며, 두 물체가 서로 접근하지 않으면 충돌하지 않습니다.</div>
+    </div></section>
+    <section class="card stage" aria-labelledby="stage-title"><div class="stagebar"><h2 id="stage-title">충돌 관찰</h2><div><span id="status" class="status" role="status" aria-live="polite">준비</span> · <span id="time" class="time">0.00 s</span></div></div>
+      <canvas id="sim" class="sim" role="img" aria-label="두 물체의 충돌 애니메이션과 속도 벡터"></canvas>
+      <div class="legend"><span><i class="dot a"></i>물체 1</span><span><i class="dot b"></i>물체 2</span><span>화살표: 속도 벡터</span></div>
+      <div class="metrics">
+        <div class="metric"><span>충돌 전 총운동량</span><strong id="pb">—</strong></div><div class="metric"><span>충돌 후 총운동량</span><strong id="pa">—</strong></div>
+        <div class="metric"><span>충돌 전 운동에너지</span><strong id="kb">—</strong></div><div class="metric"><span>충돌 후 운동에너지</span><strong id="ka">—</strong></div>
+        <div class="metric"><span>물체 1 충돌 후 속도</span><strong id="v1m">—</strong></div><div class="metric"><span>물체 2 충돌 후 속도</span><strong id="v2m">—</strong></div>
+        <div class="metric good"><span>운동량 보존 오차</span><strong id="err">—</strong></div><div class="metric"><span>운동에너지 변화율</span><strong id="kloss">—</strong></div>
+      </div>
+    </section>
+  </div>
+  <div class="lower">
+    <section class="card"><h2>시간에 따른 물리량</h2><canvas id="chart" class="chart" role="img" aria-label="총운동량과 운동에너지의 시간 그래프"></canvas><p class="footer-note">파란 선: 총운동량(kg·m/s) · 보라 선: 운동에너지(J). 서로 다른 눈금을 사용합니다.</p></section>
+    <section class="card"><div class="rowhead"><h2>관찰 기록</h2><span class="footer-note" id="count">0회</span></div><div class="scroll"><table><thead><tr><th>회차/유형</th><th>p 전→후</th><th>K 전→후</th><th>e</th></tr></thead><tbody id="records"><tr><td colspan="4" class="empty">충돌을 실행하면 자동 기록됩니다.</td></tr></tbody></table></div></section>
+  </div>
+  <section class="card questions" aria-labelledby="questions-title"><h2 id="questions-title">생각을 여는 탐구 질문</h2>
+    <details><summary>1. 반발계수를 바꾸어도 총운동량은 왜 일정할까요?</summary><p>충돌 중 두 물체가 주고받는 내부 힘의 충격량은 크기가 같고 방향이 반대입니다. 고립계 전체로 보면 서로 상쇄되므로 총운동량은 변하지 않습니다.</p></details>
+    <details><summary>2. 운동에너지는 어떤 충돌에서 보존될까요?</summary><p>반발계수 e=1인 탄성 충돌에서는 보존됩니다. e&lt;1이면 일부가 열, 소리, 변형 에너지 등으로 전환되어 충돌 뒤 운동에너지가 감소합니다.</p></details>
+    <details><summary>3. 완전 비탄성 충돌 뒤 두 물체의 속도가 같은 까닭은 무엇일까요?</summary><p>e=0이면 분리 상대속도가 0입니다. 따라서 두 물체는 붙어서 같은 속도로 움직이며, 그 공통 속도는 운동량 보존식으로 구할 수 있습니다.</p></details>
+  </section>
+</main>
+<script>
+(()=>{'use strict';
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const els={sim:$('#sim'),chart:$('#chart'),status:$('#status'),time:$('#time'),start:$('#start'),pause:$('#pause'),step:$('#step'),reset:$('#reset'),rerun:$('#rerun'),clear:$('#clear'),records:$('#records'),count:$('#count')};
+const fields=['m1','u1','m2','u2','e'], defaults={m1:2,u1:3,m2:1,u2:-1,e:1}; let state,raf=0,last=0,records=[];
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x)), fmt=(x,n=2)=>(x>=0?'+':'−')+Math.abs(x).toFixed(n);
+function params(){return Object.fromEntries(fields.map(k=>[k,Number($('#'+k).value)]))}
+function collision(p){const {m1,m2,u1,u2,e}=p;return {v1:(m1*u1+m2*u2-m2*e*(u1-u2))/(m1+m2),v2:(m1*u1+m2*u2+m1*e*(u1-u2))/(m1+m2)}}
+function quantities(p,v1,v2){return {pb:p.m1*p.u1+p.m2*p.u2,pa:p.m1*v1+p.m2*v2,kb:.5*p.m1*p.u1**2+.5*p.m2*p.u2**2,ka:.5*p.m1*v1**2+.5*p.m2*v2**2}}
+function sync(k,source){const r=$('#'+k),n=$('#'+k+'n'),min=+r.min,max=+r.max;let v=clamp(Number(source.value)||0,min,max);r.value=n.value=v;$('#'+k+'o').textContent=k==='e'?v.toFixed(2):(k[0]==='m'?v.toFixed(1)+' kg':fmt(v,1)+' m/s');if(k==='e'){$$('.presets button').forEach(b=>b.setAttribute('aria-pressed',Math.abs(+b.dataset.e-v)<.001))}reset()}
+fields.forEach(k=>{$('#'+k).addEventListener('input',e=>sync(k,e.target));$('#'+k+'n').addEventListener('change',e=>sync(k,e.target))});
+$$('.presets button').forEach(b=>b.addEventListener('click',()=>{const v=+b.dataset.e;$('#e').value=$('#en').value=v;sync('e',$('#e'))}));
+function resizeCanvas(c){const d=Math.min(devicePixelRatio||1,2),r=c.getBoundingClientRect(),w=Math.max(1,Math.round(r.width*d)),h=Math.max(1,Math.round(r.height*d));if(c.width!==w||c.height!==h){c.width=w;c.height=h}const x=c.getContext('2d');x.setTransform(d,0,0,d,0,0);return {x,w:r.width,h:r.height}}
+function reset(draw=true){cancelAnimationFrame(raf);raf=0;last=0;const p=params(),cv=els.sim.getBoundingClientRect();state={p,t:0,x1:Math.max(75,cv.width*.25),x2:Math.max(210,cv.width*.72),vel1:p.u1,vel2:p.u2,collided:false,running:false,done:false,recorded:false,history:[]};els.status.textContent='준비';els.time.textContent='0.00 s';els.start.disabled=false;els.pause.disabled=true;els.step.disabled=false;updateMetrics();if(draw){render();renderChart()}}
+function restoreDefaults(){fields.forEach(k=>{const v=defaults[k],r=$('#'+k),n=$('#'+k+'n');r.value=n.value=v;$('#'+k+'o').textContent=k==='e'?v.toFixed(2):(k[0]==='m'?v.toFixed(1)+' kg':fmt(v,1)+' m/s')});$$('.presets button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.e===defaults.e));reset()}
+function radii(){return {r1:18+state.p.m1*3.4,r2:18+state.p.m2*3.4}}
+function updateMetrics(){const p=state.p,c=collision(p),q=quantities(p,c.v1,c.v2),error=Math.abs(q.pa-q.pb)/(Math.max(Math.abs(q.pb),1e-9))*100,loss=q.kb>1e-12?100*(q.ka-q.kb)/q.kb:null;$('#pb').textContent=fmt(q.pb)+' kg·m/s';$('#pa').textContent=fmt(q.pa)+' kg·m/s';$('#kb').textContent=q.kb.toFixed(2)+' J';$('#ka').textContent=q.ka.toFixed(2)+' J';$('#v1m').textContent=fmt(c.v1)+' m/s';$('#v2m').textContent=fmt(c.v2)+' m/s';$('#err').textContent=error.toExponential(1)+' %';$('#kloss').textContent=loss===null?'계산 불가':(loss>=0?'+':'−')+Math.abs(loss).toFixed(1)+' %'}
+function step(dt=.025){if(state.done)return;const scale=48,{r1,r2}=radii(),W=els.sim.getBoundingClientRect().width;state.t+=dt;
+  if(!state.collided){const oldGap=state.x2-state.x1-r1-r2;state.x1+=state.vel1*scale*dt;state.x2+=state.vel2*scale*dt;const newGap=state.x2-state.x1-r1-r2;if(oldGap>=0&&newGap<=0&&state.vel1>state.vel2){const f=oldGap/(oldGap-newGap||1);state.x1-=state.vel1*scale*dt*(1-f);state.x2-=state.vel2*scale*dt*(1-f);const c=collision(state.p);state.vel1=c.v1;state.vel2=c.v2;state.collided=true;els.status.textContent='충돌 발생';state.x1+=state.vel1*scale*dt*(1-f);state.x2+=state.vel2*scale*dt*(1-f);record()}}
+  else{state.x1+=state.vel1*scale*dt;state.x2+=state.vel2*scale*dt}
+  const q=quantities(state.p,state.vel1,state.vel2);state.history.push({t:state.t,p:q.pa,k:q.ka});if(state.history.length>400)state.history.shift();
+  const atBoundary=state.x1-r1<=0||state.x1+r1>=W||state.x2-r2<=0||state.x2+r2>=W;
+  const stoppedAfterCollision=state.collided&&Math.abs(state.vel1)<1e-6&&Math.abs(state.vel2)<1e-6;
+  if(atBoundary)finish(state.collided?'실험 완료 · 경계 도달':'충돌 전 · 경계 도달');
+  else if(stoppedAfterCollision)finish('실험 완료 · 두 물체 정지');
+  else if(state.t>8)finish(state.collided?'실험 완료 · 관찰 시간 종료':'관찰 시간 종료 · 이후 충돌 가능');
+  els.time.textContent=state.t.toFixed(2)+' s';render();renderChart()}
+function finish(message){state.done=true;state.running=false;els.status.textContent=message;els.start.disabled=true;els.pause.disabled=true;els.step.disabled=true}
+function record(){if(state.recorded)return;state.recorded=true;const p=state.p,c=collision(p),q=quantities(p,c.v1,c.v2);records.unshift({type:p.e===1?'탄성':p.e===0?'완전 비탄성':'비탄성',e:p.e,...q});records=records.slice(0,12);drawRecords()}
+function drawRecords(){els.count.textContent=records.length+'회';els.records.innerHTML=records.length?records.map((r,i)=>`<tr><td>${records.length-i}. ${r.type}</td><td>${r.pb.toFixed(2)}→${r.pa.toFixed(2)}</td><td>${r.kb.toFixed(2)}→${r.ka.toFixed(2)}</td><td>${r.e.toFixed(2)}</td></tr>`).join(''):'<tr><td colspan="4" class="empty">충돌을 실행하면 자동 기록됩니다.</td></tr>'}
+function arrow(x,y,v,color,ctx){if(Math.abs(v)<.03)return;const len=clamp(Math.abs(v)*25,18,115),dir=Math.sign(v),end=x+dir*len;ctx.strokeStyle=color;ctx.fillStyle=color;ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(end,y);ctx.stroke();ctx.beginPath();ctx.moveTo(end,y);ctx.lineTo(end-dir*10,y-6);ctx.lineTo(end-dir*10,y+6);ctx.closePath();ctx.fill();ctx.font='700 12px system-ui';ctx.textAlign=dir>0?'left':'right';ctx.fillText(fmt(v,1)+' m/s',end+dir*5,y-9)}
+function render(){const {x:ctx,w,h}=resizeCanvas(els.sim);ctx.clearRect(0,0,w,h);const lane=h*.69;ctx.fillStyle='#e6edf7';ctx.fillRect(0,lane+30,w,5);for(let i=0;i<w;i+=40){ctx.fillStyle=i%80?'#d7e1ee':'#c7d5e7';ctx.fillRect(i,lane+35,2,8)}
+  ctx.fillStyle='#64748b';ctx.font='12px system-ui';ctx.textAlign='left';ctx.fillText('− 방향',12,lane+57);ctx.textAlign='right';ctx.fillText('+ 방향',w-12,lane+57);
+  const {r1,r2}=radii();body(state.x1,lane,r1,'#2563eb','1',state.p.m1,ctx);body(state.x2,lane,r2,'#ef4444','2',state.p.m2,ctx);arrow(state.x1,lane-r1-25,state.vel1,'#1745aa',ctx);arrow(state.x2,lane-r2-25,state.vel2,'#b91c1c',ctx);
+  function body(x,y,r,color,label,m,c){const g=c.createRadialGradient(x-r*.35,y-r*.45,2,x,y,r);g.addColorStop(0,'#fff');g.addColorStop(.12,color);g.addColorStop(1,color+'cc');c.fillStyle=g;c.beginPath();c.arc(x,y,r,0,Math.PI*2);c.fill();c.fillStyle='#fff';c.textAlign='center';c.font='800 15px system-ui';c.fillText(label,x,y+4);c.fillStyle='#334155';c.font='12px system-ui';c.fillText(m.toFixed(1)+' kg',x,y+r+18)}}
+function renderChart(){const {x:ctx,w,h}=resizeCanvas(els.chart);ctx.clearRect(0,0,w,h);const pad={l:38,r:16,t:17,b:27};ctx.strokeStyle='#dce4ef';ctx.lineWidth=1;for(let i=0;i<5;i++){const y=pad.t+(h-pad.t-pad.b)*i/4;ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(w-pad.r,y);ctx.stroke()}const data=state.history.length?state.history:[{t:0,p:quantities(state.p,state.p.u1,state.p.u2).pb,k:quantities(state.p,state.p.u1,state.p.u2).kb}];const maxT=Math.max(1,data.at(-1).t),ps=data.map(d=>d.p),ks=data.map(d=>d.k),pAbs=Math.max(1,...ps.map(Math.abs)),kMax=Math.max(1,...ks);plot(ps,'#2563eb',v=>.5-v/(2*pAbs));plot(ks,'#7c3aed',v=>1-v/kMax);function plot(arr,color,norm){ctx.strokeStyle=color;ctx.lineWidth=2.5;ctx.beginPath();arr.forEach((v,i)=>{const X=pad.l+(w-pad.l-pad.r)*(data[i].t/maxT),Y=pad.t+(h-pad.t-pad.b)*norm(v);i?ctx.lineTo(X,Y):ctx.moveTo(X,Y)});ctx.stroke()}ctx.fillStyle='#64748b';ctx.font='11px system-ui';ctx.textAlign='left';ctx.fillText('값',7,14);ctx.textAlign='right';ctx.fillText(maxT.toFixed(1)+' s',w-pad.r,h-7);ctx.textAlign='left';ctx.fillText('0',pad.l,h-7)}
+function loop(ts){if(!state.running)return;const dt=last?Math.min((ts-last)/1000,.04):.016;last=ts;step(dt);if(state.running)raf=requestAnimationFrame(loop)}
+els.start.addEventListener('click',()=>{if(state.done)reset();if(!state.collided&&state.vel1<=state.vel2){state.done=true;els.status.textContent='충돌 없음: 두 물체가 접근하지 않습니다';els.start.disabled=true;els.pause.disabled=true;els.step.disabled=true;return}state.running=true;els.status.textContent=state.collided?'충돌 후 운동 중':'운동 중';els.start.disabled=true;els.pause.disabled=false;last=0;raf=requestAnimationFrame(loop)});
+els.pause.addEventListener('click',()=>{state.running=false;cancelAnimationFrame(raf);els.status.textContent='일시정지';els.start.disabled=false;els.pause.disabled=true});
+els.step.addEventListener('click',()=>{if(state.done)return;if(state.running){state.running=false;cancelAnimationFrame(raf)}if(!state.collided&&state.vel1<=state.vel2){state.done=true;els.status.textContent='충돌 없음: 두 물체가 접근하지 않습니다';els.start.disabled=true;els.pause.disabled=true;els.step.disabled=true;return}els.status.textContent='한 단계 진행';els.start.disabled=false;els.pause.disabled=true;step(.05)});
+els.reset.addEventListener('click',restoreDefaults);els.rerun.addEventListener('click',()=>{reset();els.start.click()});els.clear.addEventListener('click',()=>{records=[];drawRecords()});
+function registerWebMCP(){const mc=document.modelContext;if(!mc?.registerTool)return;const controller=new AbortController();try{void Promise.resolve(mc.registerTool({name:'configure_momentum_experiment',title:'운동량 실험 조건 설정',description:'두 물체의 질량, 초기 속도, 반발계수를 설정하고 화면을 준비 상태로 갱신합니다.',inputSchema:{type:'object',properties:{m1:{type:'number',minimum:.5,maximum:5},u1:{type:'number',minimum:-5,maximum:5},m2:{type:'number',minimum:.5,maximum:5},u2:{type:'number',minimum:-5,maximum:5},e:{type:'number',minimum:0,maximum:1}},required:['m1','u1','m2','u2','e'],additionalProperties:false},annotations:{readOnlyHint:false,untrustedContentHint:false},execute(input){for(const k of fields){const v=Number(input[k]),r=$('#'+k);if(!Number.isFinite(v)||v<Number(r.min)||v>Number(r.max))throw new Error(k+' 값이 허용 범위를 벗어났습니다.');r.value=$('#'+k+'n').value=v;$('#'+k+'o').textContent=k==='e'?v.toFixed(2):(k[0]==='m'?v.toFixed(1)+' kg':fmt(v,1)+' m/s')}$$('.presets button').forEach(b=>b.setAttribute('aria-pressed',Math.abs(+b.dataset.e-Number(input.e))<.001));reset();return {...params(),status:'준비'}}},{signal:controller.signal})).catch(()=>{})}catch(_){}}
+registerWebMCP();
+new ResizeObserver(()=>{render();renderChart()}).observe(els.sim);reset();drawRecords();
+})();
+</script>
+</body>
+</html>

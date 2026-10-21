@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>9번 실험실 | 파동의 기본 성질과 회절</title>
+<style>
+:root{color-scheme:dark;--bg:#081323;--card:#112339;--line:#2d4b65;--text:#eaf5ff;--muted:#abc3d5;--cyan:#58dfef;--gold:#ffd471}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(140deg,#071222,#11283b 60%,#0c1831);color:var(--text);font-family:system-ui,-apple-system,'Noto Sans KR',sans-serif;line-height:1.5}main{max-width:1200px;margin:auto;padding:20px}h1{font-size:clamp(1.5rem,4vw,2.3rem);margin:0 0 5px}h2{font-size:1.15rem;margin:0 0 10px}.sub,.note{color:var(--muted)}.sub{margin:0 0 18px}.grid{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:16px}.card{background:rgba(17,35,57,.94);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:0 8px 30px #0002}.stage{width:100%;height:auto;aspect-ratio:760/420;display:block;border:1px solid var(--line);border-radius:10px;background:#071827}.graph{width:100%;height:190px;display:block;margin-top:12px;border:1px solid var(--line);border-radius:10px;background:#091729}.row{margin:0 0 18px}label{display:flex;justify-content:space-between;gap:12px;font-weight:600}.value{color:var(--gold);font-variant-numeric:tabular-nums}input[type=range]{width:100%;accent-color:#55daea;cursor:pointer;touch-action:auto}.hint{font-size:.82rem;color:var(--muted);margin-top:2px}.buttons{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:12px 0}button{appearance:none;border:1px solid #5a8ca8;border-radius:8px;background:#173b55;color:white;padding:10px 5px;font-weight:700;cursor:pointer;touch-action:manipulation}button:focus-visible,input:focus-visible{outline:3px solid #ffd471;outline-offset:2px}button.primary{background:#087d92}button:hover{filter:brightness(1.2)}.readout{padding:11px;border-radius:10px;background:#091c30;border:1px solid #29506a;font-variant-numeric:tabular-nums}.readout p{margin:4px 0}.readout strong{color:var(--cyan)}.bottom{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}.bottom p,.bottom li{color:var(--muted)}.bottom ol{padding-left:22px;margin:5px 0}.foot{font-size:.84rem;color:var(--muted)}@media(max-width:850px){.grid,.bottom{grid-template-columns:1fr}main{padding:12px}.card{padding:12px}.buttons{grid-template-columns:repeat(3,1fr)}}
+</style>
+</head>
+<body><main>
+<h1>9번 실험실 · 파동의 기본 성질과 회절</h1>
+<p class="sub">파면이 틈을 지나 어떻게 퍼지는지 관찰하고, 파장과 틈 폭의 관계를 탐구해 보세요.</p>
+<div class="grid"><section class="card"><h2>파동 수조 모형</h2><canvas id="stage" class="stage" width="760" height="420" role="img" aria-label="왼쪽에서 오른쪽으로 진행하는 파동이 가운데 장애물의 틈을 통과해 회절하는 모습"></canvas>
+<canvas id="graph" class="graph" width="760" height="190" role="img" aria-label="회절각에 따른 원거리 상대 세기 그래프"></canvas><p class="foot">파란색·밝은색은 물결의 서로 다른 위상을 나타냅니다. 아래 곡선은 먼 거리에서 예상되는 상대 세기의 정성·정량 비교용 단일 슬릿 모형입니다.</p></section>
+<aside class="card"><h2>실험 조건</h2>
+<div class="row"><label for="amp">진폭 A <span id="ampVal" class="value"></span></label><input id="amp" type="range" min="0.2" max="1" step="0.05" value="0.7"><div class="hint">파동의 색 대비가 변합니다.</div></div>
+<div class="row"><label for="freq">진동수 f <span id="freqVal" class="value"></span></label><input id="freq" type="range" min="0.8" max="3.2" step="0.05" value="1.6"><div class="hint">같은 매질에서 파장은 반대로 변합니다.</div></div>
+<div class="row"><label for="lambda">파장 λ <span id="lambdaVal" class="value"></span></label><input id="lambda" type="range" min="0.625" max="2.5" step="0.025" value="1.25"><div class="hint">파장을 바꾸면 진동수가 자동 조정됩니다.</div></div>
+<div class="row"><label for="slit">틈의 너비 a <span id="slitVal" class="value"></span></label><input id="slit" type="range" min="0.3" max="3.2" step="0.05" value="1.2"><div class="hint">a/λ를 비교해 회절의 크기를 설명해 보세요.</div></div>
+<div class="buttons"><button id="start" class="primary">▶ 시작</button><button id="pause">Ⅱ 일시정지</button><button id="reset">↺ 초기화</button></div><div class="readout" id="readout" aria-live="polite"></div><p class="note">매질 속력은 <strong>2.00 m/s</strong>로 고정합니다. 따라서 <strong>v=fλ</strong>가 항상 성립합니다.</p></aside></div>
+<div class="bottom"><section class="card"><h2>탐구 활동 · 10분</h2><ol><li><strong>관찰:</strong> 시작을 눌러 장애물 앞뒤의 파면 모양을 비교하세요.</li><li><strong>조작:</strong> 파장을 그대로 두고 틈 폭을 줄이며 퍼지는 범위를 비교하세요.</li><li><strong>비교:</strong> 틈 폭을 고정하고 진동수만 바꾸세요. 파장과 회절 범위는 어떻게 변하나요?</li><li><strong>설명:</strong> a/λ가 1보다 작을 때와 클 때, 틈 뒤쪽 파면을 그림으로 표현하고 이유를 말해 보세요.</li></ol></section><section class="card"><h2>개념 정리와 교사 유의사항</h2><p><strong>v=fλ:</strong> 같은 매질에서 진동수가 커지면 파장은 짧아집니다. 틈을 지난 뒤에도 같은 매질이므로 진동수·파장은 그대로입니다.</p><p><strong>회절:</strong> 틈이 파장에 비해 좁을수록 파동이 측면으로 더 넓게 퍼집니다. 진폭 조작은 화면의 파형 대비를 바꾸며 회절각 자체는 바꾸지 않습니다.</p><p><strong>그래프:</strong> 먼 거리 단일 슬릿의 상대 세기는 I/I₀≈[sin(πa sinθ/λ)/(πa sinθ/λ)]²입니다. a≥λ일 때 첫 어두운 방향은 a sinθ=λ이고, a&lt;λ이면 이 조건의 각도가 존재하지 않습니다. 화면의 근거리 파면은 휘겐스 합성으로 근사하여 그립니다.</p></section></div>
+</main><script>
+(()=>{'use strict';
+const $=id=>document.getElementById(id), stage=$('stage'), ctx=stage.getContext('2d'), graph=$('graph'), gx=graph.getContext('2d');
+const ids=['amp','freq','lambda','slit'], defaults={amp:.7,freq:1.6,lambda:1.25,slit:1.2}, SPEED=2, WALL=.45, W=760,H=420;
+let state={...defaults}, running=false, t=0,last=0, image, frame=0, pendingRebuild=0, phR,phI, norm, plotDirty=true;
+// 시각화 범위: 가로 8 m, 세로 5 m. 틈에 놓인 점파원을 복소 파동으로 합성한다.
+const PX=8/W, PY=5/H, resolution=3, cols=Math.ceil(W/resolution),rows=Math.ceil(H/resolution), count=cols*rows;
+const buffer=document.createElement('canvas');buffer.width=cols;buffer.height=rows;const bufferCtx=buffer.getContext('2d');
+image=ctx.createImageData(cols,rows);phR=new Float32Array(count);phI=new Float32Array(count);norm=new Float32Array(count);
+const wallX=Math.round(W*WALL), ampLabel=$('ampVal'),freqLabel=$('freqVal'),lambdaLabel=$('lambdaVal'),slitLabel=$('slitVal');
+function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
+function updateLabels(){ampLabel.textContent=state.amp.toFixed(2);freqLabel.textContent=state.freq.toFixed(2)+' Hz';lambdaLabel.textContent=state.lambda.toFixed(2)+' m';slitLabel.textContent=state.slit.toFixed(2)+' m';
+const ratio=state.slit/state.lambda, theta=ratio>=1? Math.asin(1/ratio)*180/Math.PI:null;
+$('readout').innerHTML=`<p>속력 v = <strong>${SPEED.toFixed(2)} m/s</strong> · 주기 T = <strong>${(1/state.freq).toFixed(2)} s</strong></p><p>틈 폭/파장 a/λ = <strong>${ratio.toFixed(2)}</strong></p><p>첫 어두운 방향: <strong>${theta===null?'해당 각도 없음':`±${theta.toFixed(1)}°`}</strong></p><p>상태: <strong>${running?'재생 중':'멈춤'}</strong></p>`;
+}
+function rebuildField(){const k=2*Math.PI/state.lambda, a=state.slit, n=Math.max(9,Math.min(49,Math.ceil(a/state.lambda*20))), dy=a/n;let idx=0;
+for(let row=0;row<rows;row++){const y=(row+.5)*resolution*PY-2.5;for(let col=0;col<cols;col++,idx++){const x=(col+.5)*resolution; if(x<wallX){phR[idx]=Math.cos(k*(x-wallX)*PX);phI[idx]=Math.sin(k*(x-wallX)*PX);norm[idx]=1;continue}
+let real=0,imag=0,axR=0,axI=0;const dx=Math.max((x-wallX)*PX,.045);
+for(let j=0;j<n;j++){const sourceY=-a/2+(j+.5)*dy,r=Math.hypot(dx,y-sourceY),r0=Math.hypot(dx,sourceY), weight=dy/Math.sqrt(Math.max(r,.08)),weight0=dy/Math.sqrt(Math.max(r0,.08));real+=weight*Math.cos(k*r);imag+=weight*Math.sin(k*r);axR+=weight0*Math.cos(k*r0);axI+=weight0*Math.sin(k*r0)}
+// 같은 x의 축상 크기로 정규화해 각도별 회절 분포를 관찰한다.
+const scale=Math.max(Math.hypot(axR,axI),.02);phR[idx]=real/scale;phI[idx]=imag/scale;norm[idx]=Math.min(1.2,Math.hypot(real,imag)/scale);
+}}plotDirty=true}
+function drawStage(){const d=image.data,phase=2*Math.PI*state.freq*t,c=Math.cos(phase),s=Math.sin(phase),a=state.slit, halfGap=a/2/PY, gapTop=H/2-halfGap,gapBot=H/2+halfGap;
+let p=0;for(let j=0;j<rows;j++)for(let i=0;i<cols;i++,p++){const xx=(i+.5)*resolution, yy=(j+.5)*resolution, blocked=Math.abs(xx-wallX)<7&&(yy<gapTop||yy>gapBot);let z=0;
+if(!blocked){z=(phR[p]*c+phI[p]*s)*state.amp;if(xx>=wallX)z=clamp(z,-1.15,1.15)}
+const q=p*4,bright=clamp(z,-1,1),m=Math.max(0,bright),n=Math.max(0,-bright);d[q]=blocked?103:Math.round(15+140*m+4*n);d[q+1]=blocked?135:Math.round(31+184*m+36*n);d[q+2]=blocked?158:Math.round(57+181*m+95*n);d[q+3]=255}
+bufferCtx.putImageData(image,0,0);ctx.imageSmoothingEnabled=true;ctx.drawImage(buffer,0,0,W,H);
+ctx.fillStyle='#a9bfd0';ctx.fillRect(wallX-5,0,10,gapTop);ctx.fillRect(wallX-5,gapBot,10,H-gapBot);
+ctx.strokeStyle='#ffd471';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(wallX+10,gapTop);ctx.lineTo(wallX+28,gapTop);ctx.moveTo(wallX+10,gapBot);ctx.lineTo(wallX+28,gapBot);ctx.stroke();
+ctx.fillStyle='#eef8ff';ctx.font='bold 15px system-ui';ctx.fillText('입사파',22,26);ctx.fillText('회절파',wallX+25,26);ctx.font='13px system-ui';ctx.fillStyle='#ffdc8b';ctx.fillText(`틈 폭 ${a.toFixed(2)} m`,wallX+18,Math.max(47,gapTop-12));
+ctx.fillStyle='#d2faff';ctx.fillText('진행 방향 →',40,H-18);
+const x2=wallX-24,x1=x2-state.lambda/PX,arrowY=74;ctx.strokeStyle='#ffdb82';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(x1,arrowY);ctx.lineTo(x2,arrowY);ctx.moveTo(x1,arrowY-8);ctx.lineTo(x1,arrowY+8);ctx.moveTo(x2,arrowY-8);ctx.lineTo(x2,arrowY+8);ctx.stroke();ctx.fillStyle='#ffdb82';ctx.fillText('λ (한 파장)',Math.max(12,(x1+x2)/2-38),arrowY-10);
+}
+function drawGraph(){const g=gx, w=graph.width,h=graph.height,L=52,R=w-22,T=18,B=h-34,k=Math.PI*state.slit/state.lambda;g.clearRect(0,0,w,h);g.fillStyle='#091729';g.fillRect(0,0,w,h);g.strokeStyle='#395670';g.lineWidth=1;for(let level=0;level<=1;level+=.25){const y=B-level*(B-T);g.beginPath();g.moveTo(L,y);g.lineTo(R,y);g.stroke();g.fillStyle='#aac5d6';g.font='12px system-ui';g.fillText(level.toFixed(2),9,y+4)}for(let deg=-90;deg<=90;deg+=30){const x=L+(deg+90)/180*(R-L);g.beginPath();g.moveTo(x,T);g.lineTo(x,B);g.stroke();g.fillText(deg+'°',x-13,B+18)}g.strokeStyle='#5de7ed';g.lineWidth=3;g.beginPath();for(let x=L;x<=R;x++){const theta=((x-L)/(R-L)*180-90)*Math.PI/180, q=k*Math.sin(theta),v=Math.abs(q)<1e-7?1:Math.pow(Math.sin(q)/q,2), y=B-v*(B-T);if(x===L)g.moveTo(x,y);else g.lineTo(x,y)}g.stroke();g.fillStyle='#e8f4ff';g.font='bold 12px system-ui';g.fillText('상대 세기 I/I₀',L+8,T+14);g.fillText('회절각 θ',R-82,B-12);plotDirty=false}
+function render(){drawStage();if(plotDirty)drawGraph()}
+function tick(ms){if(!running){frame=0;return}if(!last)last=ms;const dt=Math.min((ms-last)/1000,.07);last=ms;t+=dt;render();frame=requestAnimationFrame(tick)}
+function queueRebuild(){if(pendingRebuild)return;pendingRebuild=requestAnimationFrame(()=>{pendingRebuild=0;rebuildField();render()})}
+$('amp').addEventListener('input',e=>{state.amp=Number(e.target.value);updateLabels();render()});$('freq').addEventListener('input',e=>{state.freq=Number(e.target.value);state.lambda=SPEED/state.freq;$('lambda').value=state.lambda;updateLabels();queueRebuild()});$('lambda').addEventListener('input',e=>{state.lambda=Number(e.target.value);state.freq=SPEED/state.lambda;$('freq').value=state.freq;updateLabels();queueRebuild()});$('slit').addEventListener('input',e=>{state.slit=Number(e.target.value);updateLabels();queueRebuild()});
+$('start').addEventListener('click',()=>{if(running)return;running=true;last=0;updateLabels();frame=requestAnimationFrame(tick)});$('pause').addEventListener('click',()=>{running=false;if(frame)cancelAnimationFrame(frame);frame=0;last=0;updateLabels();render()});$('reset').addEventListener('click',()=>{running=false;if(frame)cancelAnimationFrame(frame);if(pendingRebuild)cancelAnimationFrame(pendingRebuild);frame=0;pendingRebuild=0;t=0;last=0;state={...defaults};for(const id of ids)$(id).value=state[id];updateLabels();rebuildField();render()});
+updateLabels();rebuildField();render();
+})();
+</script></body></html>

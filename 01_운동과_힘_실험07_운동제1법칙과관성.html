@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b1221">
+  <title>운동 제1법칙 · 관성 실험실</title>
+  <style>
+    :root{--bg:#08101f;--panel:#111c31;--panel2:#16243d;--line:#2b3e60;--text:#eef6ff;--muted:#a8bad2;--cyan:#42d9ff;--gold:#ffd166;--green:#57e39b;--red:#ff6b7a}
+    *{box-sizing:border-box} body{margin:0;background:radial-gradient(circle at 20% 0,#17305a 0,transparent 32%),var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif;line-height:1.45}
+    button,input{font:inherit} button{touch-action:manipulation}.app{max-width:1280px;margin:auto;padding:18px}
+    header{display:flex;gap:14px;align-items:center;justify-content:space-between;margin-bottom:14px}.title h1{font-size:clamp(1.35rem,3vw,2rem);margin:0}.title p{margin:4px 0 0;color:var(--muted);font-size:.94rem}.law{border:1px solid #35527e;background:#102747;padding:9px 13px;border-radius:12px;color:#d9f7ff;font-size:.88rem;max-width:420px}
+    .layout{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(280px,.85fr);gap:14px}.card{background:linear-gradient(145deg,rgba(21,35,59,.97),rgba(12,24,43,.97));border:1px solid var(--line);border-radius:18px;padding:14px;box-shadow:0 12px 30px #02071366}.stageCard{grid-row:span 2}
+    .stageTop,.sectionHead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}.sectionHead h2{font-size:1.02rem;margin:0}.status{display:flex;gap:7px;align-items:center;color:var(--muted);font-size:.84rem}.dot{width:9px;height:9px;border-radius:50%;background:var(--gold);box-shadow:0 0 10px var(--gold)}
+    canvas{display:block;width:100%;border-radius:12px}.world{height:330px;background:linear-gradient(#0a1730,#132949)}.graphs{height:225px;background:#091426;margin-top:12px}
+    .controls{display:grid;gap:12px}.slider{display:grid;grid-template-columns:1fr auto;gap:5px 10px}.slider label{font-size:.9rem}.value{color:var(--cyan);font-weight:750;font-variant-numeric:tabular-nums}.slider input{grid-column:1/-1;width:100%;accent-color:var(--cyan);min-height:28px}
+    .buttons{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.btn{border:1px solid #42618e;background:#1a3154;color:var(--text);border-radius:11px;padding:10px 8px;font-weight:700;cursor:pointer}.btn:hover{filter:brightness(1.15)}.btn.primary{background:#007f9f;border-color:#43ddff}.btn.warn{background:#513a19;border-color:#9b7332}.btn.active{background:#8a3442;border-color:#ff7180}.btn:focus-visible{outline:3px solid #fff;outline-offset:2px}
+    .forceBtn{width:100%;padding:12px;background:#243e67;border:1px solid #4b70a7;border-radius:12px;color:#fff;font-weight:800;cursor:pointer;touch-action:none;user-select:none}.forceBtn.pressed{background:#007f9f;box-shadow:0 0 0 3px #42d9ff44 inset}.hint{font-size:.8rem;color:var(--muted);text-align:center;margin-top:5px}
+    .readouts{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.meter{background:#091426;border:1px solid #263b5d;padding:9px;border-radius:10px}.meter small{display:block;color:var(--muted)}.meter strong{font-size:1.05rem;font-variant-numeric:tabular-nums}
+    .feedback{border-left:4px solid var(--cyan);background:#0c2138;padding:10px 12px;border-radius:8px;font-size:.88rem;min-height:70px}.feedback b{color:var(--cyan)}
+    .presets{display:flex;flex-wrap:wrap;gap:7px}.chip{background:#152c4d;border:1px solid #36577f;border-radius:999px;color:#ddebff;padding:7px 10px;font-size:.8rem;cursor:pointer}
+    details{border-top:1px solid var(--line);padding-top:10px}summary{cursor:pointer;font-weight:750}.tasks{margin:9px 0 0;padding-left:20px;color:#d9e6f7;font-size:.87rem}.tasks li{margin:7px 0}.check{color:var(--green);font-weight:700}.legend{font-size:.78rem;color:var(--muted);display:flex;gap:13px;flex-wrap:wrap}.legend i{display:inline-block;width:12px;height:3px;vertical-align:middle;margin-right:4px}
+    .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+    @media(max-width:850px){.layout{grid-template-columns:1fr}.stageCard{grid-row:auto}.world{height:285px}.graphs{height:210px}header{align-items:flex-start;flex-direction:column}.law{max-width:none;width:100%}}
+    @media(max-width:430px){.app{padding:10px}.card{padding:11px;border-radius:14px}.world{height:250px}.graphs{height:190px}.buttons{grid-template-columns:1fr 1fr}.buttons .reset{grid-column:1/-1}.readouts{grid-template-columns:1fr 1fr}.title p{font-size:.84rem}}
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+  </style>
+</head>
+<body>
+<main class="app">
+  <header>
+    <div class="title"><h1>운동 제1법칙 · 관성 실험실</h1><p>힘과 마찰을 바꾸며 물체의 운동 상태가 언제, 왜 변하는지 관찰하세요.</p></div>
+    <div class="law"><strong>뉴턴 운동 제1법칙</strong><br>물체에 작용하는 알짜힘이 0이면 정지한 물체는 계속 정지하고, 운동하는 물체는 등속 직선 운동을 한다.</div>
+  </header>
+
+  <div class="layout">
+    <section class="card stageCard" aria-labelledby="simTitle">
+      <div class="stageTop"><div class="sectionHead"><h2 id="simTitle">실험 화면</h2></div><div class="status"><span class="dot" id="statusDot"></span><span id="statusText">준비</span></div></div>
+      <canvas id="world" class="world" role="img" aria-label="수평면 위 수레의 운동 시뮬레이션"></canvas>
+      <div class="sectionHead" style="margin-top:12px;margin-bottom:0"><h2>실시간 그래프</h2><div class="legend"><span><i style="background:#42d9ff"></i>위치 x</span><span><i style="background:#ffd166"></i>속도 v</span></div></div>
+      <canvas id="graph" class="graphs" role="img" aria-label="시간에 따른 위치와 속도 그래프"></canvas>
+    </section>
+
+    <section class="card controls" aria-labelledby="controlTitle">
+      <div class="sectionHead"><h2 id="controlTitle">실험 조건</h2><span style="color:var(--muted);font-size:.78rem">SI 단위</span></div>
+      <div class="slider"><label for="initialSpeed">초기 속도</label><output class="value" id="initialSpeedOut">2.0 m/s</output><input id="initialSpeed" type="range" min="0" max="4" value="2" step="0.5"></div>
+      <div class="slider"><label for="force">밀어 주는 힘</label><output class="value" id="forceOut">4.0 N</output><input id="force" type="range" min="0" max="12" value="4" step="0.5"></div>
+      <div class="slider"><label for="friction">마찰 계수 μ</label><output class="value" id="frictionOut">0.00</output><input id="friction" type="range" min="0" max="0.50" value="0" step="0.01"></div>
+      <div class="slider"><label for="mass">수레 질량</label><output class="value" id="massOut">2.0 kg</output><input id="mass" type="range" min="0.5" max="5" value="2" step="0.5"></div>
+      <button class="forceBtn" id="push" aria-pressed="false">누르는 동안 → 방향으로 힘 작용</button><div class="hint">마우스·손가락으로 누르고 있으세요. 키보드는 Space.</div>
+      <div class="buttons"><button class="btn primary" id="start">▶ 시작</button><button class="btn warn" id="pause">Ⅱ 일시정지</button><button class="btn reset" id="reset">↺ 초기화</button></div>
+      <div class="readouts">
+        <div class="meter"><small>위치 x</small><strong id="xRead">0.00 m</strong></div><div class="meter"><small>속도 v</small><strong id="vRead">0.00 m/s</strong></div>
+        <div class="meter"><small>가속도 a</small><strong id="aRead">0.00 m/s²</strong></div><div class="meter"><small>알짜힘 ΣF</small><strong id="netRead">0.00 N</strong></div>
+      </div>
+      <div class="feedback" id="feedback" aria-live="polite"><b>탐구 준비:</b> 초기 속도를 설정하고 시작하면 수레가 즉시 출발합니다. 마찰 계수를 바꿔 운동을 비교하세요.</div>
+    </section>
+
+    <section class="card" aria-labelledby="exploreTitle">
+      <div class="sectionHead"><h2 id="exploreTitle">빠른 실험 · 탐구 활동</h2></div>
+      <div class="presets">
+        <button class="chip" data-preset="ideal">① 마찰 없는 우주</button><button class="chip" data-preset="rough">② 거친 바닥</button><button class="chip" data-preset="mass">③ 큰 질량</button>
+      </div>
+      <details open><summary>관찰하고 설명하기</summary><ol class="tasks"><li>μ=0에서 1초간 민 뒤 손을 뗀다. 속도 그래프의 모양을 설명한다.</li><li>같은 힘을 작은 질량과 큰 질량에 작용시켜 속도 변화량을 비교한다.</li><li>마찰이 있는 바닥에서 수레가 멈추는 까닭을 ‘관성이 사라져서’가 아닌 <span class="check">알짜힘</span>으로 설명한다.</li><li>수레가 등속 운동할 때 ΣF와 a의 값을 확인한다.</li></ol></details>
+    </section>
+  </div>
+</main>
+
+<script>
+(()=>{'use strict';
+  const $=s=>document.querySelector(s), world=$('#world'), graph=$('#graph');
+  const wc=world.getContext('2d'), gc=graph.getContext('2d');
+  const ui={initialSpeed:$('#initialSpeed'),initialSpeedOut:$('#initialSpeedOut'),force:$('#force'),friction:$('#friction'),mass:$('#mass'),forceOut:$('#forceOut'),frictionOut:$('#frictionOut'),massOut:$('#massOut'),push:$('#push'),start:$('#start'),pause:$('#pause'),reset:$('#reset'),x:$('#xRead'),v:$('#vRead'),a:$('#aRead'),net:$('#netRead'),feedback:$('#feedback'),statusText:$('#statusText'),statusDot:$('#statusDot')};
+  const state={running:false,pushing:false,t:0,x:0,v:0,a:0,net:0,last:0,acc:0,sample:0,history:[],trail:[],feedbackKey:''};
+  const g=9.81, EPS=.0005, fixed=1/120;
+
+  function fit(canvas,ctx){const r=canvas.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2);const w=Math.max(1,Math.round(r.width*d)),h=Math.max(1,Math.round(r.height*d));if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;}ctx.setTransform(d,0,0,d,0,0);return {w:r.width,h:r.height};}
+  function signed(n,d=2){return (Math.abs(n)<.0005?0:n).toFixed(d)}
+  function updateLabels(){ui.initialSpeedOut.value=(+ui.initialSpeed.value).toFixed(1)+' m/s';ui.forceOut.value=(+ui.force.value).toFixed(1)+' N';ui.frictionOut.value=(+ui.friction.value).toFixed(2);ui.massOut.value=(+ui.mass.value).toFixed(1)+' kg'}
+  function compute(){
+    const F=state.pushing?+ui.force.value:0, m=+ui.mass.value, mu=+ui.friction.value, maxF=mu*m*g;
+    let net=0;
+    if(Math.abs(state.v)>EPS){net=F-mu*m*g*Math.sign(state.v);if(state.v>0&&net<0){} }
+    else {state.v=0;net=Math.abs(F)<=maxF?0:F-maxF*Math.sign(F)}
+    state.net=net;state.a=net/m;
+  }
+  function step(dt){
+    const oldV=state.v;compute();state.v+=state.a*dt;
+    // 마찰로 정방향 운동이 0을 지나 역전되는 수치 오차를 막는다.
+    // 멈춘 다음 계산 단계에서 정지 마찰 조건을 다시 판정한다.
+    if(oldV>EPS && state.v<=0){state.v=0;state.a=0;state.net=0}
+    state.x+=state.v*dt;state.t+=dt;state.sample+=dt;
+    if(state.sample>=.05){state.sample=0;state.history.push({t:state.t,x:state.x,v:state.v});if(state.history.length>320)state.history.shift();state.trail.push(state.x);if(state.trail.length>90)state.trail.shift()}
+  }
+  function feedback(forceUpdate=false){
+    const mu=+ui.friction.value,F=state.pushing?+ui.force.value:0,m=+ui.mass.value;
+    const atRest=Math.abs(state.v)<=EPS, balanced=Math.abs(state.net)<.01;
+    const staticBalanced=atRest&&mu>0&&F>0&&balanced&&F<=mu*m*g+.001;
+    let key='inertia',title='관성 확인',msg='알짜힘이 0이므로 현재의 운동 상태가 그대로 유지됩니다.';
+    if(!state.running&&state.t===0&&atRest){key='ready';title='실험 준비';msg=`시작을 누르면 설정한 초기 속도 ${(+ui.initialSpeed.value).toFixed(1)} m/s로 즉시 출발합니다.`}
+    else if(!state.running){key='paused';title='일시정지';msg='시작을 누르면 현재 위치와 속도에서 계속합니다. 초기 속도는 새 실험에만 적용됩니다.'}
+    else if(staticBalanced){key='static';title='정지 마찰';msg='미는 힘과 정지 마찰력이 균형을 이루어 수레가 정지해 있습니다.'}
+    else if(!atRest&&balanced){key=F>0?'moving-balance':'free-inertia';title='힘의 평형과 등속 운동';msg=F>0?'운동 중 서로 반대 방향의 힘이 평형을 이루어 알짜힘과 가속도가 0입니다. 수레는 현재 속도로 등속 운동합니다.':'힘을 떼어도 알짜힘과 가속도가 0이므로, 관성에 의해 수레는 현재 속도로 등속 운동합니다.'}
+    else if(state.pushing&&!balanced){key='changing';title='운동 상태 변화';msg=`알짜힘 ${signed(state.net)} N 때문에 속도가 변합니다. 질량이 클수록 같은 힘에 의한 가속도는 작습니다.`}
+    else if(!atRest&&!balanced){key='slowing';title='마찰에 의한 감속';msg='수레의 관성이 사라진 것이 아닙니다. 운동 반대 방향의 마찰력이 속도를 변화시킵니다.'}
+    else if(atRest&&balanced){key='rest';title='정지 상태 유지';msg='알짜힘이 0이므로 정지 상태를 계속 유지합니다.'}
+    else {key='observe';title='힘의 관계';msg='작용하는 힘과 마찰력의 크기를 비교하고 알짜힘을 확인하세요.'}
+    if(forceUpdate||key!==state.feedbackKey){state.feedbackKey=key;ui.feedback.innerHTML='<b>'+title+':</b> '+msg;}
+  }
+  function drawWorld(){
+    const {w,h}=fit(world,wc),ctx=wc;ctx.clearRect(0,0,w,h);
+    const floor=h*.73, scale=Math.min(65,w/9), cartX=w*.22 + ((state.x*scale)%(w+140));
+    const cx=cartX>w+80?cartX-(w+140):cartX;
+    ctx.fillStyle='#162e4d';ctx.fillRect(0,floor,w,h-floor);ctx.strokeStyle='#49698e';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(0,floor);ctx.lineTo(w,floor);ctx.stroke();
+    // grid and distance marks
+    ctx.font='11px system-ui';ctx.fillStyle='#8fa6c1';ctx.textAlign='center';for(let i=0;i<=Math.ceil(w/scale);i++){const gx=w*.22+i*scale;ctx.strokeStyle='#294564';ctx.beginPath();ctx.moveTo(gx,floor);ctx.lineTo(gx,floor+9);ctx.stroke();ctx.fillText(i+' m',gx,floor+24)}
+    // fading trail
+    state.trail.forEach((px,i)=>{let tx=w*.22+((px*scale)%(w+140));if(tx>w+80)tx-=w+140;ctx.globalAlpha=(i/state.trail.length)*.35;ctx.fillStyle='#42d9ff';ctx.beginPath();ctx.arc(tx,floor-15,2.5,0,Math.PI*2);ctx.fill()});ctx.globalAlpha=1;
+    // cart
+    const cw=Math.max(64,Math.min(88,w*.13)),ch=45;ctx.fillStyle='#38bddd';ctx.strokeStyle='#b9f4ff';ctx.lineWidth=2;round(ctx,cx-cw/2,floor-ch-14,cw,ch,8);ctx.fill();ctx.stroke();
+    ctx.fillStyle='#d9f7ff';ctx.textAlign='center';ctx.font='bold 13px system-ui';ctx.fillText((+ui.mass.value).toFixed(1)+' kg',cx,floor-30);
+    [-cw*.3,cw*.3].forEach(dx=>{ctx.fillStyle='#101827';ctx.beginPath();ctx.arc(cx+dx,floor-10,11,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#9cb3ca';ctx.stroke()});
+    // force arrow
+    if(state.pushing&&+ui.force.value>0){const len=35+(+ui.force.value)*6;arrow(ctx,cx+cw/2+4,floor-ch*.7-14,cx+cw/2+len,floor-ch*.7-14,'#ffd166');ctx.fillStyle='#ffd166';ctx.textAlign='left';ctx.fillText('F = '+(+ui.force.value).toFixed(1)+' N',cx+cw/2+8,floor-ch*.7-25)}
+    if(+ui.friction.value>0&&Math.abs(state.v)>EPS){const len=Math.min(90,25+(+ui.friction.value)*120);arrow(ctx,cx-cw/2-4,floor-22,cx-cw/2-len,floor-22,'#ff6b7a');ctx.fillStyle='#ff9ba5';ctx.textAlign='right';ctx.fillText('마찰력',cx-cw/2-7,floor-30)}
+    ctx.fillStyle='#dceaff';ctx.textAlign='left';ctx.font='bold 13px system-ui';ctx.fillText('t = '+state.t.toFixed(2)+' s',14,24);
+    ctx.fillStyle='#9fb3cc';ctx.font='11px system-ui';ctx.fillText('※ 실제 위치 x는 계속 증가하며, 화면 끝에서는 수레 표시만 순환합니다.',14,h-12);
+  }
+  function round(c,x,y,w,h,r){c.beginPath();c.roundRect?c.roundRect(x,y,w,h,r):(c.rect(x,y,w,h))}
+  function arrow(c,x1,y1,x2,y2,color){const a=Math.atan2(y2-y1,x2-x1),q=9;c.strokeStyle=color;c.fillStyle=color;c.lineWidth=4;c.beginPath();c.moveTo(x1,y1);c.lineTo(x2,y2);c.stroke();c.beginPath();c.moveTo(x2,y2);c.lineTo(x2-q*Math.cos(a-.5),y2-q*Math.sin(a-.5));c.lineTo(x2-q*Math.cos(a+.5),y2-q*Math.sin(a+.5));c.closePath();c.fill()}
+  function drawGraph(){
+    const {w,h}=fit(graph,gc),c=gc;c.clearRect(0,0,w,h);const L=42,R=12,T=16,B=30,mid=(T+h-B)/2;
+    c.strokeStyle='#26415f';c.lineWidth=1;c.font='10px system-ui';c.fillStyle='#91a8c3';c.textAlign='right';
+    for(let i=0;i<5;i++){const y=T+i*(h-B-T)/4;c.beginPath();c.moveTo(L,y);c.lineTo(w-R,y);c.stroke()}
+    c.strokeStyle='#59738f';c.beginPath();c.moveTo(L,T);c.lineTo(L,h-B);c.lineTo(w-R,h-B);c.stroke();
+    c.fillText('x (m)',L-5,T+7);c.fillText('v (m/s)',L-5,mid+7);c.textAlign='center';c.fillText('최근 16 s →',w/2,h-9);
+    if(state.history.length<2)return;const data=state.history,tMax=data[data.length-1].t,tMin=Math.max(0,tMax-16),visible=data.filter(p=>p.t>=tMin);let maxX=Math.max(1,...visible.map(p=>Math.abs(p.x))),maxV=Math.max(1,...visible.map(p=>Math.abs(p.v)));
+    plot(visible,'x','#42d9ff',T,mid-5,maxX,tMin,tMax,w,L,R,c);plot(visible,'v','#ffd166',mid+5,h-B,maxV,tMin,tMax,w,L,R,c);
+  }
+  function plot(data,key,color,top,bottom,max,tMin,tMax,w,L,R,c){c.strokeStyle=color;c.lineWidth=2;c.beginPath();data.forEach((p,i)=>{const xx=L+(p.t-tMin)/Math.max(.001,tMax-tMin)*(w-L-R),yy=bottom-(p[key]+max)/(2*max)*(bottom-top);i?c.lineTo(xx,yy):c.moveTo(xx,yy)});c.stroke()}
+  function render(){ui.x.textContent=signed(state.x)+' m';ui.v.textContent=signed(state.v)+' m/s';ui.a.textContent=signed(state.a)+' m/s²';ui.net.textContent=signed(state.net)+' N';ui.statusText.textContent=state.running?'실험 중':'멈춤';ui.statusDot.style.background=state.running?'#57e39b':'#ffd166';ui.statusDot.style.boxShadow='0 0 10px '+(state.running?'#57e39b':'#ffd166');drawWorld();drawGraph()}
+  function loop(now){if(!state.last)state.last=now;let dt=Math.min(.05,(now-state.last)/1000);state.last=now;if(state.running){state.acc+=dt;while(state.acc>=fixed){step(fixed);state.acc-=fixed}}else compute();feedback();render();requestAnimationFrame(loop)}
+  function reset(){Object.assign(state,{running:false,pushing:false,t:0,x:0,v:0,a:0,net:0,last:performance.now(),acc:0,sample:0,history:[{t:0,x:0,v:0}],trail:[],feedbackKey:''});ui.push.classList.remove('pressed');ui.push.setAttribute('aria-pressed','false');feedback(true);render()}
+  function setPush(on){state.pushing=on;ui.push.classList.toggle('pressed',on);ui.push.setAttribute('aria-pressed',String(on));compute();feedback(true)}
+  [ui.initialSpeed,ui.force,ui.friction,ui.mass].forEach(el=>el.addEventListener('input',()=>{updateLabels();compute();feedback(true)}));
+  ui.start.addEventListener('click',()=>{
+    // t=0이고 정지한 새 실험에서만 초기 속도를 한 번 적용한다.
+    // 일시정지 후 계속할 때는 현재 상태를 그대로 사용한다.
+    if(!state.running&&state.t===0&&Math.abs(state.v)<=EPS){
+      state.v=+ui.initialSpeed.value;
+      state.history=[{t:0,x:state.x,v:state.v}];
+    }
+    state.running=true;state.last=performance.now();compute();feedback(true)
+  });ui.pause.addEventListener('click',()=>{state.running=false;state.pushing=false;ui.push.classList.remove('pressed');ui.push.setAttribute('aria-pressed','false');compute();feedback(true)});ui.reset.addEventListener('click',reset);
+  ui.push.addEventListener('pointerdown',e=>{e.preventDefault();ui.push.setPointerCapture?.(e.pointerId);setPush(true)});['pointerup','pointercancel','lostpointercapture','pointerleave'].forEach(ev=>ui.push.addEventListener(ev,()=>setPush(false)));
+  addEventListener('keydown',e=>{if(e.code==='Space'&&!e.repeat&&document.activeElement?.tagName!=='INPUT'){e.preventDefault();setPush(true)}});addEventListener('keyup',e=>{if(e.code==='Space')setPush(false)});addEventListener('blur',()=>setPush(false));document.addEventListener('visibilitychange',()=>{if(document.hidden)setPush(false)});
+  document.querySelectorAll('[data-preset]').forEach(b=>b.addEventListener('click',()=>{const p=b.dataset.preset;if(p==='ideal'){ui.initialSpeed.value=2;ui.friction.value=0;ui.force.value=4;ui.mass.value=2}else if(p==='rough'){ui.initialSpeed.value=3;ui.friction.value=.25;ui.force.value=8;ui.mass.value=2}else{ui.initialSpeed.value=2;ui.friction.value=0;ui.force.value=4;ui.mass.value=5}updateLabels();reset()}));
+  new ResizeObserver(()=>render()).observe(world);updateLabels();reset();requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

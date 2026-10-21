@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+  <meta name="theme-color" content="#071525">
+  <title>케플러 제2법칙 실험실</title>
+  <meta name="description" content="같은 시간 동안 행성과 태양을 잇는 선분이 쓸어가는 면적을 비교하는 인터랙티브 천문 실험실">
+  <style>
+    :root{--bg:#06111f;--panel:#0c1d31;--panel2:#10263e;--line:#28425d;--text:#eff7ff;--muted:#9bb0c6;--cyan:#56d8ff;--gold:#ffca57;--coral:#ff786f;--green:#67e2ac;--shadow:0 18px 50px #0008}
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:radial-gradient(circle at 25% 0,#153356 0,#071523 36%,#030a12 100%);color:var(--text);font-family:Pretendard,"Noto Sans KR",system-ui,sans-serif}body{padding:20px}.app{max-width:1440px;margin:auto}.top{display:flex;gap:18px;align-items:flex-start;justify-content:space-between;margin-bottom:16px}.brand h1{font-size:clamp(1.45rem,3vw,2.2rem);margin:0 0 6px;letter-spacing:-.04em}.brand p{margin:0;color:var(--muted);font-size:.98rem}.law{max-width:530px;padding:11px 15px;border:1px solid #39607e;background:#0a2035cc;border-radius:14px;color:#d7ebfa}.law b{color:var(--gold)}
+    .grid{display:grid;grid-template-columns:minmax(0,1.8fr) minmax(310px,.75fr);gap:16px}.card{background:linear-gradient(145deg,#0e2238ee,#081727ee);border:1px solid #29445e;border-radius:20px;box-shadow:var(--shadow)}.space{position:relative;overflow:hidden;min-height:610px}.space:before{content:"";position:absolute;inset:0;opacity:.65;background-image:radial-gradient(#fff 0.7px,transparent .8px),radial-gradient(#8fd8ff .6px,transparent .8px);background-size:53px 53px,89px 89px;background-position:11px 9px,27px 39px;pointer-events:none}.canvas-wrap{position:relative;height:520px}canvas{width:100%;height:100%;display:block;touch-action:none}.legend{position:absolute;left:16px;top:15px;display:flex;gap:8px;flex-wrap:wrap}.chip{font-size:.8rem;padding:7px 10px;border-radius:999px;background:#06121fdd;border:1px solid #2d4d68;color:#c8d9e8}.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px}.instruction{position:absolute;left:16px;bottom:14px;right:16px;color:#bdd0e0;background:#061420d9;border:1px solid #28445c;border-radius:12px;padding:10px 13px;font-size:.9rem}
+    .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:0 14px 14px}.metric{background:#071523;border:1px solid #223d56;border-radius:13px;padding:10px}.metric span{display:block;color:var(--muted);font-size:.75rem}.metric strong{font-variant-numeric:tabular-nums;font-size:1.05rem}.side{display:flex;flex-direction:column;gap:14px}.section{padding:17px}.section h2{font-size:1rem;margin:0 0 13px}.control{margin:12px 0}.control label{display:flex;justify-content:space-between;color:#d9e8f5;font-size:.88rem;margin-bottom:7px}.control output{color:var(--cyan);font-weight:700}.range{width:100%;accent-color:var(--cyan)}.preset{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.preset button,.actions button{border:1px solid #355875;background:#102c47;color:#e9f6ff;border-radius:11px;padding:10px 8px;font-weight:700;cursor:pointer;min-height:43px}.preset button.active{background:#174767;border-color:var(--cyan);box-shadow:0 0 0 2px #56d8ff22}.actions{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.actions .primary{background:linear-gradient(135deg,#1682a7,#15a384);border-color:#4ee9d1}.actions button:focus-visible,.preset button:focus-visible{outline:3px solid #fff;outline-offset:2px}.compare{display:grid;gap:9px}.barrow{display:grid;grid-template-columns:60px 1fr 58px;align-items:center;gap:8px;font-size:.82rem}.bar{height:11px;background:#08131f;border-radius:9px;overflow:hidden}.fill{height:100%;border-radius:inherit;transition:width .2s}.feedback{padding:13px;border-radius:13px;background:#081a2a;border:1px solid #29465e;line-height:1.55;color:#d8e7f2;font-size:.9rem}.question{margin-top:10px;padding-top:11px;border-top:1px solid #29445c;color:#b8d0e1}.badge{font-size:.74rem;color:#06121f;background:var(--gold);font-weight:800;border-radius:999px;padding:4px 8px;margin-right:6px}.formula{font-family:Georgia,serif;color:#fff;text-align:center;font-size:1.1rem;background:#071522;border-radius:11px;padding:9px}.note{font-size:.8rem;color:var(--muted);line-height:1.45;margin-top:8px}
+    @media(max-width:980px){body{padding:10px}.top{display:block}.law{margin-top:12px}.grid{grid-template-columns:1fr}.space{min-height:540px}.canvas-wrap{height:450px}.side{display:grid;grid-template-columns:1fr 1fr}.side .card:last-child{grid-column:1/-1}}
+    @media(max-width:620px){.top{margin-bottom:10px}.brand p{font-size:.86rem}.law{font-size:.88rem}.space{min-height:505px}.canvas-wrap{height:405px}.metrics{grid-template-columns:1fr 1fr}.side{display:flex}.legend{right:10px;left:10px}.chip{font-size:.7rem;padding:5px 7px}.instruction{font-size:.8rem}.preset button,.actions button{font-size:.84rem}}
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}.fill{transition:none}}
+  </style>
+</head>
+<body>
+<main class="app">
+  <header class="top">
+    <div class="brand"><h1>케플러 제2법칙 실험실</h1><p>행성의 속도는 달라져도, 같은 시간에 쓸어가는 면적은 같습니다.</p></div>
+    <div class="law"><b>핵심 질문</b> · 행성이 태양 가까이에서는 빠르고 멀리에서는 느린데, 왜 면적은 같을까요?</div>
+  </header>
+  <div class="grid">
+    <section class="card space" aria-label="타원 궤도 실험 화면">
+      <div class="canvas-wrap"><canvas id="orbit" aria-label="케플러 제2법칙 타원 궤도 시뮬레이션"></canvas>
+        <div class="legend"><span class="chip"><i class="dot" style="background:#ffca57"></i>현재 구간</span><span class="chip"><i class="dot" style="background:#ff786f"></i>근일점 비교</span><span class="chip"><i class="dot" style="background:#56d8ff"></i>원일점 비교</span></div>
+        <div class="instruction">행성을 끌어 궤도 위치를 바꿔 보세요. 비교 부채꼴은 항상 같은 시간 간격으로 계산됩니다.</div>
+      </div>
+      <div class="metrics">
+        <div class="metric"><span>태양까지 거리</span><strong id="distance">—</strong></div>
+        <div class="metric"><span>현재 속력</span><strong id="speed">—</strong></div>
+        <div class="metric"><span>쓸어간 면적</span><strong id="area">—</strong></div>
+        <div class="metric"><span>면적 속도</span><strong id="areal">—</strong></div>
+      </div>
+    </section>
+    <aside class="side">
+      <section class="card section">
+        <h2>실험 조건</h2>
+        <div class="preset" role="group" aria-label="궤도 이심률 선택"><button data-e="0">원 궤도</button><button data-e="0.45" class="active">보통 타원</button><button data-e="0.72">긴 타원</button></div>
+        <div class="control"><label for="ecc">이심률 <output id="eccVal">0.45</output></label><input id="ecc" class="range" type="range" min="0" max="0.8" step="0.01" value="0.45"></div>
+        <div class="control"><label for="interval">비교 시간 간격 <output id="intVal">30일</output></label><input id="interval" class="range" type="range" min="10" max="70" step="5" value="30"></div>
+        <div class="control"><label for="rate">재생 속도 <output id="rateVal">1.0배</output></label><input id="rate" class="range" type="range" min="0.25" max="3" step="0.25" value="1"></div>
+        <div class="actions"><button id="play" class="primary">▶ 재생</button><button id="step">｜▶ 5일 진행</button><button id="compare">면적 다시 비교</button><button id="reset">↺ 처음으로</button></div>
+      </section>
+      <section class="card section">
+        <h2>같은 시간, 면적 비교</h2>
+        <div class="compare"><div class="barrow"><span>근일점</span><div class="bar"><div id="nearBar" class="fill" style="background:var(--coral)"></div></div><b id="nearArea">—</b></div><div class="barrow"><span>원일점</span><div class="bar"><div id="farBar" class="fill" style="background:var(--cyan)"></div></div><b id="farArea">—</b></div></div>
+        <div id="feedback" class="feedback" aria-live="polite"></div>
+        <div class="question"><span class="badge">탐구</span>시간 간격을 바꾸어도 두 면적의 관계가 유지되는지 확인해 보세요.</div>
+      </section>
+      <section class="card section">
+        <h2>핵심 개념</h2><div class="formula">dA / dt = 일정</div>
+        <p class="note">태양과 행성을 잇는 선분은 같은 시간 동안 같은 면적을 쓸어갑니다. 따라서 행성은 근일점에서 빠르게, 원일점에서 느리게 움직입니다. 이는 태양의 중력이 중심력이라 각운동량이 보존되기 때문입니다.</p>
+      </section>
+    </aside>
+  </div>
+</main>
+<script>
+(()=>{'use strict';
+const $=id=>document.getElementById(id),canvas=$('orbit'),ctx=canvas.getContext('2d');
+let e=.45,M=0,running=false,last=0,drag=false,sectorStart=0;const period=365.25,aAU=1;
+const els={distance:$('distance'),speed:$('speed'),area:$('area'),areal:$('areal'),ecc:$('ecc'),eccVal:$('eccVal'),interval:$('interval'),intVal:$('intVal'),rate:$('rate'),rateVal:$('rateVal'),play:$('play'),nearArea:$('nearArea'),farArea:$('farArea'),nearBar:$('nearBar'),farBar:$('farBar'),feedback:$('feedback')};
+function solveE(mean){let E=mean;for(let i=0;i<12;i++)E-=(E-e*Math.sin(E)-mean)/(1-e*Math.cos(E));return E}
+function state(mean){const E=solveE(((mean%(2*Math.PI))+2*Math.PI)%(2*Math.PI));return{x:Math.cos(E)-e,y:Math.sqrt(1-e*e)*Math.sin(E),E,r:1-e*Math.cos(E)}}
+function dims(){const r=canvas.getBoundingClientRect(),d=devicePixelRatio||1;if(canvas.width!==Math.round(r.width*d)||canvas.height!==Math.round(r.height*d)){canvas.width=Math.round(r.width*d);canvas.height=Math.round(r.height*d)}ctx.setTransform(d,0,0,d,0,0);return{w:r.width,h:r.height,s:Math.min(r.width*.39,r.height*.37),cx:r.width*.5,cy:r.height*.52}}
+function point(mean,D){const q=state(mean);return{x:D.cx+q.x*D.s,y:D.cy+q.y*D.s,q}}
+function sector(mean,days,color,D){const dm=days/period*2*Math.PI,steps=40;ctx.beginPath();ctx.moveTo(D.cx,D.cy);for(let i=0;i<=steps;i++){const p=point(mean+dm*i/steps,D);ctx.lineTo(p.x,p.y)}ctx.closePath();ctx.fillStyle=color;ctx.fill();ctx.strokeStyle=color.replace(/,.+\)/,',.95)');ctx.lineWidth=1.3;ctx.stroke()}
+function drawArrow(x,y,vx,vy,color,label){const L=Math.hypot(vx,vy)||1,nx=vx/L,ny=vy/L,ex=x+nx*50,ey=y+ny*50;ctx.strokeStyle=color;ctx.fillStyle=color;ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(ex,ey);ctx.stroke();ctx.beginPath();ctx.moveTo(ex,ey);ctx.lineTo(ex-nx*10-ny*6,ey-ny*10+nx*6);ctx.lineTo(ex-nx*10+ny*6,ey-ny*10-nx*6);ctx.fill();ctx.font='700 12px system-ui';ctx.fillText(label,ex+8,ey-4)}
+function draw(){const D=dims();ctx.clearRect(0,0,D.w,D.h);ctx.save();ctx.shadowBlur=24;ctx.shadowColor='#ffca57';ctx.fillStyle='#ffc84c';ctx.beginPath();ctx.arc(D.cx,D.cy,11,0,Math.PI*2);ctx.fill();ctx.restore();ctx.fillStyle='#ffeab0';ctx.font='700 13px system-ui';ctx.fillText('태양 (초점)',D.cx+16,D.cy+5);
+ctx.strokeStyle='#5f7d98';ctx.lineWidth=2;ctx.setLineDash([6,7]);ctx.beginPath();for(let i=0;i<=180;i++){const p=point(i/180*Math.PI*2,D);i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y)}ctx.closePath();ctx.stroke();ctx.setLineDash([]);
+const days=+els.interval.value;sector(0-days/period*Math.PI,days,'rgba(255,120,111,.28)',D);sector(Math.PI-days/period*Math.PI,days,'rgba(86,216,255,.26)',D);sector(sectorStart,days,'rgba(255,202,87,.32)',D);
+const p=point(M,D),q=p.q;ctx.strokeStyle='#ffca57aa';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(D.cx,D.cy);ctx.lineTo(p.x,p.y);ctx.stroke();ctx.save();ctx.shadowBlur=16;ctx.shadowColor='#79e5ff';ctx.fillStyle='#71dbff';ctx.beginPath();ctx.arc(p.x,p.y,9,0,Math.PI*2);ctx.fill();ctx.restore();
+const dE=.001,q2=state(M+dE),vx=q2.x-q.x,vy=q2.y-q.y;drawArrow(p.x,p.y,vx,vy,'#67e2ac','속도');
+const r=q.r,speed=29.78*Math.sqrt(2/r-1),area=Math.PI*Math.sqrt(1-e*e)*(days/period),areal=Math.PI*Math.sqrt(1-e*e)/period;
+els.distance.textContent=r.toFixed(3)+' AU';els.speed.textContent=speed.toFixed(1)+' km/s';els.area.textContent=area.toFixed(3)+' AU²';els.areal.textContent=areal.toFixed(4)+' AU²/일';
+}
+function updateCompare(){const days=+els.interval.value,area=Math.PI*Math.sqrt(1-e*e)*(days/period),round=area.toFixed(3);els.nearArea.textContent=round;els.farArea.textContent=round;els.nearBar.style.width='100%';els.farBar.style.width='100%';els.feedback.innerHTML='<b style="color:var(--green)">면적이 같습니다.</b><br>'+days+'일 동안 근일점에서는 긴 궤도 호를, 원일점에서는 짧은 궤도 호를 지나지만 쓸어간 면적은 모두 '+round+' AU²입니다.';sectorStart=M;draw()}
+function setE(v){e=+v;els.ecc.value=e;els.eccVal.value=e.toFixed(2);document.querySelectorAll('[data-e]').forEach(b=>b.classList.toggle('active',Math.abs(+b.dataset.e-e)<.005));updateCompare()}
+function tick(t){if(!last)last=t;const dt=Math.min(50,t-last);last=t;if(running){M+=dt*.00035*+els.rate.value*2*Math.PI;draw()}requestAnimationFrame(tick)}
+els.ecc.addEventListener('input',x=>setE(x.target.value));els.interval.addEventListener('input',()=>{els.intVal.value=els.interval.value+'일';updateCompare()});els.rate.addEventListener('input',()=>els.rateVal.value=(+els.rate.value).toFixed(2).replace(/0$/,'')+'배');
+document.querySelectorAll('[data-e]').forEach(b=>b.addEventListener('click',()=>setE(b.dataset.e)));els.play.addEventListener('click',()=>{running=!running;els.play.textContent=running?'Ⅱ 일시정지':'▶ 재생';els.play.classList.toggle('primary',!running)});$('step').addEventListener('click',()=>{running=false;els.play.textContent='▶ 재생';M+=5/period*2*Math.PI;draw()});$('compare').addEventListener('click',updateCompare);$('reset').addEventListener('click',()=>{M=0;running=false;els.play.textContent='▶ 재생';els.interval.value=30;els.intVal.value='30일';els.rate.value=1;els.rateVal.value='1.0배';setE(.45)});
+function pos(ev){const r=canvas.getBoundingClientRect(),D=dims();return{x:ev.clientX-r.left,y:ev.clientY-r.top,D}}
+canvas.addEventListener('pointerdown',ev=>{const z=pos(ev),p=point(M,z.D);if(Math.hypot(z.x-p.x,z.y-p.y)<35){drag=true;canvas.setPointerCapture(ev.pointerId)}});canvas.addEventListener('pointermove',ev=>{if(!drag)return;const z=pos(ev),best={d:1e9,m:0};for(let i=0;i<720;i++){const m=i/720*2*Math.PI,p=point(m,z.D),d=(p.x-z.x)**2+(p.y-z.y)**2;if(d<best.d){best.d=d;best.m=m}}M=best.m;sectorStart=M;draw()});canvas.addEventListener('pointerup',()=>drag=false);canvas.addEventListener('pointercancel',()=>drag=false);window.addEventListener('resize',draw);updateCompare();requestAnimationFrame(tick);
+})();
+</script>
+</body></html>

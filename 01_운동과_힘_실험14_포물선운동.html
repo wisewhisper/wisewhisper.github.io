@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101d38">
+<title>포물선 운동 실험실</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1428;--panel:#14233d;--border:#304565;--txt:#edf5ff;--muted:#b6c8e0;--cyan:#4ddce4;--orange:#ffbd69;--pink:#fa85b3}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,'Noto Sans KR',sans-serif;background:radial-gradient(ellipse at 20% 0%,#1c3763 0%,var(--bg) 58%);color:var(--txt)}
+header,main,footer{max-width:1240px;margin:auto;padding-left:16px;padding-right:16px}header{padding-top:25px;padding-bottom:19px}h1{font-size:clamp(1.45rem,3vw,2.2rem);margin:4px 0 7px;letter-spacing:-.04em}h2{font-size:1.06rem;margin:0 0 14px}p{margin:5px 0;line-height:1.5}.eyebrow{font-size:.79rem;font-weight:800;letter-spacing:.13em;color:var(--cyan)}.sub,.help{color:var(--muted)}.sub{font-size:.94rem}
+main{display:grid;grid-template-columns:minmax(0,1.75fr) minmax(295px,1fr);gap:16px;padding-bottom:30px}.panel{border:1px solid var(--border);background:linear-gradient(155deg,#172946,#111f37);border-radius:18px;padding:17px;box-shadow:0 10px 35px #050b1933}.scene{min-width:0}.scene-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.status{background:#24456a;border-radius:100px;padding:5px 12px;color:#cff7fa;font-size:.82rem;font-weight:700}.canvas-wrap{border-radius:12px;border:1px solid #3b5572;background:#101f39;overflow:hidden;margin-top:14px}canvas{display:block;width:100%;touch-action:pan-y}#field{height:385px}#graph{height:180px}.caption{color:var(--muted);font-size:.77rem;margin-top:7px}.buttons{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 0}button{font:inherit;font-size:.88rem;font-weight:750;color:var(--txt);background:#244061;border:1px solid #496887;border-radius:10px;padding:10px 13px;cursor:pointer;min-height:42px}button:hover{filter:brightness(1.15)}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #ffcc76;outline-offset:2px}button.primary{background:#08838d;border-color:#39d3d8;color:white}button:disabled{opacity:.45;cursor:not-allowed}.settings{display:grid;gap:16px}.control{border-top:1px solid #344969;padding-top:12px}.control:first-child{border:0;padding:0}.control-head{display:flex;justify-content:space-between;gap:10px;font-size:.91rem;font-weight:650}.control output{font-variant-numeric:tabular-nums;color:var(--cyan);font-weight:850}input[type=range]{width:100%;accent-color:#49dade;margin:12px 0 3px;height:20px;cursor:pointer}.limits{display:flex;justify-content:space-between;font-size:.74rem;color:var(--muted)}.options{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.check{display:flex;align-items:center;gap:7px;font-size:.83rem;color:var(--muted);cursor:pointer}.check input{accent-color:#56d9dc;width:17px;height:17px}select{background:#244061;color:white;border:1px solid #496887;border-radius:8px;padding:7px;min-height:35px;font:inherit}.reading{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:14px}.read{background:#1d3756;border:1px solid #365475;border-radius:10px;padding:10px;min-width:0}.read small{display:block;color:var(--muted);font-size:.72rem;white-space:nowrap}.read strong{display:block;color:#fff;font-size:clamp(.95rem,1.8vw,1.22rem);font-variant-numeric:tabular-nums;white-space:nowrap;margin-top:3px}.read .unit{font-size:.72rem;color:var(--muted);margin-left:2px}.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:10px}.stat{border:1px solid #3a526f;border-radius:9px;padding:8px;text-align:center;font-size:.8rem;color:var(--muted)}.stat b{display:block;color:var(--orange);font-size:1rem;font-variant-numeric:tabular-nums}.note{font-size:.82rem;color:var(--muted);margin-top:13px}.formula{font-variant-numeric:tabular-nums;background:#0e1c32;border-radius:10px;border:1px solid #354a68;padding:11px 13px;line-height:1.6;font-size:.85rem;overflow:auto;white-space:nowrap}.lesson{grid-column:1/-1}.lesson-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.lesson article{border:1px solid #39516b;background:#172a46;border-radius:12px;padding:13px}.lesson h3{font-size:.9rem;color:var(--cyan);margin:0 0 5px}.lesson p{font-size:.83rem;color:var(--muted)}.graph-section{margin-top:16px}.graph-head{display:flex;justify-content:space-between;align-items:center;gap:10px}.graph-head h2{margin:0}.graph-head select{max-width:200px}footer{padding-bottom:26px;font-size:.78rem;color:var(--muted)}@media(max-width:880px){main{grid-template-columns:1fr}.lesson{grid-column:auto}.controls-panel{order:-1}.settings{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.control{border-top:0;padding:0}.lesson-grid{grid-template-columns:1fr 1fr}}@media(max-width:580px){header{padding-top:18px}.panel{padding:13px}.settings{gap:8px 12px}#field{height:310px}#graph{height:165px}.reading{grid-template-columns:repeat(2,1fr)}.lesson-grid{grid-template-columns:1fr}.buttons button{flex:1 1 45%}.stats{font-size:.77rem}}
+</style>
+</head>
+<body>
+<header><div class="eyebrow">INTERACTIVE PHYSICS LAB</div><h1>포물선 운동 실험실</h1><p class="sub">조건을 바꾸고 발사해 보세요. 공의 위치, 속도 성분, 궤적과 그래프가 함께 움직입니다.</p></header>
+<main>
+ <section class="panel scene" aria-label="포물선 운동 화면">
+  <div class="scene-top"><h2>발사 관찰</h2><span id="status" class="status" role="status">발사 준비</span></div>
+  <div class="canvas-wrap"><canvas id="field" aria-label="발사대에서 날아가는 공의 궤적"></canvas></div>
+  <div class="caption">청록색 실선: 현재 궤적 · 청록색 점선: 예상 궤적 · 분홍색 점선: 이전 실험 · 하늘색/분홍색 화살표: 수평/수직 속도 · 주황색 점: 공 · 지면 y = 0 m<br>이전 궤적을 저장하면 눈금이 고정됩니다. 새 궤적이 화면 밖으로 나갈 때만 ‘두 궤적 화면에 맞춤’을 누르세요.</div>
+  <div class="buttons"><button class="primary" id="start">▶ 발사</button><button id="pause" disabled>Ⅱ 일시정지</button><button id="replay">↺ 다시 실행</button><button id="reset">⟲ 초기화</button><button id="save">이 궤적 비교</button><button id="fit" disabled>두 궤적 화면에 맞춤</button></div>
+  <div class="reading" aria-live="off">
+   <div class="read"><small>경과 시간</small><strong><span id="time">0.00</span><span class="unit">s</span></strong></div>
+   <div class="read"><small>수평 위치 x</small><strong><span id="posx">0.00</span><span class="unit">m</span></strong></div>
+   <div class="read"><small>높이 y</small><strong><span id="posy">0.00</span><span class="unit">m</span></strong></div>
+   <div class="read"><small>수직 속도 vᵧ</small><strong><span id="vely">0.00</span><span class="unit">m/s</span></strong></div>
+  </div>
+  <div class="stats"><div class="stat">비행 시간 T<b id="flight">—</b></div><div class="stat">최고 높이 H<b id="peak">—</b></div><div class="stat">수평 도달 거리 R<b id="range">—</b></div></div>
+  <div class="graph-section"><div class="graph-head"><h2>시간에 따른 변화</h2><select id="graphType" aria-label="그래프 종류"><option value="height">높이 y–시간 t</option><option value="vy">수직 속도 vᵧ–시간 t</option><option value="x">수평 위치 x–시간 t</option></select></div><div class="canvas-wrap"><canvas id="graph" aria-label="시간에 따른 물리량 그래프"></canvas></div><p class="caption">점이 현재 시각을 표시합니다. 계산상 전체 비행 구간은 가는 곡선으로 표시됩니다.</p></div>
+ </section>
+ <aside class="panel controls-panel"><h2>실험 조건</h2><div class="settings">
+  <label class="control" for="speed"><span class="control-head"><span>발사 속력</span><output id="speedOut">20 m/s</output></span><input id="speed" type="range" min="2" max="40" step="1" value="20"><span class="limits"><span>2 m/s</span><span>40 m/s</span></span></label>
+  <label class="control" for="angle"><span class="control-head"><span>발사 각도</span><output id="angleOut">45°</output></span><input id="angle" type="range" min="0" max="90" step="1" value="45"><span class="limits"><span>0° 수평</span><span>90° 수직</span></span></label>
+  <label class="control" for="height"><span class="control-head"><span>발사 높이</span><output id="heightOut">0 m</output></span><input id="height" type="range" min="0" max="30" step="1" value="0"><span class="limits"><span>0 m</span><span>30 m</span></span></label>
+  <label class="control" for="gravity"><span class="control-head"><span>중력가속도</span><output id="gravityOut">9.8 m/s²</output></span><input id="gravity" type="range" min="1" max="20" step="0.1" value="9.8"><span class="limits"><span>1.0 m/s²</span><span>20.0 m/s²</span></span></label>
+ </div><div class="options" style="margin-top:18px"><label class="check"><input type="checkbox" id="vectors" checked>속도 성분 표시</label><label class="check" for="playback">재생 속도 <select id="playback"><option value="0.25">¼배</option><option value="0.5">½배</option><option value="1" selected>1배</option><option value="2">2배</option></select></label></div>
+ <p class="note">설정값을 바꾸면 현재 발사가 준비 상태로 돌아갑니다. 공기 저항과 바람은 고려하지 않습니다.</p>
+ <div class="formula" aria-label="적용한 물리 공식">x(t) = v₀ cosθ · t<br>y(t) = h + v₀ sinθ · t − ½gt²<br>vₓ = v₀ cosθ, &nbsp;vᵧ = v₀ sinθ − gt</div>
+ <p class="note">높이 0 m에서 수평으로 발사하면 비행 시간이 0초이므로 궤적 대신 지면에 닿은 상태로 표시됩니다.</p>
+ </aside>
+ <section class="panel lesson"><h2>직접 탐구해 보기</h2><div class="lesson-grid">
+  <article><h3>① 발사 각도와 도달 거리</h3><p>높이를 0 m로 고정하고 30°, 45°, 60°를 비교하세요. 어느 각도에서 가장 멀리 가나요? 같은 거리의 두 각도는 무엇인가요?</p></article>
+  <article><h3>② 수직 속도가 0인 순간</h3><p>발사 후 그래프를 ‘수직 속도’로 바꾸고 최고점 부근에서 일시정지해 보세요. 그때 수평 속도도 0일까요?</p></article>
+  <article><h3>③ 발사 높이와 중력</h3><p>한 조건씩 바꾼 뒤 ‘이 궤적 비교’를 사용하세요. 발사 높이나 중력을 바꾸면 비행 시간과 도달 거리가 어떻게 달라지나요?</p></article>
+ </div></section>
+</main><footer>이상적인 등가속도 운동 모형입니다. 화면의 물체 크기와 벡터 길이는 보기 쉽도록 조정되어 실제 길이 비율과 다를 수 있습니다.</footer>
+<script>
+(()=>{'use strict';
+const $=id=>document.getElementById(id), field=$('field'),graph=$('graph'),fc=field.getContext('2d'),gc=graph.getContext('2d');
+const inputs=['speed','angle','height','gravity'].map($);let params={},t=0,state='ready',old=null,axis=null,lastFrame=null,raf=0;
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+function scaleFor(a,b=null){return {xMax:Math.max(5,a.R,b?.R||0)*1.14,yMax:Math.max(5,a.apex,b?.apex||0)*1.18}}
+function read(){let v=Number($('speed').value),angle=Number($('angle').value),h=Number($('height').value),g=Number($('gravity').value),theta=angle*Math.PI/180,vx=v*Math.cos(theta),vy=v*Math.sin(theta),disc=vy*vy+2*g*h;
+ let T=(vy+Math.sqrt(disc))/g;if(T<1e-9)T=0;let apex=h+vy*vy/(2*g);return {v,angle,h,g,vx,vy,T,R:vx*T,apex};}
+function point(p,at){at=clamp(at,0,p.T);return {x:p.vx*at,y:Math.max(0,p.h+p.vy*at-.5*p.g*at*at),vx:p.vx,vy:p.vy-p.g*at};}
+function fmt(n,dec=2){return Number.isFinite(n)?n.toFixed(dec):'—'}
+function status(){let labels={ready:'발사 준비',running:'운동 중',paused:'일시정지',done:'지면 도착'};$('status').textContent=labels[state];$('start').textContent=state==='paused'?'▶ 계속':'▶ 발사';$('pause').disabled=state!=='running'}
+function refreshNumbers(){let p=point(params,t);$('time').textContent=fmt(t);$('posx').textContent=fmt(p.x);$('posy').textContent=fmt(p.y);$('vely').textContent=fmt(p.vy);$('flight').textContent=fmt(params.T)+' s';$('peak').textContent=fmt(params.apex)+' m';$('range').textContent=fmt(params.R)+' m';status()}
+function cancel(){cancelAnimationFrame(raf);raf=0;lastFrame=null}
+function reset(update=true){cancel();t=0;state='ready';if(update)params=read();refreshNumbers();draw()}
+function start(restart=false){if(restart||state==='done')t=0;params=read();if(params.T===0){t=0;state='done';refreshNumbers();draw();return}if(state==='running')return;state='running';lastFrame=null;refreshNumbers();raf=requestAnimationFrame(tick)}
+function tick(now){if(state!=='running')return;if(lastFrame!==null)t=Math.min(params.T,t+Math.max(0,(now-lastFrame)/1000)*Number($('playback').value));lastFrame=now;if(t>=params.T){t=params.T;state='done';lastFrame=null}refreshNumbers();draw();if(state==='running')raf=requestAnimationFrame(tick)}
+function setup(canvas,ctx){let box=canvas.getBoundingClientRect(),dpr=Math.min(window.devicePixelRatio||1,2),w=Math.max(1,box.width),h=Math.max(1,box.height);if(canvas.width!==Math.round(w*dpr)||canvas.height!==Math.round(h*dpr)){canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr)}ctx.setTransform(dpr,0,0,dpr,0,0);return {w,h}}
+function line(ctx,x1,y1,x2,y2,color,width=1,dash=[]){ctx.save();ctx.strokeStyle=color;ctx.lineWidth=width;ctx.setLineDash(dash);ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();ctx.restore()}
+function textAt(ctx,str,x,y,color='#c3d4ed',font='12px system-ui',align='left'){ctx.fillStyle=color;ctx.font=font;ctx.textAlign=align;ctx.fillText(str,x,y)}
+function arrow(ctx,x,y,dx,dy,color){let length=Math.hypot(dx,dy);if(length<2)return;let ex=x+dx,ey=y+dy,a=Math.atan2(dy,dx);line(ctx,x,y,ex,ey,color,2.7);ctx.fillStyle=color;ctx.beginPath();ctx.moveTo(ex,ey);ctx.lineTo(ex-8*Math.cos(a-.48),ey-8*Math.sin(a-.48));ctx.lineTo(ex-8*Math.cos(a+.48),ey-8*Math.sin(a+.48));ctx.closePath();ctx.fill()}
+function drawField(){let {w,h}=setup(field,fc),c=fc,p=params,margin={left:46,right:24,top:25,bottom:42},left=margin.left,right=w-margin.right,top=margin.top,bottom=h-margin.bottom,pxW=Math.max(1,right-left),pxH=Math.max(1,bottom-top);
+ c.clearRect(0,0,w,h);let grd=c.createLinearGradient(0,0,0,h);grd.addColorStop(0,'#152d4c');grd.addColorStop(1,'#10213a');c.fillStyle=grd;c.fillRect(0,0,w,h);
+ let view=old?(axis||scaleFor(old)):scaleFor(p),{xMax,yMax}=view;
+ let outside=!!old&&(p.R>xMax||p.apex>yMax);
+ $('fit').disabled=!outside;
+ let mapX=x=>left+pxW*x/xMax,mapY=y=>bottom-pxH*y/yMax;
+ for(let i=0;i<=4;i++){let gy=bottom-pxH*i/4,gx=left+pxW*i/4;line(c,left,gy,right,gy,'#2c4361',1,i?[3,5]:[]);line(c,gx,top,gx,bottom,'#2c4361',1,i?[3,5]:[]);textAt(c,fmt(yMax*i/4,0),left-8,gy+4,'#9fb5cf','10px system-ui','right');textAt(c,fmt(xMax*i/4,0),gx,bottom+17,'#9fb5cf','10px system-ui','center')}
+ textAt(c,'y (m)',8,15,'#b7cbe1','11px system-ui');textAt(c,'x (m)',w-5,h-6,'#b7cbe1','11px system-ui','right');
+ c.fillStyle='#32576a';c.fillRect(0,bottom,w,h-bottom);line(c,0,bottom,w,bottom,'#9ebbaa',2);
+ function path(q,end,color,width,dash=[]){if(q.T===0)return;c.save();c.strokeStyle=color;c.lineWidth=width;c.setLineDash(dash);c.beginPath();let n=Math.max(2,Math.round(100*end/q.T));for(let i=0;i<=n;i++){let r=point(q,end*i/n),xx=mapX(r.x),yy=mapY(r.y);if(i===0)c.moveTo(xx,yy);else c.lineTo(xx,yy)}c.stroke();c.restore()}
+ if(old)path(old,old.T,'#fb98ba',2,[7,5]);path(p,p.T,'#49dbe2',1.5,[3,7]);path(p,t,'#51e4e9',3.2);
+ let at=point(p,t),x=mapX(at.x),y=mapY(at.y),launch=mapY(p.h);
+ if(p.h>0){line(c,left,launch,left,bottom,'#a0b9c9',3);c.fillStyle='#4a728e';c.fillRect(left-9,launch-5,20,10)}
+ c.save();c.shadowColor='#63eff0';c.shadowBlur=19;c.fillStyle='#ffca73';c.beginPath();c.arc(x,y,Math.max(6,Math.min(9,w/55)),0,2*Math.PI);c.fill();c.restore();
+ if($('vectors').checked&&(state!=='done'||p.T===0)){let scale=Math.min(3.5,Math.max(1.5,Math.min(pxW,pxH)/120)),dx=at.vx*scale,dy=-at.vy*scale;arrow(c,x,y,dx,0,'#56d8f0');arrow(c,x,y,0,dy,'#f6a0bc');textAt(c,'vₓ',clamp(x+dx+5,2,w-22),clamp(y-6,12,h-8),'#9be9f6','12px system-ui');textAt(c,'vᵧ',clamp(x+5,2,w-22),clamp(y+dy-6,12,h-8),'#ffbbd1','12px system-ui')}
+ if(old)textAt(c,'이전 궤적',right-5,top+14,'#ffabca','11px system-ui','right');
+ if(outside){c.fillStyle='#132641eb';c.fillRect(left+4,top+5,Math.min(pxW-8,330),29);textAt(c,'새 궤적이 화면 밖입니다 · 두 궤적 화면에 맞춤',left+12,top+25,'#ffe1a5','12px system-ui')}
+}
+function drawGraph(){let {w,h}=setup(graph,gc),c=gc,p=params,kind=$('graphType').value,box={l:50,r:w-20,t:18,b:h-31};c.clearRect(0,0,w,h);c.fillStyle='#10213b';c.fillRect(0,0,w,h);
+ let value=(q,time)=>{let a=point(q,time);return kind==='height'?a.y:kind==='x'?a.x:a.vy};let zero=kind==='vy'?Math.min(0,p.vy-p.g*p.T):0,upper=kind==='height'?Math.max(1,p.apex):kind==='x'?Math.max(1,p.R):Math.max(0,p.vy);if(kind==='vy'&&upper===zero)upper=1;let pad=Math.max(1,(upper-zero)*.1);zero-=pad;upper+=pad;let maxT=Math.max(.5,p.T),xx=s=>box.l+(box.r-box.l)*s/maxT,yy=v=>box.b-(box.b-box.t)*(v-zero)/(upper-zero);
+ for(let i=0;i<=4;i++){let gx=box.l+(box.r-box.l)*i/4,gy=box.b-(box.b-box.t)*i/4;line(c,box.l,gy,box.r,gy,'#2b4461',1,[3,5]);line(c,gx,box.t,gx,box.b,'#2b4461',1,[3,5]);textAt(c,fmt(zero+(upper-zero)*i/4,1),box.l-7,gy+4,'#9eb6d1','10px system-ui','right');textAt(c,fmt(maxT*i/4,1),gx,box.b+15,'#9eb6d1','10px system-ui','center')}
+ let unit=kind==='vy'?'vᵧ (m/s)':kind==='height'?'y (m)':'x (m)';textAt(c,unit,6,12,'#c8d9e8','11px system-ui');textAt(c,'t (s)',w-6,h-5,'#c8d9e8','11px system-ui','right');if(zero<0&&upper>0)line(c,box.l,yy(0),box.r,yy(0),'#60839b',1.4);
+ function curve(end,color,width,dash){let n=150;c.save();c.strokeStyle=color;c.lineWidth=width;c.setLineDash(dash);c.beginPath();for(let i=0;i<=n;i++){let at=end*i/n,px=xx(at),py=yy(value(p,at));if(i===0)c.moveTo(px,py);else c.lineTo(px,py)}c.stroke();c.restore()}
+ curve(p.T,'#607c99',1.6,[4,5]);curve(t,'#4ddce4',2.8,[]);c.fillStyle='#ffbd69';c.beginPath();c.arc(xx(t),yy(value(p,t)),5,0,2*Math.PI);c.fill();}
+function draw(){drawField();drawGraph()}
+function changed(){let p=read();$('speedOut').textContent=p.v+' m/s';$('angleOut').textContent=p.angle+'°';$('heightOut').textContent=p.h+' m';$('gravityOut').textContent=fmt(p.g,1)+' m/s²';reset(true)}
+inputs.forEach(el=>el.addEventListener('input',changed));$('start').addEventListener('click',()=>start());$('pause').addEventListener('click',()=>{if(state==='running'){state='paused';cancel();refreshNumbers();draw()}});$('replay').addEventListener('click',()=>{reset();start(true)});$('reset').addEventListener('click',()=>{old=null;axis=null;reset()});$('save').addEventListener('click',()=>{old={...params};axis=scaleFor(old);draw()});$('fit').addEventListener('click',()=>{if(old){axis=scaleFor(params,old);draw()}});$('graphType').addEventListener('change',draw);$('vectors').addEventListener('change',draw);if(window.ResizeObserver){new ResizeObserver(draw).observe(field);new ResizeObserver(draw).observe(graph)}else window.addEventListener('resize',draw);params=read();refreshNumbers();draw();
+})();
+</script>
+</body></html>
