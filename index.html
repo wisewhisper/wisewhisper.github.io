@@ -1,265 +1,133 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="WiseWhisper 온라인 과학실험실 - 물리·통합과학 인터랙티브 시뮬레이션" />
-  <title>WiseWhisper 온라인 과학실험실</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="WiseWhisper 온라인 과학실험실 · 물리 단원별 시뮬레이션 81개">
+  <title>WiseWhisper 온라인 과학실험실 | 물리 시뮬레이션</title>
   <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", Arial, sans-serif;
-      background: linear-gradient(135deg, #eef7ff 0%, #f8fbff 45%, #eefaf4 100%);
-      color: #17324d;
-    }
-    header {
-      padding: 64px 20px 40px;
-      text-align: center;
-    }
-    .badge {
-      display: inline-block;
-      padding: 8px 14px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.85);
-      box-shadow: 0 8px 24px rgba(23,50,77,.08);
-      font-weight: 700;
-      font-size: 14px;
-      margin-bottom: 18px;
-    }
-    h1 {
-      margin: 0;
-      font-size: clamp(34px, 6vw, 64px);
-      line-height: 1.1;
-      letter-spacing: -0.04em;
-    }
-    .subtitle {
-      max-width: 760px;
-      margin: 20px auto 0;
-      font-size: 18px;
-      line-height: 1.7;
-      color: #4d6881;
-    }
-    .filters {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-      padding: 0 20px 28px;
-    }
-    .filter-btn {
-      border: 1px solid rgba(23,50,77,.12);
-      background: rgba(255,255,255,.85);
-      color: #17324d;
-      padding: 10px 16px;
-      border-radius: 999px;
-      cursor: pointer;
-      font-weight: 700;
-      transition: .2s ease;
-    }
-    .filter-btn:hover, .filter-btn.active {
-      transform: translateY(-1px);
-      background: #17324d;
-      color: white;
-    }
-    main {
-      max-width: 1180px;
-      margin: 0 auto;
-      padding: 10px 20px 70px;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 22px;
-    }
-    .card {
-      background: rgba(255,255,255,.94);
-      border: 1px solid rgba(23,50,77,.08);
-      border-radius: 24px;
-      padding: 24px;
-      box-shadow: 0 16px 50px rgba(23,50,77,.08);
-      transition: .25s ease;
-      display: flex;
-      flex-direction: column;
-      min-height: 300px;
-    }
-    .card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 22px 60px rgba(23,50,77,.13);
-    }
-    .icon {
-      font-size: 44px;
-      margin-bottom: 14px;
-    }
-    .category {
-      font-size: 13px;
-      font-weight: 800;
-      color: #54708b;
-      letter-spacing: .03em;
-      margin-bottom: 8px;
-    }
-    .card h2 {
-      margin: 0 0 12px;
-      font-size: 24px;
-      letter-spacing: -0.02em;
-    }
-    .card p {
-      color: #5d7287;
-      line-height: 1.65;
-      margin: 0 0 22px;
-      flex: 1;
-    }
-    .launch {
-      text-decoration: none;
-      text-align: center;
-      padding: 13px 16px;
-      border-radius: 14px;
-      background: #17324d;
-      color: white;
-      font-weight: 800;
-      transition: .2s ease;
-    }
-    .launch:hover {
-      transform: scale(1.015);
-      opacity: .94;
-    }
-    .guide {
-      margin-top: 32px;
-      background: rgba(255,255,255,.8);
-      border-radius: 22px;
-      padding: 24px;
-      box-shadow: 0 14px 40px rgba(23,50,77,.06);
-    }
-    .guide h3 {
-      margin-top: 0;
-      font-size: 22px;
-    }
-    .guide code {
-      background: #edf3f8;
-      padding: 3px 7px;
-      border-radius: 6px;
-    }
-    footer {
-      text-align: center;
-      color: #718396;
-      padding: 0 20px 40px;
-      font-size: 14px;
-    }
-    @media (max-width: 640px) {
-      header { padding-top: 42px; }
-      .card { min-height: 270px; }
-    }
+    :root { color-scheme: light; --ink:#17324d; --muted:#536b80; --line:#d7e5eb; --accent:#087f74; --accent-dark:#06655d; --paper:#fff; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); font-family:system-ui,-apple-system,"Segoe UI","Noto Sans KR",Arial,sans-serif; background:#f5fafb; }
+    a { color:inherit; }
+    button, input, select { font:inherit; }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible { outline:3px solid #f0a42a; outline-offset:3px; }
+    .hero { background:linear-gradient(125deg,#e7f6fa 0%,#f2fbf6 52%,#eaf3ff 100%); border-bottom:1px solid var(--line); }
+    .hero-inner { max-width:1200px; margin:auto; padding:58px 22px 48px; }
+    .eyebrow { display:inline-block; padding:7px 13px; border-radius:100px; background:#fff; color:#086d67; font-size:13px; font-weight:800; letter-spacing:.04em; box-shadow:0 4px 18px #17405b12; }
+    h1 { font-size:clamp(34px,5vw,58px); line-height:1.14; letter-spacing:-.045em; margin:20px 0 16px; }
+    .hero p { max-width:680px; margin:0; color:var(--muted); font-size:18px; line-height:1.7; }
+    .hero-stats { display:flex; flex-wrap:wrap; gap:11px; margin-top:25px; }
+    .hero-stats span { background:#ffffffd9; border:1px solid #d8e9ed; padding:9px 13px; border-radius:11px; font-size:14px; font-weight:700; }
+    main { max-width:1200px; margin:auto; padding:34px 22px 80px; }
+    .controls { background:var(--paper); border:1px solid var(--line); border-radius:20px; padding:22px; box-shadow:0 10px 30px #1b52600b; }
+    .controls-top { display:flex; flex-wrap:wrap; align-items:end; gap:15px; }
+    .field { display:flex; flex-direction:column; gap:7px; }
+    .field span { color:var(--muted); font-size:13px; font-weight:750; }
+    .search-field { flex:1 1 300px; }
+    input[type=search], select { min-height:45px; background:#fff; border:1px solid #b9ccd3; border-radius:10px; color:var(--ink); padding:9px 13px; }
+    input[type=search] { width:100%; }
+    .filter-list { display:flex; flex-wrap:wrap; gap:8px; margin-top:20px; }
+    .unit-filter { cursor:pointer; background:#f4fafb; border:1px solid #d5e7e9; border-radius:100px; padding:9px 12px; color:var(--ink); font-size:14px; font-weight:700; }
+    .unit-filter span { color:var(--muted); font-size:12px; margin-left:3px; }
+    .unit-filter:hover { border-color:var(--accent); }
+    .unit-filter[aria-pressed=true] { background:var(--ink); color:#fff; border-color:var(--ink); }
+    .unit-filter[aria-pressed=true] span { color:#dcebf0; }
+    .result-count { color:var(--muted); font-size:14px; margin:17px 3px 0; }
+    .unit-section { margin-top:38px; }
+    .section-heading { display:flex; align-items:center; justify-content:space-between; gap:12px; border-bottom:1px solid var(--line); padding-bottom:12px; margin-bottom:18px; }
+    .section-heading > div { display:flex; align-items:center; gap:9px; }
+    .section-heading h2 { margin:0; font-size:23px; letter-spacing:-.025em; }
+    .section-heading > span { color:var(--muted); font-size:14px; white-space:nowrap; }
+    .unit-icon { font-size:23px; }
+    .card-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:15px; }
+    .lab-card { display:flex; flex-direction:column; min-height:174px; padding:18px; border:1px solid var(--line); border-radius:16px; background:#fff; box-shadow:0 5px 20px #18445d0a; }
+    .lab-card:hover { border-color:#8bbab9; box-shadow:0 9px 26px #18445d15; }
+    .lab-meta { display:flex; flex-wrap:wrap; align-items:center; gap:9px; color:var(--muted); font-size:12px; }
+    .type { display:inline-block; border-radius:6px; padding:4px 7px; font-weight:800; }
+    .type-공식 { background:#e7f3ff; color:#225c86; }
+    .type-실험 { background:#e6f7ee; color:#17745a; }
+    .lab-card h3 { font-size:19px; line-height:1.42; letter-spacing:-.025em; margin:14px 0 20px; overflow-wrap:anywhere; }
+    .lab-card a { margin-top:auto; width:max-content; text-decoration:none; font-size:14px; font-weight:800; color:var(--accent-dark); }
+    .lab-card a:hover { text-decoration:underline; }
+    .empty { display:none; text-align:center; padding:48px 16px; color:var(--muted); }
+    footer { text-align:center; padding:20px; color:#637a89; font-size:13px; border-top:1px solid var(--line); }
+    [hidden] { display:none !important; }
+    @media (max-width:640px) { .hero-inner { padding:42px 20px 36px; } main { padding:22px 16px 60px; } .controls { padding:17px; } .section-heading h2 { font-size:20px; } }
   </style>
 </head>
 <body>
-  <header>
-    <div class="badge">🔬 Interactive Science Lab</div>
-    <h1>WiseWhisper<br>온라인 과학실험실</h1>
-    <p class="subtitle">
-      물리·통합과학 개념을 직접 조작하고 관찰하며 이해하는 웹 기반 실험실입니다.
-      아래 실험을 선택해 바로 시작하세요.
-    </p>
+  <header class="hero">
+    <div class="hero-inner">
+      <span class="eyebrow">🔬 INTERACTIVE SCIENCE LAB</span>
+      <h1>WiseWhisper<br>온라인 과학실험실</h1>
+      <p>개념을 직접 조작하고 관찰하며 이해하는 물리 시뮬레이션 모음입니다. 단원을 선택하거나 주제를 검색해 바로 시작하세요.</p>
+      <div class="hero-stats"><span>8개 단원</span><span>81개 시뮬레이션</span><span>브라우저에서 바로 실행</span></div>
+    </div>
   </header>
-
-  <div class="filters">
-    <button class="filter-btn active" data-filter="all">전체</button>
-    <button class="filter-btn" data-filter="역학">역학</button>
-    <button class="filter-btn" data-filter="파동">파동</button>
-    <button class="filter-btn" data-filter="전기">전기</button>
-    <button class="filter-btn" data-filter="현대물리">현대물리</button>
-  </div>
-
   <main>
-    <section class="grid" id="labGrid">
-
-      <article class="card" data-category="파동">
-        <div class="icon">🚑</div>
-        <div class="category">파동</div>
-        <h2>도플러 효과</h2>
-        <p>움직이는 음원과 관측자의 상대운동에 따라 파장과 관측 주파수가 어떻게 변하는지 탐구합니다.</p>
-        <a class="launch" href="https://wisewhisper.github.io/doppler-lab/" target="_blank">실험 시작</a>
-      </article>
-
-      <article class="card" data-category="역학">
-        <div class="icon">🏀</div>
-        <div class="category">역학</div>
-        <h2>포물선 운동</h2>
-        <p>발사 속도와 각도를 바꾸며 최고점, 비행시간, 수평도달거리의 변화를 확인합니다.</p>
-        <a class="launch" href="https://wisewhisper.github.io/projectile-lab/" target="_blank">실험 시작</a>
-      </article>
-
-      <article class="card" data-category="역학">
-        <div class="icon">🚗</div>
-        <div class="category">역학</div>
-        <h2>운동량 보존</h2>
-        <p>두 물체의 질량과 속도를 조절하며 충돌 전후의 운동량 보존을 시각적으로 확인합니다.</p>
-        <a class="launch" href="https://wisewhisper.github.io/momentum-lab/" target="_blank">실험 시작</a>
-      </article>
-
-      <article class="card" data-category="전기">
-        <div class="icon">⚡</div>
-        <div class="category">전기</div>
-        <h2>전기회로</h2>
-        <p>직렬·병렬 연결에 따른 전압, 전류, 저항의 관계를 비교하며 옴의 법칙을 탐구합니다.</p>
-        <a class="launch" href="https://wisewhisper.github.io/circuit-lab/" target="_blank">실험 시작</a>
-      </article>
-
-     <article class="card" data-category="파동">
-       <div class="icon">〰️</div>
-       <div class="category">파동</div>
-       <h2>현·개관·폐관 정상파</h2>
-       <p>현과 관의 경계 조건에 따른 마디·배와 공명 주파수를 비교합니다.</p>
-       <a class="launch"
-       href="./standing-wave.html"
-       target="_blank">
-      실험 시작
-      </a>
-    </article>
-
-      <article class="card" data-category="현대물리">
-        <div class="icon">⚛️</div>
-        <div class="category">현대물리</div>
-        <h2>보어 원자모형</h2>
-        <p>전자의 에너지 준위와 전이에 따른 빛의 방출·흡수를 보어 원자모형으로 살펴봅니다.</p>
-        <a class="launch" href="https://wisewhisper.github.io/bohr-model/" target="_blank">실험 시작</a>
-      </article>
-
-    </section>
-
-    <section class="guide">
-      <h3>🛠 사용 전 한 번만 수정하세요</h3>
-      <p>
-        이 파일에서 <code>YOUR_GITHUB_ID</code>를 자신의 GitHub 아이디로 바꾸면 됩니다.
-        예를 들어 아이디가 <code>wisewhisper</code>라면
-        <code>https://wisewhisper.github.io/doppler-lab/</code> 형태로 연결됩니다.
-      </p>
-      <p>
-        새로운 실험을 추가할 때는 기존 <code>&lt;article class="card"&gt;</code> 블록을 복사해
-        제목·설명·주소만 바꾸면 됩니다.
-      </p>
-    </section>
+    <div class="controls" aria-label="자료 찾기">
+      <div class="controls-top">
+        <label class="field search-field"><span>주제 검색</span><input id="search" type="search" placeholder="예: 구심력, 옴의 법칙, 정상파" autocomplete="off"></label>
+        <label class="field"><span>자료 유형</span><select id="kind"><option value="all">공식 + 실험</option><option value="공식">공식</option><option value="실험">실험</option></select></label>
+      </div>
+      <div class="filter-list" role="group" aria-label="단원 선택">
+        <button class="unit-filter" type="button" data-unit="all" aria-pressed="true">전체 <span>81</span></button>
+        <button class="unit-filter" type="button" data-unit="01_운동과_힘" aria-pressed="false">🛹 운동과 힘 <span>26</span></button>
+        <button class="unit-filter" type="button" data-unit="02_일과_에너지_운동량" aria-pressed="false">⚙️ 일·에너지·운동량 <span>10</span></button>
+        <button class="unit-filter" type="button" data-unit="03_열과_열역학" aria-pressed="false">🌡️ 열과 열역학 <span>6</span></button>
+        <button class="unit-filter" type="button" data-unit="04_파동과_소리" aria-pressed="false">〰️ 파동과 소리 <span>8</span></button>
+        <button class="unit-filter" type="button" data-unit="05_빛과_광학" aria-pressed="false">🔍 빛과 광학 <span>3</span></button>
+        <button class="unit-filter" type="button" data-unit="06_전기와_회로" aria-pressed="false">⚡ 전기와 회로 <span>13</span></button>
+        <button class="unit-filter" type="button" data-unit="07_자기와_전자기유도" aria-pressed="false">🧲 자기와 전자기 유도 <span>10</span></button>
+        <button class="unit-filter" type="button" data-unit="08_현대물리" aria-pressed="false">⚛️ 현대물리 <span>5</span></button>
+      </div>
+      <p class="result-count" id="result-count" role="status" aria-live="polite">81개 자료 표시 중</p>
+    </div>
+    <div id="catalogue"><section class="unit-section" data-unit="01_운동과_힘" aria-label="운동과 힘"><div class="section-heading"><div><span class="unit-icon" aria-hidden="true">🛹</span><h2>운동과 힘</h2></div><span>26개 자료</span></div><div class="card-grid"><article class="lab-card" data-unit="01_운동과_힘" data-kind="공식" data-search="운동과 힘 평균 속도 공식"><div class="lab-meta"><span class="type type-공식">공식 01</span><span class="unit-name">운동과 힘</span></div><h3>평균 속도</h3><a href="01_%EC%9A%B4%EB%8F%99%EA%B3%BC_%ED%9E%98_%EA%B3%B5%EC%8B%9D01_%ED%8F%89%EA%B7%A0%EC%86%8D%EB%8F%84.html" target="_blank" rel="noopener noreferrer" aria-label="평균 속도 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="01_운동과_힘" data-kind="공식" data-search="운동과 힘 평균 가속도 공식"><div class="lab-meta"><span class="type type-공식">공식 02</span><span class="unit-name">운동과 힘</span></div><h3>평균 가속도</h3><a href="01_%EC%9A%B4%EB%8F%99%EA%B3%BC_%ED%9E%98_%EA%B3%B5%EC%8B%9D02_%ED%8F%89%EA%B7%A0%EA%B0%80%EC%86%8D%EB%8F%84.html" target="_blank" rel="noopener noreferrer" aria-label="평균 가속도 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="01_운동과_힘" data-kind="공식" data-search="운동과 힘 등가속도 속도 공식"><div class="lab-meta"><span class="type type-공식">공식 03</span><span class="unit-name">운동과 힘</span></div><h3>등가속도 속도</h3><a href="01_%EC%9A%B4%EB%8F%99%EA%B3%BC_%ED%9E%98_%EA%B3%B5%EC%8B%9D03_%EB%93%B1%EA%B0%80%EC%86%8D%EB%8F%84%EC%9A%B4%EB%8F%99%EC%9D%98%EC%86%8D%EB%8F%84.html" target="_blank" rel="noopener noreferrer" aria-label="등가속도 속도 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="01_운동과_힘" data-kind="공식" data-search="운동과 힘 등가속도 변위 공식"><div class="lab-meta"><span class="type type-공식">공식 04</span><span class="unit-name">운동과 힘</span></div><h3>등가속도 변위</h3><a href="01_%EC%9A%B4%EB%8F%99%EA%B3%BC_%ED%9E%98_%EA%B3%B5%EC%8B%9D04_%EB%93%B1%EA%B0%80%EC%86%8D%EB%8F%84%EC%9A%B4%EB%8F%99%EC%9D%98%EB%B3%80%EC%9C%84.html" target="_blank" rel="noopener noreferrer" aria-label="등가속도 변위 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="01_운동과_힘" data-kind="공식" data-search="운동과 힘 속도와 변위 공식"><div class="lab-meta"><span class="type type-공식">공식 05</span><span class="unit-name">운동과 힘</span></div><h3>속도와 변위</h3><a href="01_%EC%9A%B4%EB%8F%99%EA%B3%BC_%ED%9E%98_%EA%B3%B5%EC%8B%9D05_%EC%86%8D%EB%8F%84%EC%99%80%EB%B3%80%EC%9C%84.html" target="_blank" rel="noopener noreferrer" aria-label="속도와 변위 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="01_운동과_힘" data-kind="공식" data-search="운동과 힘 뉴턴 제2법칙 공식"><div class="lab-meta"><span class="type type-공식">공식 06</span><span class="unit-name">운동과 힘</span></div><h3>뉴턴 제2법칙</h3><a href="01_%EC%9A%B4%EB%8F%99%EA%B3%BC_%ED%9E%98_%EA%B3%B5%EC%8B%9D06_%EB%89%B4%ED%84%B4%EC%A0%9C2%EB%B2%95%EC%B9%99.html" target="_blank" rel="noopener noreferrer" aria-label="뉴턴 제2법칙 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="01_운동과_힘" data-kind="공식" data-search="운동과 힘 무게 공식"><div class="lab-meta"><span class="type type-공식">공식 07</span><span class="unit-name">운동과 힘</span></div><h3>무게</h3><a href="01_%EC%9A%B4%EB%8F%99%EA%B3%BC_%ED%9E%98_%EA%B3%B5%EC%8B%9D07_%EB%AC%B4%EA%B2%8C.html" target="_blank" rel="noopener noreferrer" aria-label="무게 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="01_운동과_힘" data-kind="공식" data-search="운동과 힘 운동 마찰력 공식"><div class="lab-meta"><span class="type type-공식">공식 08</span><span class="unit-name">운동과 힘</span></div><h3>운동 마찰력</h3><a href="01_%EC%9A%B4%EB%8F%99%EA%B3%BC_%ED%9E%98_%EA%B3%B5%EC%8B%9D08_%EC%9A%B4%EB%8F%99%EB%A7%88%EC%B0%B0%EB%A0%A5.html" target="_blank" rel="noopener noreferrer" aria-label="운동 마찰력 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="01_운동과_힘" data-kind="공식" data-search="운동과 힘 정지 마찰력 공식"><div class="lab-meta"><span class="type type-공식">공식 09</span><span class="unit-name">운동과 힘</span></div><h3>정지 마찰력</h3><a href="01_%EC%9A%B4%EB%8F%99%EA%B3%BC_%ED%9E%98_%EA%B3%B5%EC%8B%9D09_%EC%A0%95%EC%A7%80%EB%A7%88%EC%B0%B0%EB%A0%A5.html" target="_blank" rel="noopener noreferrer" aria-label="정지 마찰력 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="01_운동과_힘" data-kind="공식" data-search="운동과 힘 용수철 힘 공식"><div class="lab-meta"><span class="type type-공식">공식 10</span><span class="unit-name">운동과 힘</span></div><h3>용수철 힘</h3><a href="01_%EC%9A%B4%EB%8F%99%EA%B3%BC_%ED%9E%98_%EA%B3%B5%EC%8B%9D10_%EC%9A%A9%EC%88%98%EC%B2%A0%EC%9D%98%ED%9E%98.html" target="_blank" rel="noopener noreferrer" aria-label="용수철 힘 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="01_운동과_힘" data-kind="공식" data-search="운동과 힘 구심 가속도 공식"><div class="lab-meta"><span class="type type-공식">공식 19</span><span class="unit-name">운동과 힘</span></div><h3>구심 가속도</h3><a href="01_%EC%9A%B4%EB%8F%99%EA%B3%BC_%ED%9E%98_%EA%B3%B5%EC%8B%9D19_%EA%B5%AC%EC%8B%AC%EA%B0%80%EC%86%8D%EB%8F%84.html" target="_blank" rel="noopener noreferrer" aria-label="구심 가속도 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="01_운동과_힘" data-kind="공식" data-search="운동과 힘 만유인력 공식"><div class="lab-meta"><span class="type type-공식">공식 20</span><span class="unit-name">운동과 힘</span></div><h3>만유인력</h3><a href="01_%EC%9A%B4%EB%8F%99%EA%B3%BC_%ED%9E%98_%EA%B3%B5%EC%8B%9D20_%EB%A7%8C%EC%9C%A0%EC%9D%B8%EB%A0%A5.html" target="_blank" rel="noopener noreferrer" aria-label="만유인력 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="01_운동과_힘" data-kind="실험" data-search="운동과 힘 경사면과 마찰력 실험"><div class="lab-meta"><span class="type type-실험">실험 01</span><span class="unit-name">운동과 힘</span></div><h3>경사면과 마찰력</h3><a href="01_%EC%9A%B4%EB%8F%99%EA%B3%BC_%ED%9E%98_%EC%8B%A4%ED%97%9801_%EA%B2%BD%EC%82%AC%EB%A9%B4%EA%B3%BC%EB%A7%88%EC%B0%B0%EB%A0%A5.html" target="_blank" rel="noopener noreferrer" aria-label="경사면과 마찰력 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="01_운동과_힘" data-kind="실험" data-search="운동과 힘 등속 원운동·구심력 실험"><div class="lab-meta"><span class="type type-실험">실험 02</span><span class="unit-name">운동과 힘</span></div><h3>등속 원운동·구심력</h3><a href="01_%EC%9A%B4%EB%8F%99%EA%B3%BC_%ED%9E%98_%EC%8B%A4%ED%97%9802_%EA%B5%AC%EC%8B%AC%EB%A0%A5.html" target="_blank" rel="noopener noreferrer" aria-label="등속 원운동·구심력 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="01_운동과_힘" data-kind="실험" data-search="운동과 힘 단진자와 진동 실험"><div class="lab-meta"><span class="type type-실험">실험 03</span><span class="unit-name">운동과 힘</span></div><h3>단진자와 진동</h3><a href="01_%EC%9A%B4%EB%8F%99%EA%B3%BC_%ED%9E%98_%EC%8B%A4%ED%97%9803_%EB%8B%A8%EC%A7%84%EC%9E%90%EC%99%80%EC%A7%84%EB%8F%99.html" target="_blank" rel="noopener noreferrer" aria-label="단진자와 진동 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="01_운동과_힘" data-kind="실험" data-search="운동과 힘 등가속도 운동 · 운동 그래프 실험"><div class="lab-meta"><span class="type type-실험">실험 04</span><span class="unit-name">운동과 힘</span></div><h3>등가속도 운동 · 운동 그래프</h3><a href="01_%EC%9A%B4%EB%8F%99%EA%B3%BC_%ED%9E%98_%EC%8B%A4%ED%97%9804_%EB%93%B1%EA%B0%80%EC%86%8D%EB%8F%84%EC%9A%B4%EB%8F%99%EA%B7%B8%EB%9E%98%ED%94%84.html" target="_blank" rel="noopener noreferrer" aria-label="등가속도 운동 · 운동 그래프 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="01_운동과_힘" data-kind="실험" data-search="운동과 힘 등속 원운동 실험"><div class="lab-meta"><span class="type type-실험">실험 05</span><span class="unit-name">운동과 힘</span></div><h3>등속 원운동</h3><a href="01_%EC%9A%B4%EB%8F%99%EA%B3%BC_%ED%9E%98_%EC%8B%A4%ED%97%9805_%EB%93%B1%EC%86%8D%EC%9B%90%EC%9A%B4%EB%8F%99.html" target="_blank" rel="noopener noreferrer" aria-label="등속 원운동 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="01_운동과_힘" data-kind="실험" data-search="운동과 힘 등속 직선 운동 실험"><div class="lab-meta"><span class="type type-실험">실험 06</span><span class="unit-name">운동과 힘</span></div><h3>등속 직선 운동</h3><a href="01_%EC%9A%B4%EB%8F%99%EA%B3%BC_%ED%9E%98_%EC%8B%A4%ED%97%9806_%EB%93%B1%EC%86%8D%EC%A7%81%EC%84%A0%EC%9A%B4%EB%8F%99.html" target="_blank" rel="noopener noreferrer" aria-label="등속 직선 운동 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="01_운동과_힘" data-kind="실험" data-search="운동과 힘 운동 제1법칙 · 관성 실험"><div class="lab-meta"><span class="type type-실험">실험 07</span><span class="unit-name">운동과 힘</span></div><h3>운동 제1법칙 · 관성</h3><a href="01_%EC%9A%B4%EB%8F%99%EA%B3%BC_%ED%9E%98_%EC%8B%A4%ED%97%9807_%EC%9A%B4%EB%8F%99%EC%A0%9C1%EB%B2%95%EC%B9%99%EA%B3%BC%EA%B4%80%EC%84%B1.html" target="_blank" rel="noopener noreferrer" aria-label="운동 제1법칙 · 관성 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="01_운동과_힘" data-kind="실험" data-search="운동과 힘 운동 제2법칙 실험"><div class="lab-meta"><span class="type type-실험">실험 08</span><span class="unit-name">운동과 힘</span></div><h3>운동 제2법칙</h3><a href="01_%EC%9A%B4%EB%8F%99%EA%B3%BC_%ED%9E%98_%EC%8B%A4%ED%97%9808_%EC%9A%B4%EB%8F%99%EC%A0%9C2%EB%B2%95%EC%B9%99.html" target="_blank" rel="noopener noreferrer" aria-label="운동 제2법칙 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="01_운동과_힘" data-kind="실험" data-search="운동과 힘 뉴턴 제3법칙 실험"><div class="lab-meta"><span class="type type-실험">실험 09</span><span class="unit-name">운동과 힘</span></div><h3>뉴턴 제3법칙</h3><a href="01_%EC%9A%B4%EB%8F%99%EA%B3%BC_%ED%9E%98_%EC%8B%A4%ED%97%9809_%EC%9A%B4%EB%8F%99%EC%A0%9C3%EB%B2%95%EC%B9%99.html" target="_blank" rel="noopener noreferrer" aria-label="뉴턴 제3법칙 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="01_운동과_힘" data-kind="실험" data-search="운동과 힘 케플러 제1법칙 실험"><div class="lab-meta"><span class="type type-실험">실험 10</span><span class="unit-name">운동과 힘</span></div><h3>케플러 제1법칙</h3><a href="01_%EC%9A%B4%EB%8F%99%EA%B3%BC_%ED%9E%98_%EC%8B%A4%ED%97%9810_%EC%BC%80%ED%94%8C%EB%9F%AC%EC%A0%9C1%EB%B2%95%EC%B9%99.html" target="_blank" rel="noopener noreferrer" aria-label="케플러 제1법칙 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="01_운동과_힘" data-kind="실험" data-search="운동과 힘 케플러 제2법칙 · 버전 2 실험"><div class="lab-meta"><span class="type type-실험">실험 11</span><span class="unit-name">운동과 힘</span></div><h3>케플러 제2법칙 · 버전 2</h3><a href="01_%EC%9A%B4%EB%8F%99%EA%B3%BC_%ED%9E%98_%EC%8B%A4%ED%97%9811_%EC%BC%80%ED%94%8C%EB%9F%AC%EC%A0%9C2%EB%B2%95%EC%B9%99_%EB%B2%84%EC%A0%842.html" target="_blank" rel="noopener noreferrer" aria-label="케플러 제2법칙 · 버전 2 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="01_운동과_힘" data-kind="실험" data-search="운동과 힘 케플러 제3법칙 실험"><div class="lab-meta"><span class="type type-실험">실험 12</span><span class="unit-name">운동과 힘</span></div><h3>케플러 제3법칙</h3><a href="01_%EC%9A%B4%EB%8F%99%EA%B3%BC_%ED%9E%98_%EC%8B%A4%ED%97%9812_%EC%BC%80%ED%94%8C%EB%9F%AC%EC%A0%9C3%EB%B2%95%EC%B9%99.html" target="_blank" rel="noopener noreferrer" aria-label="케플러 제3법칙 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="01_운동과_힘" data-kind="실험" data-search="운동과 힘 케플러 제2법칙 · 버전 1 실험"><div class="lab-meta"><span class="type type-실험">실험 13</span><span class="unit-name">운동과 힘</span></div><h3>케플러 제2법칙 · 버전 1</h3><a href="01_%EC%9A%B4%EB%8F%99%EA%B3%BC_%ED%9E%98_%EC%8B%A4%ED%97%9813_%EC%BC%80%ED%94%8C%EB%9F%AC%EC%A0%9C2%EB%B2%95%EC%B9%99_%EB%B2%84%EC%A0%841.html" target="_blank" rel="noopener noreferrer" aria-label="케플러 제2법칙 · 버전 1 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="01_운동과_힘" data-kind="실험" data-search="운동과 힘 포물선 운동 실험"><div class="lab-meta"><span class="type type-실험">실험 14</span><span class="unit-name">운동과 힘</span></div><h3>포물선 운동</h3><a href="01_%EC%9A%B4%EB%8F%99%EA%B3%BC_%ED%9E%98_%EC%8B%A4%ED%97%9814_%ED%8F%AC%EB%AC%BC%EC%84%A0%EC%9A%B4%EB%8F%99.html" target="_blank" rel="noopener noreferrer" aria-label="포물선 운동 열기">실험 열기 <span aria-hidden="true">↗</span></a></article></div></section>
+    <section class="unit-section" data-unit="02_일과_에너지_운동량" aria-label="일·에너지·운동량"><div class="section-heading"><div><span class="unit-icon" aria-hidden="true">⚙️</span><h2>일·에너지·운동량</h2></div><span>10개 자료</span></div><div class="card-grid"><article class="lab-card" data-unit="02_일과_에너지_운동량" data-kind="공식" data-search="일·에너지·운동량 일 공식"><div class="lab-meta"><span class="type type-공식">공식 11</span><span class="unit-name">일·에너지·운동량</span></div><h3>일</h3><a href="02_%EC%9D%BC%EA%B3%BC_%EC%97%90%EB%84%88%EC%A7%80_%EC%9A%B4%EB%8F%99%EB%9F%89_%EA%B3%B5%EC%8B%9D11_%EC%9D%BC.html" target="_blank" rel="noopener noreferrer" aria-label="일 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="02_일과_에너지_운동량" data-kind="공식" data-search="일·에너지·운동량 운동 에너지 공식"><div class="lab-meta"><span class="type type-공식">공식 12</span><span class="unit-name">일·에너지·운동량</span></div><h3>운동 에너지</h3><a href="02_%EC%9D%BC%EA%B3%BC_%EC%97%90%EB%84%88%EC%A7%80_%EC%9A%B4%EB%8F%99%EB%9F%89_%EA%B3%B5%EC%8B%9D12_%EC%9A%B4%EB%8F%99%EC%97%90%EB%84%88%EC%A7%80.html" target="_blank" rel="noopener noreferrer" aria-label="운동 에너지 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="02_일과_에너지_운동량" data-kind="공식" data-search="일·에너지·운동량 중력 위치 에너지 공식"><div class="lab-meta"><span class="type type-공식">공식 13</span><span class="unit-name">일·에너지·운동량</span></div><h3>중력 위치 에너지</h3><a href="02_%EC%9D%BC%EA%B3%BC_%EC%97%90%EB%84%88%EC%A7%80_%EC%9A%B4%EB%8F%99%EB%9F%89_%EA%B3%B5%EC%8B%9D13_%EC%A4%91%EB%A0%A5%EC%9C%84%EC%B9%98%EC%97%90%EB%84%88%EC%A7%80.html" target="_blank" rel="noopener noreferrer" aria-label="중력 위치 에너지 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="02_일과_에너지_운동량" data-kind="공식" data-search="일·에너지·운동량 탄성 위치 에너지 공식"><div class="lab-meta"><span class="type type-공식">공식 14</span><span class="unit-name">일·에너지·운동량</span></div><h3>탄성 위치 에너지</h3><a href="02_%EC%9D%BC%EA%B3%BC_%EC%97%90%EB%84%88%EC%A7%80_%EC%9A%B4%EB%8F%99%EB%9F%89_%EA%B3%B5%EC%8B%9D14_%ED%83%84%EC%84%B1%EC%9C%84%EC%B9%98%EC%97%90%EB%84%88%EC%A7%80.html" target="_blank" rel="noopener noreferrer" aria-label="탄성 위치 에너지 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="02_일과_에너지_운동량" data-kind="공식" data-search="일·에너지·운동량 일·에너지 정리 공식"><div class="lab-meta"><span class="type type-공식">공식 15</span><span class="unit-name">일·에너지·운동량</span></div><h3>일·에너지 정리</h3><a href="02_%EC%9D%BC%EA%B3%BC_%EC%97%90%EB%84%88%EC%A7%80_%EC%9A%B4%EB%8F%99%EB%9F%89_%EA%B3%B5%EC%8B%9D15_%EC%9D%BC%EC%97%90%EB%84%88%EC%A7%80%EC%A0%95%EB%A6%AC.html" target="_blank" rel="noopener noreferrer" aria-label="일·에너지 정리 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="02_일과_에너지_운동량" data-kind="공식" data-search="일·에너지·운동량 평균 일률 공식"><div class="lab-meta"><span class="type type-공식">공식 16</span><span class="unit-name">일·에너지·운동량</span></div><h3>평균 일률</h3><a href="02_%EC%9D%BC%EA%B3%BC_%EC%97%90%EB%84%88%EC%A7%80_%EC%9A%B4%EB%8F%99%EB%9F%89_%EA%B3%B5%EC%8B%9D16_%ED%8F%89%EA%B7%A0%EC%9D%BC%EB%A5%A0.html" target="_blank" rel="noopener noreferrer" aria-label="평균 일률 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="02_일과_에너지_운동량" data-kind="공식" data-search="일·에너지·운동량 운동량 공식"><div class="lab-meta"><span class="type type-공식">공식 17</span><span class="unit-name">일·에너지·운동량</span></div><h3>운동량</h3><a href="02_%EC%9D%BC%EA%B3%BC_%EC%97%90%EB%84%88%EC%A7%80_%EC%9A%B4%EB%8F%99%EB%9F%89_%EA%B3%B5%EC%8B%9D17_%EC%9A%B4%EB%8F%99%EB%9F%89.html" target="_blank" rel="noopener noreferrer" aria-label="운동량 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="02_일과_에너지_운동량" data-kind="공식" data-search="일·에너지·운동량 충격량 공식"><div class="lab-meta"><span class="type type-공식">공식 18</span><span class="unit-name">일·에너지·운동량</span></div><h3>충격량</h3><a href="02_%EC%9D%BC%EA%B3%BC_%EC%97%90%EB%84%88%EC%A7%80_%EC%9A%B4%EB%8F%99%EB%9F%89_%EA%B3%B5%EC%8B%9D18_%EC%B6%A9%EA%B2%A9%EB%9F%89.html" target="_blank" rel="noopener noreferrer" aria-label="충격량 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="02_일과_에너지_운동량" data-kind="실험" data-search="일·에너지·운동량 운동량 보존 법칙 실험"><div class="lab-meta"><span class="type type-실험">실험 01</span><span class="unit-name">일·에너지·운동량</span></div><h3>운동량 보존 법칙</h3><a href="02_%EC%9D%BC%EA%B3%BC_%EC%97%90%EB%84%88%EC%A7%80_%EC%9A%B4%EB%8F%99%EB%9F%89_%EC%8B%A4%ED%97%9801_%EC%9A%B4%EB%8F%99%EB%9F%89%EB%B3%B4%EC%A1%B4%EB%B2%95%EC%B9%99.html" target="_blank" rel="noopener noreferrer" aria-label="운동량 보존 법칙 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="02_일과_에너지_운동량" data-kind="실험" data-search="일·에너지·운동량 일과 역학적 에너지 보존 실험"><div class="lab-meta"><span class="type type-실험">실험 02</span><span class="unit-name">일·에너지·운동량</span></div><h3>일과 역학적 에너지 보존</h3><a href="02_%EC%9D%BC%EA%B3%BC_%EC%97%90%EB%84%88%EC%A7%80_%EC%9A%B4%EB%8F%99%EB%9F%89_%EC%8B%A4%ED%97%9802_%EC%9D%BC%EA%B3%BC%EC%97%AD%ED%95%99%EC%A0%81%EC%97%90%EB%84%88%EC%A7%80%EB%B3%B4%EC%A1%B4.html" target="_blank" rel="noopener noreferrer" aria-label="일과 역학적 에너지 보존 열기">실험 열기 <span aria-hidden="true">↗</span></a></article></div></section>
+    <section class="unit-section" data-unit="03_열과_열역학" aria-label="열과 열역학"><div class="section-heading"><div><span class="unit-icon" aria-hidden="true">🌡️</span><h2>열과 열역학</h2></div><span>6개 자료</span></div><div class="card-grid"><article class="lab-card" data-unit="03_열과_열역학" data-kind="공식" data-search="열과 열역학 열량 공식"><div class="lab-meta"><span class="type type-공식">공식 21</span><span class="unit-name">열과 열역학</span></div><h3>열량</h3><a href="03_%EC%97%B4%EA%B3%BC_%EC%97%B4%EC%97%AD%ED%95%99_%EA%B3%B5%EC%8B%9D21_%EC%97%B4%EB%9F%89.html" target="_blank" rel="noopener noreferrer" aria-label="열량 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="03_열과_열역학" data-kind="공식" data-search="열과 열역학 이상 기체 공식"><div class="lab-meta"><span class="type type-공식">공식 22</span><span class="unit-name">열과 열역학</span></div><h3>이상 기체</h3><a href="03_%EC%97%B4%EA%B3%BC_%EC%97%B4%EC%97%AD%ED%95%99_%EA%B3%B5%EC%8B%9D22_%EC%9D%B4%EC%83%81%EA%B8%B0%EC%B2%B4.html" target="_blank" rel="noopener noreferrer" aria-label="이상 기체 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="03_열과_열역학" data-kind="공식" data-search="열과 열역학 03_열과_열역학_공식23_열역학제1법칙 공식"><div class="lab-meta"><span class="type type-공식">공식 23</span><span class="unit-name">열과 열역학</span></div><h3>03_열과_열역학_공식23_열역학제1법칙</h3><a href="03_%EC%97%B4%EA%B3%BC_%EC%97%B4%EC%97%AD%ED%95%99_%EA%B3%B5%EC%8B%9D23_%EC%97%B4%EC%97%AD%ED%95%99%EC%A0%9C1%EB%B2%95%EC%B9%99.html" target="_blank" rel="noopener noreferrer" aria-label="03_열과_열역학_공식23_열역학제1법칙 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="03_열과_열역학" data-kind="실험" data-search="열과 열역학 열기관 효율 실험"><div class="lab-meta"><span class="type type-실험">실험 01</span><span class="unit-name">열과 열역학</span></div><h3>열기관 효율</h3><a href="03_%EC%97%B4%EA%B3%BC_%EC%97%B4%EC%97%AD%ED%95%99_%EC%8B%A4%ED%97%9801_%EC%97%B4%EA%B8%B0%EA%B4%80%EC%9D%98%ED%9A%A8%EC%9C%A8.html" target="_blank" rel="noopener noreferrer" aria-label="열기관 효율 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="03_열과_열역학" data-kind="실험" data-search="열과 열역학 열역학 과정 실험"><div class="lab-meta"><span class="type type-실험">실험 02</span><span class="unit-name">열과 열역학</span></div><h3>열역학 과정</h3><a href="03_%EC%97%B4%EA%B3%BC_%EC%97%B4%EC%97%AD%ED%95%99_%EC%8B%A4%ED%97%9802_%EC%97%B4%EC%97%AD%ED%95%99%EA%B3%BC%EC%A0%95.html" target="_blank" rel="noopener noreferrer" aria-label="열역학 과정 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="03_열과_열역학" data-kind="실험" data-search="열과 열역학 열평형과 비열 실험"><div class="lab-meta"><span class="type type-실험">실험 03</span><span class="unit-name">열과 열역학</span></div><h3>열평형과 비열</h3><a href="03_%EC%97%B4%EA%B3%BC_%EC%97%B4%EC%97%AD%ED%95%99_%EC%8B%A4%ED%97%9803_%EC%97%B4%ED%8F%89%ED%98%95%EA%B3%BC%EB%B9%84%EC%97%B4.html" target="_blank" rel="noopener noreferrer" aria-label="열평형과 비열 열기">실험 열기 <span aria-hidden="true">↗</span></a></article></div></section>
+    <section class="unit-section" data-unit="04_파동과_소리" aria-label="파동과 소리"><div class="section-heading"><div><span class="unit-icon" aria-hidden="true">〰️</span><h2>파동과 소리</h2></div><span>8개 자료</span></div><div class="card-grid"><article class="lab-card" data-unit="04_파동과_소리" data-kind="공식" data-search="파동과 소리 파동 속력 공식"><div class="lab-meta"><span class="type type-공식">공식 24</span><span class="unit-name">파동과 소리</span></div><h3>파동 속력</h3><a href="04_%ED%8C%8C%EB%8F%99%EA%B3%BC_%EC%86%8C%EB%A6%AC_%EA%B3%B5%EC%8B%9D24_%ED%8C%8C%EB%8F%99%EC%9D%98%EC%86%8D%EB%A0%A5.html" target="_blank" rel="noopener noreferrer" aria-label="파동 속력 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="04_파동과_소리" data-kind="공식" data-search="파동과 소리 주기와 진동수 공식"><div class="lab-meta"><span class="type type-공식">공식 25</span><span class="unit-name">파동과 소리</span></div><h3>주기와 진동수</h3><a href="04_%ED%8C%8C%EB%8F%99%EA%B3%BC_%EC%86%8C%EB%A6%AC_%EA%B3%B5%EC%8B%9D25_%EC%A3%BC%EA%B8%B0%EC%99%80%EC%A7%84%EB%8F%99%EC%88%98.html" target="_blank" rel="noopener noreferrer" aria-label="주기와 진동수 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="04_파동과_소리" data-kind="실험" data-search="파동과 소리 공명과 정상파 실험"><div class="lab-meta"><span class="type type-실험">실험 01</span><span class="unit-name">파동과 소리</span></div><h3>공명과 정상파</h3><a href="04_%ED%8C%8C%EB%8F%99%EA%B3%BC_%EC%86%8C%EB%A6%AC_%EC%8B%A4%ED%97%9801_%EA%B3%B5%EB%AA%85%EA%B3%BC%EC%A0%95%EC%83%81%ED%8C%8C.html" target="_blank" rel="noopener noreferrer" aria-label="공명과 정상파 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="04_파동과_소리" data-kind="실험" data-search="파동과 소리 기주 공명 실험"><div class="lab-meta"><span class="type type-실험">실험 02</span><span class="unit-name">파동과 소리</span></div><h3>기주 공명</h3><a href="04_%ED%8C%8C%EB%8F%99%EA%B3%BC_%EC%86%8C%EB%A6%AC_%EC%8B%A4%ED%97%9802_%EA%B8%B0%EC%A3%BC%EA%B3%B5%EB%AA%85.html" target="_blank" rel="noopener noreferrer" aria-label="기주 공명 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="04_파동과_소리" data-kind="실험" data-search="파동과 소리 도플러 효과 실험"><div class="lab-meta"><span class="type type-실험">실험 03</span><span class="unit-name">파동과 소리</span></div><h3>도플러 효과</h3><a href="04_%ED%8C%8C%EB%8F%99%EA%B3%BC_%EC%86%8C%EB%A6%AC_%EC%8B%A4%ED%97%9803_%EB%8F%84%ED%94%8C%EB%9F%AC%ED%9A%A8%EA%B3%BC.html" target="_blank" rel="noopener noreferrer" aria-label="도플러 효과 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="04_파동과_소리" data-kind="실험" data-search="파동과 소리 정상파 공명 실험"><div class="lab-meta"><span class="type type-실험">실험 04</span><span class="unit-name">파동과 소리</span></div><h3>정상파 공명</h3><a href="04_%ED%8C%8C%EB%8F%99%EA%B3%BC_%EC%86%8C%EB%A6%AC_%EC%8B%A4%ED%97%9804_%EC%A0%95%EC%83%81%ED%8C%8C%EA%B3%B5%EB%AA%85.html" target="_blank" rel="noopener noreferrer" aria-label="정상파 공명 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="04_파동과_소리" data-kind="실험" data-search="파동과 소리 파동의 간섭 실험"><div class="lab-meta"><span class="type type-실험">실험 05</span><span class="unit-name">파동과 소리</span></div><h3>파동의 간섭</h3><a href="04_%ED%8C%8C%EB%8F%99%EA%B3%BC_%EC%86%8C%EB%A6%AC_%EC%8B%A4%ED%97%9805_%ED%8C%8C%EB%8F%99%EC%9D%98%EA%B0%84%EC%84%AD.html" target="_blank" rel="noopener noreferrer" aria-label="파동의 간섭 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="04_파동과_소리" data-kind="실험" data-search="파동과 소리 파동의 기본 성질과 회절 실험"><div class="lab-meta"><span class="type type-실험">실험 06</span><span class="unit-name">파동과 소리</span></div><h3>파동의 기본 성질과 회절</h3><a href="04_%ED%8C%8C%EB%8F%99%EA%B3%BC_%EC%86%8C%EB%A6%AC_%EC%8B%A4%ED%97%9806_%ED%8C%8C%EB%8F%99%EC%9D%98%ED%9A%8C%EC%A0%88.html" target="_blank" rel="noopener noreferrer" aria-label="파동의 기본 성질과 회절 열기">실험 열기 <span aria-hidden="true">↗</span></a></article></div></section>
+    <section class="unit-section" data-unit="05_빛과_광학" aria-label="빛과 광학"><div class="section-heading"><div><span class="unit-icon" aria-hidden="true">🔍</span><h2>빛과 광학</h2></div><span>3개 자료</span></div><div class="card-grid"><article class="lab-card" data-unit="05_빛과_광학" data-kind="공식" data-search="빛과 광학 굴절 법칙 공식"><div class="lab-meta"><span class="type type-공식">공식 26</span><span class="unit-name">빛과 광학</span></div><h3>굴절 법칙</h3><a href="05_%EB%B9%9B%EA%B3%BC_%EA%B4%91%ED%95%99_%EA%B3%B5%EC%8B%9D26_%EA%B5%B4%EC%A0%88%EB%B2%95%EC%B9%99.html" target="_blank" rel="noopener noreferrer" aria-label="굴절 법칙 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="05_빛과_광학" data-kind="공식" data-search="빛과 광학 얇은 렌즈 공식"><div class="lab-meta"><span class="type type-공식">공식 27</span><span class="unit-name">빛과 광학</span></div><h3>얇은 렌즈</h3><a href="05_%EB%B9%9B%EA%B3%BC_%EA%B4%91%ED%95%99_%EA%B3%B5%EC%8B%9D27_%EC%96%87%EC%9D%80%EB%A0%8C%EC%A6%88.html" target="_blank" rel="noopener noreferrer" aria-label="얇은 렌즈 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="05_빛과_광학" data-kind="실험" data-search="빛과 광학 빛의 굴절과 렌즈 실험"><div class="lab-meta"><span class="type type-실험">실험 01</span><span class="unit-name">빛과 광학</span></div><h3>빛의 굴절과 렌즈</h3><a href="05_%EB%B9%9B%EA%B3%BC_%EA%B4%91%ED%95%99_%EC%8B%A4%ED%97%9801_%EB%B9%9B%EC%9D%98%EA%B5%B4%EC%A0%88%EA%B3%BC%EB%A0%8C%EC%A6%88.html" target="_blank" rel="noopener noreferrer" aria-label="빛의 굴절과 렌즈 열기">실험 열기 <span aria-hidden="true">↗</span></a></article></div></section>
+    <section class="unit-section" data-unit="06_전기와_회로" aria-label="전기와 회로"><div class="section-heading"><div><span class="unit-icon" aria-hidden="true">⚡</span><h2>전기와 회로</h2></div><span>13개 자료</span></div><div class="card-grid"><article class="lab-card" data-unit="06_전기와_회로" data-kind="공식" data-search="전기와 회로 쿨롱 힘 공식"><div class="lab-meta"><span class="type type-공식">공식 28</span><span class="unit-name">전기와 회로</span></div><h3>쿨롱 힘</h3><a href="06_%EC%A0%84%EA%B8%B0%EC%99%80_%ED%9A%8C%EB%A1%9C_%EA%B3%B5%EC%8B%9D28_%EC%BF%A8%EB%A1%B1%EC%9D%98%EB%B2%95%EC%B9%99.html" target="_blank" rel="noopener noreferrer" aria-label="쿨롱 힘 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="06_전기와_회로" data-kind="공식" data-search="전기와 회로 전기장 공식"><div class="lab-meta"><span class="type type-공식">공식 29</span><span class="unit-name">전기와 회로</span></div><h3>전기장</h3><a href="06_%EC%A0%84%EA%B8%B0%EC%99%80_%ED%9A%8C%EB%A1%9C_%EA%B3%B5%EC%8B%9D29_%EC%A0%84%EA%B8%B0%EC%9E%A5.html" target="_blank" rel="noopener noreferrer" aria-label="전기장 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="06_전기와_회로" data-kind="공식" data-search="전기와 회로 점전하 전위 공식"><div class="lab-meta"><span class="type type-공식">공식 30</span><span class="unit-name">전기와 회로</span></div><h3>점전하 전위</h3><a href="06_%EC%A0%84%EA%B8%B0%EC%99%80_%ED%9A%8C%EB%A1%9C_%EA%B3%B5%EC%8B%9D30_%EC%A0%90%EC%A0%84%ED%95%98%EC%9D%98%EC%A0%84%EC%9C%84.html" target="_blank" rel="noopener noreferrer" aria-label="점전하 전위 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="06_전기와_회로" data-kind="공식" data-search="전기와 회로 전기 용량 공식"><div class="lab-meta"><span class="type type-공식">공식 31</span><span class="unit-name">전기와 회로</span></div><h3>전기 용량</h3><a href="06_%EC%A0%84%EA%B8%B0%EC%99%80_%ED%9A%8C%EB%A1%9C_%EA%B3%B5%EC%8B%9D31_%EC%A0%84%EA%B8%B0%EC%9A%A9%EB%9F%89.html" target="_blank" rel="noopener noreferrer" aria-label="전기 용량 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="06_전기와_회로" data-kind="공식" data-search="전기와 회로 전류 공식"><div class="lab-meta"><span class="type type-공식">공식 32</span><span class="unit-name">전기와 회로</span></div><h3>전류</h3><a href="06_%EC%A0%84%EA%B8%B0%EC%99%80_%ED%9A%8C%EB%A1%9C_%EA%B3%B5%EC%8B%9D32_%EC%A0%84%EB%A5%98.html" target="_blank" rel="noopener noreferrer" aria-label="전류 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="06_전기와_회로" data-kind="공식" data-search="전기와 회로 옴의 법칙 공식"><div class="lab-meta"><span class="type type-공식">공식 33</span><span class="unit-name">전기와 회로</span></div><h3>옴의 법칙</h3><a href="06_%EC%A0%84%EA%B8%B0%EC%99%80_%ED%9A%8C%EB%A1%9C_%EA%B3%B5%EC%8B%9D33_%EC%98%B4%EC%9D%98%EB%B2%95%EC%B9%99.html" target="_blank" rel="noopener noreferrer" aria-label="옴의 법칙 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="06_전기와_회로" data-kind="공식" data-search="전기와 회로 전력 공식"><div class="lab-meta"><span class="type type-공식">공식 34</span><span class="unit-name">전기와 회로</span></div><h3>전력</h3><a href="06_%EC%A0%84%EA%B8%B0%EC%99%80_%ED%9A%8C%EB%A1%9C_%EA%B3%B5%EC%8B%9D34_%EC%A0%84%EB%A0%A5.html" target="_blank" rel="noopener noreferrer" aria-label="전력 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="06_전기와_회로" data-kind="실험" data-search="전기와 회로 옴의 법칙과 직렬·병렬 회로 실험"><div class="lab-meta"><span class="type type-실험">실험 01</span><span class="unit-name">전기와 회로</span></div><h3>옴의 법칙과 직렬·병렬 회로</h3><a href="06_%EC%A0%84%EA%B8%B0%EC%99%80_%ED%9A%8C%EB%A1%9C_%EC%8B%A4%ED%97%9801_%EC%98%B4%EC%9D%98%EB%B2%95%EC%B9%99%EA%B3%BC%EC%A0%80%ED%95%AD%EC%97%B0%EA%B2%B0.html" target="_blank" rel="noopener noreferrer" aria-label="옴의 법칙과 직렬·병렬 회로 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="06_전기와_회로" data-kind="실험" data-search="전기와 회로 전기장과 전위 실험"><div class="lab-meta"><span class="type type-실험">실험 02</span><span class="unit-name">전기와 회로</span></div><h3>전기장과 전위</h3><a href="06_%EC%A0%84%EA%B8%B0%EC%99%80_%ED%9A%8C%EB%A1%9C_%EC%8B%A4%ED%97%9802_%EC%A0%84%EA%B8%B0%EC%9E%A5%EA%B3%BC%EC%A0%84%EC%9C%84.html" target="_blank" rel="noopener noreferrer" aria-label="전기장과 전위 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="06_전기와_회로" data-kind="실험" data-search="전기와 회로 축전기 rc 충전·방전 실험"><div class="lab-meta"><span class="type type-실험">실험 03</span><span class="unit-name">전기와 회로</span></div><h3>축전기 RC 충전·방전</h3><a href="06_%EC%A0%84%EA%B8%B0%EC%99%80_%ED%9A%8C%EB%A1%9C_%EC%8B%A4%ED%97%9803_RC%ED%9A%8C%EB%A1%9C%EC%9D%98%EC%B6%A9%EC%A0%84%EA%B3%BC%EB%B0%A9%EC%A0%84.html" target="_blank" rel="noopener noreferrer" aria-label="축전기 RC 충전·방전 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="06_전기와_회로" data-kind="실험" data-search="전기와 회로 평행판 축전기 실험"><div class="lab-meta"><span class="type type-실험">실험 04</span><span class="unit-name">전기와 회로</span></div><h3>평행판 축전기</h3><a href="06_%EC%A0%84%EA%B8%B0%EC%99%80_%ED%9A%8C%EB%A1%9C_%EC%8B%A4%ED%97%9804_%ED%8F%89%ED%96%89%ED%8C%90%EC%B6%95%EC%A0%84%EA%B8%B0.html" target="_blank" rel="noopener noreferrer" aria-label="평행판 축전기 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="06_전기와_회로" data-kind="실험" data-search="전기와 회로 npn 트랜지스터 스위치 실험"><div class="lab-meta"><span class="type type-실험">실험 05</span><span class="unit-name">전기와 회로</span></div><h3>NPN 트랜지스터 스위치</h3><a href="06_%EC%A0%84%EA%B8%B0%EC%99%80_%ED%9A%8C%EB%A1%9C_%EC%8B%A4%ED%97%9805_NPN%ED%8A%B8%EB%9E%9C%EC%A7%80%EC%8A%A4%ED%84%B0%EC%8A%A4%EC%9C%84%EC%B9%98.html" target="_blank" rel="noopener noreferrer" aria-label="NPN 트랜지스터 스위치 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="06_전기와_회로" data-kind="실험" data-search="전기와 회로 npn 트랜지스터 증폭 실험"><div class="lab-meta"><span class="type type-실험">실험 06</span><span class="unit-name">전기와 회로</span></div><h3>NPN 트랜지스터 증폭</h3><a href="06_%EC%A0%84%EA%B8%B0%EC%99%80_%ED%9A%8C%EB%A1%9C_%EC%8B%A4%ED%97%9806_NPN%ED%8A%B8%EB%9E%9C%EC%A7%80%EC%8A%A4%ED%84%B0%EC%A6%9D%ED%8F%AD.html" target="_blank" rel="noopener noreferrer" aria-label="NPN 트랜지스터 증폭 열기">실험 열기 <span aria-hidden="true">↗</span></a></article></div></section>
+    <section class="unit-section" data-unit="07_자기와_전자기유도" aria-label="자기와 전자기 유도"><div class="section-heading"><div><span class="unit-icon" aria-hidden="true">🧲</span><h2>자기와 전자기 유도</h2></div><span>10개 자료</span></div><div class="card-grid"><article class="lab-card" data-unit="07_자기와_전자기유도" data-kind="공식" data-search="자기와 전자기 유도 직선 전류 자기장 공식"><div class="lab-meta"><span class="type type-공식">공식 35</span><span class="unit-name">자기와 전자기 유도</span></div><h3>직선 전류 자기장</h3><a href="07_%EC%9E%90%EA%B8%B0%EC%99%80_%EC%A0%84%EC%9E%90%EA%B8%B0%EC%9C%A0%EB%8F%84_%EA%B3%B5%EC%8B%9D35_%EC%A7%81%EC%84%A0%EC%A0%84%EB%A5%98%EC%9D%98%EC%9E%90%EA%B8%B0%EC%9E%A5.html" target="_blank" rel="noopener noreferrer" aria-label="직선 전류 자기장 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="07_자기와_전자기유도" data-kind="공식" data-search="자기와 전자기 유도 전하의 자기력 공식"><div class="lab-meta"><span class="type type-공식">공식 36</span><span class="unit-name">자기와 전자기 유도</span></div><h3>전하의 자기력</h3><a href="07_%EC%9E%90%EA%B8%B0%EC%99%80_%EC%A0%84%EC%9E%90%EA%B8%B0%EC%9C%A0%EB%8F%84_%EA%B3%B5%EC%8B%9D36_%EC%A0%84%ED%95%98%EA%B0%80%EB%B0%9B%EB%8A%94%EC%9E%90%EA%B8%B0%EB%A0%A5.html" target="_blank" rel="noopener noreferrer" aria-label="전하의 자기력 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="07_자기와_전자기유도" data-kind="공식" data-search="자기와 전자기 유도 도선의 자기력 공식"><div class="lab-meta"><span class="type type-공식">공식 37</span><span class="unit-name">자기와 전자기 유도</span></div><h3>도선의 자기력</h3><a href="07_%EC%9E%90%EA%B8%B0%EC%99%80_%EC%A0%84%EC%9E%90%EA%B8%B0%EC%9C%A0%EB%8F%84_%EA%B3%B5%EC%8B%9D37_%EB%8F%84%EC%84%A0%EC%9D%B4%EB%B0%9B%EB%8A%94%EC%9E%90%EA%B8%B0%EB%A0%A5.html" target="_blank" rel="noopener noreferrer" aria-label="도선의 자기력 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="07_자기와_전자기유도" data-kind="공식" data-search="자기와 전자기 유도 전자기 유도 공식"><div class="lab-meta"><span class="type type-공식">공식 38</span><span class="unit-name">자기와 전자기 유도</span></div><h3>전자기 유도</h3><a href="07_%EC%9E%90%EA%B8%B0%EC%99%80_%EC%A0%84%EC%9E%90%EA%B8%B0%EC%9C%A0%EB%8F%84_%EA%B3%B5%EC%8B%9D38_%EC%A0%84%EC%9E%90%EA%B8%B0%EC%9C%A0%EB%8F%84.html" target="_blank" rel="noopener noreferrer" aria-label="전자기 유도 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="07_자기와_전자기유도" data-kind="공식" data-search="자기와 전자기 유도 맥스웰 방정식 공식"><div class="lab-meta"><span class="type type-공식">공식 41</span><span class="unit-name">자기와 전자기 유도</span></div><h3>맥스웰 방정식</h3><a href="07_%EC%9E%90%EA%B8%B0%EC%99%80_%EC%A0%84%EC%9E%90%EA%B8%B0%EC%9C%A0%EB%8F%84_%EA%B3%B5%EC%8B%9D41_%EB%A7%A5%EC%8A%A4%EC%9B%B0%EB%B0%A9%EC%A0%95%EC%8B%9D.html" target="_blank" rel="noopener noreferrer" aria-label="맥스웰 방정식 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="07_자기와_전자기유도" data-kind="실험" data-search="자기와 전자기 유도 맥스웰 방정식 실험"><div class="lab-meta"><span class="type type-실험">실험 01</span><span class="unit-name">자기와 전자기 유도</span></div><h3>맥스웰 방정식</h3><a href="07_%EC%9E%90%EA%B8%B0%EC%99%80_%EC%A0%84%EC%9E%90%EA%B8%B0%EC%9C%A0%EB%8F%84_%EC%8B%A4%ED%97%9801_%EB%A7%A5%EC%8A%A4%EC%9B%B0%EB%B0%A9%EC%A0%95%EC%8B%9D.html" target="_blank" rel="noopener noreferrer" aria-label="맥스웰 방정식 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="07_자기와_전자기유도" data-kind="실험" data-search="자기와 전자기 유도 변압기 원리 실험"><div class="lab-meta"><span class="type type-실험">실험 02</span><span class="unit-name">자기와 전자기 유도</span></div><h3>변압기 원리</h3><a href="07_%EC%9E%90%EA%B8%B0%EC%99%80_%EC%A0%84%EC%9E%90%EA%B8%B0%EC%9C%A0%EB%8F%84_%EC%8B%A4%ED%97%9802_%EB%B3%80%EC%95%95%EA%B8%B0%EC%9B%90%EB%A6%AC.html" target="_blank" rel="noopener noreferrer" aria-label="변압기 원리 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="07_자기와_전자기유도" data-kind="실험" data-search="자기와 전자기 유도 자기장과 자기력 실험"><div class="lab-meta"><span class="type type-실험">실험 03</span><span class="unit-name">자기와 전자기 유도</span></div><h3>자기장과 자기력</h3><a href="07_%EC%9E%90%EA%B8%B0%EC%99%80_%EC%A0%84%EC%9E%90%EA%B8%B0%EC%9C%A0%EB%8F%84_%EC%8B%A4%ED%97%9803_%EC%9E%90%EA%B8%B0%EC%9E%A5%EA%B3%BC%EC%9E%90%EA%B8%B0%EB%A0%A5.html" target="_blank" rel="noopener noreferrer" aria-label="자기장과 자기력 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="07_자기와_전자기유도" data-kind="실험" data-search="자기와 전자기 유도 전자기 유도 · 버전 1 실험"><div class="lab-meta"><span class="type type-실험">실험 04</span><span class="unit-name">자기와 전자기 유도</span></div><h3>전자기 유도 · 버전 1</h3><a href="07_%EC%9E%90%EA%B8%B0%EC%99%80_%EC%A0%84%EC%9E%90%EA%B8%B0%EC%9C%A0%EB%8F%84_%EC%8B%A4%ED%97%9804_%EC%A0%84%EC%9E%90%EA%B8%B0%EC%9C%A0%EB%8F%84_%EB%B2%84%EC%A0%841.html" target="_blank" rel="noopener noreferrer" aria-label="전자기 유도 · 버전 1 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="07_자기와_전자기유도" data-kind="실험" data-search="자기와 전자기 유도 전자기 유도 · 버전 2 실험"><div class="lab-meta"><span class="type type-실험">실험 05</span><span class="unit-name">자기와 전자기 유도</span></div><h3>전자기 유도 · 버전 2</h3><a href="07_%EC%9E%90%EA%B8%B0%EC%99%80_%EC%A0%84%EC%9E%90%EA%B8%B0%EC%9C%A0%EB%8F%84_%EC%8B%A4%ED%97%9805_%EC%A0%84%EC%9E%90%EA%B8%B0%EC%9C%A0%EB%8F%84_%EB%B2%84%EC%A0%842.html" target="_blank" rel="noopener noreferrer" aria-label="전자기 유도 · 버전 2 열기">실험 열기 <span aria-hidden="true">↗</span></a></article></div></section>
+    <section class="unit-section" data-unit="08_현대물리" aria-label="현대물리"><div class="section-heading"><div><span class="unit-icon" aria-hidden="true">⚛️</span><h2>현대물리</h2></div><span>5개 자료</span></div><div class="card-grid"><article class="lab-card" data-unit="08_현대물리" data-kind="공식" data-search="현대물리 광자 에너지 공식"><div class="lab-meta"><span class="type type-공식">공식 39</span><span class="unit-name">현대물리</span></div><h3>광자 에너지</h3><a href="08_%ED%98%84%EB%8C%80%EB%AC%BC%EB%A6%AC_%EA%B3%B5%EC%8B%9D39_%EA%B4%91%EC%9E%90%EC%97%90%EB%84%88%EC%A7%80.html" target="_blank" rel="noopener noreferrer" aria-label="광자 에너지 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="08_현대물리" data-kind="공식" data-search="현대물리 물질파 파장 공식"><div class="lab-meta"><span class="type type-공식">공식 40</span><span class="unit-name">현대물리</span></div><h3>물질파 파장</h3><a href="08_%ED%98%84%EB%8C%80%EB%AC%BC%EB%A6%AC_%EA%B3%B5%EC%8B%9D40_%EB%AC%BC%EC%A7%88%ED%8C%8C.html" target="_blank" rel="noopener noreferrer" aria-label="물질파 파장 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="08_현대물리" data-kind="실험" data-search="현대물리 광전효과 실험"><div class="lab-meta"><span class="type type-실험">실험 01</span><span class="unit-name">현대물리</span></div><h3>광전효과</h3><a href="08_%ED%98%84%EB%8C%80%EB%AC%BC%EB%A6%AC_%EC%8B%A4%ED%97%9801_%EA%B4%91%EC%A0%84%ED%9A%A8%EA%B3%BC.html" target="_blank" rel="noopener noreferrer" aria-label="광전효과 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="08_현대물리" data-kind="실험" data-search="현대물리 원자 스펙트럼과 에너지 준위 실험"><div class="lab-meta"><span class="type type-실험">실험 02</span><span class="unit-name">현대물리</span></div><h3>원자 스펙트럼과 에너지 준위</h3><a href="08_%ED%98%84%EB%8C%80%EB%AC%BC%EB%A6%AC_%EC%8B%A4%ED%97%9802_%EC%9B%90%EC%9E%90%EC%8A%A4%ED%8E%99%ED%8A%B8%EB%9F%BC%EA%B3%BC%EC%97%90%EB%84%88%EC%A7%80%EC%A4%80%EC%9C%84.html" target="_blank" rel="noopener noreferrer" aria-label="원자 스펙트럼과 에너지 준위 열기">실험 열기 <span aria-hidden="true">↗</span></a></article><article class="lab-card" data-unit="08_현대물리" data-kind="실험" data-search="현대물리 특수 상대성이론 실험"><div class="lab-meta"><span class="type type-실험">실험 03</span><span class="unit-name">현대물리</span></div><h3>특수 상대성이론</h3><a href="08_%ED%98%84%EB%8C%80%EB%AC%BC%EB%A6%AC_%EC%8B%A4%ED%97%9803_%ED%8A%B9%EC%88%98%EC%83%81%EB%8C%80%EC%84%B1%EC%9D%B4%EB%A1%A0.html" target="_blank" rel="noopener noreferrer" aria-label="특수 상대성이론 열기">실험 열기 <span aria-hidden="true">↗</span></a></article></div></section></div>
+    <p class="empty" id="empty">검색 결과가 없습니다. 다른 단어나 단원을 선택해 보세요.</p>
   </main>
-
-  <footer>
-    © WiseWhisper Online Science Lab · 물리·통합과학 인터랙티브 학습
-  </footer>
-
+  <footer>© WiseWhisper Online Science Lab</footer>
   <script>
-    const buttons = document.querySelectorAll('.filter-btn');
-    const cards = document.querySelectorAll('.card');
-
-    buttons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        buttons.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-
-        const filter = btn.dataset.filter;
-        cards.forEach(card => {
-          const show = filter === 'all' || card.dataset.category === filter;
-          card.style.display = show ? 'flex' : 'none';
-        });
+    const search = document.getElementById('search');
+    const kind = document.getElementById('kind');
+    const buttons = [...document.querySelectorAll('.unit-filter')];
+    const sections = [...document.querySelectorAll('.unit-section')];
+    const cards = [...document.querySelectorAll('.lab-card')];
+    const resultCount = document.getElementById('result-count');
+    const empty = document.getElementById('empty');
+    let selectedUnit = 'all';
+    function updateCatalogue() {
+      const query = search.value.trim().toLocaleLowerCase('ko');
+      let shown = 0;
+      cards.forEach(card => {
+        const matches = (selectedUnit === 'all' || card.dataset.unit === selectedUnit)
+          && (kind.value === 'all' || card.dataset.kind === kind.value)
+          && (!query || card.dataset.search.includes(query));
+        card.hidden = !matches;
+        if (matches) shown++;
       });
-    });
+      sections.forEach(section => {
+        section.hidden = ![...section.querySelectorAll('.lab-card')].some(card => !card.hidden);
+      });
+      resultCount.textContent = `${shown}개 자료 표시 중`;
+      empty.style.display = shown ? 'none' : 'block';
+    }
+    buttons.forEach(button => button.addEventListener('click', () => {
+      selectedUnit = button.dataset.unit;
+      buttons.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+      updateCatalogue();
+    }));
+    search.addEventListener('input', updateCatalogue);
+    kind.addEventListener('change', updateCatalogue);
   </script>
 </body>
 </html>
