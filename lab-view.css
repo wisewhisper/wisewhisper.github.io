@@ -1,0 +1,88 @@
+
+/* Shared compact experiment view; the original layout remains available. */
+#lab-viewbar{position:sticky;top:0;z-index:1000;display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:9px 16px;background:#10233e;color:#fff;box-shadow:0 2px 12px #0002;font:14px/1.4 system-ui,sans-serif}
+#lab-viewbar .lab-name{font-weight:750;margin-right:auto;max-width:55vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#lab-viewbar button,#lab-viewbar a{font:inherit;min-height:34px;padding:6px 12px;border:1px solid #738ca8;border-radius:8px;color:#fff;background:#203e60;cursor:pointer;text-decoration:none}
+#lab-viewbar button[aria-pressed=true]{background:#e1fbf3;color:#075647;border-color:#5be0b5}
+#lab-viewbar button:focus-visible,#lab-viewbar a:focus-visible{outline:3px solid #ffc45d;outline-offset:2px}
+#lab-focus{padding:12px;max-width:1800px;margin:auto;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(310px,1fr);gap:12px;align-items:start;font-size:14px;line-height:1.45}
+#lab-focus .lab-column{display:flex;flex-direction:column;gap:10px;min-width:0}
+#lab-focus .lab-piece{margin:0!important;min-width:0!important;width:100%!important;max-width:none!important;grid-column:auto!important;grid-row:auto!important;order:0!important;padding:12px!important;border-radius:12px}
+#lab-focus h2{font-size:16px!important;margin:0 0 8px!important;line-height:1.35!important}
+#lab-focus h3{font-size:14px!important;margin:7px 0!important}
+#lab-focus p{margin:5px 0!important}
+#lab-focus button,#lab-focus select,#lab-focus input[type=number]{min-height:32px!important;font-size:13px!important;padding:4px 8px!important}
+#lab-focus input[type=range]{min-height:20px!important;height:20px!important;margin:3px 0!important}
+#lab-focus .control,#lab-focus .group{margin:7px 0!important;padding-top:4px!important}
+#lab-focus .row,#lab-focus .buttons,#lab-focus .actions{gap:6px!important;margin:6px 0!important}
+#lab-focus .settings{gap:7px!important}
+#lab-focus .metric,#lab-focus .read,#lab-focus .stat,#lab-focus .meter{padding:7px!important}
+#lab-focus .metric strong,#lab-focus .read strong{font-size:19px!important}
+#lab-focus details{margin:5px 0!important;padding:6px 9px!important}
+#lab-focus summary{min-height:26px!important}
+#lab-focus canvas{max-width:100%!important}
+#lab-focus svg{max-width:100%!important}
+#lab-focus .lab-scene canvas,#lab-focus .lab-scene svg{max-height:clamp(180px,32vh,330px)!important;object-fit:contain}
+#lab-focus .lab-chart canvas,#lab-focus .lab-chart svg{max-height:clamp(140px,25vh,240px)!important;object-fit:contain}
+#lab-focus .caption,#lab-focus .hint,#lab-focus .note,#lab-focus .small,#lab-focus .muted{font-size:12px!important;line-height:1.4!important}
+#lab-extras{margin:0 auto 24px;max-width:1800px;padding:0 12px;display:flex;flex-wrap:wrap;gap:8px}
+#lab-extras>details{width:100%;border:1px solid #8195ad66;border-radius:10px;padding:10px 14px;background:var(--panel,var(--paper,#f3f6fc))}
+#lab-extras>details>summary{cursor:pointer;font-weight:700;min-height:30px}
+#lab-extras .lab-piece{margin:12px 0 0!important;max-width:100%!important}
+body.lab-compact>header,body.lab-compact>main>header{padding-top:10px!important;padding-bottom:10px!important}
+body.lab-compact>header h1,body.lab-compact>main>header h1{font-size:23px!important;margin:3px 0!important}
+body.lab-compact>main{display:contents!important}
+body.lab-compact .lab-empty{display:none!important}
+body.lab-compact .lab-native{max-width:1600px!important;margin:auto!important;padding-top:8px!important}
+body.lab-compact .lab-native h1{font-size:23px!important;margin:6px 0!important}
+body.lab-compact .lab-native header{padding-top:8px!important;padding-bottom:8px!important}
+body.lab-compact .lab-native canvas{max-height:36vh;object-fit:contain}
+body.lab-compact .lab-native .panel,body.lab-compact .lab-native .card{padding:12px}
+@media(min-width:1100px) and (max-height:800px){#lab-focus{gap:8px;padding:8px;font-size:13px}#lab-focus .lab-piece{padding:9px!important}#lab-focus .control,#lab-focus .group{margin:4px 0!important}#lab-focus .lab-scene canvas,#lab-focus .lab-scene svg{max-height:27vh!important}#lab-focus .lab-chart canvas,#lab-focus .lab-chart svg{max-height:22vh!important}}
+@media(max-width:999px){#lab-focus{grid-template-columns:1fr}#lab-viewbar .lab-name{max-width:80vw}#lab-viewbar{position:relative}#lab-focus .lab-scene canvas,#lab-focus .lab-scene svg{max-height:45vh!important}}
+@media print{#lab-viewbar{display:none}}
+
+
+@media(min-width:1200px){#lab-focus.lab-has-results{grid-template-columns:minmax(0,1.4fr) minmax(300px,1fr) minmax(250px,.85fr)}}
+#lab-focus .lab-scene canvas,#lab-focus .lab-scene svg{max-height:24vh!important}
+#lab-focus .lab-piece.lab-view-hidden{position:absolute!important;visibility:hidden!important;pointer-events:none!important;inset:0 auto auto 0!important;width:100%!important}
+#lab-focus .lab-view-tabs{display:flex;flex-wrap:wrap;gap:6px}
+#lab-focus .lab-view-tabs button{border:1px solid #7890a9;border-radius:8px;background:#eef3f8;color:#213953;font:600 13px/1.4 system-ui,sans-serif;cursor:pointer}
+#lab-focus .lab-view-tabs button[aria-pressed=true]{background:#173e60;color:#fff}
+#lab-focus .lab-result-panel{background:var(--panel,var(--paper,#ffffff));border:1px solid #8195ad66}
+#lab-focus .stats,#lab-focus .metrics{gap:7px!important}
+#lab-focus .calc,#lab-focus .equation{font-size:13px!important;padding:8px!important;overflow-wrap:anywhere;white-space:normal!important}
+#lab-focus .ctrl{margin:4px 0!important;gap:7px!important}
+body.lab-compact[data-lab-page*="특수상대"] .app{display:grid;grid-template-columns:350px minmax(0,1fr);gap:12px;max-width:1600px;padding:12px}
+body.lab-compact[data-lab-page*="특수상대"] .app>header{display:none}
+body.lab-compact[data-lab-page*="특수상대"] .app>section.grid{grid-column:1;grid-row:1/4;display:flex;flex-direction:column;gap:10px}
+body.lab-compact[data-lab-page*="특수상대"] .app>.tabs{grid-column:2;margin:0;align-self:start}
+body.lab-compact[data-lab-page*="특수상대"] .app>.lab{grid-column:2;min-width:0}
+body.lab-compact[data-lab-page*="특수상대"] .app>.footer{grid-column:1/-1}
+body.lab-compact[data-lab-page*="특수상대"] .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+body.lab-compact[data-lab-page*="특수상대"] .subtitle{font-size:13px;line-height:1.4}
+body.lab-compact[data-lab-page*="특수상대"] .lab canvas{max-height:42vh;object-fit:contain}
+body.lab-compact[data-lab-page*="열역학과정"] header{display:none}
+body.lab-compact[data-lab-page*="열역학과정"] .wrap{padding-top:12px;max-width:1600px}
+body.lab-compact[data-lab-page*="열역학과정"] .control-row{margin:8px 0}
+body.lab-compact[data-lab-page*="열역학과정"] .stage,body.lab-compact[data-lab-page*="열역학과정"] .chartbox{min-height:260px}
+@media(max-width:999px){body.lab-compact[data-lab-page*="특수상대"] .app{display:block}body.lab-compact[data-lab-page*="특수상대"] .app>.tabs{margin:12px 0}}
+#lab-focus .lab-result-panel .reading,#lab-focus .lab-result-panel .stats,#lab-focus .lab-result-panel .readings,#lab-focus .lab-result-panel .readouts{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+#lab-focus .lab-result-panel strong,#lab-focus .lab-result-panel .num{overflow-wrap:anywhere;white-space:normal!important}
+#lab-focus .lab-piece{position:relative!important;inset:auto!important;transform:none!important;overflow-wrap:anywhere}
+#lab-focus .lab-piece .value,#lab-focus .lab-piece .num,#lab-focus .lab-piece .read strong{white-space:normal!important;overflow-wrap:anywhere}
+#lab-focus .lab-piece .scroll,#lab-focus .lab-piece .tablewrap,#lab-focus .lab-piece .table-wrap{max-width:100%;overflow-x:auto}
+body.lab-compact[data-lab-page*="맥스웰방정식"] #canvasWrap{height:30vh!important;min-height:0!important}
+body.lab-compact[data-lab-page*="맥스웰방정식"] #fieldCanvas{height:100%!important;max-height:none!important}
+body.lab-compact[data-lab-page*="공명과정상파"] #lab-focus .control{margin:3px 0!important}
+body.lab-compact[data-lab-page*="공명과정상파"] #lab-focus .presets{gap:4px!important;margin:4px 0!important}
+body.lab-compact[data-lab-page*="공명과정상파"] #lab-focus .control label{margin-bottom:1px!important}
+#lab-focus.lab-has-results>.lab-column:last-child .metrics,#lab-focus.lab-has-results>.lab-column:last-child .meters{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+#lab-focus.lab-has-results>.lab-column:last-child .v,#lab-focus.lab-has-results>.lab-column:last-child .value{white-space:normal!important;overflow-wrap:anywhere;font-size:18px!important}
+body.lab-compact[data-lab-page*="공명과정상파"] #lab-focus .control{padding:5px!important;margin:0!important}
+body.lab-compact[data-lab-page*="공명과정상파"] #lab-focus .control .row{margin:0!important}
+body.lab-compact[data-lab-page*="공명과정상파"] #lab-focus .controls{gap:5px!important}
+body.lab-compact[data-lab-page*="공명과정상파"] #lab-focus .stage{min-height:0!important}
+
+#lab-focus .lab-column{position:relative}
+
