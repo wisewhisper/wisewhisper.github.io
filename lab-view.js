@@ -36,11 +36,26 @@
       if (el.querySelector(atomic)) collect(el,out);
     }
   }
+  // New presentation panels inherit a complete surface, not only a text color.
+  function surface(source) {
+    const color = getComputedStyle(source).color;
+    for(let node=source;node;node=node.parentElement){
+      const style=getComputedStyle(node);
+      if(style.backgroundImage!=='none'||!/^rgba\([^)]*,\s*0\)$/.test(style.backgroundColor)&&style.backgroundColor!=='transparent'){
+        return {color,backgroundColor:style.backgroundColor,backgroundImage:style.backgroundImage};
+      }
+    }
+    return {color,backgroundColor:getComputedStyle(body).backgroundColor,backgroundImage:'none'};
+  }
+  function paint(element,palette){Object.assign(element.style,palette);}
   function resize() { window.dispatchEvent(new Event('resize')); }
   function move(el, destination) {
     if(!el.parentNode){el.classList.add('lab-piece');destination.append(el);return;}
     const placeholder = document.createComment('original experiment position');
-    el.before(placeholder); moved.push({el,placeholder});
+    const color=el.style.getPropertyValue('color'),priority=el.style.getPropertyPriority('color');
+    const inheritedColor=getComputedStyle(el).color;
+    el.before(placeholder); moved.push({el,placeholder,color,priority});
+    el.style.setProperty('color',inheritedColor);
     el.classList.add('lab-piece'); destination.append(el);
   }
   function enable() {
@@ -51,6 +66,7 @@
       resize(); return;
     }
     const pieces=[]; collect(body,pieces);
+    const palettes=new Map(pieces.map(el=>[el,surface(el)]));
     const scene=[], controls=[], results=[], charts=[], more=[], navigation=[];
     for(const el of pieces) {
       const heading=(el.querySelector('h2,h3')?.textContent || '').trim();
@@ -72,20 +88,45 @@
     for(const el of navigation) { move(el,left); el.classList.add('lab-navigation'); }
     for(const el of [...controls,...scene]) {
       const blocks=Array.from(el.querySelectorAll('.metrics,.stats,.calc,.equation,.values,.readouts,.readings,.reading')).filter(n=>!n.querySelector('input,select,button')&&!n.parentElement.closest('.metrics,.stats,.calc,.equation,.values,.readouts,.readings,.reading'));
-      if(blocks.length){const card=document.createElement('section');card.className='lab-result-panel';const h=document.createElement('h2');h.textContent='실시간 결과';card.append(h);for(const n of blocks)move(n,card);results.push(card);generated.push(card);}
+      if(blocks.length){const card=document.createElement('section');card.className='lab-result-panel';paint(card,palettes.get(el));const h=document.createElement('h2');h.textContent='실시간 결과';card.append(h);for(const n of blocks)move(n,card);results.push(card);generated.push(card);}
     }
     for(const el of scene) { move(el,left); el.classList.add('lab-scene'); }
     for(const el of controls) move(el,right);
     if(results.length){focus.append(readings);focus.classList.add('lab-has-results');for(const el of results) move(el,readings);}
     for(const el of charts) { move(el,left); el.classList.add('lab-chart'); }
-    const views=[...scene,...charts];
-    if(views.length>1){
-      const nav=document.createElement('div');nav.className='lab-view-tabs';nav.setAttribute('role','group');nav.setAttribute('aria-label','관찰 화면 선택');generated.push(nav);left.prepend(nav);
+    function viewTabs(views,column){
+      if(views.length<2)return;
+      const nav=document.createElement('div');nav.className='lab-view-tabs';nav.setAttribute('role','group');nav.setAttribute('aria-label','관찰 화면 선택');generated.push(nav);views[0].before(nav);
       views.forEach((el,index)=>{const button=document.createElement('button');button.type='button';button.textContent=el.querySelector('h2,h3')?.textContent.trim()||(index?'그래프 '+index:'실험 장면');nav.append(button);button.setAttribute('aria-pressed',String(index===0));el.classList.toggle('lab-view-hidden',index!==0);button.addEventListener('click',()=>{views.forEach((v,i)=>{v.classList.toggle('lab-view-hidden',i!==index);nav.children[i].setAttribute('aria-pressed',String(i===index));});resize();});});
+    }
+    // Show observation and a graph together when they fit; retain tabs on smaller screens.
+    let combined=false;
+    if(window.innerWidth>=1200&&scene.length===1&&charts.length){
+      const room=window.innerHeight-bar.getBoundingClientRect().height-32;
+      const first=scene[0],graph=charts[0];
+      if(first.getBoundingClientRect().height+graph.getBoundingClientRect().height+10<=room){
+        combined=true;viewTabs(charts,left);
+      }else{
+        const hadResults=readings.parentNode===focus;
+        if(!hadResults){focus.append(readings);focus.classList.add('lab-has-results');}
+        charts.forEach(chart=>readings.append(chart));
+        const resultHeight=Array.from(readings.children).filter(el=>!charts.includes(el)).reduce((sum,el)=>sum+el.getBoundingClientRect().height+10,0);
+        if(resultHeight+graph.getBoundingClientRect().height+(charts.length>1?44:0)<=room){combined=true;viewTabs(charts,readings);}
+        else{charts.forEach(chart=>left.append(chart));if(!hadResults){readings.remove();focus.classList.remove('lab-has-results');}}
+      }
+    }
+    if(!combined)viewTabs([...scene,...charts],left);
+    focus.classList.toggle('lab-combined',combined);
+    // A single observation should use more of the available screen height.
+    if(scene.length===1&&scene[0].querySelectorAll('canvas,svg').length===1){
+      const sceneHeight=scene[0].getBoundingClientRect().height;
+      const maxHeight=window.innerHeight-bar.getBoundingClientRect().height-36;
+      if(sceneHeight+100<maxHeight&&(!combined||charts[0]?.parentNode!==left))scene[0].classList.add('lab-expanded-scene');
     }
     for(const el of more) {
       const details=document.createElement('details'); const summary=document.createElement('summary');
       summary.textContent=el.querySelector('h2,h3,summary')?.textContent.trim() || '해설 · 탐구 자료';
+      paint(details,palettes.get(el));
       details.append(summary); extras.append(details); move(el,details);
       details.addEventListener('toggle',resize);
     }
@@ -97,11 +138,11 @@
     resize();
   }
   function disable() {
-    for(const {el,placeholder} of moved) { placeholder.replaceWith(el); el.classList.remove('lab-piece','lab-scene','lab-chart','lab-navigation','lab-view-hidden'); }
+    for(const {el,placeholder,color,priority} of moved) { placeholder.replaceWith(el); el.classList.remove('lab-piece','lab-scene','lab-chart','lab-navigation','lab-view-hidden','lab-expanded-scene');if(color)el.style.setProperty('color',color,priority);else el.style.removeProperty('color'); }
     moved.length=0;
     for(const el of generated)el.remove();generated.length=0;
     for(const el of empty) el.classList.remove('lab-empty'); empty.length=0;
-    focus.remove(); focus.classList.remove('lab-has-results'); readings.remove(); readings.replaceChildren(); left.replaceChildren(); right.replaceChildren(); extras.remove(); extras.replaceChildren();
+    focus.remove(); focus.classList.remove('lab-has-results','lab-combined'); readings.remove(); readings.replaceChildren(); left.replaceChildren(); right.replaceChildren(); extras.remove(); extras.replaceChildren();
     document.querySelectorAll('.lab-native').forEach(el=>el.classList.remove('lab-native'));
     body.classList.remove('lab-compact'); toggle.setAttribute('aria-pressed','false'); toggle.textContent='한 화면 실험'; resize();
   }
