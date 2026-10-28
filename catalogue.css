@@ -40,3 +40,6 @@ main{max-width:1280px;padding:28px 24px 65px}
 @media(prefers-reduced-motion:reduce){.filter-list .unit-filter{transition:none}.filter-list .unit-filter:hover{transform:none}}
 @media(min-width:1001px){.hero-inner{padding-top:25px;padding-bottom:24px}.hero h1{font-size:42px}.filter-list .unit-filter{min-height:218px}}
 @media(max-width:700px){.hero-break{display:block}}
+
+/* Games and everyday tools. */
+.app-icon{font-size:46px;min-height:100px;display:grid;place-items:center;background:#fff2df;border-radius:10px;margin-bottom:16px}.type-어플{background:#fff0d4;color:#75421b}.lab-card .app-description{color:var(--muted);font-size:14px;line-height:1.6;margin:-8px 0 20px}.unit-section[data-unit="09_재미있는_어플들"]{--unit-accent:#9a5324;--unit-tint:#fff0df}

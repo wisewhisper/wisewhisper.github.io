@@ -1,0 +1,2201 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
+  <meta name="theme-color" content="#060816" />
+  <meta name="description" content="한 번의 터치로 궤도를 뒤집고, 매 판 달라지는 우주 이벤트를 돌파하는 모바일 아케이드 게임" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiByb2xlPSJpbWciIGFyaWEtbGFiZWw9Ik9SQklUIFpFUk8g7JWE7J207L2YIj4KICA8ZGVmcz4KICAgIDxyYWRpYWxHcmFkaWVudCBpZD0iYmciIGN4PSI1MCUiIGN5PSI0MiUiIHI9IjcwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzE4MmM2NiIvPgogICAgICA8c3RvcCBvZmZzZXQ9Ii41NSIgc3RvcC1jb2xvcj0iIzA5MGQyNSIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMwMzA0MGIiLz4KICAgIDwvcmFkaWFsR3JhZGllbnQ+CiAgICA8cmFkaWFsR3JhZGllbnQgaWQ9ImNvcmUiIGN4PSIzOCUiIGN5PSIzMCUiIHI9IjcwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmZiIvPgogICAgICA8c3RvcCBvZmZzZXQ9Ii4yNCIgc3RvcC1jb2xvcj0iIzhmZmJmZiIvPgogICAgICA8c3RvcCBvZmZzZXQ9Ii42OCIgc3RvcC1jb2xvcj0iIzRiNjVkZiIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMxNzI0NWQiLz4KICAgIDwvcmFkaWFsR3JhZGllbnQ+CiAgICA8ZmlsdGVyIGlkPSJnbG93IiB4PSItODAlIiB5PSItODAlIiB3aWR0aD0iMjYwJSIgaGVpZ2h0PSIyNjAlIj4KICAgICAgPGZlR2F1c3NpYW5CbHVyIHN0ZERldmlhdGlvbj0iMTUiIHJlc3VsdD0iYiIvPgogICAgICA8ZmVNZXJnZT48ZmVNZXJnZU5vZGUgaW49ImIiLz48ZmVNZXJnZU5vZGUgaW49IlNvdXJjZUdyYXBoaWMiLz48L2ZlTWVyZ2U+CiAgICA8L2ZpbHRlcj4KICA8L2RlZnM+CiAgPHJlY3Qgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHJ4PSIxMTIiIGZpbGw9InVybCgjYmcpIi8+CiAgPGNpcmNsZSBjeD0iMjU2IiBjeT0iMjU2IiByPSIxNDgiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzIxMzg1ZiIgc3Ryb2tlLXdpZHRoPSI0IiBzdHJva2UtZGFzaGFycmF5PSI4IDE1Ii8+CiAgPHBhdGggZD0iTTM2NyAxNThhMTQ4IDE0OCAwIDAgMSAyNiAxNzdNMTQ2IDM2MGExNDggMTQ4IDAgMCAxLTI4LTE4MSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNTVmNGZmIiBzdHJva2Utd2lkdGg9IjI0IiBzdHJva2UtbGluZWNhcD0icm91bmQiIGZpbHRlcj0idXJsKCNnbG93KSIvPgogIDxjaXJjbGUgY3g9IjI1NiIgY3k9IjI1NiIgcj0iNDUiIGZpbGw9InVybCgjY29yZSkiIGZpbHRlcj0idXJsKCNnbG93KSIvPgogIDxjaXJjbGUgY3g9IjM2NyIgY3k9IjE1OCIgcj0iMjUiIGZpbGw9IiNmZmYiIHN0cm9rZT0iIzY0ZjdmZiIgc3Ryb2tlLXdpZHRoPSIxMSIgZmlsdGVyPSJ1cmwoI2dsb3cpIi8+Cjwvc3ZnPgo=" type="image/svg+xml" />
+  <title>ORBIT ZERO</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --ink: #f7fbff;
+      --muted: #9aa6c5;
+      --cyan: #47f6ff;
+      --violet: #a878ff;
+      --pink: #ff4ec8;
+      --panel: rgba(8, 12, 34, .82);
+      --line: rgba(130, 179, 255, .2);
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-right: env(safe-area-inset-right, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --safe-left: env(safe-area-inset-left, 0px);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: #050713;
+      color: var(--ink);
+      font-family: Inter, Pretendard, "Noto Sans KR", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -webkit-tap-highlight-color: transparent;
+      overscroll-behavior: none;
+    }
+
+    button { font: inherit; }
+
+    button:focus-visible {
+      outline: 3px solid rgba(71, 246, 255, .8);
+      outline-offset: 3px;
+    }
+
+    [hidden] { display: none !important; }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    #app {
+      position: fixed;
+      inset: 0;
+      isolation: isolate;
+      background:
+        radial-gradient(circle at 50% 42%, rgba(38, 70, 149, .2), transparent 46%),
+        linear-gradient(180deg, #090b20 0%, #04050e 100%);
+    }
+
+    #gameCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      touch-action: manipulation;
+      user-select: none;
+    }
+
+    .topbar {
+      position: absolute;
+      z-index: 5;
+      top: 0;
+      left: 0;
+      right: 0;
+      min-height: calc(70px + var(--safe-top));
+      padding: calc(14px + var(--safe-top)) calc(16px + var(--safe-right)) 10px calc(16px + var(--safe-left));
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      pointer-events: none;
+    }
+
+    .brand {
+      justify-self: start;
+      color: rgba(243, 250, 255, .8);
+      font-size: .8rem;
+      font-weight: 900;
+      letter-spacing: .18em;
+      text-shadow: 0 0 20px rgba(71, 246, 255, .25);
+    }
+
+    .hud-stats {
+      justify-self: center;
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      opacity: 0;
+      transform: translateY(-8px);
+      transition: opacity .25s ease, transform .25s ease;
+    }
+
+    .hud-stats.visible { opacity: 1; transform: translateY(0); }
+
+    .score-wrap { text-align: center; }
+
+    #scoreValue {
+      display: block;
+      min-width: 3.2ch;
+      font-size: clamp(1.7rem, 7vw, 2.5rem);
+      line-height: 1;
+      font-weight: 950;
+      letter-spacing: -.05em;
+      font-variant-numeric: tabular-nums;
+      text-shadow: 0 0 24px rgba(71, 246, 255, .44);
+    }
+
+    .score-label {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: .68rem;
+      font-weight: 800;
+      letter-spacing: .14em;
+    }
+
+    .shield {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(71, 246, 255, .24);
+      border-radius: 50%;
+      color: var(--cyan);
+      background: rgba(7, 18, 39, .72);
+      box-shadow: inset 0 0 18px rgba(71, 246, 255, .08);
+      opacity: .38;
+      transition: opacity .2s ease, box-shadow .2s ease;
+    }
+
+    .shield.active {
+      opacity: 1;
+      box-shadow: 0 0 20px rgba(71, 246, 255, .3), inset 0 0 18px rgba(71, 246, 255, .15);
+    }
+
+    .top-actions {
+      justify-self: end;
+      display: flex;
+      gap: 8px;
+      pointer-events: auto;
+    }
+
+    .icon-btn {
+      width: 44px;
+      height: 44px;
+      border: 1px solid rgba(160, 194, 255, .2);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: #dfeaff;
+      background: rgba(7, 11, 30, .6);
+      backdrop-filter: blur(12px);
+      cursor: pointer;
+      transition: border-color .2s ease, background .2s ease, transform .15s ease;
+    }
+
+    .icon-btn:active { transform: scale(.93); }
+    .icon-btn:hover { border-color: rgba(71, 246, 255, .48); background: rgba(13, 22, 52, .8); }
+    .icon-btn svg { width: 20px; height: 20px; fill: currentColor; }
+
+    .combo-wrap {
+      position: absolute;
+      z-index: 4;
+      top: calc(76px + var(--safe-top));
+      left: 50%;
+      width: min(220px, 52vw);
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity .2s ease;
+      pointer-events: none;
+    }
+
+    .combo-wrap.visible { opacity: 1; }
+
+    .combo-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+      color: #cfdaef;
+      font-size: .72rem;
+      font-weight: 900;
+      letter-spacing: .08em;
+    }
+
+    #comboValue { color: var(--cyan); }
+
+    .combo-track {
+      height: 4px;
+      overflow: hidden;
+      border-radius: 99px;
+      background: rgba(174, 200, 255, .12);
+    }
+
+    #comboFill {
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--cyan), var(--violet), var(--pink));
+      box-shadow: 0 0 13px rgba(71, 246, 255, .8);
+      transition: width .18s ease;
+    }
+
+    .event-banner {
+      position: absolute;
+      z-index: 6;
+      top: calc(128px + var(--safe-top));
+      left: 50%;
+      width: min(330px, 86vw);
+      padding: 10px 13px;
+      border: 1px solid rgba(255, 215, 104, .34);
+      border-radius: 17px;
+      display: grid;
+      grid-template-columns: 34px 1fr auto;
+      align-items: center;
+      gap: 10px;
+      color: #f8fbff;
+      background: linear-gradient(105deg, rgba(24, 18, 48, .91), rgba(7, 22, 43, .91));
+      box-shadow: 0 12px 36px rgba(0, 0, 0, .28), 0 0 24px rgba(125, 228, 255, .12);
+      backdrop-filter: blur(14px);
+      opacity: 0;
+      transform: translate(-50%, -10px) scale(.96);
+      pointer-events: none;
+      transition: opacity .22s ease, transform .22s ease;
+    }
+
+    .event-banner.visible { opacity: 1; transform: translate(-50%, 0) scale(1); }
+
+    .event-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      font-size: 1.05rem;
+      background: linear-gradient(135deg, rgba(255, 209, 94, .96), rgba(255, 99, 167, .9));
+      box-shadow: 0 0 18px rgba(255, 178, 91, .28);
+    }
+
+    .event-copy { min-width: 0; text-align: left; }
+    .event-copy strong { display: block; overflow: hidden; font-size: .78rem; text-overflow: ellipsis; white-space: nowrap; }
+    .event-copy span { display: block; margin-top: 2px; overflow: hidden; color: #aebbd4; font-size: .66rem; text-overflow: ellipsis; white-space: nowrap; }
+    .event-time { color: #ffe787; font-size: .72rem; font-weight: 950; font-variant-numeric: tabular-nums; }
+
+    .overlay {
+      position: absolute;
+      z-index: 10;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: calc(82px + var(--safe-top)) calc(18px + var(--safe-right)) calc(22px + var(--safe-bottom)) calc(18px + var(--safe-left));
+      background: linear-gradient(180deg, rgba(2, 4, 14, .12), rgba(2, 4, 14, .38));
+      transition: opacity .24s ease;
+    }
+
+    .panel {
+      width: min(100%, 410px);
+      max-height: 100%;
+      overflow-y: auto;
+      padding: clamp(22px, 5vh, 32px);
+      border: 1px solid rgba(158, 191, 255, .2);
+      border-radius: 30px;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(71, 246, 255, .09), transparent 38%),
+        linear-gradient(155deg, rgba(13, 19, 50, .91), rgba(6, 9, 25, .88));
+      box-shadow: 0 26px 80px rgba(0, 0, 0, .42), inset 0 1px 0 rgba(255, 255, 255, .07);
+      backdrop-filter: blur(18px);
+      text-align: center;
+      scrollbar-width: none;
+    }
+
+    .panel::-webkit-scrollbar { display: none; }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--cyan);
+      font-size: .74rem;
+      font-weight: 900;
+      letter-spacing: .2em;
+    }
+
+    h1, h2, p { margin-top: 0; }
+
+    h1 {
+      margin-bottom: 10px;
+      font-size: clamp(2.45rem, 11vw, 4rem);
+      line-height: .94;
+      letter-spacing: -.06em;
+      font-weight: 950;
+      background: linear-gradient(120deg, #fff 16%, #8cf9ff 54%, #c899ff 82%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 0 24px rgba(71, 246, 255, .18));
+    }
+
+    h2 {
+      margin-bottom: 8px;
+      font-size: clamp(2rem, 9vw, 3rem);
+      line-height: 1;
+      letter-spacing: -.04em;
+    }
+
+    .lead {
+      margin-bottom: 22px;
+      color: #bac5dc;
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    .record-card {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      margin: 0 0 18px;
+      padding: 14px 10px;
+      border: 1px solid rgba(153, 190, 255, .14);
+      border-radius: 20px;
+      background: rgba(1, 5, 18, .34);
+    }
+
+    .record-card div + div { border-left: 1px solid rgba(153, 190, 255, .12); }
+
+    .metric-value {
+      display: block;
+      color: #f5f9ff;
+      font-size: 1.2rem;
+      font-weight: 950;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .metric-label {
+      display: block;
+      margin-top: 3px;
+      color: #8290af;
+      font-size: .68rem;
+      font-weight: 800;
+      letter-spacing: .06em;
+    }
+
+    .mission {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+      padding: 12px 14px;
+      border-radius: 18px;
+      color: #dfe8fb;
+      background: linear-gradient(90deg, rgba(91, 66, 195, .18), rgba(35, 191, 202, .12));
+      text-align: left;
+    }
+
+    .mission-icon {
+      flex: 0 0 auto;
+      width: 36px;
+      height: 36px;
+      border-radius: 13px;
+      display: grid;
+      place-items: center;
+      color: #08101f;
+      font-size: 1.1rem;
+      font-weight: 950;
+      background: linear-gradient(135deg, #6ff8ff, #bb8bff);
+      box-shadow: 0 0 20px rgba(71, 246, 255, .24);
+    }
+
+    .mission strong { display: block; font-size: .86rem; }
+    .mission span { color: #94a3c2; font-size: .76rem; }
+    .mission.done { background: rgba(45, 203, 146, .12); }
+    .mission.done .mission-icon { background: #72f3b8; }
+
+    .core-section {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .event-catalog {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin: -3px 0 17px;
+    }
+
+    .event-chip {
+      width: 34px;
+      height: 30px;
+      border: 1px solid rgba(155, 190, 255, .14);
+      border-radius: 11px;
+      display: grid;
+      place-items: center;
+      background: rgba(4, 9, 26, .44);
+      font-size: .9rem;
+    }
+
+    .section-label {
+      display: block;
+      margin: 0 0 9px 2px;
+      color: #8f9db9;
+      font-size: .73rem;
+      font-weight: 900;
+      letter-spacing: .12em;
+    }
+
+    .core-picker { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+
+    .core-choice {
+      position: relative;
+      min-height: 52px;
+      border: 1px solid rgba(165, 195, 255, .15);
+      border-radius: 16px;
+      background: rgba(2, 6, 20, .42);
+      cursor: pointer;
+      transition: transform .15s ease, border-color .18s ease, background .18s ease;
+    }
+
+    .core-choice:active { transform: scale(.94); }
+    .core-choice.selected { border-color: rgba(111, 248, 255, .75); background: rgba(53, 114, 154, .18); }
+    .core-choice.locked { opacity: .42; }
+
+    .core-dot {
+      position: absolute;
+      inset: 50% auto auto 50%;
+      width: 18px;
+      height: 18px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: var(--core-color, #47f6ff);
+      box-shadow: 0 0 17px var(--core-color, #47f6ff), inset -3px -4px 8px rgba(0, 0, 0, .25);
+    }
+
+    .lock-mark {
+      position: absolute;
+      right: 5px;
+      bottom: 4px;
+      color: #aeb9ce;
+      font-size: .6rem;
+      font-weight: 900;
+    }
+
+    .primary-btn, .secondary-btn {
+      width: 100%;
+      min-height: 56px;
+      border-radius: 18px;
+      font-weight: 950;
+      cursor: pointer;
+      transition: transform .15s ease, filter .2s ease, border-color .2s ease;
+    }
+
+    .primary-btn {
+      border: 0;
+      color: #07121b;
+      background: linear-gradient(115deg, #54f6ff, #a98aff 65%, #ff70cf);
+      box-shadow: 0 12px 38px rgba(79, 223, 255, .24), inset 0 1px 0 rgba(255, 255, 255, .55);
+    }
+
+    .secondary-btn {
+      border: 1px solid rgba(164, 196, 255, .24);
+      color: #eef5ff;
+      background: rgba(9, 16, 40, .64);
+    }
+
+    .primary-btn:active, .secondary-btn:active { transform: translateY(2px) scale(.985); }
+    .primary-btn:hover { filter: brightness(1.08); }
+    .secondary-btn:hover { border-color: rgba(71, 246, 255, .5); }
+
+    .microcopy {
+      margin: 12px 0 0;
+      color: #7785a2;
+      font-size: .73rem;
+      line-height: 1.5;
+    }
+
+    .result-score {
+      margin: 18px 0 20px;
+      font-size: clamp(3.7rem, 18vw, 5.8rem);
+      line-height: .85;
+      font-weight: 950;
+      letter-spacing: -.07em;
+      font-variant-numeric: tabular-nums;
+      text-shadow: 0 0 30px rgba(71, 246, 255, .3);
+    }
+
+    .new-record {
+      display: inline-flex;
+      margin-bottom: 13px;
+      padding: 7px 11px;
+      border-radius: 99px;
+      color: #07161b;
+      background: #6ff8ff;
+      font-size: .72rem;
+      font-weight: 950;
+      letter-spacing: .08em;
+      box-shadow: 0 0 20px rgba(71, 246, 255, .3);
+    }
+
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .result-item {
+      padding: 13px 7px;
+      border: 1px solid rgba(153, 190, 255, .12);
+      border-radius: 16px;
+      background: rgba(1, 5, 18, .28);
+    }
+
+    .button-row { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-top: 9px; }
+
+    .choice-panel { width: min(100%, 520px); }
+    .choice-lead { margin-bottom: 16px; color: #acb9d3; line-height: 1.5; }
+    .choice-grid { display: grid; gap: 9px; }
+    .choice-card {
+      width: 100%;
+      min-height: 72px;
+      padding: 12px 14px;
+      border: 1px solid rgba(154, 194, 255, .2);
+      border-radius: 18px;
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      align-items: center;
+      gap: 12px;
+      color: #f4f8ff;
+      background: rgba(5, 11, 31, .72);
+      text-align: left;
+      cursor: pointer;
+      transition: transform .15s ease, border-color .2s ease, background .2s ease;
+    }
+    .choice-card:hover { border-color: rgba(92, 241, 255, .58); background: rgba(14, 27, 60, .78); }
+    .choice-card:active { transform: scale(.98); }
+    .choice-card b { display: block; margin-bottom: 3px; font-size: .91rem; }
+    .choice-card small { display: block; color: #94a4c3; font-size: .72rem; line-height: 1.4; }
+    .choice-symbol {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, rgba(71, 246, 255, .22), rgba(190, 112, 255, .25));
+      font-size: 1.2rem;
+    }
+
+    .pause-title { margin-bottom: 24px; }
+
+    .tutorial {
+      position: absolute;
+      z-index: 7;
+      left: 50%;
+      bottom: calc(54px + var(--safe-bottom));
+      transform: translate(-50%, 10px);
+      width: max-content;
+      max-width: 86vw;
+      padding: 11px 16px;
+      border: 1px solid rgba(126, 228, 255, .2);
+      border-radius: 999px;
+      color: #e7faff;
+      background: rgba(5, 12, 29, .76);
+      backdrop-filter: blur(12px);
+      font-size: .85rem;
+      font-weight: 800;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s ease, transform .25s ease;
+    }
+
+    .tutorial.show { opacity: 1; transform: translate(-50%, 0); }
+
+    .toast {
+      position: absolute;
+      z-index: 20;
+      top: calc(96px + var(--safe-top));
+      left: 50%;
+      width: max-content;
+      max-width: 88vw;
+      padding: 11px 16px;
+      border: 1px solid rgba(117, 240, 255, .28);
+      border-radius: 999px;
+      color: #f4fcff;
+      background: rgba(8, 18, 42, .9);
+      box-shadow: 0 12px 38px rgba(0, 0, 0, .3), 0 0 22px rgba(71, 246, 255, .12);
+      backdrop-filter: blur(14px);
+      font-size: .82rem;
+      font-weight: 900;
+      opacity: 0;
+      transform: translate(-50%, -14px);
+      pointer-events: none;
+      transition: opacity .24s ease, transform .24s ease;
+    }
+
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+    .fever {
+      position: absolute;
+      z-index: 6;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(.7);
+      font-size: clamp(2.4rem, 12vw, 5rem);
+      font-weight: 1000;
+      letter-spacing: -.05em;
+      color: transparent;
+      background: linear-gradient(90deg, #54f6ff, #fff, #ff5fd1);
+      -webkit-background-clip: text;
+      background-clip: text;
+      filter: drop-shadow(0 0 22px rgba(71, 246, 255, .65));
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .fever.pop { animation: fever-pop .9s cubic-bezier(.2, .9, .22, 1) both; }
+
+    @keyframes fever-pop {
+      0% { opacity: 0; transform: translate(-50%, -50%) scale(.55); }
+      28% { opacity: 1; transform: translate(-50%, -50%) scale(1.08); }
+      72% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(1.18); }
+    }
+
+    @media (max-height: 690px) {
+      .panel { padding: 20px; border-radius: 25px; }
+      .lead { margin-bottom: 14px; }
+      .record-card, .mission, .core-section { margin-bottom: 12px; }
+      .mission { padding-block: 9px; }
+      h1 { font-size: 2.65rem; }
+      .result-score { margin: 12px 0 15px; font-size: 4rem; }
+      .event-banner { top: calc(116px + var(--safe-top)); }
+    }
+
+    @media (max-width: 370px) {
+      .result-grid { gap: 5px; }
+      .result-item { padding-inline: 3px; }
+      .result-item .metric-label { font-size: .6rem; }
+    }
+
+    @media (orientation: landscape) and (max-height: 560px) {
+      .overlay { padding-top: calc(64px + var(--safe-top)); }
+      .panel { width: min(88vw, 680px); }
+      #startScreen .panel { display: grid; grid-template-columns: 1fr 1fr; column-gap: 22px; align-items: center; }
+      #startScreen .panel > .mission, #startScreen .panel > .core-section { grid-column: 2; }
+      #startScreen .panel > .eyebrow, #startScreen .panel > h1, #startScreen .panel > .lead, #startScreen .panel > .record-card { grid-column: 1; }
+      #startScreen .panel > .primary-btn, #startScreen .panel > .microcopy { grid-column: 2; }
+      h1 { font-size: 2.8rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <canvas id="gameCanvas" aria-label="공전 방향을 바꾸며 네온 링의 틈을 통과하는 게임 화면"></canvas>
+
+    <header class="topbar">
+      <div class="brand">ORBIT ZERO</div>
+      <div class="hud-stats" id="hudStats">
+        <div class="score-wrap">
+          <span id="scoreValue">0</span>
+          <span class="score-label">SCORE</span>
+        </div>
+        <div class="shield" id="shieldIcon" aria-label="보호막 없음" title="보호막">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 20 5.5v5.8c0 5.05-3.42 9.48-8 10.7-4.58-1.22-8-5.65-8-10.7V5.5L12 2Zm0 3.05L6.5 7.46v3.84c0 3.63 2.27 6.85 5.5 7.96 3.23-1.11 5.5-4.33 5.5-7.96V7.46L12 5.05Z"/></svg>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button class="icon-btn" id="soundButton" type="button" aria-label="음향 끄기" title="음향">
+          <svg id="soundOnIcon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Zm11.5-.88v7.76a4 4 0 0 0 0-7.76Zm0-4.12v2.06a6 6 0 0 1 0 11.88V20a8 8 0 0 0 0-16Z"/></svg>
+          <svg id="soundOffIcon" viewBox="0 0 24 24" aria-hidden="true" hidden><path d="m3.27 2 18.73 18.73-1.27 1.27-4.28-4.28A7.92 7.92 0 0 1 15.5 20v-2.06c.48-.12.94-.3 1.36-.54L13 13.54V19l-5-4H4V9h1.46L2 5.54 3.27 2ZM13 5v4.73L9.82 6.55 13 4v1Zm2.5 3.12a4 4 0 0 1 2.18 5.78l-1.5-1.5a2 2 0 0 0-.68-2.08v-2.2Zm0-4.12a8 8 0 0 1 5.92 11.38l-1.57-1.57A6 6 0 0 0 15.5 6.06V4Z"/></svg>
+        </button>
+        <button class="icon-btn" id="pauseButton" type="button" aria-label="게임 일시정지" title="일시정지" hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7V5Zm6 0h4v14h-4V5Z"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="combo-wrap" id="comboWrap" aria-hidden="true">
+      <div class="combo-row"><span>FEVER</span><span id="comboValue">0 / 12</span></div>
+      <div class="combo-track"><div id="comboFill"></div></div>
+    </div>
+
+    <div class="event-banner" id="eventBanner" aria-hidden="true">
+      <div class="event-icon" id="eventIcon">☄</div>
+      <div class="event-copy"><strong id="eventName">유성우</strong><span id="eventDesc">붉은 궤적을 피하세요</span></div>
+      <span class="event-time" id="eventTime">7.0</span>
+    </div>
+
+    <section class="overlay" id="startScreen">
+      <div class="panel">
+        <p class="eyebrow">ONE TOUCH ARCADE</p>
+        <h1>ORBIT<br />ZERO</h1>
+        <p class="lead">한 번의 터치. 매 판 달라지는 우주.</p>
+
+        <div class="record-card" aria-label="게임 기록">
+          <div><span class="metric-value" id="bestValue">0</span><span class="metric-label">최고 점수</span></div>
+          <div><span class="metric-value" id="totalRingsValue">0</span><span class="metric-label">통과 링</span></div>
+          <div><span class="metric-value" id="energyValue">0</span><span class="metric-label">에너지</span></div>
+        </div>
+
+        <div class="mission" id="dailyMission">
+          <div class="mission-icon" id="missionIcon">D</div>
+          <div><strong id="missionTitle">오늘의 궤도</strong><span id="missionText">링 25개 통과 · 보상 20</span></div>
+        </div>
+
+        <div class="event-catalog" aria-label="등장 이벤트: 보너스 러시, 유성우, 미러 게이트, 시간 왜곡, 정전, 공명 폭풍, 타이탄 관문">
+          <span class="event-chip" title="보너스 러시">✦</span><span class="event-chip" title="유성우">☄</span><span class="event-chip" title="미러 게이트">◈</span><span class="event-chip" title="시간 왜곡">◷</span><span class="event-chip" title="블랙아웃">◐</span><span class="event-chip" title="공명 폭풍">◎</span><span class="event-chip" title="타이탄 관문">♛</span>
+        </div>
+
+        <div class="core-section">
+          <span class="section-label">CORE</span>
+          <div class="core-picker" id="corePicker" aria-label="코어 색상 선택"></div>
+        </div>
+
+        <button class="primary-btn" id="playButton" type="button">궤도 진입</button>
+        <p class="microcopy">화면 탭 · 클릭 · 스페이스바로 방향 전환</p>
+      </div>
+    </section>
+
+    <section class="overlay" id="pauseScreen" hidden>
+      <div class="panel">
+        <p class="eyebrow">ORBIT HOLD</p>
+        <h2 class="pause-title">일시정지</h2>
+        <button class="primary-btn" id="resumeButton" type="button">계속하기</button>
+        <div class="button-row">
+          <button class="secondary-btn" id="restartFromPauseButton" type="button">다시 시작</button>
+          <button class="secondary-btn" id="homeFromPauseButton" type="button">홈으로</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="overlay" id="choiceScreen" hidden>
+      <div class="panel choice-panel">
+        <p class="eyebrow">QUANTUM FORK</p>
+        <h2>항로를 선택하세요</h2>
+        <p class="choice-lead">안전하게 오래 갈지, 위험을 안고 점수를 폭발시킬지 결정합니다.</p>
+        <div class="choice-grid">
+          <button class="choice-card" type="button" data-choice="stabilizer"><span class="choice-symbol">🛡</span><span><b>안정 항로</b><small>보호막 1개 · 다음 5개 관문이 더 넓어집니다</small></span></button>
+          <button class="choice-card" type="button" data-choice="overdrive"><span class="choice-symbol">⚡</span><span><b>폭주 항로</b><small>8초간 점수 3배 · 관문 속도도 빨라집니다</small></span></button>
+          <button class="choice-card" type="button" data-choice="magnet"><span class="choice-symbol">✧</span><span><b>수집 항로</b><small>다음 6개 관문의 에너지를 자동으로 끌어옵니다</small></span></button>
+        </div>
+      </div>
+    </section>
+
+    <section class="overlay" id="gameOverScreen" hidden>
+      <div class="panel">
+        <p class="eyebrow">RUN COMPLETE</p>
+        <h2>궤도 종료</h2>
+        <span class="new-record" id="newRecordBadge" hidden>NEW RECORD</span>
+        <div class="result-score" id="resultScore">0</div>
+        <div class="result-grid">
+          <div class="result-item"><span class="metric-value" id="resultRings">0</span><span class="metric-label">통과</span></div>
+          <div class="result-item"><span class="metric-value" id="resultPerfects">0</span><span class="metric-label">퍼펙트</span></div>
+          <div class="result-item"><span class="metric-value" id="resultCombo">0</span><span class="metric-label">최대 콤보</span></div>
+          <div class="result-item"><span class="metric-value" id="resultEvents">0</span><span class="metric-label">이벤트</span></div>
+        </div>
+        <button class="primary-btn" id="replayButton" type="button">한 번 더</button>
+        <div class="button-row">
+          <button class="secondary-btn" id="shareButton" type="button">기록 공유</button>
+          <button class="secondary-btn" id="homeButton" type="button">홈으로</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="tutorial" id="tutorialHint">화면을 탭하면 공전 방향이 바뀝니다</div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <div class="fever" id="feverText" aria-hidden="true">FEVER ×2</div>
+    <div id="announcer" class="sr-only" aria-live="polite"></div>
+  </div>
+
+  <script>
+    (() => {
+      'use strict';
+
+      const TAU = Math.PI * 2;
+      const canvas = document.getElementById('gameCanvas');
+      const ctx = canvas.getContext('2d', { alpha: false });
+      const els = {
+        start: document.getElementById('startScreen'),
+        pause: document.getElementById('pauseScreen'),
+        choice: document.getElementById('choiceScreen'),
+        over: document.getElementById('gameOverScreen'),
+        hud: document.getElementById('hudStats'),
+        score: document.getElementById('scoreValue'),
+        best: document.getElementById('bestValue'),
+        totalRings: document.getElementById('totalRingsValue'),
+        energy: document.getElementById('energyValue'),
+        shield: document.getElementById('shieldIcon'),
+        comboWrap: document.getElementById('comboWrap'),
+        comboValue: document.getElementById('comboValue'),
+        comboFill: document.getElementById('comboFill'),
+        eventBanner: document.getElementById('eventBanner'),
+        eventIcon: document.getElementById('eventIcon'),
+        eventName: document.getElementById('eventName'),
+        eventDesc: document.getElementById('eventDesc'),
+        eventTime: document.getElementById('eventTime'),
+        pauseButton: document.getElementById('pauseButton'),
+        soundButton: document.getElementById('soundButton'),
+        soundOn: document.getElementById('soundOnIcon'),
+        soundOff: document.getElementById('soundOffIcon'),
+        play: document.getElementById('playButton'),
+        resume: document.getElementById('resumeButton'),
+        restartPause: document.getElementById('restartFromPauseButton'),
+        homePause: document.getElementById('homeFromPauseButton'),
+        replay: document.getElementById('replayButton'),
+        home: document.getElementById('homeButton'),
+        share: document.getElementById('shareButton'),
+        tutorial: document.getElementById('tutorialHint'),
+        toast: document.getElementById('toast'),
+        fever: document.getElementById('feverText'),
+        resultScore: document.getElementById('resultScore'),
+        resultRings: document.getElementById('resultRings'),
+        resultPerfects: document.getElementById('resultPerfects'),
+        resultCombo: document.getElementById('resultCombo'),
+        resultEvents: document.getElementById('resultEvents'),
+        newRecord: document.getElementById('newRecordBadge'),
+        picker: document.getElementById('corePicker'),
+        mission: document.getElementById('dailyMission'),
+        missionIcon: document.getElementById('missionIcon'),
+        missionText: document.getElementById('missionText'),
+        announcer: document.getElementById('announcer')
+      };
+      const choiceButtons = [...document.querySelectorAll('[data-choice]')];
+
+      const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const skins = [
+        { name: '아쿠아', color: '#47f6ff', glow: '#3cbcff', unlock: 0 },
+        { name: '솔라', color: '#ffd84c', glow: '#ff7a3d', unlock: 20 },
+        { name: '바이올렛', color: '#bf78ff', glow: '#774cff', unlock: 60 },
+        { name: '노바', color: '#ff5e9e', glow: '#58f6d3', unlock: 120 }
+      ];
+
+      const defaultProfile = {
+        best: 0,
+        totalRings: 0,
+        energy: 0,
+        games: 0,
+        totalEvents: 0,
+        skin: 0,
+        sound: true,
+        tutorialSeen: false,
+        dailyCompleted: ''
+      };
+
+      function loadProfile() {
+        try {
+          return { ...defaultProfile, ...JSON.parse(localStorage.getItem('orbit-zero-profile') || '{}') };
+        } catch {
+          return { ...defaultProfile };
+        }
+      }
+
+      let profile = loadProfile();
+      const today = new Date();
+      const dateKey = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+      const dailyTarget = 22 + ((today.getDate() * 7 + today.getMonth()) % 9);
+      let state = 'menu';
+      let game = null;
+      let lastTime = performance.now();
+      let width = innerWidth;
+      let height = innerHeight;
+      let dpr = 1;
+      let centerX = width / 2;
+      let centerY = height * .48;
+      let orbitRadius = 92;
+      let outerRadius = 420;
+      let stars = [];
+      let idleAngle = -Math.PI / 2;
+      let toastTimer = 0;
+      let audioCtx = null;
+      let masterGain = null;
+
+      const fmt = value => new Intl.NumberFormat('ko-KR').format(Math.round(value));
+      const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+      const rand = (min, max) => min + Math.random() * (max - min);
+      const normalizeAngle = angle => ((angle % TAU) + TAU) % TAU;
+      const angleDelta = (a, b) => Math.atan2(Math.sin(a - b), Math.cos(a - b));
+
+      function saveProfile() {
+        localStorage.setItem('orbit-zero-profile', JSON.stringify(profile));
+      }
+
+      function resize() {
+        width = innerWidth;
+        height = innerHeight;
+        dpr = Math.min(devicePixelRatio || 1, 2);
+        canvas.width = Math.round(width * dpr);
+        canvas.height = Math.round(height * dpr);
+        canvas.style.width = `${width}px`;
+        canvas.style.height = `${height}px`;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        centerX = width / 2;
+        centerY = height * (width > height ? .52 : .47);
+        orbitRadius = clamp(Math.min(width, height) * .22, 72, 124);
+        outerRadius = Math.hypot(Math.max(centerX, width - centerX), Math.max(centerY, height - centerY)) + 68;
+        buildStars();
+      }
+
+      function buildStars() {
+        const count = Math.round(clamp((width * height) / 7600, 45, 120));
+        stars = Array.from({ length: count }, () => ({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          r: rand(.45, 1.5),
+          phase: rand(0, TAU),
+          speed: rand(.5, 1.4),
+          tint: Math.random() < .18 ? 190 : 220
+        }));
+      }
+
+      function initAudio() {
+        if (!profile.sound) return;
+        if (!audioCtx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (!AudioContext) return;
+          audioCtx = new AudioContext();
+          masterGain = audioCtx.createGain();
+          masterGain.gain.value = .28;
+          masterGain.connect(audioCtx.destination);
+        }
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+      }
+
+      function tone(freq, duration = .08, type = 'sine', volume = .2, delay = 0, slide = 1) {
+        if (!profile.sound || !audioCtx || !masterGain) return;
+        const start = audioCtx.currentTime + delay;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, start);
+        osc.frequency.exponentialRampToValueAtTime(Math.max(30, freq * slide), start + duration);
+        gain.gain.setValueAtTime(.0001, start);
+        gain.gain.exponentialRampToValueAtTime(volume, start + .012);
+        gain.gain.exponentialRampToValueAtTime(.0001, start + duration);
+        osc.connect(gain);
+        gain.connect(masterGain);
+        osc.start(start);
+        osc.stop(start + duration + .02);
+      }
+
+      function sound(name) {
+        if (!profile.sound) return;
+        initAudio();
+        if (name === 'tap') tone(330, .055, 'triangle', .13, 0, 1.35);
+        if (name === 'pass') tone(520 + Math.min(game?.combo || 0, 10) * 24, .08, 'sine', .15, 0, 1.08);
+        if (name === 'perfect') {
+          tone(720, .1, 'sine', .18, 0, 1.15);
+          tone(1080, .14, 'triangle', .13, .045, 1.08);
+        }
+        if (name === 'energy') {
+          tone(630, .08, 'square', .1, 0, 1.35);
+          tone(910, .12, 'sine', .15, .055, 1.1);
+        }
+        if (name === 'shield') {
+          tone(260, .2, 'sine', .18, 0, 2.1);
+          tone(520, .24, 'sine', .12, .08, 1.4);
+        }
+        if (name === 'hit') {
+          tone(110, .34, 'sawtooth', .22, 0, .28);
+          tone(70, .4, 'square', .12, .02, .45);
+        }
+        if (name === 'start') {
+          tone(330, .12, 'sine', .12, 0, 1.02);
+          tone(495, .14, 'sine', .13, .09, 1.02);
+          tone(660, .18, 'triangle', .14, .18, 1.05);
+        }
+        if (name === 'fever') {
+          [392, 523, 659, 784].forEach((f, i) => tone(f, .2, 'triangle', .14, i * .055, 1.04));
+        }
+        if (name === 'event') {
+          tone(294, .12, 'triangle', .13, 0, 1.25);
+          tone(440, .16, 'sine', .15, .075, 1.18);
+          tone(659, .2, 'sine', .12, .15, 1.05);
+        }
+        if (name === 'warning') {
+          tone(185, .14, 'sawtooth', .13, 0, .82);
+          tone(150, .14, 'sawtooth', .11, .2, .82);
+        }
+        if (name === 'boss') {
+          tone(92, .34, 'sawtooth', .22, 0, .72);
+          tone(138, .38, 'square', .12, .18, .82);
+          tone(220, .42, 'triangle', .14, .4, 1.18);
+        }
+        if (name === 'choice') {
+          tone(440, .1, 'sine', .12, 0, 1.18);
+          tone(660, .16, 'triangle', .14, .07, 1.12);
+        }
+      }
+
+      function vibrate(pattern) {
+        if ('vibrate' in navigator) navigator.vibrate(pattern);
+      }
+
+      function showToast(message, duration = 1800) {
+        clearTimeout(toastTimer);
+        els.toast.textContent = message;
+        els.toast.classList.add('show');
+        toastTimer = setTimeout(() => els.toast.classList.remove('show'), duration);
+      }
+
+      function updateProfileUI() {
+        els.best.textContent = fmt(profile.best);
+        els.totalRings.textContent = fmt(profile.totalRings);
+        els.energy.textContent = fmt(profile.energy);
+        const done = profile.dailyCompleted === dateKey;
+        els.mission.classList.toggle('done', done);
+        els.missionIcon.textContent = done ? '✓' : 'D';
+        els.missionText.textContent = done ? '오늘의 보상을 획득했습니다' : `링 ${dailyTarget}개 통과 · 보상 20`;
+        renderCorePicker();
+        updateSoundButton();
+      }
+
+      function renderCorePicker() {
+        els.picker.innerHTML = '';
+        skins.forEach((skin, index) => {
+          const unlocked = profile.totalRings >= skin.unlock;
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = `core-choice${profile.skin === index ? ' selected' : ''}${unlocked ? '' : ' locked'}`;
+          button.setAttribute('aria-label', unlocked ? `${skin.name} 코어 선택` : `${skin.name} 코어 잠김, 링 ${skin.unlock}개 필요`);
+          button.dataset.index = index;
+          button.innerHTML = `<span class="core-dot" style="--core-color:${skin.color}"></span>${unlocked ? '' : `<span class="lock-mark">${skin.unlock}</span>`}`;
+          button.addEventListener('click', () => {
+            if (!unlocked) {
+              showToast(`누적 링 ${skin.unlock}개에서 해금됩니다`);
+              sound('tap');
+              return;
+            }
+            profile.skin = index;
+            saveProfile();
+            renderCorePicker();
+            sound('energy');
+          });
+          els.picker.appendChild(button);
+        });
+      }
+
+      function updateSoundButton() {
+        els.soundOn.hidden = !profile.sound;
+        els.soundOff.hidden = profile.sound;
+        els.soundButton.setAttribute('aria-label', profile.sound ? '음향 끄기' : '음향 켜기');
+      }
+
+      function setScreen(next) {
+        els.start.hidden = next !== 'menu';
+        els.pause.hidden = next !== 'paused';
+        els.choice.hidden = next !== 'choice';
+        els.over.hidden = next !== 'over';
+        const active = next === 'playing' || next === 'ending' || next === 'paused' || next === 'choice';
+        els.hud.classList.toggle('visible', active);
+        els.comboWrap.classList.toggle('visible', active);
+        els.pauseButton.hidden = !(next === 'playing' || next === 'paused');
+        if (next === 'menu' || next === 'over') els.eventBanner.classList.remove('visible');
+      }
+
+      function createGame() {
+        return {
+          score: 0,
+          ringsPassed: 0,
+          perfects: 0,
+          combo: 0,
+          bestCombo: 0,
+          energy: 0,
+          angle: -Math.PI / 2,
+          direction: 1,
+          angularSpeed: 1.72,
+          playerSize: clamp(orbitRadius * .09, 7.5, 11),
+          rings: [],
+          meteors: [],
+          particles: [],
+          trail: [],
+          elapsed: 0,
+          spawnTimer: .55,
+          pulse: 0,
+          shake: 0,
+          flash: 0,
+          shield: 0,
+          fever: 0,
+          feverCount: 0,
+          tutorialTimer: profile.tutorialSeen ? 0 : 4.4,
+          dead: false,
+          endTimer: 0,
+          dailyCompleted: false,
+          nextShieldAt: 9,
+          event: null,
+          eventHistory: [],
+          eventsSurvived: 0,
+          nextEventAt: 7,
+          nextBossAt: 20,
+          nextChoiceAt: 12,
+          pendingChoice: false,
+          bossRemaining: 0,
+          stabilizer: 0,
+          magnet: 0,
+          buff: null,
+          dodges: 0
+        };
+      }
+
+      function startGame() {
+        initAudio();
+        game = createGame();
+        state = 'playing';
+        lastTime = performance.now();
+        setScreen('playing');
+        updateHud();
+        updateEventHud();
+        els.tutorial.classList.toggle('show', !profile.tutorialSeen);
+        sound('start');
+      }
+
+      function updateHud() {
+        if (!game) return;
+        els.score.textContent = fmt(game.score);
+        els.comboValue.textContent = game.fever > 0 ? '×2 ACTIVE' : `${game.combo} / 12`;
+        els.comboFill.style.width = `${game.fever > 0 ? 100 : clamp(game.combo / 12 * 100, 0, 100)}%`;
+        els.comboFill.style.filter = game.fever > 0 ? 'hue-rotate(60deg) brightness(1.35)' : '';
+        els.shield.classList.toggle('active', game.shield > 0);
+        els.shield.setAttribute('aria-label', game.shield > 0 ? '보호막 활성' : '보호막 없음');
+      }
+
+      const eventDefinitions = {
+        bonus: { icon: '✦', name: '보너스 러시', desc: '넓은 황금 관문 · 에너지 보너스', duration: 8 },
+        meteor: { icon: '☄', name: '유성우', desc: '붉은 궤적의 유성을 피하세요', duration: 8 },
+        mirror: { icon: '◈', name: '미러 게이트', desc: '두 개의 틈 · 점수 1.5배', duration: 9 },
+        time: { icon: '◷', name: '시간 왜곡', desc: '느린 관문 · 점수 2배', duration: 7 },
+        blackout: { icon: '◐', name: '블랙아웃', desc: '가까워져야 관문이 보입니다', duration: 7 },
+        resonance: { icon: '◎', name: '공명 폭풍', desc: '파동이 빛날 때 방향 전환', duration: 8 },
+        boss: { icon: '♛', name: '타이탄 관문', desc: '강화 관문 3개를 연속 돌파', duration: Infinity }
+      };
+
+      function scoreMultiplier() {
+        if (!game) return 1;
+        let multiplier = game.fever > 0 ? 2 : 1;
+        if (game.event?.type === 'mirror') multiplier *= 1.5;
+        if (game.event?.type === 'time') multiplier *= 2;
+        if (game.buff?.type === 'overdrive') multiplier *= 3;
+        return multiplier;
+      }
+
+      function updateEventHud() {
+        if (!game) {
+          els.eventBanner.classList.remove('visible');
+          return;
+        }
+        let data = null;
+        let timeText = '';
+        if (game.event) {
+          data = eventDefinitions[game.event.type];
+          timeText = game.event.type === 'boss' ? `${game.bossRemaining}문` : `${Math.max(0, game.event.remaining).toFixed(1)}s`;
+        } else if (game.buff?.type === 'overdrive') {
+          data = { icon: '⚡', name: '폭주 항로', desc: '점수 3배 · 관문 가속' };
+          timeText = `${Math.max(0, game.buff.remaining).toFixed(1)}s`;
+        } else if (game.stabilizer > 0) {
+          data = { icon: '🛡', name: '안정 항로', desc: '관문 확장 · 보호막 가동' };
+          timeText = `${game.stabilizer}문`;
+        } else if (game.magnet > 0) {
+          data = { icon: '✧', name: '수집 항로', desc: '에너지 자동 흡수' };
+          timeText = `${game.magnet}문`;
+        }
+        els.eventBanner.classList.toggle('visible', Boolean(data) && state !== 'menu' && state !== 'over');
+        if (!data) return;
+        els.eventIcon.textContent = data.icon;
+        els.eventName.textContent = data.name;
+        els.eventDesc.textContent = data.desc;
+        els.eventTime.textContent = timeText;
+      }
+
+      function pickRandomEvent() {
+        let pool = ['bonus', 'meteor', 'mirror', 'time', 'resonance'];
+        if (game.ringsPassed >= 12) pool.push('blackout');
+        const recent = game.eventHistory.slice(-2);
+        const fresh = pool.filter(type => !recent.includes(type));
+        const choices = fresh.length ? fresh : pool;
+        return choices[Math.floor(Math.random() * choices.length)];
+      }
+
+      function startEvent(type) {
+        if (!game || game.event || game.dead) return;
+        const definition = eventDefinitions[type];
+        game.event = {
+          type,
+          remaining: definition.duration,
+          spawnTimer: type === 'meteor' ? .55 : 0,
+          pulseTimer: type === 'resonance' ? .65 : 0,
+          pulseWindow: 0,
+          pulseClaimed: false,
+          wave: 1
+        };
+        game.eventHistory.push(type);
+        if (type === 'boss') {
+          game.bossRemaining = 3;
+          game.rings = game.rings.filter(ring => ring.radius < orbitRadius * 1.35);
+          game.spawnTimer = .18;
+          sound('boss');
+          vibrate([22, 40, 22, 40, 45]);
+        } else {
+          sound(type === 'meteor' || type === 'blackout' ? 'warning' : 'event');
+          vibrate(type === 'meteor' ? [18, 28, 18] : 15);
+        }
+        showToast(`${definition.icon} ${definition.name} · ${definition.desc}`, 2350);
+        els.announcer.textContent = `${definition.name} 이벤트 시작. ${definition.desc}`;
+        updateEventHud();
+      }
+
+      function finishEvent(reward = true) {
+        if (!game?.event) return;
+        const ended = game.event.type;
+        game.event = null;
+        game.bossRemaining = 0;
+        game.meteors = [];
+        game.nextEventAt = game.ringsPassed + 7 + Math.floor(Math.random() * 4);
+        if (reward && !game.dead) {
+          game.eventsSurvived++;
+          game.score += ended === 'boss' ? 100 : 24;
+          if (ended === 'boss') game.energy += 12;
+          showToast(ended === 'boss' ? '타이탄 격파 · +100 · 에너지 +12' : '이벤트 돌파 · +24', 1800);
+          sound(ended === 'boss' ? 'fever' : 'energy');
+          updateHud();
+        }
+        updateEventHud();
+        if (game.pendingChoice && !game.dead) {
+          game.pendingChoice = false;
+          openChoice();
+        }
+      }
+
+      function openChoice() {
+        if (!game || game.dead) return;
+        if (game.event) {
+          game.pendingChoice = true;
+          return;
+        }
+        state = 'choice';
+        setScreen('choice');
+        updateEventHud();
+        sound('choice');
+        vibrate(18);
+        els.announcer.textContent = '양자 갈림길입니다. 안정, 폭주, 수집 항로 중 하나를 선택하세요.';
+      }
+
+      function applyChoice(type) {
+        if (state !== 'choice' || !game) return;
+        if (type === 'stabilizer') {
+          game.shield = 1;
+          game.stabilizer = 5;
+          showToast('안정 항로 · 보호막 + 넓은 관문 5개');
+          sound('shield');
+        } else if (type === 'overdrive') {
+          game.buff = { type: 'overdrive', remaining: 8 };
+          showToast('폭주 항로 · 8초간 점수 3배');
+          sound('fever');
+        } else {
+          game.magnet = 6;
+          showToast('수집 항로 · 에너지 6개 자동 흡수');
+          sound('energy');
+        }
+        state = 'playing';
+        lastTime = performance.now();
+        setScreen('playing');
+        updateHud();
+        updateEventHud();
+      }
+
+      function checkMilestones() {
+        if (!game || game.dead || state !== 'playing') return;
+        if (game.ringsPassed >= game.nextChoiceAt) {
+          game.nextChoiceAt += game.nextChoiceAt < 30 ? 20 : 25;
+          openChoice();
+          return;
+        }
+        if (!game.event && game.ringsPassed >= game.nextBossAt) {
+          game.nextBossAt += 25;
+          startEvent('boss');
+          return;
+        }
+        if (!game.event && game.ringsPassed >= game.nextEventAt) startEvent(pickRandomEvent());
+      }
+
+      function spawnMeteor() {
+        const travelTime = rand(1.45, 1.85);
+        const predicted = game.angle + game.direction * game.angularSpeed * travelTime;
+        game.meteors.push({
+          angle: normalizeAngle(predicted + rand(-.65, .65)),
+          radius: outerRadius,
+          previousRadius: outerRadius,
+          speed: (outerRadius - orbitRadius) / travelTime,
+          size: rand(7, 11),
+          passed: false,
+          alpha: 1,
+          spin: rand(-5, 5)
+        });
+      }
+
+      function updateActiveEvent(dt, step) {
+        if (!game?.event || game.dead || state !== 'playing') return;
+        const event = game.event;
+        if (Number.isFinite(event.remaining)) event.remaining -= dt;
+
+        if (event.type === 'meteor') {
+          event.spawnTimer -= dt;
+          if (event.spawnTimer <= 0) {
+            spawnMeteor();
+            event.spawnTimer = rand(1.05, 1.42);
+          }
+        }
+
+        if (event.type === 'resonance') {
+          event.pulseTimer -= dt;
+          event.pulseWindow = Math.max(0, event.pulseWindow - dt);
+          event.wave += dt * 1.15;
+          if (event.pulseTimer <= 0) {
+            event.pulseTimer = 1.35;
+            event.pulseWindow = .42;
+            event.pulseClaimed = false;
+            event.wave = 0;
+            tone(245, .11, 'sine', .1, 0, 1.32);
+          }
+        }
+
+        for (const meteor of game.meteors) {
+          meteor.previousRadius = meteor.radius;
+          meteor.radius -= meteor.speed * step;
+          if (!meteor.passed && meteor.previousRadius > orbitRadius && meteor.radius <= orbitRadius) {
+            meteor.passed = true;
+            const hitWindow = game.playerSize / orbitRadius + .105;
+            if (Math.abs(angleDelta(game.angle, meteor.angle)) <= hitWindow) {
+              if (game.shield > 0) {
+                game.shield = 0;
+                game.combo = 0;
+                game.shake = 11;
+                game.flash = .5;
+                const x = centerX + Math.cos(meteor.angle) * orbitRadius;
+                const y = centerY + Math.sin(meteor.angle) * orbitRadius;
+                burst(x, y, '#64f6ff', 34, 230);
+                showToast('보호막이 유성을 막았습니다');
+                sound('shield');
+                vibrate([28, 24, 16]);
+                updateHud();
+              } else {
+                endGame();
+              }
+            } else {
+              game.dodges++;
+              game.score += Math.round(7 * scoreMultiplier());
+              updateHud();
+            }
+          }
+          if (meteor.passed && meteor.radius < orbitRadius * .55) meteor.alpha -= dt * 2.8;
+        }
+        game.meteors = game.meteors.filter(meteor => meteor.radius > 5 && meteor.alpha > 0);
+
+        if (event.remaining <= 0) finishEvent(true);
+        updateEventHud();
+      }
+
+      function spawnRing() {
+        const boss = game.event?.type === 'boss' && game.bossRemaining > 0;
+        if (boss && game.rings.some(ring => ring.boss && !ring.passed)) {
+          game.spawnTimer = .16;
+          return;
+        }
+        const difficulty = clamp(game.elapsed / 78, 0, 1);
+        const speed = clamp(Math.min(width, height) * (.24 + difficulty * .11), 122, 228) * (boss ? .82 : 1);
+        const speedFactor = (game.event?.type === 'time' ? .58 : 1) * (game.buff?.type === 'overdrive' ? 1.28 : 1);
+        const timeToOrbit = (outerRadius - orbitRadius) / (speed * speedFactor);
+        const reachable = Math.min(Math.PI * .95, game.angularSpeed * timeToOrbit * .74);
+        const lead = game.angle + game.direction * game.angularSpeed * timeToOrbit * rand(.18, .58);
+        const offset = rand(-reachable, reachable);
+        let gapAngle = normalizeAngle(lead + offset);
+        if (game.rings.length) {
+          const previous = game.rings[game.rings.length - 1];
+          const crossingGap = angleDelta(gapAngle, previous.gapAngle);
+          const maxShift = clamp(game.angularSpeed * (game.lastInterval || 1.35) * .82, .65, 2.2);
+          if (Math.abs(crossingGap) > maxShift) gapAngle = normalizeAngle(previous.gapAngle + Math.sign(crossingGap) * maxShift);
+        }
+        const special = !boss && game.ringsPassed >= game.nextShieldAt;
+        const mirror = !boss && game.event?.type === 'mirror';
+        const bonus = !boss && game.event?.type === 'bonus';
+        let gapWidth = special ? 1.05 : rand(1.02 - difficulty * .27, 1.2 - difficulty * .32);
+        if (bonus) gapWidth += .32;
+        if (game.stabilizer > 0) gapWidth += .28;
+        if (game.buff?.type === 'overdrive') gapWidth -= .08;
+        if (boss) gapWidth = clamp(.9 - difficulty * .12, .72, .9);
+        const shardBase = mirror && Math.random() < .5 ? gapAngle + Math.PI : gapAngle;
+        const shardAngle = normalizeAngle(shardBase + rand(-gapWidth * .16, gapWidth * .16));
+        game.rings.push({
+          radius: outerRadius,
+          previousRadius: outerRadius,
+          speed,
+          gapAngle,
+          gapWidth,
+          shardAngle,
+          thickness: boss ? 16 : clamp(8 + difficulty * 3, 8, 12),
+          hue: boss ? 18 : bonus ? 46 : (185 + game.ringsPassed * 31 + Math.random() * 32) % 360,
+          passed: false,
+          broken: false,
+          special,
+          mirror,
+          bonus,
+          boss,
+          shardTaken: false,
+          alpha: 1
+        });
+        let interval = boss ? 1.5 : clamp(1.52 - difficulty * .48, .92, 1.52);
+        if (bonus) interval *= .82;
+        if (game.buff?.type === 'overdrive') interval *= .84;
+        game.lastInterval = interval;
+        game.spawnTimer = interval;
+      }
+
+      function reverseDirection() {
+        if (state !== 'playing' || !game || game.dead) return;
+        game.direction *= -1;
+        game.pulse = 1;
+        const px = centerX + Math.cos(game.angle) * orbitRadius;
+        const py = centerY + Math.sin(game.angle) * orbitRadius;
+        const resonance = game.event?.type === 'resonance' && game.event.pulseWindow > 0 && !game.event.pulseClaimed;
+        if (resonance) {
+          game.event.pulseClaimed = true;
+          game.score += Math.round(14 * scoreMultiplier());
+          game.combo++;
+          game.bestCombo = Math.max(game.bestCombo, game.combo);
+          burst(px, py, '#fff29a', 22, 160);
+          sound('perfect');
+          vibrate([10, 18, 10]);
+          showToast('공명 PERFECT · +14', 760);
+          updateHud();
+        } else {
+          burst(px, py, skins[profile.skin].color, 7, 55);
+          sound('tap');
+          vibrate(7);
+        }
+        if (!profile.tutorialSeen) {
+          profile.tutorialSeen = true;
+          saveProfile();
+          els.tutorial.classList.remove('show');
+        }
+      }
+
+      function burst(x, y, color, count = 14, speed = 110) {
+        if (!game) return;
+        const amount = reducedMotion ? Math.ceil(count * .45) : count;
+        for (let i = 0; i < amount; i++) {
+          const angle = rand(0, TAU);
+          const velocity = rand(speed * .35, speed);
+          game.particles.push({
+            x, y,
+            vx: Math.cos(angle) * velocity,
+            vy: Math.sin(angle) * velocity,
+            life: rand(.35, .85),
+            maxLife: .85,
+            size: rand(1.5, 4.4),
+            color,
+            drag: rand(.91, .97)
+          });
+        }
+      }
+
+      function activateFever() {
+        game.fever = 6.2;
+        game.feverCount++;
+        game.combo = 0;
+        game.flash = .65;
+        els.fever.classList.remove('pop');
+        void els.fever.offsetWidth;
+        els.fever.classList.add('pop');
+        showToast('피버 발동 · 점수 2배', 1500);
+        sound('fever');
+        vibrate([18, 35, 24]);
+      }
+
+      function resolveCrossing(ring) {
+        if (ring.passed || game.dead) return;
+        ring.passed = true;
+        const playerAngularSize = game.playerSize / orbitRadius;
+        const safeHalf = Math.max(.13, ring.gapWidth / 2 - playerAngularSize - ring.thickness / orbitRadius * .55);
+        const gapAngles = ring.mirror ? [ring.gapAngle, normalizeAngle(ring.gapAngle + Math.PI)] : [ring.gapAngle];
+        const delta = Math.min(...gapAngles.map(angle => Math.abs(angleDelta(game.angle, angle))));
+
+        if (delta <= safeHalf) {
+          const perfectWindow = Math.max(.105, safeHalf * .32);
+          const perfect = delta <= perfectWindow;
+          game.ringsPassed++;
+          game.combo += perfect ? 2 : 1;
+          game.bestCombo = Math.max(game.bestCombo, game.combo);
+          const multiplier = scoreMultiplier();
+          game.score += Math.round((perfect ? 18 + game.combo * 1.5 : 10 + game.combo * .7) * multiplier);
+          if (perfect) game.perfects++;
+
+          const shardDelta = Math.abs(angleDelta(game.angle, ring.shardAngle));
+          const magneticCollect = game.magnet > 0;
+          if (magneticCollect || shardDelta < Math.max(.14, safeHalf * .55)) {
+            ring.shardTaken = true;
+            game.energy++;
+            game.score += 5 * multiplier;
+            sound('energy');
+          } else {
+            sound(perfect ? 'perfect' : 'pass');
+          }
+
+          if (game.magnet > 0) game.magnet--;
+          if (game.stabilizer > 0) game.stabilizer--;
+
+          if (ring.bonus) {
+            game.energy += 2;
+            game.score += Math.round(15 * multiplier);
+            const bx = centerX + Math.cos(game.angle) * orbitRadius;
+            const by = centerY + Math.sin(game.angle) * orbitRadius;
+            burst(bx, by, '#ffe56e', 18, 145);
+          }
+
+          if (ring.special) {
+            game.shield = 1;
+            game.nextShieldAt += 11 + Math.floor(game.ringsPassed / 28);
+            ring.shardTaken = true;
+            showToast('양자 보호막 충전');
+            sound('shield');
+          } else if (perfect) {
+            const px = centerX + Math.cos(game.angle) * orbitRadius;
+            const py = centerY + Math.sin(game.angle) * orbitRadius;
+            burst(px, py, '#ffffff', 18, 150);
+          }
+
+          if (ring.boss) {
+            game.bossRemaining = Math.max(0, game.bossRemaining - 1);
+            game.score += Math.round(35 * multiplier);
+            game.shake = 6;
+            const bx = centerX + Math.cos(game.angle) * orbitRadius;
+            const by = centerY + Math.sin(game.angle) * orbitRadius;
+            burst(bx, by, '#ffce72', 34, 220);
+            showToast(game.bossRemaining > 0 ? `타이탄 관문 돌파 · ${game.bossRemaining}개 남음` : '타이탄 핵 붕괴!', 1100);
+            sound('boss');
+            if (game.bossRemaining === 0) finishEvent(true);
+          }
+
+          if (game.combo >= 12 && game.fever <= 0) activateFever();
+          if (!game.dailyCompleted && profile.dailyCompleted !== dateKey && game.ringsPassed >= dailyTarget) {
+            game.dailyCompleted = true;
+            game.energy += 20;
+            showToast('오늘의 궤도 완료 · 에너지 +20', 2400);
+            sound('fever');
+          }
+
+          game.pulse = Math.max(game.pulse, perfect ? .8 : .4);
+          updateHud();
+          updateEventHud();
+          checkMilestones();
+          return;
+        }
+
+        if (game.shield > 0) {
+          game.shield = 0;
+          game.combo = 0;
+          ring.broken = true;
+          game.flash = .45;
+          game.shake = 10;
+          const px = centerX + Math.cos(game.angle) * orbitRadius;
+          const py = centerY + Math.sin(game.angle) * orbitRadius;
+          burst(px, py, '#5df7ff', 30, 220);
+          showToast('보호막이 충돌을 막았습니다');
+          sound('shield');
+          vibrate([30, 28, 18]);
+          updateHud();
+        } else {
+          endGame();
+        }
+      }
+
+      function endGame() {
+        if (!game || game.dead) return;
+        game.dead = true;
+        game.endTimer = .72;
+        game.shake = 18;
+        game.flash = .85;
+        state = 'ending';
+        setScreen('ending');
+        const px = centerX + Math.cos(game.angle) * orbitRadius;
+        const py = centerY + Math.sin(game.angle) * orbitRadius;
+        burst(px, py, skins[profile.skin].color, 46, 290);
+        burst(px, py, '#ffffff', 22, 190);
+        sound('hit');
+        vibrate([55, 35, 90]);
+      }
+
+      function finalizeGame() {
+        const previousBest = profile.best;
+        profile.best = Math.max(profile.best, game.score);
+        profile.totalRings += game.ringsPassed;
+        profile.energy += game.energy;
+        profile.games += 1;
+        profile.totalEvents += game.eventsSurvived;
+        if (game.dailyCompleted) profile.dailyCompleted = dateKey;
+        saveProfile();
+
+        els.resultScore.textContent = fmt(game.score);
+        els.resultRings.textContent = fmt(game.ringsPassed);
+        els.resultPerfects.textContent = fmt(game.perfects);
+        els.resultCombo.textContent = fmt(game.bestCombo);
+        els.resultEvents.textContent = fmt(game.eventsSurvived);
+        els.newRecord.hidden = !(game.score > previousBest && game.score > 0);
+        state = 'over';
+        setScreen('over');
+        updateProfileUI();
+        els.announcer.textContent = `게임 종료. 점수 ${game.score}점, 링 ${game.ringsPassed}개 통과.`;
+      }
+
+      function returnHome() {
+        state = 'menu';
+        game = null;
+        els.tutorial.classList.remove('show');
+        els.eventBanner.classList.remove('visible');
+        setScreen('menu');
+        updateProfileUI();
+      }
+
+      function pauseGame() {
+        if (state !== 'playing') return;
+        state = 'paused';
+        els.tutorial.classList.remove('show');
+        setScreen('paused');
+      }
+
+      function resumeGame() {
+        if (state !== 'paused') return;
+        state = 'playing';
+        lastTime = performance.now();
+        setScreen('playing');
+      }
+
+      function update(dt) {
+        idleAngle += dt * .22;
+        if (state !== 'playing' && state !== 'ending') return;
+        if (!game) return;
+
+        const playScale = state === 'ending' ? .32 : 1;
+        const step = dt * playScale;
+        game.elapsed += state === 'playing' ? dt : 0;
+        game.pulse = Math.max(0, game.pulse - dt * 2.6);
+        game.flash = Math.max(0, game.flash - dt * 2.2);
+        game.shake = Math.max(0, game.shake - dt * 24);
+        if (game.fever > 0) game.fever = Math.max(0, game.fever - dt);
+        if (state === 'playing' && game.buff?.type === 'overdrive') {
+          game.buff.remaining -= dt;
+          if (game.buff.remaining <= 0) {
+            game.buff = null;
+            showToast('폭주 항로 종료');
+          }
+        }
+
+        if (!game.dead) {
+          const difficulty = clamp(game.elapsed / 90, 0, 1);
+          game.angularSpeed = 1.72 + difficulty * .34;
+          game.angle = normalizeAngle(game.angle + game.direction * game.angularSpeed * step);
+          game.spawnTimer -= dt;
+          if (game.spawnTimer <= 0) spawnRing();
+          updateActiveEvent(dt, step);
+          if (game.tutorialTimer > 0) {
+            game.tutorialTimer -= dt;
+            if (game.tutorialTimer <= 0) els.tutorial.classList.remove('show');
+          }
+        }
+
+        const playerX = centerX + Math.cos(game.angle) * orbitRadius;
+        const playerY = centerY + Math.sin(game.angle) * orbitRadius;
+        if (!game.dead) {
+          game.trail.unshift({ x: playerX, y: playerY, life: 1 });
+          if (game.trail.length > (reducedMotion ? 8 : 22)) game.trail.pop();
+        }
+        game.trail.forEach(point => point.life -= dt * 1.9);
+        game.trail = game.trail.filter(point => point.life > 0);
+
+        for (const ring of game.rings) {
+          ring.previousRadius = ring.radius;
+          const ringSpeedFactor = (game.event?.type === 'time' ? .58 : 1) * (game.buff?.type === 'overdrive' ? 1.28 : 1);
+          ring.radius -= ring.speed * ringSpeedFactor * step;
+          if (!ring.passed && ring.previousRadius > orbitRadius && ring.radius <= orbitRadius) resolveCrossing(ring);
+          if (ring.passed && ring.radius < orbitRadius * .55) ring.alpha = Math.max(0, ring.alpha - dt * 2.4);
+        }
+        game.rings = game.rings.filter(ring => ring.radius > 8 && ring.alpha > .01 && !ring.broken);
+
+        for (const particle of game.particles) {
+          particle.x += particle.vx * step;
+          particle.y += particle.vy * step;
+          particle.vx *= Math.pow(particle.drag, step * 60);
+          particle.vy *= Math.pow(particle.drag, step * 60);
+          particle.life -= dt;
+        }
+        game.particles = game.particles.filter(particle => particle.life > 0);
+        if (state === 'playing') updateEventHud();
+
+        if (state === 'ending') {
+          game.endTimer -= dt;
+          if (game.endTimer <= 0) finalizeGame();
+        }
+      }
+
+      function drawBackground(time) {
+        const background = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, Math.max(width, height) * .78);
+        const feverAlpha = game?.fever > 0 ? .18 : 0;
+        const eventColor = {
+          bonus: '62,43,9', meteor: '52,15,28', mirror: '35,20,72', time: '11,37,78',
+          blackout: '2,3,10', resonance: '10,49,58', boss: '68,15,24'
+        }[game?.event?.type];
+        background.addColorStop(0, `rgba(${game?.fever > 0 ? '50,20,94' : eventColor || '12,28,67'},1)`);
+        background.addColorStop(.52, `rgba(6,10,28,1)`);
+        background.addColorStop(1, '#03040b');
+        ctx.fillStyle = background;
+        ctx.fillRect(0, 0, width, height);
+
+        if (feverAlpha) {
+          const pulse = .5 + .5 * Math.sin(time * .006);
+          ctx.fillStyle = `rgba(70, 246, 255, ${feverAlpha * pulse})`;
+          ctx.fillRect(0, 0, width, height);
+        }
+
+        for (const star of stars) {
+          const alpha = .15 + (.5 + .5 * Math.sin(time * .001 * star.speed + star.phase)) * .52;
+          ctx.fillStyle = `hsla(${star.tint}, 90%, 84%, ${alpha})`;
+          if (game?.event?.type === 'time') {
+            const angle = Math.atan2(star.y - centerY, star.x - centerX);
+            ctx.strokeStyle = `hsla(${star.tint}, 90%, 84%, ${alpha * .6})`;
+            ctx.lineWidth = star.r;
+            ctx.beginPath();
+            ctx.moveTo(star.x, star.y);
+            ctx.lineTo(star.x - Math.cos(angle) * 13, star.y - Math.sin(angle) * 13);
+            ctx.stroke();
+          } else {
+            ctx.beginPath();
+            ctx.arc(star.x, star.y, star.r, 0, TAU);
+            ctx.fill();
+          }
+        }
+
+        if (game?.event?.type === 'blackout') {
+          ctx.fillStyle = 'rgba(0,0,5,.48)';
+          ctx.fillRect(0, 0, width, height);
+        }
+
+        ctx.save();
+        ctx.translate(centerX, centerY);
+        ctx.strokeStyle = 'rgba(104, 156, 255, .055)';
+        ctx.lineWidth = 1;
+        const spacing = 44;
+        const max = Math.max(width, height);
+        for (let r = spacing; r < max; r += spacing) {
+          ctx.beginPath();
+          ctx.arc(0, 0, r, 0, TAU);
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+
+      function drawArcRing(ring, time) {
+        if (ring.broken || ring.alpha <= 0) return;
+        const fever = game?.fever > 0;
+        const hue = fever ? (ring.hue + time * .08) % 360 : ring.hue;
+        let alpha = ring.alpha * (ring.passed ? .55 : 1);
+        if (game?.event?.type === 'blackout' && !ring.passed) {
+          const proximity = 1 - Math.max(0, ring.radius - orbitRadius) / Math.max(1, orbitRadius * 2.15);
+          alpha *= clamp(proximity, .08, 1);
+        }
+        const start = ring.gapAngle + ring.gapWidth / 2;
+        const end = ring.gapAngle - ring.gapWidth / 2 + TAU;
+        const segments = ring.mirror
+          ? [
+              [start, ring.gapAngle + Math.PI - ring.gapWidth / 2],
+              [ring.gapAngle + Math.PI + ring.gapWidth / 2, end]
+            ]
+          : [[start, end]];
+        const gapEdges = ring.mirror
+          ? [start, ring.gapAngle - ring.gapWidth / 2, ring.gapAngle + Math.PI + ring.gapWidth / 2, ring.gapAngle + Math.PI - ring.gapWidth / 2]
+          : [start, end];
+        ctx.save();
+        ctx.lineCap = 'round';
+        ctx.shadowColor = ring.special ? '#6ff8ff' : ring.boss ? '#ff8a5e' : ring.bonus ? '#ffe06a' : `hsla(${hue}, 95%, 67%, .8)`;
+        ctx.shadowBlur = ring.special || ring.boss ? 25 : 16;
+        ctx.lineWidth = ring.thickness;
+        ctx.strokeStyle = ring.special ? `rgba(111,248,255,${alpha})` : ring.boss ? `rgba(255,102,75,${alpha})` : ring.bonus ? `rgba(255,221,91,${alpha})` : `hsla(${hue}, 88%, 66%, ${alpha})`;
+        for (const [segmentStart, segmentEnd] of segments) {
+          ctx.beginPath();
+          ctx.arc(centerX, centerY, ring.radius, segmentStart, segmentEnd, false);
+          ctx.stroke();
+        }
+
+        ctx.shadowBlur = 0;
+        ctx.lineWidth = 1.5;
+        ctx.strokeStyle = ring.special ? `rgba(255,255,255,${alpha * .8})` : `hsla(${hue}, 100%, 90%, ${alpha * .65})`;
+        for (const [segmentStart, segmentEnd] of segments) {
+          ctx.beginPath();
+          ctx.arc(centerX, centerY, ring.radius, segmentStart + .03, segmentEnd - .03, false);
+          ctx.stroke();
+        }
+
+        if (ring.boss) {
+          ctx.strokeStyle = `rgba(255,213,119,${alpha * .78})`;
+          ctx.lineWidth = 3;
+          for (const [segmentStart, segmentEnd] of segments) {
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, ring.radius - 8, segmentStart + .045, segmentEnd - .045, false);
+            ctx.stroke();
+          }
+        }
+
+        for (const edge of gapEdges) {
+          const inner = ring.radius - ring.thickness * .85;
+          const outer = ring.radius + ring.thickness * .85;
+          ctx.strokeStyle = `rgba(239,252,255,${alpha * .8})`;
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(centerX + Math.cos(edge) * inner, centerY + Math.sin(edge) * inner);
+          ctx.lineTo(centerX + Math.cos(edge) * outer, centerY + Math.sin(edge) * outer);
+          ctx.stroke();
+        }
+
+        if (!ring.passed && !ring.shardTaken) {
+          const x = centerX + Math.cos(ring.shardAngle) * ring.radius;
+          const y = centerY + Math.sin(ring.shardAngle) * ring.radius;
+          const size = ring.special ? 7.5 : ring.bonus ? 6.8 : 5.3;
+          ctx.translate(x, y);
+          ctx.rotate(time * .0025);
+          ctx.fillStyle = ring.bonus ? '#fff3a2' : '#ffffff';
+          ctx.shadowColor = ring.special ? '#6ff8ff' : ring.bonus ? '#ffd452' : '#bf8cff';
+          ctx.shadowBlur = 18;
+          ctx.beginPath();
+          ctx.moveTo(0, -size * 1.45);
+          ctx.lineTo(size, 0);
+          ctx.lineTo(0, size * 1.45);
+          ctx.lineTo(-size, 0);
+          ctx.closePath();
+          ctx.fill();
+        }
+        ctx.restore();
+      }
+
+      function drawReactor(time) {
+        const pulse = .5 + .5 * Math.sin(time * .0028);
+        ctx.save();
+        ctx.translate(centerX, centerY);
+        const halo = ctx.createRadialGradient(0, 0, 0, 0, 0, orbitRadius * .62);
+        halo.addColorStop(0, `rgba(73, 224, 255, ${.13 + pulse * .08})`);
+        halo.addColorStop(.32, 'rgba(92, 88, 220, .075)');
+        halo.addColorStop(1, 'rgba(6, 10, 28, 0)');
+        ctx.fillStyle = halo;
+        ctx.beginPath();
+        ctx.arc(0, 0, orbitRadius * .62, 0, TAU);
+        ctx.fill();
+
+        ctx.rotate(time * .00022);
+        ctx.strokeStyle = 'rgba(114, 186, 255, .18)';
+        ctx.lineWidth = 1;
+        ctx.setLineDash([2, 10]);
+        ctx.beginPath();
+        ctx.arc(0, 0, orbitRadius * .36, 0, TAU);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        const core = ctx.createRadialGradient(-5, -7, 2, 0, 0, orbitRadius * .15);
+        core.addColorStop(0, '#ffffff');
+        core.addColorStop(.16, '#8ffbff');
+        core.addColorStop(.5, '#446ae0');
+        core.addColorStop(1, 'rgba(25, 33, 91, .1)');
+        ctx.shadowColor = '#4cefff';
+        ctx.shadowBlur = 28 + pulse * 12;
+        ctx.fillStyle = core;
+        ctx.beginPath();
+        ctx.arc(0, 0, orbitRadius * (.105 + pulse * .008), 0, TAU);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      function drawOrbit(time) {
+        ctx.save();
+        ctx.strokeStyle = 'rgba(128, 180, 255, .17)';
+        ctx.lineWidth = 1;
+        ctx.setLineDash([3, 8]);
+        ctx.lineDashOffset = -time * .01;
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, orbitRadius, 0, TAU);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.restore();
+      }
+
+      function drawPlayer(time) {
+        const currentAngle = game ? game.angle : idleAngle;
+        const skin = skins[profile.skin];
+        const size = game ? game.playerSize : clamp(orbitRadius * .09, 8, 11);
+        const dead = game?.dead;
+
+        if (game) {
+          for (let i = game.trail.length - 1; i >= 0; i--) {
+            const point = game.trail[i];
+            const ratio = 1 - i / Math.max(1, game.trail.length);
+            ctx.fillStyle = hexToRgba(skin.color, point.life * ratio * .35);
+            ctx.beginPath();
+            ctx.arc(point.x, point.y, size * ratio * .82, 0, TAU);
+            ctx.fill();
+          }
+        }
+
+        if (dead) return;
+        const x = centerX + Math.cos(currentAngle) * orbitRadius;
+        const y = centerY + Math.sin(currentAngle) * orbitRadius;
+        const pulse = 1 + Math.sin(time * .009) * .045 + (game?.pulse || 0) * .22;
+        ctx.save();
+        ctx.translate(x, y);
+        const glow = ctx.createRadialGradient(-size * .25, -size * .3, 1, 0, 0, size * 1.25);
+        glow.addColorStop(0, '#ffffff');
+        glow.addColorStop(.25, skin.color);
+        glow.addColorStop(.72, skin.glow);
+        glow.addColorStop(1, hexToRgba(skin.glow, 0));
+        ctx.shadowColor = skin.color;
+        ctx.shadowBlur = 24 + (game?.fever > 0 ? 15 : 0);
+        ctx.fillStyle = glow;
+        ctx.beginPath();
+        ctx.arc(0, 0, size * pulse, 0, TAU);
+        ctx.fill();
+
+        ctx.shadowBlur = 0;
+        ctx.strokeStyle = 'rgba(255,255,255,.72)';
+        ctx.lineWidth = 1.2;
+        ctx.beginPath();
+        ctx.arc(-size * .12, -size * .1, size * .54, Math.PI * 1.08, Math.PI * 1.72);
+        ctx.stroke();
+        ctx.restore();
+
+        if (game?.shield > 0) {
+          ctx.save();
+          ctx.strokeStyle = `rgba(100, 246, 255, ${.5 + Math.sin(time * .008) * .18})`;
+          ctx.lineWidth = 2;
+          ctx.shadowColor = '#47f6ff';
+          ctx.shadowBlur = 16;
+          ctx.beginPath();
+          ctx.arc(x, y, size * 1.9, 0, TAU);
+          ctx.stroke();
+          ctx.restore();
+        }
+      }
+
+      function drawMeteors(time) {
+        if (!game?.meteors?.length) return;
+        for (const meteor of game.meteors) {
+          const x = centerX + Math.cos(meteor.angle) * meteor.radius;
+          const y = centerY + Math.sin(meteor.angle) * meteor.radius;
+          const tailX = x + Math.cos(meteor.angle) * meteor.size * 5.5;
+          const tailY = y + Math.sin(meteor.angle) * meteor.size * 5.5;
+          ctx.save();
+          ctx.globalAlpha = clamp(meteor.alpha, 0, 1);
+          const trail = ctx.createLinearGradient(x, y, tailX, tailY);
+          trail.addColorStop(0, 'rgba(255,238,182,.95)');
+          trail.addColorStop(.3, 'rgba(255,91,74,.72)');
+          trail.addColorStop(1, 'rgba(255,48,95,0)');
+          ctx.strokeStyle = trail;
+          ctx.lineWidth = meteor.size * .85;
+          ctx.lineCap = 'round';
+          ctx.beginPath();
+          ctx.moveTo(x, y);
+          ctx.lineTo(tailX, tailY);
+          ctx.stroke();
+
+          ctx.translate(x, y);
+          ctx.rotate(time * .001 * meteor.spin);
+          ctx.fillStyle = '#fff2bd';
+          ctx.shadowColor = '#ff584f';
+          ctx.shadowBlur = 22;
+          ctx.beginPath();
+          for (let i = 0; i < 8; i++) {
+            const angle = i / 8 * TAU;
+            const radius = meteor.size * (i % 2 ? .68 : 1);
+            const px = Math.cos(angle) * radius;
+            const py = Math.sin(angle) * radius;
+            if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+          }
+          ctx.closePath();
+          ctx.fill();
+          ctx.restore();
+
+          if (!meteor.passed && meteor.radius > orbitRadius) {
+            const warningX = centerX + Math.cos(meteor.angle) * orbitRadius;
+            const warningY = centerY + Math.sin(meteor.angle) * orbitRadius;
+            ctx.save();
+            ctx.strokeStyle = `rgba(255,92,88,${.35 + Math.sin(time * .012) * .2})`;
+            ctx.lineWidth = 3;
+            ctx.shadowColor = '#ff4d61';
+            ctx.shadowBlur = 12;
+            ctx.beginPath();
+            ctx.arc(warningX, warningY, 13 + Math.sin(time * .014) * 2, 0, TAU);
+            ctx.stroke();
+            ctx.restore();
+          }
+        }
+      }
+
+      function drawEventEffects(time) {
+        if (!game?.event) return;
+        const event = game.event;
+        ctx.save();
+        if (event.type === 'resonance') {
+          const progress = clamp(event.wave / 1.35, 0, 1);
+          ctx.strokeStyle = `rgba(255,237,124,${(1 - progress) * .72})`;
+          ctx.lineWidth = 3;
+          ctx.shadowColor = '#fff09a';
+          ctx.shadowBlur = 20;
+          ctx.beginPath();
+          ctx.arc(centerX, centerY, orbitRadius * (.35 + progress * .85), 0, TAU);
+          ctx.stroke();
+          if (event.pulseWindow > 0 && !event.pulseClaimed) {
+            ctx.fillStyle = '#fff3a1';
+            ctx.font = '950 15px system-ui, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.shadowBlur = 16;
+            ctx.fillText('지금 탭!', centerX, centerY - orbitRadius * .55);
+          }
+        } else if (event.type === 'bonus') {
+          for (let i = 0; i < 14; i++) {
+            const angle = time * .00035 + i / 14 * TAU;
+            const radius = orbitRadius * (1.22 + .12 * Math.sin(time * .002 + i));
+            ctx.fillStyle = `rgba(255,229,108,${.25 + .25 * Math.sin(time * .006 + i)})`;
+            ctx.beginPath();
+            ctx.arc(centerX + Math.cos(angle) * radius, centerY + Math.sin(angle) * radius, 1.8, 0, TAU);
+            ctx.fill();
+          }
+        } else if (event.type === 'mirror') {
+          ctx.strokeStyle = 'rgba(189,139,255,.18)';
+          ctx.lineWidth = 1;
+          ctx.setLineDash([5, 9]);
+          ctx.beginPath();
+          ctx.moveTo(centerX, centerY - orbitRadius * 1.35);
+          ctx.lineTo(centerX, centerY + orbitRadius * 1.35);
+          ctx.stroke();
+          ctx.setLineDash([]);
+        } else if (event.type === 'boss') {
+          const pulse = .5 + .5 * Math.sin(time * .006);
+          ctx.strokeStyle = `rgba(255,92,69,${.16 + pulse * .18})`;
+          ctx.lineWidth = 5;
+          ctx.beginPath();
+          ctx.arc(centerX, centerY, orbitRadius * 1.18, 0, TAU);
+          ctx.stroke();
+        } else if (event.type === 'blackout') {
+          const x = centerX + Math.cos(game.angle) * orbitRadius;
+          const y = centerY + Math.sin(game.angle) * orbitRadius;
+          const glow = ctx.createRadialGradient(x, y, 0, x, y, 92);
+          glow.addColorStop(0, 'rgba(94,240,255,.16)');
+          glow.addColorStop(1, 'rgba(94,240,255,0)');
+          ctx.fillStyle = glow;
+          ctx.fillRect(x - 92, y - 92, 184, 184);
+        }
+        ctx.restore();
+      }
+
+      function drawParticles() {
+        if (!game) return;
+        for (const particle of game.particles) {
+          const alpha = clamp(particle.life / particle.maxLife, 0, 1);
+          ctx.fillStyle = hexToRgba(particle.color, alpha);
+          ctx.beginPath();
+          ctx.arc(particle.x, particle.y, particle.size * alpha, 0, TAU);
+          ctx.fill();
+        }
+      }
+
+      function hexToRgba(hex, alpha) {
+        const clean = hex.replace('#', '');
+        const full = clean.length === 3 ? clean.split('').map(c => c + c).join('') : clean;
+        const value = Number.parseInt(full, 16);
+        const r = (value >> 16) & 255;
+        const g = (value >> 8) & 255;
+        const b = value & 255;
+        return `rgba(${r},${g},${b},${alpha})`;
+      }
+
+      function render(time) {
+        ctx.save();
+        if (game?.shake > 0 && !reducedMotion) {
+          ctx.translate(rand(-game.shake, game.shake), rand(-game.shake, game.shake));
+        }
+        drawBackground(time);
+
+        if (!game || state === 'menu') {
+          const demoRings = [
+            { radius: orbitRadius * 1.7 + Math.sin(time * .00055) * 8, gapAngle: idleAngle + 1.3, gapWidth: 1.05, thickness: 8, hue: 190, alpha: .45, passed: false, broken: false, special: false, shardTaken: true },
+            { radius: orbitRadius * 2.5 + Math.sin(time * .0004 + 2) * 12, gapAngle: idleAngle - 1.7, gapWidth: .82, thickness: 7, hue: 285, alpha: .26, passed: false, broken: false, special: false, shardTaken: true }
+          ];
+          demoRings.forEach(ring => drawArcRing(ring, time));
+        } else {
+          [...game.rings].sort((a, b) => b.radius - a.radius).forEach(ring => drawArcRing(ring, time));
+        }
+
+        drawMeteors(time);
+        drawEventEffects(time);
+        drawOrbit(time);
+        drawReactor(time);
+        drawPlayer(time);
+        drawParticles();
+
+        if (game?.flash > 0) {
+          ctx.fillStyle = `rgba(160, 244, 255, ${game.flash * .25})`;
+          ctx.fillRect(0, 0, width, height);
+        }
+        ctx.restore();
+      }
+
+      function loop(now) {
+        const dt = Math.min((now - lastTime) / 1000, .033);
+        lastTime = now;
+        if (state !== 'paused') update(dt);
+        render(now);
+        requestAnimationFrame(loop);
+      }
+
+      async function shareScore() {
+        if (!game) return;
+        const text = `ORBIT ZERO에서 ${game.score}점! 네온 링 ${game.ringsPassed}개와 우주 이벤트 ${game.eventsSurvived}개를 돌파했습니다. 이 기록을 넘을 수 있을까요?`;
+        try {
+          if (navigator.share) {
+            await navigator.share({ title: 'ORBIT ZERO', text, url: location.href });
+          } else if (navigator.clipboard) {
+            await navigator.clipboard.writeText(`${text} ${location.href}`);
+            showToast('기록이 복사되었습니다');
+          } else {
+            showToast('공유 기능을 지원하지 않는 기기입니다');
+          }
+        } catch (error) {
+          if (error?.name !== 'AbortError') showToast('공유하지 못했습니다');
+        }
+      }
+
+      els.play.addEventListener('click', startGame);
+      els.replay.addEventListener('click', startGame);
+      els.resume.addEventListener('click', resumeGame);
+      els.restartPause.addEventListener('click', startGame);
+      els.homePause.addEventListener('click', returnHome);
+      els.home.addEventListener('click', returnHome);
+      els.pauseButton.addEventListener('click', () => state === 'paused' ? resumeGame() : pauseGame());
+      els.share.addEventListener('click', shareScore);
+      choiceButtons.forEach(button => button.addEventListener('click', () => applyChoice(button.dataset.choice)));
+      els.soundButton.addEventListener('click', () => {
+        profile.sound = !profile.sound;
+        saveProfile();
+        updateSoundButton();
+        if (profile.sound) {
+          initAudio();
+          sound('tap');
+        }
+      });
+
+      canvas.addEventListener('pointerdown', event => {
+        if (event.pointerType === 'mouse' && event.button !== 0) return;
+        reverseDirection();
+      });
+
+      addEventListener('keydown', event => {
+        if ((event.code === 'Space' || event.code === 'ArrowLeft' || event.code === 'ArrowRight') && state === 'playing') {
+          event.preventDefault();
+          reverseDirection();
+        } else if (event.code === 'Escape' || event.code === 'KeyP') {
+          if (state === 'playing') pauseGame();
+          else if (state === 'paused') resumeGame();
+        } else if (event.code === 'Enter' && (state === 'menu' || state === 'over')) {
+          startGame();
+        } else if (state === 'choice' && ['Digit1', 'Digit2', 'Digit3'].includes(event.code)) {
+          applyChoice(['stabilizer', 'overdrive', 'magnet'][Number(event.code.slice(-1)) - 1]);
+        }
+      });
+
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden && state === 'playing') pauseGame();
+      });
+
+      addEventListener('resize', resize, { passive: true });
+      resize();
+      updateProfileUI();
+      setScreen('menu');
+      requestAnimationFrame(loop);
+
+    })();
+  </script>
+</body>
+</html>
