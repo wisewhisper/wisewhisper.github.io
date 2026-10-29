@@ -81,7 +81,7 @@
       if(field && (/조건|조작|변수|변인|설정|조절|입력/.test(heading) || el.matches('aside,.controls,.controls-panel'))) { controls.push(el); continue; }
       if(el.querySelector('canvas,svg')) { scene.push(el); continue; }
       if(el.querySelector('input,select,button')) { controls.push(el); continue; }
-      if(/결과|측정|계산|현재|에너지|관측점|실시간/.test(heading) || el.matches('.metrics,.meters,.stats')) results.push(el);
+      if(/결과|측정|계산|현재|에너지|관측점|실시간/.test(heading) || el.matches('.metrics,.meters,.stats') || (body.dataset.labPage.includes('기주공명') && el.matches('.meter-card'))) results.push(el);
       else more.push(el);
     }
     body.insertBefore(focus, bar.nextSibling); focus.after(extras);
@@ -92,6 +92,10 @@
     }
     for(const el of scene) { move(el,left); el.classList.add('lab-scene'); }
     for(const el of controls) move(el,right);
+    if(body.dataset.labPage.includes('기주공명')){
+      const actions=document.querySelector('.top-actions');
+      if(actions && controls[0])move(actions,controls[0]);
+    }
     if(results.length){focus.append(readings);focus.classList.add('lab-has-results');for(const el of results) move(el,readings);}
     for(const el of charts) { move(el,left); el.classList.add('lab-chart'); }
     function viewTabs(views,column){
@@ -157,3 +161,4 @@
   document.addEventListener('fullscreenchange',()=>{full.textContent=document.fullscreenElement?'⛶ 전체화면 나가기':'⛶ 전체화면'; resize();});
   if(window.innerWidth>=1000) enable();
 })();
+

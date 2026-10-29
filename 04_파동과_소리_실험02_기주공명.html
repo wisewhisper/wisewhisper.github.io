@@ -28,7 +28,7 @@
 <main class="app">
   <header class="topbar">
     <div class="title-wrap"><div class="mark" aria-hidden="true">λ</div><div><div class="eyebrow">WAVE LAB · 가상 실험</div><h1>기주 공명 실험실</h1></div></div>
-    <div class="top-actions"><button class="btn sound-toggle" id="soundBtn" type="button">🔊 소리 켜기</button><button class="btn" id="pauseBtn" type="button">⏸ 애니메이션</button><button class="btn" id="resetBtn" type="button">↺ 처음으로</button></div>
+    <div class="top-actions"><button class="btn primary sound-toggle" id="soundBtn" type="button">🔊 소리 켜기</button><button class="btn" id="pauseBtn" type="button">⏸ 애니메이션</button><button class="btn" id="resetBtn" type="button">↺ 처음으로</button></div>
   </header>
   <div class="question"><span aria-hidden="true">✦</span><span><b>핵심 질문</b>　왜 소리는 특정한 물 높이에서만 갑자기 커질까요?</span></div>
 
@@ -150,10 +150,22 @@
     ctx.beginPath();for(let i=0;i<=250;i++){const L=3+89*i/250,ss=state(L),x=X(L),y=Y(.06+.9*Math.sqrt(ss.intensity));i?ctx.lineTo(x,y):ctx.moveTo(x,y)}const grad=ctx.createLinearGradient(pad.l,0,w-pad.r,0);grad.addColorStop(0,'#2ab9d2');grad.addColorStop(1,'#ffbf47');ctx.strokeStyle=grad;ctx.lineWidth=3;ctx.stroke();
     const yy=Y(.06+.9*Math.sqrt(s.intensity));ctx.strokeStyle='#ffbf47';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(X(s.L),pad.t);ctx.lineTo(X(s.L),h-pad.b);ctx.stroke();ctx.fillStyle='#fff2c7';ctx.beginPath();ctx.arc(X(s.L),yy,6,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#ffbf47';ctx.stroke();
   }
-  function updateAudio(s){if(!soundOn||!osc)return;osc.frequency.setTargetAtTime(s.f,audio.currentTime,.02);const vol=.018+.14*s.intensity;gain.gain.setTargetAtTime(vol,audio.currentTime,.04);filter.frequency.setTargetAtTime(Math.min(4000,s.f*3),audio.currentTime,.05)}
+  function updateAudio(s){if(!soundOn||!osc)return;osc.frequency.setTargetAtTime(s.f,audio.currentTime,.02);const vol=.04+.22*s.intensity;gain.gain.setTargetAtTime(vol,audio.currentTime,.04);filter.frequency.setTargetAtTime(Math.min(4000,s.f*3),audio.currentTime,.05)}
   async function toggleSound(){
-    if(!audio){audio=new (window.AudioContext||window.webkitAudioContext)();osc=audio.createOscillator();gain=audio.createGain();filter=audio.createBiquadFilter();osc.type='sine';filter.type='bandpass';filter.Q=.8;gain.gain.value=0;osc.connect(filter).connect(gain).connect(audio.destination);osc.start()}
-    if(audio.state==='suspended')await audio.resume();soundOn=!soundOn;els.sound.textContent=soundOn?'🔇 소리 끄기':'🔊 소리 켜기';els.sound.classList.toggle('sound-on',soundOn);gain.gain.setTargetAtTime(soundOn?.04:0,audio.currentTime,.03);updateUI();
+    try {
+      const AudioContextClass=window.AudioContext||window.webkitAudioContext;
+      if(!AudioContextClass){els.sound.textContent='이 브라우저는 소리를 지원하지 않습니다';return;}
+      if(!audio){audio=new AudioContextClass();osc=audio.createOscillator();gain=audio.createGain();filter=audio.createBiquadFilter();osc.type='sine';filter.type='lowpass';filter.Q.value=.7;gain.gain.value=0;osc.connect(filter).connect(gain).connect(audio.destination);osc.start();}
+      if(audio.state!=='running')await audio.resume();
+      if(audio.state!=='running')throw new Error('Audio output is suspended');
+      soundOn=!soundOn;
+      els.sound.textContent=soundOn?'🔇 소리 끄기':'🔊 소리 켜기';
+      els.sound.classList.toggle('sound-on',soundOn);
+      els.sound.setAttribute('aria-pressed',String(soundOn));
+      els.sound.title=soundOn?'소리 출력 중 · 주파수와 공명 정도에 따라 소리가 달라집니다':'버튼을 누르면 소리가 재생됩니다';
+      if(!soundOn)gain.gain.setTargetAtTime(0,audio.currentTime,.04);
+      updateUI();
+    } catch(error){console.warn('Audio playback failed:',error.message);soundOn=false;if(gain)gain.gain.setTargetAtTime(0,audio.currentTime,.04);els.sound.classList.remove('sound-on');els.sound.setAttribute('aria-pressed','false');els.sound.textContent='🔊 다시 소리 켜기';els.sound.title='기기 음량과 브라우저의 사이트 음소거를 확인한 뒤 다시 눌러 주세요';}
   }
   function setLengthFromPointer(clientY){const r=els.app.getBoundingClientRect(),s=state(),top=102,bottom=r.height-72,L=3+Math.max(0,Math.min(1,(clientY-r.top-top)/(bottom-top)))*89;els.L.value=L.toFixed(1);updateUI()}
   els.app.addEventListener('pointerdown',e=>{dragging=true;els.app.setPointerCapture(e.pointerId);setLengthFromPointer(e.clientY)});els.app.addEventListener('pointermove',e=>{if(dragging)setLengthFromPointer(e.clientY)});els.app.addEventListener('pointerup',()=>dragging=false);els.app.addEventListener('pointercancel',()=>dragging=false);
@@ -168,3 +180,4 @@
 </script>
 </body>
 </html>
+

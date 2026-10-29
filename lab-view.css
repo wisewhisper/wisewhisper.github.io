@@ -90,5 +90,13 @@ body.lab-compact[data-lab-page*="공명과정상파"] #lab-focus .stage{min-heig
 /* Keep generated headings readable in both light and dark source themes. */
 #lab-focus .lab-result-panel>h2,#lab-extras>details>summary{color:inherit!important}
 
+/* Air-column apparatus needs a usable height independent of chart limits. */
+body.lab-compact[data-lab-page*="기주공명"] #lab-focus .sim-card{min-height:0!important;padding:12px!important;display:flex;flex-direction:column}
+body.lab-compact[data-lab-page*="기주공명"] #lab-focus .sim-head{position:static;flex-wrap:wrap;margin-bottom:6px}
+body.lab-compact[data-lab-page*="기주공명"] #lab-focus #apparatus{height:clamp(400px,calc(100dvh - 230px),620px)!important;max-height:none!important;flex:none}
+body.lab-compact[data-lab-page*="기주공명"] #lab-focus .drag-hint{position:static;transform:none;align-self:center;max-width:100%;text-align:center;margin-top:6px}
+body.lab-compact[data-lab-page*="기주공명"] #lab-focus .top-actions{justify-content:flex-start;margin:0 0 12px}
+
 /* Let a lone scene grow, while retaining room for the controls and readouts. */
 @media(min-width:1200px){#lab-focus .lab-expanded-scene canvas,#lab-focus .lab-expanded-scene svg{max-height:38vh!important}}
+
