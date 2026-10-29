@@ -44,7 +44,7 @@
       </div>
       <div class="settings">
         <label>대전 방식<select id="mode"><option value="ai">컴퓨터 대전</option><option value="pvp">2인 대전</option></select></label>
-        <label>난이도<select id="difficulty"><option value="easy">초급</option><option value="normal" selected>중급</option><option value="hard">고급</option></select></label>
+        <label>난이도<select id="difficulty"><option value="easy">초급</option><option value="normal" selected>중급</option><option value="hard">고급 · 공격형</option><option value="expert">최고급 · 수읽기</option></select></label>
         <label class="order-setting">선공 선택<select id="order"><option value="winner" selected>승자 선공 (기본)</option><option value="a" id="orderA">나 선공</option><option value="b" id="orderB">컴퓨터 선공</option></select></label>
       </div>
       <div class="controls">
@@ -136,15 +136,55 @@
   }
   function scheduleAI(delay=280){if($('mode').value!=='ai'||over||turn!==getAIColor())return;clearTimeout(aiTimer);thinking=true;updateUI();aiTimer=setTimeout(aiMove,delay)}
   function aiMove(){if(over||$('mode').value!=='ai')return;const color=getAIColor(),diff=$('difficulty').value;let move;if(diff==='easy'&&Math.random()<.38)move=randomNear(color);else move=bestMove(diff,color);thinking=false;if(move)place(move.r,move.c,color);updateUI()}
-  function candidates(){if(!history.length)return[{r:7,c:7}];const set=new Map(),radius=$('difficulty').value==='hard'?2:1;for(const h of history)for(let dr=-radius;dr<=radius;dr++)for(let dc=-radius;dc<=radius;dc++){const r=h.r+dr,c=h.c+dc;if(r>=0&&r<N&&c>=0&&c<N&&!board[r][c])set.set(r+','+c,{r,c})}return [...set.values()]}
+  function candidates(radius){if(!history.length)return[{r:7,c:7}];radius=radius||(($('difficulty').value==='hard'||$('difficulty').value==='expert')?2:1);const set=new Map();for(const h of history)for(let dr=-radius;dr<=radius;dr++)for(let dc=-radius;dc<=radius;dc++){const r=h.r+dr,c=h.c+dc;if(r>=0&&r<N&&c>=0&&c<N&&!board[r][c])set.set(r+','+c,{r,c})}return [...set.values()]}
   function runScore(r,c,color){let score=0;for(const [dr,dc] of dirs){let count=1,open=0;for(const s of [-1,1]){let rr=r+dr*s,cc=c+dc*s;while(rr>=0&&rr<N&&cc>=0&&cc<N&&board[rr][cc]===color){count++;rr+=dr*s;cc+=dc*s}if(rr>=0&&rr<N&&cc>=0&&cc<N&&!board[rr][cc])open++}const table=count>=5?1e7:count===4?(open===2?900000:110000):count===3?(open===2?35000:4500):count===2?(open===2?900:140):25;score+=table}return score}
+  function legalMove(r,c,color){return !board[r][c]&&(color!==BLACK||!isDoubleThree(r,c))}
+  function centerScore(m){return (14-(Math.abs(m.r-7)+Math.abs(m.c-7)))*2}
+  function baseMoveScore(m,color,style){
+    const foe=color===BLACK?WHITE:BLACK,attack=runScore(m.r,m.c,color),defense=runScore(m.r,m.c,foe);
+    if(attack>=1e7)return 3e8;
+    if(defense>=1e7)return 2e8+attack;
+    if(style==='hard')return attack*1.58+defense*.68+Math.min(attack,120000)*.45+centerScore(m);
+    if(style==='expert')return attack*1.42+defense*.82+Math.min(attack,180000)*.38+centerScore(m);
+    return Math.max(attack,defense*.94)+attack*.24+defense*.16+centerScore(m);
+  }
+  function rankedMoves(color,style,limit,radius){
+    return candidates(radius).filter(m=>legalMove(m.r,m.c,color)).map(m=>({m,s:baseMoveScore(m,color,style)})).sort((a,b)=>b.s-a.s).slice(0,limit);
+  }
+  function expertScore(m,color){
+    const foe=color===BLACK?WHITE:BLACK,initial=baseMoveScore(m,color,'expert');
+    if(initial>=3e8)return initial;
+    board[m.r][m.c]=color;
+    const replies=rankedMoves(foe,'expert',10,2);
+    let worst=Infinity;
+    if(!replies.length)worst=initial;
+    for(const reply of replies){
+      if(reply.s>=3e8){worst=Math.min(worst,-2.5e8);continue}
+      board[reply.m.r][reply.m.c]=foe;
+      const follow=rankedMoves(color,'hard',8,2)[0];
+      const continuation=follow?follow.s:0;
+      const value=initial+continuation*.62-reply.s*.78;
+      board[reply.m.r][reply.m.c]=EMPTY;
+      if(value<worst)worst=value;
+    }
+    board[m.r][m.c]=EMPTY;
+    return worst;
+  }
   function bestMove(diff,color){
-    const foe=color===BLACK?WHITE:BLACK;let list=candidates(),best=[],top=-1;
+    const pool=candidates(diff==='hard'||diff==='expert'?2:1).filter(m=>legalMove(m.r,m.c,color)),foe=color===BLACK?WHITE:BLACK;
+    const winning=pool.filter(m=>runScore(m.r,m.c,color)>=1e7);if(winning.length)return winning[Math.floor(Math.random()*winning.length)];
+    const urgent=pool.filter(m=>runScore(m.r,m.c,foe)>=1e7);if(urgent.length)return urgent.sort((a,b)=>runScore(b.r,b.c,color)-runScore(a.r,a.c,color))[0];
+    let list=diff==='expert'?rankedMoves(color,'expert',14,2).map(x=>x.m):pool,best=[],top=-Infinity;
     for(const m of list){
-      if(color===BLACK&&isDoubleThree(m.r,m.c))continue;
-      const attack=runScore(m.r,m.c,color),defense=runScore(m.r,m.c,foe);let s=Math.max(attack,defense*.94)+attack*.24+defense*.16+(14-(Math.abs(m.r-7)+Math.abs(m.c-7)))*2+Math.random()*8;
-      if(defense>=1e7)s=9e6;if(attack>=1e7)s=2e7;
-      if(diff==='hard'){board[m.r][m.c]=color;let danger=0;for(const o of candidates())danger=Math.max(danger,runScore(o.r,o.c,foe));board[m.r][m.c]=EMPTY;s-=danger*.12}
+      if(!legalMove(m.r,m.c,color))continue;
+      let s=diff==='expert'?expertScore(m,color):baseMoveScore(m,color,diff);
+      if(diff==='hard'){
+        board[m.r][m.c]=color;
+        const ownNext=rankedMoves(color,'hard',6,2)[0],foe=color===BLACK?WHITE:BLACK,reply=rankedMoves(foe,'expert',6,2)[0];
+        board[m.r][m.c]=EMPTY;
+        s+=(ownNext?ownNext.s*.22:0)-(reply?reply.s*.12:0);
+      }
+      s+=Math.random()*(diff==='expert'?.35:diff==='hard'?1.5:8);
       if(s>top+.01){top=s;best=[m]}else if(Math.abs(s-top)<.01)best.push(m)
     }
     return best[Math.floor(Math.random()*best.length)]||randomNear(color)
