@@ -177,6 +177,44 @@ body.focus .clockpanel #subject{
 .timetable.attendanceMode:not(.subjectEntry):not(.timeline) .schedule .slot .periodBadge{
  font-size:10px!important;line-height:1.2!important;
 }
+
+/* Fit the mock-CSAT timetable and attendance on one classroom screen. */
+@media(min-width:850px){
+.timetable.attendanceMode:not(.subjectEntry):not(.timeline){overflow:hidden!important;min-height:0;gap:6px!important;}
+.timetable.attendanceMode:not(.subjectEntry):not(.timeline) .schedule{
+ flex:1 1 0!important;min-height:0!important;height:auto!important;
+ grid-auto-rows:minmax(0,1fr)!important;gap:4px!important;
+ overflow:hidden!important;
+}
+.timetable.attendanceMode:not(.subjectEntry):not(.timeline) .schedule .slot{
+ min-height:0!important;height:auto!important;padding:3px 8px!important;
+ overflow:hidden;gap:5px!important;
+}
+.timetable.attendanceMode:not(.subjectEntry):not(.timeline) .schedule .slot b{
+ line-height:1.12!important;white-space:nowrap!important;
+ font-size:clamp(12px,1.05vw,16px)!important;padding-inline:37px 2px!important;
+}
+.timetable.attendanceMode:not(.subjectEntry):not(.timeline) .schedule .slot span{font-size:clamp(12px,1.05vw,16px)!important;line-height:1.12!important;}
+.timetable.attendanceMode:not(.subjectEntry):not(.timeline) #attendanceCard{
+ flex:0 0 auto!important;min-height:0!important;overflow:hidden!important;
+ padding:8px 10px!important;gap:3px!important;
+}
+.timetable.attendanceMode:not(.subjectEntry):not(.timeline) .attHead strong{font-size:15px!important;line-height:1.15;}
+.timetable.attendanceMode:not(.subjectEntry):not(.timeline) .attHead button{font-size:13px!important;padding:3px 7px!important;}
+.timetable.attendanceMode:not(.subjectEntry):not(.timeline) .attStateRow,.timetable.attendanceMode:not(.subjectEntry):not(.timeline) #attendanceDetail{font-size:12px!important;line-height:1.2!important;}
+.timetable.attendanceMode:not(.subjectEntry):not(.timeline) .attSummary small{font-size:12px!important;line-height:1.15;}
+.timetable.attendanceMode:not(.subjectEntry):not(.timeline) .attSummary strong{font-size:25px!important;line-height:1!important;}
+}
+@media(min-width:850px) and (max-height:720px){
+.timetable.attendanceMode:not(.subjectEntry):not(.timeline){padding:9px!important;gap:4px!important;}
+.timetable.attendanceMode:not(.subjectEntry):not(.timeline) .sectionhead h2{font-size:23px!important;}
+.timetable.attendanceMode:not(.subjectEntry):not(.timeline) #modes{gap:3px!important;}
+.timetable.attendanceMode:not(.subjectEntry):not(.timeline) #modes button{font-size:13px!important;padding:5px 7px!important;}
+.timetable.attendanceMode:not(.subjectEntry):not(.timeline) .schedule{gap:3px!important;}
+.timetable.attendanceMode:not(.subjectEntry):not(.timeline) .schedule .slot b,.timetable.attendanceMode:not(.subjectEntry):not(.timeline) .schedule .slot span{font-size:12px!important;}
+.timetable.attendanceMode:not(.subjectEntry):not(.timeline) #attendanceCard{padding:5px 8px!important;gap:2px!important;}
+.timetable.attendanceMode:not(.subjectEntry):not(.timeline) .attSummary strong{font-size:22px!important;}
+}
 </style><header><div class="brand"><small>WISEWHISPER · STUDY ROOM</small>한 칸의 집중</div><div class="date"><div class="headerNow"><span id="date"></span><strong id="headerTime" aria-label="현재 한국 시각"></strong></div><div class="daybadges"><span id="csatDay" title="2027학년도 수능 · 2026년 11월 19일"></span><span id="dday"></span></div></div><nav><button id="openTools">공부 도구</button><button id="openTips">시간 배분·안내</button><button id="focus">큰 시계</button><button id="sound">종소리 꺼짐</button><button id="wake">화면 켜 두기</button><button id="theme">밝기</button><button id="settings">설정</button><button id="full">전체화면 ⛶</button></nav></header>
 <dialog id="toolsDialog"><div class="sectionhead"><h2 id="toolsTitle">공부 도구</h2><button id="closeTools">시계로 돌아가기 ×</button></div><div id="toolBody"></div><div id="tipBody" hidden></div></dialog><main><section class="panel clockpanel"><div class="eyebrow">지금, 이 순간에 집중</div><div class="status" id="period">시간표 확인 중</div><h1 id="subject">자율학습</h1><canvas id="clock" width="560" height="560" aria-label="현재 시각 아날로그 시계"></canvas><div id="digital"></div><div class="muted" id="remainingLabel">다음 일정까지</div><div class="remaining" id="remaining">--:--</div><div class="bar"><i id="progress"></i></div><div class="muted" id="next"></div></section>
 <section class="panel timetable"><div class="sectionhead"><div><div class="eyebrow">YOUR DAILY RHYTHM</div><h2>오늘의 시간표</h2></div><button id="edit">편집 ↗</button></div><div class="chips" id="modes"><button data-mode="exam">수능 연습</button><button data-mode="school">학교 수업</button><button data-mode="schoolExam">학교 시험</button><button data-mode="mockCsat">수능 모의고사</button><button data-mode="study">자율학습</button></div><p class="note" id="mockNote" hidden>첨부 2025년 현황표 기준 · 국어 08:35 / 수학 10:25 / 영어 13:00 / 한국사 14:45 입실. 본령 5분 전 준비 완료. 영어 듣기는 별도 타종 없이 시작합니다. 탐구 사이 2분은 두 시험 시각 사이의 간격으로 표시합니다.</p><p class="note">시간표는 매일 한국 시각을 기준으로 반복됩니다. 수능 연습은 예시이며 탐구 선택에 맞게 편집하세요.</p><div id="schedule" class="schedule"></div><div id="centerGuide"></div><div id="guide"></div><div class="tips"><b style="color:var(--ink)">오늘의 집중 가이드</b><br>시작 전에 이번 시간의 목표를 하나 정하세요.<br>막히는 문제는 표시하고, 돌아올 시간을 남겨 두세요.<br>쉬는 시간에는 눈과 어깨를 잠시 쉬어 주세요.</div></section>
