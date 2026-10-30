@@ -1,5 +1,26 @@
 
 /* Shared compact experiment view; the original layout remains available. */
+/* Doppler: retain the live result group instead of generic card extraction. */
+@media(min-width:1000px){
+body.lab-compact[data-lab-page*="도플러효과"]>main.lab-native{display:block!important;padding:8px 12px!important;max-width:1800px!important}
+body.lab-compact[data-lab-page*="도플러효과"] .topbar{display:none!important}
+body.lab-compact[data-lab-page*="도플러효과"] .layout{display:grid!important;grid-template-columns:minmax(0,1.65fr) minmax(340px,1fr);grid-template-rows:minmax(260px,1fr) auto minmax(180px,.62fr);height:calc(100dvh - 75px);min-height:550px;gap:9px;align-items:stretch}
+body.lab-compact[data-lab-page*="도플러효과"] .stage{grid-column:1;grid-row:1;display:flex;flex-direction:column;min-height:0;padding:9px!important}
+body.lab-compact[data-lab-page*="도플러효과"] .canvas-wrap{flex:1;min-height:0}
+body.lab-compact[data-lab-page*="도플러효과"] #simCanvas{height:100%!important;max-height:none!important;object-fit:fill}
+body.lab-compact[data-lab-page*="도플러효과"] .side{grid-column:2;grid-row:1;display:grid;grid-template-columns:1fr 1fr;gap:6px;align-content:start;padding:9px!important;overflow:auto}
+body.lab-compact[data-lab-page*="도플러효과"] .side .control{margin:0;padding:6px}
+body.lab-compact[data-lab-page*="도플러효과"] .metrics{grid-column:1/-1!important;grid-row:2;display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+body.lab-compact[data-lab-page*="도플러효과"] .metric{min-height:83px;padding:9px!important}
+body.lab-compact[data-lab-page*="도플러효과"] .metric .k{font-size:14px}
+body.lab-compact[data-lab-page*="도플러효과"] .metric .v{font-size:clamp(20px,1.8vw,29px);line-height:1.25;overflow-wrap:anywhere}
+body.lab-compact[data-lab-page*="도플러효과"] .metric .s{font-size:13px}
+body.lab-compact[data-lab-page*="도플러효과"] .lower{grid-column:1/-1;grid-row:3;display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:9px;min-height:0}
+body.lab-compact[data-lab-page*="도플러효과"] .graph{display:flex;flex-direction:column;min-height:0;padding:9px!important}
+body.lab-compact[data-lab-page*="도플러효과"] #graphCanvas{flex:1;min-height:80px;height:0!important;max-height:none!important}
+body.lab-compact[data-lab-page*="도플러효과"] .explain{padding:9px!important;overflow:auto}
+body.lab-compact[data-lab-page*="도플러효과"] .mission,body.lab-compact[data-lab-page*="도플러효과"] .sources{display:none}
+}
 #lab-viewbar{position:sticky;top:0;z-index:1000;display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:9px 16px;background:#10233e;color:#fff;box-shadow:0 2px 12px #0002;font:14px/1.4 system-ui,sans-serif}
 #lab-viewbar .lab-name{font-weight:750;margin-right:auto;max-width:55vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #lab-viewbar button,#lab-viewbar a{font:inherit;min-height:34px;padding:6px 12px;border:1px solid #738ca8;border-radius:8px;color:#fff;background:#203e60;cursor:pointer;text-decoration:none}
@@ -99,4 +120,5 @@ body.lab-compact[data-lab-page*="기주공명"] #lab-focus .top-actions{justify-
 
 /* Let a lone scene grow, while retaining room for the controls and readouts. */
 @media(min-width:1200px){#lab-focus .lab-expanded-scene canvas,#lab-focus .lab-expanded-scene svg{max-height:38vh!important}}
+
 
