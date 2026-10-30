@@ -22,7 +22,7 @@
   const generated=[];
   const empty = [];
   // These pages own switching panels. Keep their original ancestor structure.
-  const native = /특수상대성|빛의굴절과렌즈|열역학과정|전기장과전위/.test(decodeURIComponent(location.pathname));
+  const native = /특수상대성|빛의굴절과렌즈|열역학과정|전기장과전위|도플러효과/.test(decodeURIComponent(location.pathname));
   const atomic = 'section,aside,article,.card,.panel,.stage,.scene,.toolbar,.meters,.metrics,.stats,nav,.tabs,.mode-tabs';
   const wrapper = '.grid,.layout,.workspace,.wrap,.app,.col,.right,.left,.side,.stack,.lower,.visuals,.main-grid,.top,.bottom,.below,.graphs,.stage';
   function collect(parent, out) {
@@ -161,4 +161,5 @@
   document.addEventListener('fullscreenchange',()=>{full.textContent=document.fullscreenElement?'⛶ 전체화면 나가기':'⛶ 전체화면'; resize();});
   if(window.innerWidth>=1000) enable();
 })();
+
 
