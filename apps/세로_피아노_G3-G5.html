@@ -1,0 +1,1361 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#111010">
+  <meta name="description" content="화면 방향에 맞춰 가로·세로로 자동 전환되는 터치 피아노 연습실">
+  <title>세로 피아노</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --ink: #f8f4ea;
+      --muted: #a9a39a;
+      --panel: #191817;
+      --panel-2: #22201e;
+      --line: rgba(255, 255, 255, .1);
+      --wine: #8d2638;
+      --wine-bright: #bd4056;
+      --gold: #d8b36a;
+      --key-gap: 2px;
+      --white-key-width: 46px;
+      --black-key-width: 29px;
+      --radius: 20px;
+      font-family: Inter, Pretendard, "Noto Sans KR", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+      overflow: hidden;
+      overscroll-behavior: none;
+      background: #0d0c0c;
+    }
+
+    body {
+      min-height: 100dvh;
+      color: var(--ink);
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: none;
+    }
+
+    button, select, input {
+      font: inherit;
+    }
+
+    button {
+      color: inherit;
+    }
+
+    .app {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      width: min(100%, 560px);
+      height: var(--app-height, 100dvh);
+      min-height: 0;
+      margin: 0 auto;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% -10%, rgba(141, 38, 56, .22), transparent 32%),
+        linear-gradient(180deg, #171514 0%, #0e0d0d 72%);
+      border-inline: 1px solid rgba(255,255,255,.04);
+    }
+
+    .topbar {
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 66px;
+      padding: calc(10px + env(safe-area-inset-top)) 16px 8px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      display: grid;
+      grid-template-columns: repeat(3, 3px);
+      align-items: end;
+      gap: 3px;
+      width: 22px;
+      height: 22px;
+      padding: 4px;
+      border-radius: 7px;
+      background: var(--wine);
+      box-shadow: 0 7px 20px rgba(141, 38, 56, .25);
+    }
+
+    .brand-mark span {
+      width: 3px;
+      border-radius: 2px;
+      background: #fff7e8;
+    }
+
+    .brand-mark span:nth-child(1) { height: 7px; }
+    .brand-mark span:nth-child(2) { height: 13px; }
+    .brand-mark span:nth-child(3) { height: 10px; }
+
+    .brand h1 {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", "Noto Serif KR", serif;
+      font-size: 1.18rem;
+      font-weight: 600;
+      letter-spacing: -.02em;
+      white-space: nowrap;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sound-select {
+      height: 38px;
+      padding: 0 30px 0 12px;
+      color: var(--ink);
+      font-size: .83rem;
+      font-weight: 700;
+      background-color: rgba(255, 255, 255, .06);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      outline: none;
+    }
+
+    .icon-btn {
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      padding: 0;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(255,255,255,.055);
+      cursor: pointer;
+    }
+
+    .icon-btn:active {
+      transform: scale(.95);
+      background: rgba(255,255,255,.1);
+    }
+
+    .now-playing {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 52px;
+      margin: 0 14px 10px;
+      padding: 8px 14px 8px 16px;
+      border: 1px solid rgba(216, 179, 106, .18);
+      border-radius: 16px;
+      background: linear-gradient(110deg, rgba(216,179,106,.09), rgba(255,255,255,.025));
+      box-shadow: inset 0 1px rgba(255,255,255,.03);
+    }
+
+    .note-readout {
+      min-width: 0;
+    }
+
+    .note-readout small {
+      display: block;
+      margin-bottom: 2px;
+      color: var(--muted);
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+    }
+
+    #activeNotes {
+      display: block;
+      overflow: hidden;
+      color: #fff8e9;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.18rem;
+      font-weight: 700;
+      letter-spacing: .01em;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .beat-lights {
+      display: flex;
+      gap: 7px;
+      flex: 0 0 auto;
+      padding-left: 10px;
+    }
+
+    .beat-light {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #48433e;
+      transition: transform .08s ease, background .08s ease, box-shadow .08s ease;
+    }
+
+    .beat-light.is-beat {
+      transform: scale(1.38);
+      background: var(--gold);
+      box-shadow: 0 0 12px rgba(216,179,106,.8);
+    }
+
+    .control-strip {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 8px;
+      margin: 0 14px 10px;
+    }
+
+    .stepper,
+    .toggle-control {
+      display: flex;
+      align-items: center;
+      min-height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--panel);
+    }
+
+    .stepper {
+      justify-content: space-between;
+      padding: 3px;
+    }
+
+    .stepper-label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 68px;
+      line-height: 1.05;
+    }
+
+    .stepper-label small {
+      color: var(--muted);
+      font-size: .66rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+    }
+
+    .stepper-label strong {
+      margin-top: 3px;
+      font-size: .88rem;
+    }
+
+    .step-btn {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      padding: 0;
+      border: 0;
+      border-radius: 10px;
+      background: rgba(255,255,255,.065);
+      font-size: 1.12rem;
+      cursor: pointer;
+    }
+
+    .step-btn:active { background: rgba(255,255,255,.13); }
+    .step-btn:disabled { color: #5e5954; cursor: default; }
+
+    .toggle-control {
+      justify-content: center;
+      gap: 7px;
+      min-width: 86px;
+      padding: 0 11px;
+      color: var(--muted);
+      font-size: .77rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .toggle-control::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #59534e;
+      box-shadow: 0 0 0 3px rgba(255,255,255,.035);
+    }
+
+    .toggle-control[aria-pressed="true"] {
+      color: #fff5e3;
+      border-color: rgba(216,179,106,.42);
+      background: rgba(216,179,106,.1);
+    }
+
+    .toggle-control[aria-pressed="true"]::before {
+      background: var(--gold);
+      box-shadow: 0 0 9px rgba(216,179,106,.65);
+    }
+
+    .keyboard-shell {
+      position: relative;
+      flex: 1 1 auto;
+      min-height: 300px;
+      margin: 0 10px;
+      padding: 29px 6px 7px;
+      overflow: hidden;
+      border-radius: 18px 18px 22px 22px;
+      background:
+        linear-gradient(90deg, #2a2724, #151413 13%, #201e1c 50%, #151413 87%, #2a2724),
+        #171514;
+      box-shadow:
+        0 18px 45px rgba(0,0,0,.42),
+        inset 0 1px rgba(255,255,255,.08);
+    }
+
+    .keyboard-shell::before {
+      content: "";
+      position: absolute;
+      inset: 3px 14px auto;
+      height: 4px;
+      border-radius: 100%;
+      background: linear-gradient(90deg, transparent, var(--wine), transparent);
+      opacity: .8;
+    }
+
+    .keyboard-scroll {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      overflow-y: hidden;
+      touch-action: none;
+    }
+
+    .range-badge {
+      position: absolute;
+      z-index: 7;
+      top: 7px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #d7d0c5;
+      width: calc(100% - 32px);
+      overflow: hidden;
+      font-size: clamp(.58rem, 2.5vw, .7rem);
+      font-weight: 800;
+      letter-spacing: .025em;
+      text-align: center;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    .keys {
+      position: relative;
+      width: 100%;
+      min-width: 0;
+      height: 100%;
+      overflow: hidden;
+      border-radius: 12px 12px 17px 17px;
+      background: #171514;
+      touch-action: none;
+    }
+
+    .white-keys {
+      display: flex;
+      gap: var(--key-gap);
+      width: 100%;
+      height: 100%;
+      padding-top: 5px;
+    }
+
+    .key {
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      min-width: 0;
+      padding: 0 0 17px;
+      border: 0;
+      outline: none;
+      cursor: pointer;
+      touch-action: none;
+    }
+
+    .key.white {
+      flex: 0 0 var(--white-key-width);
+      z-index: 1;
+      color: #403c37;
+      border: 1px solid #c8c1b5;
+      border-top: 0;
+      border-radius: 2px 2px 10px 10px;
+      background:
+        linear-gradient(90deg, rgba(150,140,125,.12), transparent 18%, transparent 76%, rgba(130,120,105,.12)),
+        linear-gradient(180deg, #fffef9 0%, #f2efe6 74%, #d8d1c3 100%);
+      box-shadow:
+        inset 0 -7px 8px rgba(85,72,58,.13),
+        0 4px 0 #a8a093,
+        0 6px 8px rgba(0,0,0,.35);
+      transition: transform .012s ease, background .012s ease;
+    }
+
+    .key.white.is-active {
+      transform: translateY(4px);
+      color: #651d2b;
+      border-color: #caa3aa;
+      background:
+        linear-gradient(180deg, #fffdf7 0%, #f5dce0 78%, #d59aa5 100%);
+      box-shadow:
+        inset 0 -3px 8px rgba(141,38,56,.18),
+        0 1px 0 #8e7678,
+        0 2px 4px rgba(0,0,0,.3);
+    }
+
+    .key.white.guide-note {
+      border-bottom: 4px solid var(--gold);
+    }
+
+    .key.white.guide-note::before {
+      content: "";
+      position: absolute;
+      bottom: 48px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 8px rgba(216,179,106,.48);
+    }
+
+    .key.white.guide-note.center-guide {
+      color: #741e2e;
+      border-bottom-color: var(--wine-bright);
+    }
+
+    .key.white.guide-note.center-guide::before {
+      background: var(--wine-bright);
+      box-shadow: 0 0 8px rgba(189,64,86,.52);
+    }
+
+    .black-keys {
+      position: absolute;
+      z-index: 3;
+      inset: 5px 0 auto;
+      height: 61%;
+      pointer-events: none;
+    }
+
+    .key.black {
+      position: absolute;
+      top: 0;
+      width: var(--black-key-width);
+      height: 100%;
+      padding: 0 0 14px;
+      transform: translateX(-50%);
+      color: #ddd4c6;
+      pointer-events: auto;
+      border: 1px solid #050505;
+      border-radius: 0 0 8px 8px;
+      background:
+        linear-gradient(90deg, #090909, #282625 26%, #111 68%, #050505),
+        #111;
+      box-shadow:
+        inset 0 -8px 7px rgba(255,255,255,.045),
+        0 6px 0 #050505,
+        0 10px 12px rgba(0,0,0,.55);
+      transition: height .012s ease, background .012s ease;
+    }
+
+    .key.black.is-active {
+      height: calc(100% + 5px);
+      color: #fff0c9;
+      background:
+        linear-gradient(90deg, #19070a, #6f1d2c 38%, #321017 74%, #0b0607),
+        var(--wine);
+      box-shadow:
+        inset 0 -5px 8px rgba(255,255,255,.08),
+        0 2px 0 #21090e,
+        0 5px 8px rgba(0,0,0,.5);
+    }
+
+    .key-label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .key-label strong {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(.72rem, 3.3vw, .96rem);
+    }
+
+    .key-label small {
+      font-size: clamp(.55rem, 2.5vw, .68rem);
+      font-weight: 800;
+      opacity: .62;
+    }
+
+    .key.black .key-label strong {
+      font-size: clamp(.58rem, 2.6vw, .75rem);
+    }
+
+    .key.black .key-label small {
+      display: none;
+    }
+
+    .hide-labels .key-label { opacity: 0; }
+
+    .practice-bar {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 12px;
+      min-height: 78px;
+      padding: 10px 15px calc(10px + env(safe-area-inset-bottom));
+    }
+
+    .metro-button {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-width: 116px;
+      height: 48px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: var(--panel);
+      cursor: pointer;
+    }
+
+    .metro-icon {
+      position: relative;
+      width: 17px;
+      height: 22px;
+      border: 2px solid var(--muted);
+      border-top: 0;
+      border-radius: 2px 2px 5px 5px;
+      transform: perspective(20px) rotateX(-3deg);
+    }
+
+    .metro-icon::after {
+      content: "";
+      position: absolute;
+      left: 7px;
+      bottom: 4px;
+      width: 2px;
+      height: 15px;
+      transform-origin: bottom;
+      transform: rotate(18deg);
+      border-radius: 2px;
+      background: var(--muted);
+    }
+
+    .metro-button[aria-pressed="true"] {
+      border-color: rgba(189,64,86,.56);
+      background: rgba(141,38,56,.18);
+    }
+
+    .metro-button[aria-pressed="true"] .metro-icon,
+    .metro-button[aria-pressed="true"] .metro-icon::after {
+      border-color: var(--wine-bright);
+      background-color: var(--wine-bright);
+    }
+
+    .metro-copy {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      line-height: 1.05;
+    }
+
+    .metro-copy small {
+      color: var(--muted);
+      font-size: .67rem;
+      font-weight: 700;
+    }
+
+    .metro-copy strong {
+      margin-top: 4px;
+      font-size: .82rem;
+    }
+
+    .bpm-control {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .bpm-control .step-btn {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.045);
+    }
+
+    .bpm-display {
+      min-width: 47px;
+      text-align: center;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .bpm-display small {
+      display: block;
+      margin-top: 1px;
+      color: var(--muted);
+      font-family: inherit;
+      font-size: .57rem;
+      letter-spacing: .06em;
+    }
+
+    .volume-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      width: 76px;
+    }
+
+    .volume-wrap svg {
+      flex: 0 0 auto;
+      color: var(--muted);
+    }
+
+    input[type="range"] {
+      width: 54px;
+      height: 24px;
+      margin: 0;
+      accent-color: var(--wine-bright);
+      cursor: pointer;
+    }
+
+    .keyboard-hint {
+      display: none;
+      position: fixed;
+      inset: auto 50% 12px;
+      z-index: 20;
+      width: max-content;
+      max-width: calc(100vw - 24px);
+      padding: 8px 12px;
+      transform: translateX(-50%);
+      color: #d9d2c8;
+      font-size: .73rem;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(16,15,15,.9);
+      backdrop-filter: blur(12px);
+    }
+
+    .focus-ring:focus-visible,
+    button:focus-visible,
+    select:focus-visible,
+    input:focus-visible {
+      outline: 3px solid rgba(216,179,106,.65);
+      outline-offset: 2px;
+    }
+
+    @media (min-width: 720px) and (pointer: fine) {
+      body {
+        display: grid;
+        place-items: center;
+        padding: 18px;
+        background:
+          radial-gradient(circle at center, #2a2020 0%, #0d0c0c 52%, #070707 100%);
+      }
+
+      .app {
+        height: min(920px, calc(var(--app-height, 100dvh) - 36px));
+        border: 1px solid rgba(255,255,255,.09);
+        border-radius: 28px;
+        box-shadow: 0 32px 90px rgba(0,0,0,.6);
+      }
+
+      .keyboard-hint { display: block; }
+    }
+
+    @media (max-height: 690px) {
+      .app { min-height: 500px; }
+      .topbar { min-height: 54px; padding-top: calc(7px + env(safe-area-inset-top)); }
+      .now-playing { min-height: 43px; margin-bottom: 7px; }
+      .control-strip { margin-bottom: 7px; }
+      .practice-bar { min-height: 64px; padding-top: 7px; }
+      .metro-button { height: 43px; }
+      .key { padding-bottom: 11px; }
+    }
+
+    @media (max-width: 370px) {
+      .control-strip { grid-template-columns: 1fr auto; }
+      #labelsToggle { display: none; }
+      .practice-bar { gap: 7px; padding-inline: 10px; }
+      .metro-button { min-width: 104px; padding-inline: 10px; }
+      .volume-wrap { width: 62px; }
+      input[type="range"] { width: 42px; }
+    }
+
+    @media (orientation: landscape) {
+      html, body { overflow: hidden; }
+      body { touch-action: none; }
+      .app {
+        width: min(100%, 1180px);
+        height: var(--app-height, 100dvh);
+        min-height: 0;
+      }
+
+      .topbar {
+        min-height: 52px;
+        padding: calc(6px + env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) 6px max(12px, env(safe-area-inset-left));
+      }
+
+      .now-playing {
+        min-height: 44px;
+        margin-bottom: 7px;
+      }
+
+      .control-strip {
+        width: min(720px, calc(100% - 28px));
+        grid-template-columns: minmax(190px, 1fr) auto auto;
+        align-self: center;
+        margin-bottom: 7px;
+      }
+
+      .keyboard-shell {
+        min-height: 0;
+        margin-inline: max(8px, env(safe-area-inset-left)) max(8px, env(safe-area-inset-right));
+      }
+
+      .practice-bar {
+        min-height: 58px;
+        padding: 7px max(14px, env(safe-area-inset-right)) max(7px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+      }
+    }
+
+    @media (orientation: landscape) and (max-height: 520px) {
+      .app { width: 100%; }
+      .topbar { min-height: 46px; }
+      .now-playing { display: none; }
+      .control-strip {
+        width: auto;
+        grid-template-columns: minmax(180px, 1fr) auto auto;
+        align-self: stretch;
+        margin: 0 max(10px, env(safe-area-inset-right)) 6px max(10px, env(safe-area-inset-left));
+      }
+      .stepper,
+      .toggle-control { min-height: 38px; }
+      .step-btn { width: 31px; height: 31px; }
+      .keyboard-shell { min-height: 0; padding-top: 25px; }
+      .practice-bar { min-height: 49px; padding-top: 4px; }
+      .metro-button { height: 41px; }
+      .key { padding-bottom: 8px; }
+      .key.white.guide-note::before { bottom: 37px; }
+    }
+
+    @media (orientation: landscape) and (min-width: 720px) and (pointer: fine) {
+      .app {
+        width: min(1180px, calc(100vw - 36px));
+        height: min(760px, calc(var(--app-height, 100dvh) - 36px));
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .001ms !important;
+        animation-duration: .001ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app" id="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></div>
+        <h1>세로 피아노</h1>
+      </div>
+      <div class="header-actions">
+        <label>
+          <span class="sr-only" hidden>음색</span>
+          <select class="sound-select" id="soundSelect" aria-label="피아노 음색">
+            <option value="grand">그랜드</option>
+            <option value="warm">웜 피아노</option>
+            <option value="electric">일렉트릭</option>
+          </select>
+        </label>
+        <button class="icon-btn" id="fullscreenButton" type="button" aria-label="전체 화면">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <section class="now-playing" aria-live="polite">
+      <div class="note-readout">
+        <small>NOW PLAYING</small>
+        <span id="activeNotes">건반을 눌러 시작하세요</span>
+      </div>
+      <div class="beat-lights" aria-label="4박자 표시">
+        <span class="beat-light"></span>
+        <span class="beat-light"></span>
+        <span class="beat-light"></span>
+        <span class="beat-light"></span>
+      </div>
+    </section>
+
+    <section class="control-strip" aria-label="연주 설정">
+      <div class="stepper">
+        <button class="step-btn" id="octaveDown" type="button" aria-label="옥타브 내리기">−</button>
+        <div class="stepper-label">
+          <small>OCTAVE</small>
+          <strong id="octaveValue">4</strong>
+        </div>
+        <button class="step-btn" id="octaveUp" type="button" aria-label="옥타브 올리기">＋</button>
+      </div>
+      <button class="toggle-control" id="labelsToggle" type="button" aria-pressed="true">음이름</button>
+      <button class="toggle-control" id="sustainToggle" type="button" aria-pressed="false">서스테인</button>
+    </section>
+
+    <section class="keyboard-shell" aria-label="피아노 건반">
+      <div class="range-badge" id="rangeLabel">낮은 솔 G3 · 기본 솔 G4 · 높은 솔 G5</div>
+      <div class="keyboard-scroll" id="keyboardScroll">
+        <div class="keys" id="keyboard">
+          <div class="white-keys" id="whiteKeys"></div>
+          <div class="black-keys" id="blackKeys"></div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="practice-bar">
+      <button class="metro-button" id="metroToggle" type="button" aria-pressed="false">
+        <span class="metro-icon" aria-hidden="true"></span>
+        <span class="metro-copy"><small>메트로놈</small><strong id="metroState">시작</strong></span>
+      </button>
+      <div class="bpm-control" aria-label="메트로놈 빠르기">
+        <button class="step-btn" id="bpmDown" type="button" aria-label="빠르기 낮추기">−</button>
+        <div class="bpm-display"><span id="bpmValue">80</span><small>BPM</small></div>
+        <button class="step-btn" id="bpmUp" type="button" aria-label="빠르기 높이기">＋</button>
+      </div>
+      <label class="volume-wrap" aria-label="음량">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M11 5 6.5 9H3v6h3.5l4.5 4V5Zm4 4.5a4 4 0 0 1 0 5M17.7 7a7 7 0 0 1 0 10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <input id="volume" type="range" min="0" max="100" value="72">
+      </label>
+    </footer>
+  </main>
+
+  <div class="keyboard-hint" aria-hidden="true">낮은 솔부터 높은 솔까지 2옥타브 · 컴퓨터 키보드 A–K</div>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const NOTE_NAMES = ["C", "C♯", "D", "D♯", "E", "F", "F♯", "G", "G♯", "A", "A♯", "B"];
+      const SOLFEGE = ["도", "도♯", "레", "레♯", "미", "파", "파♯", "솔", "솔♯", "라", "라♯", "시"];
+      const RANGE_START_OFFSET = -5;
+      const RANGE_END_OFFSET = 19;
+      const WHITE_PITCH_CLASSES = new Set([0, 2, 4, 5, 7, 9, 11]);
+      const ALL_OFFSETS = Array.from(
+        { length: RANGE_END_OFFSET - RANGE_START_OFFSET + 1 },
+        (_, index) => RANGE_START_OFFSET + index
+      );
+      const WHITE_OFFSETS = ALL_OFFSETS.filter(offset =>
+        WHITE_PITCH_CLASSES.has(((offset % 12) + 12) % 12)
+      );
+      const BLACK_OFFSETS = ALL_OFFSETS.filter(offset => !WHITE_OFFSETS.includes(offset));
+      const BLACK_BOUNDARIES = BLACK_OFFSETS.map(offset =>
+        WHITE_OFFSETS.filter(whiteOffset => whiteOffset < offset).length
+      );
+      const KEYBOARD_MAP = {
+        KeyA: 0, KeyW: 1, KeyS: 2, KeyE: 3, KeyD: 4,
+        KeyF: 5, KeyT: 6, KeyG: 7, KeyY: 8, KeyH: 9,
+        KeyU: 10, KeyJ: 11, KeyK: 12, KeyO: 13, KeyL: 14
+      };
+
+      let audioContext = null;
+      let masterGain = null;
+      let octave = 4;
+      let volume = .72;
+      let sustain = false;
+      let sound = "grand";
+      let bpm = 80;
+      let metroTimer = null;
+      let beat = 0;
+      let layoutFrame = 0;
+      let layoutSettleTimer = 0;
+
+      const voices = new Map();
+      const heldSources = new Map();
+      const pointerNotes = new Map();
+      const keyboardSources = new Map();
+      const sustainedNotes = new Set();
+
+      const app = document.getElementById("app");
+      const keyboardScroll = document.getElementById("keyboardScroll");
+      const keyboard = document.getElementById("keyboard");
+      const whiteKeys = document.getElementById("whiteKeys");
+      const blackKeys = document.getElementById("blackKeys");
+      const rangeLabel = document.getElementById("rangeLabel");
+      const activeNotes = document.getElementById("activeNotes");
+      const octaveValue = document.getElementById("octaveValue");
+      const octaveDown = document.getElementById("octaveDown");
+      const octaveUp = document.getElementById("octaveUp");
+      const labelsToggle = document.getElementById("labelsToggle");
+      const sustainToggle = document.getElementById("sustainToggle");
+      const soundSelect = document.getElementById("soundSelect");
+      const volumeInput = document.getElementById("volume");
+      const metroToggle = document.getElementById("metroToggle");
+      const metroState = document.getElementById("metroState");
+      const bpmValue = document.getElementById("bpmValue");
+      const beatLights = [...document.querySelectorAll(".beat-light")];
+
+      function midiFromOffset(offset) {
+        return 12 * (octave + 1) + offset;
+      }
+
+      function noteInfo(midi) {
+        const index = ((midi % 12) + 12) % 12;
+        const noteOctave = Math.floor(midi / 12) - 1;
+        return {
+          name: NOTE_NAMES[index],
+          solfege: SOLFEGE[index],
+          octave: noteOctave,
+          frequency: 440 * Math.pow(2, (midi - 69) / 12)
+        };
+      }
+
+      function ensureAudio() {
+        if (!audioContext) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          if (!AudioCtx) return null;
+          try {
+            audioContext = new AudioCtx({ latencyHint: "interactive" });
+          } catch (_) {
+            audioContext = new AudioCtx();
+          }
+          masterGain = audioContext.createGain();
+          masterGain.gain.value = volume;
+          masterGain.connect(audioContext.destination);
+        }
+        if (audioContext.state === "suspended") audioContext.resume().catch(() => {});
+        return audioContext;
+      }
+
+      function makeVoice(midi) {
+        const ctx = ensureAudio();
+        if (!ctx || !masterGain) return null;
+
+        const now = ctx.currentTime;
+        const info = noteInfo(midi);
+        const output = ctx.createGain();
+        const filter = ctx.createBiquadFilter();
+        const oscillators = [];
+
+        filter.type = "lowpass";
+        filter.frequency.setValueAtTime(sound === "electric" ? 5200 : 4200, now);
+        filter.Q.value = .55;
+        output.gain.setValueAtTime(.0001, now);
+        output.gain.exponentialRampToValueAtTime(sound === "warm" ? .24 : .29, now + .002);
+        output.gain.exponentialRampToValueAtTime(sound === "electric" ? .13 : .095, now + (sound === "grand" ? 1.15 : .72));
+        output.connect(filter);
+        filter.connect(masterGain);
+
+        const recipes = sound === "grand"
+          ? [
+              { ratio: 1, type: "triangle", gain: .72, detune: -1.2 },
+              { ratio: 2, type: "sine", gain: .17, detune: 1.4 },
+              { ratio: 3, type: "sine", gain: .065, detune: -.6 }
+            ]
+          : sound === "warm"
+          ? [
+              { ratio: 1, type: "sine", gain: .82, detune: -2 },
+              { ratio: 1, type: "triangle", gain: .2, detune: 2 },
+              { ratio: 2, type: "sine", gain: .07, detune: 0 }
+            ]
+          : [
+              { ratio: 1, type: "sine", gain: .78, detune: 0 },
+              { ratio: 2, type: "sine", gain: .18, detune: 4 },
+              { ratio: 3, type: "triangle", gain: .055, detune: -4 }
+            ];
+
+        recipes.forEach(recipe => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = recipe.type;
+          osc.frequency.value = info.frequency * recipe.ratio;
+          osc.detune.value = recipe.detune;
+          gain.gain.value = recipe.gain;
+          osc.connect(gain);
+          gain.connect(output);
+          osc.start(now);
+          oscillators.push(osc);
+        });
+
+        return { midi, output, filter, oscillators, released: false };
+      }
+
+      function stopVoice(midi, fast = false) {
+        const voice = voices.get(midi);
+        if (!voice || voice.released || !audioContext) return;
+        voice.released = true;
+        const now = audioContext.currentTime;
+        const releaseTime = fast ? .045 : (sound === "electric" ? 1.05 : .58);
+        voice.output.gain.cancelScheduledValues(now);
+        voice.output.gain.setTargetAtTime(.0001, now, releaseTime / 5);
+        voice.oscillators.forEach(osc => {
+          try { osc.stop(now + releaseTime + .08); } catch (_) {}
+        });
+        window.setTimeout(() => {
+          voice.output.disconnect();
+          voice.filter.disconnect();
+          if (voices.get(midi) === voice) voices.delete(midi);
+        }, (releaseTime + .15) * 1000);
+      }
+
+      function pressNote(midi, sourceId) {
+        if (!heldSources.has(midi)) heldSources.set(midi, new Set());
+        const sources = heldSources.get(midi);
+        if (sources.has(sourceId)) return;
+        sources.add(sourceId);
+        const wasSustained = sustainedNotes.delete(midi);
+
+        const oldVoice = voices.get(midi);
+        if (wasSustained && oldVoice && !oldVoice.released) stopVoice(midi, true);
+        if (!oldVoice || oldVoice.released || wasSustained) {
+          const voice = makeVoice(midi);
+          if (voice) voices.set(midi, voice);
+        }
+        updateKeys();
+        updateReadout();
+      }
+
+      function releaseNote(midi, sourceId) {
+        const sources = heldSources.get(midi);
+        if (!sources) return;
+        sources.delete(sourceId);
+        if (sources.size) return;
+        heldSources.delete(midi);
+        if (sustain) {
+          sustainedNotes.add(midi);
+        } else {
+          stopVoice(midi);
+        }
+        updateKeys();
+        updateReadout();
+      }
+
+      function keyForMidi(midi) {
+        return keyboard.querySelector(`[data-midi="${midi}"]`);
+      }
+
+      function updateKeys() {
+        keyboard.querySelectorAll(".key").forEach(key => {
+          const midi = Number(key.dataset.midi);
+          const active = heldSources.has(midi) || sustainedNotes.has(midi);
+          key.classList.toggle("is-active", active);
+          key.setAttribute("aria-pressed", String(active));
+        });
+      }
+
+      function updateReadout() {
+        const notes = [...new Set([...heldSources.keys(), ...sustainedNotes])]
+          .sort((a, b) => a - b)
+          .map(midi => {
+            const info = noteInfo(midi);
+            return `${info.name}${info.octave}`;
+          });
+        activeNotes.textContent = notes.length ? notes.join("  ·  ") : "건반을 눌러 시작하세요";
+      }
+
+      function createKey(offset, kind, position) {
+        const midi = midiFromOffset(offset);
+        const info = noteInfo(midi);
+        const key = document.createElement("button");
+        key.type = "button";
+        key.className = `key ${kind}`;
+        const guideName = offset === RANGE_START_OFFSET
+          ? "낮은 솔"
+          : offset === 7
+            ? "기본 솔"
+            : offset === RANGE_END_OFFSET
+              ? "높은 솔"
+              : "";
+        if (guideName && kind === "white") {
+          key.classList.add("guide-note");
+          if (offset === 7) key.classList.add("center-guide");
+        }
+        key.dataset.offset = String(offset);
+        key.dataset.midi = String(midi);
+        key.setAttribute("aria-label", `${guideName ? `${guideName}, ` : ""}${info.solfege}, ${info.name}${info.octave}`);
+        key.setAttribute("aria-pressed", "false");
+        key.innerHTML = `<span class="key-label"><strong>${info.name}</strong><small>${info.solfege}</small></span>`;
+        if (typeof position === "number") key.dataset.boundary = String(position);
+        return key;
+      }
+
+      function layoutKeyboard() {
+        const viewportWidth = keyboardScroll.clientWidth || Math.max(320, window.innerWidth - 32);
+        const gap = 2;
+        const keyWidth = (viewportWidth - (WHITE_OFFSETS.length - 1) * gap) / WHITE_OFFSETS.length;
+        const blackWidth = Math.max(11, keyWidth * .64);
+        const totalWidth = WHITE_OFFSETS.length * keyWidth + (WHITE_OFFSETS.length - 1) * gap;
+
+        keyboard.style.setProperty("--white-key-width", `${keyWidth}px`);
+        keyboard.style.setProperty("--black-key-width", `${blackWidth}px`);
+        keyboard.style.width = `${totalWidth}px`;
+        blackKeys.style.width = `${totalWidth}px`;
+
+        blackKeys.querySelectorAll(".key.black").forEach(key => {
+          const boundary = Number(key.dataset.boundary);
+          const left = boundary * keyWidth + Math.max(0, boundary - 1) * gap + gap / 2;
+          key.style.left = `${left}px`;
+        });
+
+        keyboardScroll.scrollLeft = 0;
+      }
+
+      function scheduleKeyboardLayout() {
+        window.cancelAnimationFrame(layoutFrame);
+        layoutFrame = window.requestAnimationFrame(() => {
+          layoutFrame = window.requestAnimationFrame(layoutKeyboard);
+        });
+        window.clearTimeout(layoutSettleTimer);
+        layoutSettleTimer = window.setTimeout(layoutKeyboard, 180);
+      }
+
+      function syncDisplayMode() {
+        const viewport = window.visualViewport;
+        const width = Math.round(viewport?.width || window.innerWidth || document.documentElement.clientWidth);
+        const height = Math.round(viewport?.height || window.innerHeight || document.documentElement.clientHeight);
+        const nextMode = width > height ? "landscape" : "portrait";
+        const previousMode = app.dataset.orientation;
+
+        document.documentElement.style.setProperty("--app-height", `${height}px`);
+        app.dataset.orientation = nextMode;
+
+        if (previousMode && previousMode !== nextMode) releaseAll(true);
+        scheduleKeyboardLayout();
+      }
+
+      function renderKeyboard() {
+        releaseAll(true);
+        whiteKeys.innerHTML = "";
+        blackKeys.innerHTML = "";
+        WHITE_OFFSETS.forEach(offset => whiteKeys.appendChild(createKey(offset, "white")));
+        BLACK_OFFSETS.forEach((offset, index) =>
+          blackKeys.appendChild(createKey(offset, "black", BLACK_BOUNDARIES[index]))
+        );
+        const first = noteInfo(midiFromOffset(RANGE_START_OFFSET));
+        const middle = noteInfo(midiFromOffset(7));
+        const last = noteInfo(midiFromOffset(RANGE_END_OFFSET));
+        rangeLabel.textContent = `낮은 솔 ${first.name}${first.octave} · 기본 솔 ${middle.name}${middle.octave} · 높은 솔 ${last.name}${last.octave}`;
+        octaveValue.textContent = String(octave);
+        octaveDown.disabled = octave <= 2;
+        octaveUp.disabled = octave >= 6;
+        layoutKeyboard();
+      }
+
+      function releaseAll(fast = false) {
+        heldSources.clear();
+        pointerNotes.clear();
+        keyboardSources.clear();
+        sustainedNotes.clear();
+        [...voices.keys()].forEach(midi => stopVoice(midi, fast));
+        updateKeys();
+        updateReadout();
+      }
+
+      function noteAtPoint(x, y) {
+        const element = document.elementFromPoint(x, y);
+        const key = element && element.closest ? element.closest(".key") : null;
+        return key && keyboard.contains(key) ? Number(key.dataset.midi) : null;
+      }
+
+      app.addEventListener("pointerdown", ensureAudio, { capture: true, passive: true });
+
+      keyboard.addEventListener("pointerdown", event => {
+        const key = event.target.closest(".key");
+        if (!key) return;
+        event.preventDefault();
+        const midi = Number(key.dataset.midi);
+        const source = `pointer-${event.pointerId}`;
+        pointerNotes.set(event.pointerId, midi);
+        pressNote(midi, source);
+      }, { passive: false });
+
+      window.addEventListener("pointermove", event => {
+        if (!pointerNotes.has(event.pointerId)) return;
+        event.preventDefault();
+        const previous = pointerNotes.get(event.pointerId);
+        const next = noteAtPoint(event.clientX, event.clientY);
+        if (next === null || next === previous) return;
+        const source = `pointer-${event.pointerId}`;
+        releaseNote(previous, source);
+        pointerNotes.set(event.pointerId, next);
+        pressNote(next, source);
+      }, { passive: false });
+
+      function endPointer(event) {
+        if (!pointerNotes.has(event.pointerId)) return;
+        const midi = pointerNotes.get(event.pointerId);
+        pointerNotes.delete(event.pointerId);
+        releaseNote(midi, `pointer-${event.pointerId}`);
+      }
+
+      window.addEventListener("pointerup", endPointer);
+      window.addEventListener("pointercancel", endPointer);
+
+      window.addEventListener("keydown", event => {
+        if (event.repeat || !(event.code in KEYBOARD_MAP)) return;
+        if (event.target.matches("input, select")) return;
+        event.preventDefault();
+        const offset = KEYBOARD_MAP[event.code];
+        const midi = midiFromOffset(offset);
+        const source = `keyboard-${event.code}`;
+        keyboardSources.set(event.code, midi);
+        pressNote(midi, source);
+      });
+
+      window.addEventListener("keyup", event => {
+        if (!keyboardSources.has(event.code)) return;
+        const midi = keyboardSources.get(event.code);
+        keyboardSources.delete(event.code);
+        releaseNote(midi, `keyboard-${event.code}`);
+      });
+
+      window.addEventListener("blur", () => releaseAll(true));
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) releaseAll(true);
+      });
+
+      function changeOctave(delta) {
+        const next = Math.max(2, Math.min(6, octave + delta));
+        if (next === octave) return;
+        octave = next;
+        renderKeyboard();
+      }
+
+      octaveDown.addEventListener("click", () => changeOctave(-1));
+      octaveUp.addEventListener("click", () => changeOctave(1));
+      window.addEventListener("resize", syncDisplayMode, { passive: true });
+      window.addEventListener("orientationchange", syncDisplayMode, { passive: true });
+      window.visualViewport?.addEventListener("resize", syncDisplayMode, { passive: true });
+      window.screen.orientation?.addEventListener?.("change", syncDisplayMode);
+      if ("ResizeObserver" in window) {
+        const keyboardObserver = new ResizeObserver(scheduleKeyboardLayout);
+        keyboardObserver.observe(keyboardScroll);
+      }
+
+      labelsToggle.addEventListener("click", () => {
+        const show = labelsToggle.getAttribute("aria-pressed") !== "true";
+        labelsToggle.setAttribute("aria-pressed", String(show));
+        app.classList.toggle("hide-labels", !show);
+      });
+
+      sustainToggle.addEventListener("click", () => {
+        sustain = !sustain;
+        sustainToggle.setAttribute("aria-pressed", String(sustain));
+        if (!sustain) {
+          [...sustainedNotes].forEach(midi => {
+            sustainedNotes.delete(midi);
+            if (!heldSources.has(midi)) stopVoice(midi);
+          });
+          updateKeys();
+          updateReadout();
+        }
+      });
+
+      soundSelect.addEventListener("change", event => {
+        sound = event.target.value;
+        releaseAll(true);
+      });
+
+      volumeInput.addEventListener("input", event => {
+        volume = Number(event.target.value) / 100;
+        if (masterGain && audioContext) {
+          masterGain.gain.setTargetAtTime(volume, audioContext.currentTime, .02);
+        }
+      });
+
+      function playClick(accent) {
+        const ctx = ensureAudio();
+        if (!ctx || !masterGain) return;
+        const now = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(accent ? 1120 : 820, now);
+        osc.frequency.exponentialRampToValueAtTime(accent ? 740 : 560, now + .035);
+        gain.gain.setValueAtTime(accent ? .16 : .1, now);
+        gain.gain.exponentialRampToValueAtTime(.0001, now + .07);
+        osc.connect(gain);
+        gain.connect(masterGain);
+        osc.start(now);
+        osc.stop(now + .08);
+      }
+
+      function showBeat(index) {
+        beatLights.forEach((light, i) => light.classList.toggle("is-beat", i === index));
+        window.setTimeout(() => {
+          if (beatLights[index]) beatLights[index].classList.remove("is-beat");
+        }, 105);
+      }
+
+      function metroTick() {
+        playClick(beat === 0);
+        showBeat(beat);
+        beat = (beat + 1) % 4;
+      }
+
+      function startMetronome() {
+        stopMetronome(false);
+        beat = 0;
+        metroTick();
+        metroTimer = window.setInterval(metroTick, 60000 / bpm);
+        metroToggle.setAttribute("aria-pressed", "true");
+        metroState.textContent = "정지";
+      }
+
+      function stopMetronome(update = true) {
+        if (metroTimer) window.clearInterval(metroTimer);
+        metroTimer = null;
+        beatLights.forEach(light => light.classList.remove("is-beat"));
+        if (update) {
+          metroToggle.setAttribute("aria-pressed", "false");
+          metroState.textContent = "시작";
+        }
+      }
+
+      metroToggle.addEventListener("click", () => {
+        if (metroTimer) stopMetronome();
+        else startMetronome();
+      });
+
+      function changeBpm(delta) {
+        bpm = Math.max(40, Math.min(208, bpm + delta));
+        bpmValue.textContent = String(bpm);
+        if (metroTimer) startMetronome();
+      }
+
+      document.getElementById("bpmDown").addEventListener("click", () => changeBpm(-5));
+      document.getElementById("bpmUp").addEventListener("click", () => changeBpm(5));
+
+      document.getElementById("fullscreenButton").addEventListener("click", async () => {
+        try {
+          if (!document.fullscreenElement) {
+            await document.documentElement.requestFullscreen?.();
+          } else {
+            await document.exitFullscreen?.();
+          }
+        } catch (_) {}
+      });
+
+      syncDisplayMode();
+      renderKeyboard();
+    })();
+  </script>
+</body>
+</html>
