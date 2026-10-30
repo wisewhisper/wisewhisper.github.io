@@ -20,6 +20,21 @@
  .bottom{margin-top:13px;font-size:9px}
  .side{padding:8px 5px}
 }
+
+/* High-contrast, heavier LCD typography. */
+.lcd{color:#142516;background:linear-gradient(110deg,#dce7c9,#c1d0af)}
+.status{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;font-size:12px;font-weight:750;letter-spacing:.2px}
+textarea{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;font-variant-numeric:tabular-nums;font-size:27px;font-weight:650;line-height:1.3;height:43px;letter-spacing:.15px;caret-color:#142516}
+textarea::placeholder{color:#40513d;opacity:1}
+.output{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;font-variant-numeric:tabular-nums;font-size:46px;font-weight:750;line-height:1.15;letter-spacing:-.5px;white-space:nowrap;overflow-x:auto;overflow-y:hidden;min-height:53px}
+.output.error{font:600 16px/1.4 system-ui;white-space:normal;letter-spacing:0}
+@media(max-width:780px){
+ .lcd{min-height:118px}
+ .status{font-size:12px}
+ textarea{font-size:27px;height:38px;font-weight:650;line-height:1.3}
+ .output{font-size:42px;min-height:49px;font-weight:750}
+ .output.error{font-size:16px}
+}
 </style></head><body><header><strong>한결 / SCIENTIFIC</strong><span>익숙한 손끝, 더 깊은 계산.</span></header><main class="layout"><div class="calculator-stage" id="calculatorStage"><section class="body" aria-label="공학용 계산기"><div class="brand"><div><strong>HANGYEOL</strong><small>SC-01 · SCIENTIFIC</small></div><div class="solar" aria-hidden="true"></div></div><div class="bezel"><div class="lcd"><div class="status"><span id="shiftStatus" class="off">SHIFT</span><span id="memoryStatus" class="off">M</span><span id="angleStatus">DEG</span><span id="formatStatus">NORM</span><span>COMP</span></div><textarea id="expression" readonly inputmode="none" rows="1" spellcheck="false" aria-label="계산식 입력" placeholder="0"></textarea><div class="output" id="output" aria-live="polite">0</div></div></div><div class="hint"><span>SHIFT → 노란색 보조 기능</span><button type="button" id="keyboardToggle" aria-pressed="false">키보드 입력 켜기</button></div><div class="control" id="controls"></div><div class="function" id="functions"></div><div class="number" id="numbers"></div><div class="bottom">SCIENTIFIC CALCULATOR · REAL NUMBER MODE</div></section></div><aside class="side"><div class="eyebrow">ENGINEER YOUR THINKING</div><h1>손에 익은 배열.<br>생각을 이어 가는 계산.</h1><p class="intro">물리·수학·공학의 계산을 익숙한 방식으로.<br>각도 단위와 메모리 상태를 액정에서 확인하세요.</p><section class="panel"><div class="row"><h2>계산 기록</h2><button class="link" id="clearHistory">기록 지우기</button></div><div id="history" class="history"></div><div class="row"><button class="link" id="copy">결과 복사</button><button class="link" id="export">기록 내려받기</button></div><div class="settings"><label for="notation">결과 표시</label><select id="notation"><option value="norm">일반 NORM</option><option value="sci">과학 SCI</option><option value="eng">공학 ENG</option></select></div><div class="toast" id="toast" role="status"></div></section><details open><summary>사용 방법</summary><p>DEG는 도(°), RAD는 라디안입니다. SHIFT를 누른 뒤 sin·cos·tan을 누르면 역삼각함수가 입력됩니다. 노란 보조 기능은 한 번 사용하면 해제됩니다.</p><p>MR: 메모리 불러오기 · MS: 현재 값 저장<br>M+: 현재 값을 메모리에 더하기<br>SHIFT + MR: 메모리 초기화 · Ans: 직전 답<br>S↔D: 소수와 근사 분수 전환 (분모 최대 10,000)<br>EXP: ×10의 거듭제곱 입력 (예: 6.02 EXP 23)</p><p>버튼 사용 시 휴대폰 키보드는 열리지 않습니다.<br>직접 입력하려면 액정 아래 ‘키보드 입력 켜기’를 누르세요.<br>Enter: 계산 · Esc: 수식 초기화<br>괄호는 직접 닫아 주세요. %는 앞의 값을 100으로 나눕니다. 음수의 제곱은 (-3)^2처럼 괄호로 묶어 주세요.</p></details><div class="examples"><button data-example="sin(30)">sin 30°</button><button data-example="log(1000)">log 1000</button><button data-example="1/3+1/6">분수 계산</button><button data-example="6.02*10^23">과학 표기</button></div><p class="tip">실제 공학용 계산기의 키 구성을 참고한 독자 디자인입니다. 실수 범위의 수치 계산을 지원하며, 일반 결과는 최대 12자리 유효숫자로 표시합니다. 기록·메모리는 사용 중인 브라우저에 저장됩니다. 상단 패널은 장식입니다.</p></aside></main>
 <script>
 'use strict';
@@ -43,7 +58,8 @@ function clean(v){return Number(v.toPrecision(12))}
 function format(v){v=clean(v);if(notation==='sci')return v.toExponential(8).replace(/\.?0+e/,'e');if(notation==='eng'&&v!==0){const n=Math.floor(Math.log10(Math.abs(v))/3)*3;return Number((v/10**n).toPrecision(10))+' ×10^'+n}return Math.abs(v)>=1e12||(v!==0&&Math.abs(v)<1e-7)?String(v):v.toLocaleString('en-US',{maximumSignificantDigits:12})}
 function rational(v){for(let d=1;d<=10000;d++){const n=Math.round(v*d);if(Number.isSafeInteger(n)&&Math.abs(v-n/d)<=1e-12*Math.max(1,Math.abs(v)))return d===1?String(n):n+' / '+d}return null}
 function status(){ $('angleStatus').textContent=angle;$('shiftStatus').className=shift?'':'off';$('memoryStatus').className=memory!==0?'':'off';$('formatStatus').textContent=notation.toUpperCase();$('shiftButton').classList.toggle('active',shift);$('shiftButton').setAttribute('aria-pressed',String(shift));$('angleButton').textContent=angle}
-function output(v){$('output').classList.remove('error');$('output').textContent=fraction?(rational(v)||format(v)):format(v)}
+function fitLCDText(){const el=$('output');if(el.classList.contains('error'))return;const base=window.matchMedia('(max-width:780px)').matches?42:46;el.style.fontSize=base+'px';if(el.scrollWidth>el.clientWidth&&el.clientWidth>0){el.style.fontSize=Math.max(20,Math.floor(base*el.clientWidth/el.scrollWidth)-1)+'px';}}
+function output(v){$('output').classList.remove('error');$('output').textContent=fraction?(rational(v)||format(v)):format(v);fitLCDText();}
 function preview(){done=false;fraction=false;if(!field.value){output(0);return}try{last=compute(field.value,angle,ans,memory);output(last)}catch{$('output').classList.remove('error');$('output').textContent='…'}}
 function toast(s){$('toast').textContent=s}
 function focusExpression(){if(!field.readOnly)field.focus({preventScroll:true});}
@@ -74,7 +90,8 @@ function fitPhoneCalculator(){
  stage.style.height=Math.ceil(shell.offsetHeight*scale)+'px';
 }
 window.addEventListener('resize',fitPhoneCalculator);
+window.addEventListener('resize',fitLCDText);
 window.addEventListener('orientationchange',()=>requestAnimationFrame(fitPhoneCalculator));
 if(window.visualViewport)window.visualViewport.addEventListener('resize',fitPhoneCalculator);
-requestAnimationFrame(fitPhoneCalculator);
+requestAnimationFrame(()=>{fitPhoneCalculator();fitLCDText();});
 </script></body></html>
