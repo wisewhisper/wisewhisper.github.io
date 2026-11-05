@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<meta name="color-scheme" content="dark" />
+<title>NFC · RFID 전자기 유도 탐구 실험실</title>
+<style>
+:root{--bg:#07101c;--panel:#101e31;--panel2:#13253c;--edge:#29415a;--txt:#eaf4ff;--dim:#aac0d8;--dim2:#7898b8;--mint:#54ebc4;--blue:#66b9ff;--orange:#ffbf72;--bad:#ff808c}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:system-ui,-apple-system,"Malgun Gothic","Noto Sans KR",sans-serif;color:var(--txt);background:radial-gradient(circle at 65% -12%,#173653 0%,transparent 42%),var(--bg)}button,input,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--orange);outline-offset:2px}button:disabled{opacity:.5;cursor:not-allowed}
+.app{max-width:1760px;margin:0 auto;padding:0 16px 14px;min-height:100dvh;display:flex;flex-direction:column}
+header{height:69px;min-height:69px;display:flex;align-items:center;justify-content:space-between;gap:15px;border-bottom:1px solid #24405a}
+.brand{display:flex;gap:12px;align-items:center;min-width:0}.brand-mark{height:40px;width:40px;display:grid;place-items:center;border-radius:13px;background:linear-gradient(145deg,#165e75,#217d73);font-weight:900;font-size:22px;box-shadow:0 0 25px #38d6b52b}
+h1{font-size:19px;margin:0;line-height:1.32;letter-spacing:-.5px}header small{font-size:11px;color:var(--dim);display:block;margin-top:3px;letter-spacing:.1px}.top-controls{display:flex;align-items:center;gap:8px;flex-shrink:0}.topbtn{border:1px solid #41627e;background:#142a42;color:#dcefff;border-radius:10px;padding:8px 12px;font-weight:750;font-size:13px}.topbtn.active{background:#2a5a68;border-color:#54ebc4;color:#d8ffef}.topbtn:hover{filter:brightness(1.2)}
+.tab-panel{display:none}.tab-panel.active{display:flex;flex:1;min-height:0;flex-direction:column}.lab-intro{min-height:66px;display:flex;align-items:center;justify-content:space-between;gap:12px}.lab-intro p{margin:0;color:#b6c9de;font-size:12px;line-height:1.5}.lab-intro strong{display:block;font-size:16px;margin:0 0 4px}.modes{display:flex;gap:7px;flex-wrap:wrap}.mode{border:1px solid #375471;background:#11263b;color:#abc3dd;padding:9px 11px;border-radius:9px;font-size:12px;font-weight:800;white-space:nowrap}.mode.active{border-color:#52e8c1;background:#153e49;color:#cafff0}.mode.active.uhf{border-color:var(--orange);background:#493825;color:#ffdeb0}
+.lab-layout{display:grid;grid-template-columns:minmax(0,1.79fr) minmax(332px,.83fr);gap:12px;flex:1;min-height:0}.left-col{display:flex;flex-direction:column;gap:11px;min-height:0}.stage{background:linear-gradient(150deg,#0f243b,#071729 73%);border:1px solid #2a4661;border-radius:18px;position:relative;flex:1;min-height:280px;overflow:hidden}.stage::before{content:"";position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(#ffffff05 1px,transparent 1px),linear-gradient(90deg,#ffffff05 1px,transparent 1px);background-size:32px 32px;mask-image:linear-gradient(0deg,#0004,black)}.stage-head{position:absolute;z-index:3;left:16px;top:12px;right:14px;display:flex;justify-content:space-between;gap:10px;align-items:flex-start;pointer-events:none}.scene-title{color:#d5e9fc;font-size:13px;font-weight:850}.scene-info{color:var(--dim);display:block;margin-top:4px;font-size:11px;max-width:400px}.scene-badge{font-size:11px;border:1px solid #3c6973;background:#103a46;border-radius:99px;color:#9df9de;padding:6px 10px;white-space:nowrap}#scene{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:default}.drag-note{position:absolute;right:15px;bottom:11px;color:#aac6db;font-size:11px;pointer-events:none}.model-note{position:absolute;left:15px;bottom:11px;color:#789bb5;font-size:10px;pointer-events:none}
+.bottom-panel{flex:0 0 155px;border-radius:16px;border:1px solid #2b455e;background:#112238;display:grid;grid-template-columns: 1fr 1fr 1fr 1.6fr;gap:9px;padding:11px}.metric{background:#0c1b2e;border-radius:12px;padding:11px 10px;min-width:0;border:1px solid #203a53}.metric label{display:block;font-size:11px;color:#a7bfd6;font-weight:650;margin-bottom:10px}.metric strong{font-size:24px;font-weight:850;letter-spacing:-.6px}.metric small{font-size:10px;color:#a3b6ca;display:block;margin-top:7px;line-height:1.32}.metric .ok{color:var(--mint)}.metric .fail{color:var(--bad)}.metric .sig{color:var(--blue)}.plot-wrap{min-width:0;background:#0b1b2d;border:1px solid #203a53;border-radius:12px;padding:8px 9px 4px;display:flex;flex-direction:column}.plot-top{display:flex;justify-content:space-between;align-items:center;gap:4px;font-size:11px;color:#b5d1e3;font-weight:750}.plot-top span:last-child{color:#75a4b4;font-weight:600;font-size:10px}#wave{width:100%;flex:1;min-height:75px}
+.right-col{border:1px solid #304a60;background:linear-gradient(180deg,#142940,#102138);border-radius:16px;padding:14px;min-height:0;display:flex;flex-direction:column;gap:12px;overflow-y:auto;scrollbar-width:thin}.section-label{font-size:12px;letter-spacing:.5px;color:#93e9d1;font-weight:900;margin:0 0 2px}.control{display:block}.control-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:6px;font-size:12.5px;color:#c7dbee;font-weight:750}.control-head output{font-variant-numeric:tabular-nums;color:#f4fbff;font-size:13px;font-weight:900}.control input[type=range]{appearance:none;width:100%;height:8px;border-radius:7px;background:#314c66;cursor:pointer;margin:4px 0 3px;accent-color:#4ae6bc}.control input[type=range]::-webkit-slider-thumb{appearance:none;width:18px;height:18px;border-radius:50%;background:#8bffe1;border:3px solid #246f70;box-shadow:0 0 0 2px #8bffe126}.range-hints{display:flex;justify-content:space-between;font-size:10px;color:#829db8}.divider{height:1px;background:#2b455e;flex:0 0 1px}.tag-box{background:#0e1d30;border-radius:12px;border:1px solid #2b465d;padding:11px}.tag-title{display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#c9e9ef;font-weight:850;margin-bottom:8px}.subtag{font-size:10px;color:#89b7c1}.tag-box select{width:100%;background:#162c43;border:1px solid #44617a;color:#f5faff;padding:9px;border-radius:8px;font-size:12px}.stored{font-size:11px;margin:8px 0;color:#b1c9df;line-height:1.45;overflow-wrap:anywhere}.actrow{display:flex;gap:7px;margin-top:9px}.act{border:1px solid #3d6475;background:#21465f;color:#ecf7ff;border-radius:9px;padding:10px 6px;font-size:12px;font-weight:850;flex:1}.act.primary{background:#2ba88b;color:#04241b;border-color:#64f6c6}.act:hover{filter:brightness(1.12)}.feedback{background:#0c1b2e;border-left:3px solid #5ee6bb;color:#cce8f2;border-radius:7px;font-size:11px;line-height:1.45;padding:8px 10px;min-height:47px}.feedback.warn{border-color:#ffba76}.qa{border-top:1px solid #2b465d;padding-top:11px}.qa h3{font-size:12px;color:#ffe0aa;margin:0 0 7px}.qa p{font-size:11.5px;line-height:1.54;color:#c2d6ea;margin:0 0 5px}.qa strong{color:#e5f4ff}
+#concept{padding:20px 0;overflow-y:auto;min-height:0;display:none}#concept.active{display:block}.concept-wrap{max-width:1230px;margin:0 auto;width:100%;display:grid;gap:14px}.concept-heading h2{font-size:24px;margin:2px 0 5px}.concept-heading p{color:#b0c7db;font-size:13px;margin:0}.concept-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:13px}.concept-card{border-radius:16px;border:1px solid #2f4b64;background:#12253a;padding:18px}.concept-card h3{font-size:17px;margin:0 0 12px;color:#dcfaff}.concept-card p,.concept-card li{font-size:13px;line-height:1.75;color:#c8dcef}.concept-card p{margin:7px 0}.formula{font-size:19px;color:#8cf6d8;letter-spacing:.5px;padding:13px;background:#091b2c;border-radius:10px;text-align:center;font-family:Georgia,serif;margin:11px 0}.formula-desc{font-size:12px!important;color:#9ebad0!important}.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-top:15px}.step{border-radius:12px;padding:13px 12px;background:#0a1e2f;border:1px solid #2a4b5c;min-width:0}.step b{display:block;font-size:12px;color:#8ef4d5;margin-bottom:7px}.step span{color:#d2e6f5;font-size:12px;line-height:1.55;display:block}.compare{overflow-x:auto}.compare table{border-collapse:collapse;width:100%;min-width:575px;font-size:12px}.compare th,.compare td{padding:10px 11px;text-align:left;border-bottom:1px solid #2d4961;vertical-align:top;line-height:1.5}.compare th{color:#8feacf}.compare td{color:#d0e4f3}.highlight{color:#91ffde;font-weight:850}.notice{font-size:12px;color:#b9cbdc;line-height:1.65;border-radius:10px;background:#0d1b2d;padding:13px}.sources{font-size:11px;color:#92b4c9;line-height:1.65}.sources a{color:#99dfff}.icon-circle{font-size:18px}.pictogram{display:flex;gap:7px;align-items:center;justify-content:center;font-size:12px;padding:12px 0;color:#a7d6e8}.pictobox{border:2px solid #63d7c3;border-radius:10px;background:#143c43;padding:16px;font-weight:800;text-align:center}.arrow{font-size:23px;color:#60bbff}.foot{color:#839bb0;font-size:10px;margin-top:6px}
+@media(min-width:980px) and (min-height:650px){.app{height:100dvh;min-height:650px}}@media(max-width:1110px){.lab-layout{grid-template-columns:minmax(0,1.35fr) minmax(315px,.83fr)}.bottom-panel{grid-template-columns:repeat(3,1fr);flex-basis:197px}.plot-wrap{grid-column:1/-1;min-height:74px}.plot-top{display:none}#wave{min-height:56px}.lab-intro p{max-width:315px}}
+@media(max-width:820px){.app{padding:0 10px 17px;min-height:100dvh}header{min-height:64px;height:auto;padding:9px 0}.brand-mark{width:35px;height:35px;font-size:18px}h1{font-size:15px}header small{font-size:10px}.topbtn{font-size:11px;padding:8px 9px}.lab-intro{padding:9px 0;align-items:stretch;flex-direction:column;gap:8px}.lab-intro strong{font-size:15px}.lab-intro p{max-width:none;font-size:11px}.modes{width:100%}.mode{flex:1;padding:8px 4px;font-size:10.5px}.lab-layout{grid-template-columns:1fr}.left-col{min-height:0}.stage{flex:none;height:340px;min-height:0}.bottom-panel{flex:none;grid-template-columns:repeat(3,minmax(0,1fr));padding:8px;gap:6px}.metric{padding:10px 7px}.metric strong{font-size:20px}.metric small{font-size:9px}.plot-wrap{height:89px}.right-col{overflow:visible}.concept-grid,.steps{grid-template-columns:1fr}.concept-heading h2{font-size:21px}#concept{overflow:visible}.qa{padding-top:9px}}
+@media(max-width:390px){.topbtn{padding:7px 6px}.brand{gap:8px}h1{font-size:13px}.stage{height:315px}.scene-info{max-width:245px;font-size:10px}.scene-badge{font-size:9px;padding:5px 7px}.metric strong{font-size:18px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand"><div class="brand-mark" aria-hidden="true">◉</div><div><h1>NFC · RFID 전자기 유도 실험실</h1><small>과학탐구실험 · 교과서 22~23쪽 탐구 연결</small></div></div>
+    <nav class="top-controls" aria-label="화면 탭"><button class="topbtn active" data-tab="lab" aria-pressed="true">🔬 실험하기</button><button class="topbtn" data-tab="concept" aria-pressed="false">📘 개념·비교</button><button class="topbtn" id="resetBtn" title="현재 실험 조건 초기화">↺ 초기화</button></nav>
+  </header>
+  <section id="lab" class="tab-panel active">
+    <div class="lab-intro"><div><strong>가까이 대면 왜 배터리 없는 태그가 반응할까?</strong><p>거리·각도·출력을 조절하고 NFC 태그의 기록·읽기를 모의 실험해 보세요.</p></div><div class="modes" aria-label="통신 방식 선택"><button class="mode active" data-mode="nfc" aria-pressed="true">NFC <span>13.56 MHz</span></button><button class="mode" data-mode="lf" aria-pressed="false">RFID · LF <span>125 kHz</span></button><button class="mode uhf" data-mode="uhf" aria-pressed="false">RFID · UHF <span>920 MHz</span></button></div></div>
+    <div class="lab-layout">
+      <div class="left-col">
+        <section class="stage" aria-label="자기장 또는 전파 전달 개념 시각화"><div class="stage-head"><div><span class="scene-title" id="sceneTitle">13.56 MHz 자기장 → 태그 코일</span><span class="scene-info" id="sceneInfo">서로 마주한 코일 사이에 변하는 자기선속이 형성됩니다.</span></div><span class="scene-badge" id="sceneBadge">자기 유도 결합</span></div><canvas id="scene" aria-label="거리와 각도에 따른 자기장 및 태그 반응 그림"></canvas><div class="model-note">물리 원리를 위한 단순화된 모식도 · 길이/자기장 비축척</div><div class="drag-note">⇆ 태그를 잡고 이동</div></section>
+        <section class="bottom-panel" aria-label="실시간 측정 모형 결과">
+          <div class="metric"><label id="m1Label">상대 결합 세기</label><strong class="sig" id="m1">—</strong><small>기준 장치 안에서만 비교하는 모형값</small></div>
+          <div class="metric"><label id="m2Label">유도기전력 지표</label><strong id="m2">—</strong><small id="m2Note">변하는 자기선속에 의해 생성</small></div>
+          <div class="metric"><label>태그 인식 판정</label><strong id="m3">—</strong><small id="m3Note">모형의 가상 판정 기준 적용</small></div>
+          <div class="plot-wrap"><div class="plot-top"><span id="graphTitle">자기선속·유도 전압 · 시간</span><span>느린 개념 시각화</span></div><canvas id="wave" aria-label="유도 전압 또는 수신 신호의 시간 변화 그래프"></canvas></div>
+        </section>
+      </div>
+      <aside class="right-col">
+        <div class="section-label">01 · 실험 조건 조절</div>
+        <div class="control"><div class="control-head"><label for="dist">리더기 ↔ 태그 거리</label><output id="distVal" for="dist">2.0 cm</output></div><input id="dist" type="range" min="0" max="12" step="0.1" value="2" /><div class="range-hints"><span>가까움</span><span id="distMax">12 cm</span></div></div>
+        <div class="control"><div class="control-head"><label for="angle">태그 코일 기울기</label><output id="angleVal" for="angle">0°</output></div><input id="angle" type="range" min="0" max="90" step="1" value="0" /><div class="range-hints"><span>0° · 평행</span><span>90° · 수직</span></div></div>
+        <div class="control"><div class="control-head"><label for="power">리더기 출력 (상대)</label><output id="powerVal" for="power">100%</output></div><input id="power" type="range" min="0" max="100" step="5" value="100" /><div class="range-hints"><span>꺼짐</span><span>최대</span></div></div>
+        <div class="divider"></div>
+        <div class="section-label">02 · 태그 기록 / 읽기 <span id="simNote" style="color:#b3cfe0;font-size:10px;font-weight:600">가상 NFC 태그</span></div>
+        <div class="tag-box"><div class="tag-title"><span id="tagPanelTitle">태그에 저장할 정보</span><span class="subtag" id="tagHint">실제 스마트폰 NFC 연결 아님</span></div>
+          <select id="payload" aria-label="태그에 기록할 정보"><option value="text">📝 텍스트 · 과학탐구 모둠</option><option value="url">🔗 URL · 탐구 안내 페이지</option><option value="contact">👤 연락처 · 탐구 담당</option></select>
+          <p class="stored" id="stored">저장된 데이터: (비어 있음)</p><div class="actrow"><button class="act" id="writeBtn">✎ 태그 기록</button><button class="act primary" id="readBtn">⌁ 태그 읽기</button></div>
+        </div>
+        <div class="feedback" id="feedback" role="status" aria-live="polite">태그를 가까이 하고 ‘태그 기록’ 또는 ‘태그 읽기’를 눌러보세요.</div>
+        <div class="qa"><h3>💡 생각해 볼 문제</h3><p id="prompt">① 거리를 2 cm에서 6 cm로 늘리면 결합 세기는 어떻게 달라질까요?</p><p id="prompt2">② 태그를 90° 기울이면 왜 인식이 어려워질까요?</p></div>
+      </aside>
+    </div>
+  </section>
+  <section id="concept" class="tab-panel">
+    <div class="concept-wrap">
+      <div class="concept-heading"><h2>📘 NFC 탐구의 핵심 원리와 RFID 비교</h2><p>교과서의 ‘NFC 태그에 정보 기록 → 다른 기기로 읽기 → 생활 속 활용 구상’ 흐름에 맞춘 개념 정리입니다.</p></div>
+      <div class="concept-grid">
+        <article class="concept-card"><h3>1. 배터리가 없는 태그가 어떻게 켜질까?</h3><div class="pictogram"><div class="pictobox">📱 스마트폰<br/><small>교류 전류·코일</small></div><div class="arrow">⇢</div><div class="pictobox">◎ NFC 태그<br/><small>코일·정류·칩</small></div></div><p>스마트폰의 NFC 리더기가 <b>13.56 MHz 교류 자기장</b>을 만듭니다. 가까이 있는 태그 코일을 통과하는 <b>자기선속이 시간에 따라 변하면 유도기전력</b>이 생깁니다. 태그 회로는 이 에너지를 정류·저장하여 작은 칩을 작동시킵니다.</p><p>태그는 저장 정보를 전송할 때 대개 <b>부하 변조(load modulation)</b>로 리더기가 감지하는 신호를 변화시킵니다. 단순히 태그에서 전파를 새로 강하게 송신하는 그림과는 다릅니다.</p></article>
+        <article class="concept-card"><h3>2. 패러데이 법칙과 실험 변수</h3><div class="formula">ε = −N × dΦ<sub>B</sub> / dt</div><p>ε: 유도기전력(V), N: 코일 감은 수, Φ<sub>B</sub>: 자기선속(Wb). 마이너스 부호는 유도 효과가 자기선속의 변화를 방해하는 방향임을 뜻합니다(렌츠 법칙).</p><div class="formula">Φ<sub>B</sub> = BA cos θ <span style="font-size:12px">(균일한 자기장일 때)</span></div><p>이 실험에서는 NFC 송신 주파수와 태그 코일 구조를 고정하므로 자기장 결합 지표와 유도전압 지표가 같은 비율로 변합니다.</p><p>태그를 멀리하면 코일에 도달하는 자기장이 약해지고, 코일 면의 법선과 자기장 방향 사이 각도 θ가 커지면 통과 자기선속이 작아집니다.</p><p class="formula-desc">화면은 실제 회로의 임피던스·공진·안테나 구조를 계산하지 않습니다. 결과의 %와 성공/실패는 학습용 상대 지표이며 실측값이나 보편적 인식 거리 보장이 아닙니다.</p></article>
+      </div>
+      <article class="concept-card"><h3>3. NFC 탐구: 기록 → 읽기 → 활용</h3><div class="steps"><div class="step"><b>① 태그 정보 선택</b><span>텍스트, URL, 연락처 중 하나를 선택합니다.</span></div><div class="step"><b>② 가까이 대고 기록</b><span>코일 결합이 충분할 때 태그 메모리에 정보를 썼다고 가정합니다.</span></div><div class="step"><b>③ 다른 기기로 읽기</b><span>기록된 데이터를 읽고 공유되는 내용을 확인합니다.</span></div><div class="step"><b>④ 생활 속 활용 설계</b><span>안내판·와이파이 연결·교실 출결 등 활용을 구상하고 필요한 인증을 토론합니다.</span></div></div><p class="foot">※ 이 파일의 기록/읽기는 가상 실험입니다. 실제 NFC 태그를 쓰거나 스마트폰 NFC 하드웨어에 접근하지 않습니다. 출결 확인에는 태그 인식만으로 신원을 확정할 수 없으므로 로그인·시간·중복 방지 등의 검증이 필요합니다.</p></article>
+      <article class="concept-card"><h3>4. NFC와 RFID는 어떻게 다를까?</h3><div class="compare"><table><thead><tr><th>비교</th><th>NFC</th><th>RFID · LF</th><th>RFID · UHF</th></tr></thead><tbody><tr><td>관계</td><td><span class="highlight">RFID의 한 종류</span></td><td>RFID의 한 종류</td><td>RFID의 한 종류</td></tr><tr><td>대표 주파수</td><td>13.56 MHz (HF)</td><td>125–134 kHz</td><td>약 860–930 MHz (지역·규격별 차이)</td></tr><tr><td>주요 전달 원리</td><td>근거리 자기 유도 결합</td><td>근거리 자기 유도 결합</td><td>전파 전달 및 후방산란(backscatter)</td></tr><tr><td>대략적 거리</td><td>일반적으로 수 cm</td><td>주로 수 cm~수십 cm</td><td>설비·환경에 따라 수 m 이상도 가능</td></tr><tr><td>용도</td><td>스마트폰 태그, 결제, 교통</td><td>동물 식별, 출입 통제</td><td>물류 재고, 자산·상품 추적</td></tr></tbody></table></div><p style="font-size:12px;color:#a8cee1">NFC의 특징은 스마트폰 등에서 사용할 수 있도록 통신 방식·데이터 형식과 상호운용성을 규정하고, 태그 읽기/쓰기나 카드 에뮬레이션 같은 다양한 모드를 지원한다는 점입니다.</p><p style="font-size:12px;color:#a8cee1">주의: RFID가 항상 멀리서 작동하는 것은 아닙니다. 특히 HF RFID 중에는 NFC와 같은 13.56 MHz를 쓰는 기술도 있습니다. 주파수와 안테나·프로토콜에 따라 실제 성능이 달라집니다.</p></article>
+      <div class="concept-grid"><article class="concept-card"><h3>5. 실험 예상·관찰·해석</h3><p><b>거리:</b> 같은 방향에서는 가까울수록 자기 결합이 강해지는 경향을 확인합니다.</p><p><b>각도:</b> 자기장에 수직인 코일 면이 선속을 크게 받습니다. 여기서 0°는 코일 면끼리 평행한 상태를 뜻합니다.</p><p><b>출력:</b> 자기장을 만드는 리더기의 출력이 약해지면 유도되는 에너지 또한 줄어듭니다.</p><p><b>주파수/방식:</b> NFC·LF 모드와 UHF 모드는 에너지 결합 방식이 달라 서로의 %를 직접 비교하면 안 됩니다.</p></article><article class="concept-card"><h3>6. 수업에서 짚을 오개념</h3><p>❌ NFC는 RFID와 전혀 다른 방식이다. → ✅ <b>NFC는 HF RFID 기반의 표준화된 근거리 통신 방식</b>입니다.</p><p>❌ 스마트폰 자기장이 태그에 정보를 직접 새긴다. → ✅ 자기장은 작동 에너지를 제공하고, 칩·통신 규약·메모리가 데이터 기록에 관여합니다.</p><p>❌ 태그의 배터리가 방전되면 못 읽는다. → ✅ <b>수동형 태그는 배터리 없이</b> 리더기에서 에너지를 받습니다.</p><p>❌ UHF RFID도 NFC와 똑같은 코일 유도 방식이다. → ✅ 원거리 UHF RFID에는 전파와 후방산란을 주로 설명해야 합니다.</p></article></div>
+      <div class="notice"><b>실험 모델의 범위</b> · NFC/LF 모드에서 자기장 거리 감쇠는 동축 원형 코일의 축상 자기장 형태 B(z) ∝ [1+(z/a)²]<sup>−3/2</sup>를 사용한 교육용 근사입니다. 실제 안테나는 형태와 공진 조건이 다양합니다. UHF 모드는 다른 거리 감쇠 모형과 반사 신호 지표를 쓰며 자기선속·유도기전력 계산을 적용하지 않습니다. 속도가 느리게 그려진 파동은 관찰용 애니메이션으로 실제 MHz 주기를 나타내지 않습니다.</div>
+      <div class="sources"><b>개념 근거</b> · <a href="https://nfc-forum.org/learn/nfc-technology/" target="_blank" rel="noopener noreferrer">NFC Forum — NFC Technology</a> · <a href="https://www.st.com/en/applications/connectivity/nfc-rfid.html" target="_blank" rel="noopener noreferrer">STMicroelectronics — NFC/RFID</a> · <a href="https://support.gs1.org/support/solutions/articles/43000734278-what-is-the-difference-between-low-high-and-ultra-high-frequencies-" target="_blank" rel="noopener noreferrer">GS1 — LF/HF/UHF 분류</a> (자료 열람은 인터넷 연결 시 가능, 실험은 완전 오프라인 실행)</div>
+    </div>
+  </section>
+</div>
+<script>
+(() => {
+'use strict';
+const $ = id => document.getElementById(id);
+const scene=$('scene'),ctx=scene.getContext('2d'),wave=$('wave'),wctx=wave.getContext('2d');
+const cfg={nfc:{name:'NFC',max:12,unit:'cm',def:2,f:'13.56 MHz',ax:3,th:.20},lf:{name:'RFID LF',max:40,unit:'cm',def:8,f:'125 kHz',ax:10,th:.20},uhf:{name:'RFID UHF',max:10,unit:'m',def:2,f:'920 MHz',ax:3.2,th:.23}};
+let mode='nfc',distance=2,angle=0,power=100,payload='text',memory=null,feedback='',lastRead=null;
+let animOn=true,tPrev=0,time=0,tagHit=null,drag=false,graphArray=[];
+const values={text:'과학탐구 모둠 · 전자기 유도 관찰',url:'https://example.org/nfc-study (예시 주소)',contact:'과학탐구 담당 · 교실 안내용 연락처'};
+const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
+function signal(){let fac=power/100,ori=Math.abs(Math.cos(angle*Math.PI/180)); if(mode==='uhf'){let d=distance;return clamp(fac*(.25+.75*ori)/(1+(d/cfg.uhf.ax)**2),0,1)} return clamp(fac*ori/Math.pow(1+(distance/cfg[mode].ax)**2,1.5),0,1)}
+function readOK(){return signal()>=cfg[mode].th}
+function formattedDist(){return distance.toFixed(1)+' '+cfg[mode].unit}
+function statusText(){return readOK()?'인식 가능':'인식 불가'}
+function notify(msg,warn=false){$('feedback').textContent=msg;$('feedback').classList.toggle('warn',warn)}
+function renderValues(){const s=signal(),ok=readOK();$('distVal').textContent=formattedDist();$('angleVal').textContent=angle+'°';$('powerVal').textContent=power+'%';$('m1').textContent=Math.round(s*100)+'%';$('m2').textContent=Math.round(s*100)+'%';$('m3').textContent=statusText();$('m3').className=ok?'ok':'fail';$('m3Note').textContent=ok?'모형 기준을 넘었습니다':'거리·각도·출력을 조절하세요';$('stored').textContent=mode==='nfc'?'저장된 데이터: '+(memory===null?'(비어 있음)':memory):mode==='lf'?'태그 ID: LF-125-001 (가상 식별자)':'태그 ID: UHF-920-001 (가상 식별자)'}
+function adaptMode(){let c=cfg[mode];distance=c.def;angle=0;power=100;graphArray=[];$('dist').max=c.max;$('dist').step='0.1';$('dist').value=distance;$('angle').value=0;$('power').value=100;$('distMax').textContent=c.max+' '+c.unit;document.querySelectorAll('[data-mode]').forEach(btn=>{let yes=btn.dataset.mode===mode;btn.classList.toggle('active',yes);btn.setAttribute('aria-pressed',yes)});
+const isUhf=mode==='uhf';$('sceneTitle').textContent=isUhf?'920 MHz 전파 → 태그의 반사 신호':`${c.f} 교류 자기장 → 태그 코일`;$('sceneInfo').textContent=isUhf?'UHF RFID는 원거리 전파와 후방산란으로 정보를 주고받습니다.':'코일을 통과하는 자기선속 변화가 태그에 에너지를 제공합니다.';$('sceneBadge').textContent=isUhf?'전파·후방산란':'자기 유도 결합';$('m1Label').textContent=isUhf?'상대 수신 신호':'상대 결합 세기';$('m2Label').textContent=isUhf?'반사 신호 지표':'유도기전력 지표';$('m2Note').textContent=isUhf?'돌아오는 산란 신호를 단순화':'변화하는 자기선속의 유도 효과';$('graphTitle').textContent=isUhf?'입사파·반사파 · 시간':'자기선속·유도 전압 · 시간';$('simNote').textContent=isUhf?'가상 UHF 태그':mode==='lf'?'가상 LF 태그':'가상 NFC 태그';$('tagPanelTitle').textContent=mode==='nfc'?'태그에 저장할 정보':'태그 식별 정보 읽기';$('payload').hidden=mode!=='nfc';$('writeBtn').hidden=mode!=='nfc';$('readBtn').textContent=mode==='nfc'?'⌁ 태그 읽기':'⌁ ID 읽기';$('prompt').textContent=mode==='nfc'?'① 거리를 2 cm에서 6 cm로 늘리면 결합 세기는 어떻게 달라질까요?':mode==='lf'?'① 저주파 RFID의 에너지 전달 원리는 NFC와 비슷할까요?':'① UHF는 왜 수 m 거리에서도 태그를 식별할 수 있을까요?';$('prompt2').textContent=isUhf?'② 이 모드에 패러데이 코일 유도 계산을 그대로 적용해도 될까요?':'② 코일을 90° 기울이면 왜 유도 효과가 약해질까요?';notify(mode==='nfc'?'조건을 조절하고 태그에 기록한 뒤 다른 기기처럼 읽어보세요.':isUhf?'UHF 모드는 NFC와 다른 원리인 전파·후방산란 모형입니다.':'LF RFID 역시 가까운 코일 사이의 자기 유도 결합을 이용합니다.');renderValues()}
+function switchTab(tab){document.querySelectorAll('.tab-panel').forEach(x=>x.classList.toggle('active',x.id===tab));document.querySelectorAll('[data-tab]').forEach(x=>{let active=x.dataset.tab===tab;x.classList.toggle('active',active);x.setAttribute('aria-pressed',active)});if(tab==='lab'){requestAnimationFrame(()=>{resizes();drawScene();drawGraph()})}}
+for(const btn of document.querySelectorAll('[data-tab]')) btn.addEventListener('click',()=>switchTab(btn.dataset.tab));
+for(const btn of document.querySelectorAll('[data-mode]')) btn.addEventListener('click',()=>{mode=btn.dataset.mode;adaptMode();});
+$('resetBtn').addEventListener('click',()=>{memory=null;payload='text';$('payload').value='text';mode='nfc';time=0;adaptMode();notify('모든 조건과 가상 태그 데이터를 초기화했습니다.')});
+$('dist').addEventListener('input',e=>{distance=Number(e.target.value);renderValues()});$('angle').addEventListener('input',e=>{angle=Number(e.target.value);renderValues()});$('power').addEventListener('input',e=>{power=Number(e.target.value);renderValues()});$('payload').addEventListener('change',e=>{payload=e.target.value;notify('내용을 선택했습니다. 실제 저장 내용은 ‘태그 기록’을 눌러야 바뀝니다.')});
+$('writeBtn').addEventListener('click',()=>{if(mode!=='nfc')return;if(!readOK()){notify('기록 실패: 결합이 약합니다. 태그를 가깝게 하고 각도·출력을 조절하세요.',true);return}memory=values[payload];renderValues();notify('기록 성공! 가상 태그에 '+memory+'을(를) 저장했습니다.')});
+$('readBtn').addEventListener('click',()=>{if(!readOK()){notify('읽기 실패: 현재 조건에서는 태그를 인식하지 못합니다.',true);return}if(mode==='nfc'){notify(memory===null?'태그는 인식했지만 저장된 정보가 없습니다. 먼저 기록해 보세요.':'읽기 성공! 저장된 내용: '+memory)}else notify('식별 성공! '+(mode==='lf'?'LF-125-001':'UHF-920-001')+' (가상 ID)')});
+function fit(canvas,context){let rect=canvas.getBoundingClientRect();if(rect.width<=0||rect.height<=0)return null;const dpr=Math.min(window.devicePixelRatio||1,2);let w=Math.round(rect.width*dpr),h=Math.round(rect.height*dpr);if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h}context.setTransform(dpr,0,0,dpr,0,0);return {w:rect.width,h:rect.height}}
+function resizes(){fit(scene,ctx);fit(wave,wctx)}
+function rr(c,x,y,w,h,r,fill,stroke=null,line=1){c.beginPath();c.roundRect(x,y,w,h,r);if(fill){c.fillStyle=fill;c.fill()}if(stroke){c.lineWidth=line;c.strokeStyle=stroke;c.stroke()}}
+function text(c,str,x,y,color,size=12,weight='600',align='center'){c.fillStyle=color;c.font=`${weight} ${size}px system-ui,-apple-system,'Malgun Gothic',sans-serif`;c.textAlign=align;c.fillText(str,x,y)}
+function beam(c,pts,color,width,alpha=1){c.save();c.globalAlpha=alpha;c.beginPath();c.moveTo(...pts[0]);for(let i=1;i<pts.length;i++)c.lineTo(...pts[i]);c.lineWidth=width;c.strokeStyle=color;c.lineCap='round';c.stroke();c.restore()}
+function drawScene(){const D=fit(scene,ctx);if(!D)return;const {w,h}=D;ctx.clearRect(0,0,w,h);
+// Render in a fixed educational coordinate system, preserving broad margins and labels.
+const mob=w<600;ctx.save();ctx.scale(w/(mob?640:950),h/460);let c=ctx,s=signal(),isUHF=mode==='uhf';const xL=mob?145:242,yC=247;
+let xR=(mob?343:440)+distance/cfg[mode].max*(mob?190:355);tagHit={x:xR,y:yC,r:80,w,h};const phase=time*1.8;
+// Soft halo for active reader
+const g=c.createRadialGradient(xL,yC,10,xL,yC,220);g.addColorStop(0,isUHF?'#ffbf722a':'#55efd028');g.addColorStop(1,'#00a5a500');c.fillStyle=g;c.beginPath();c.arc(xL,yC,230,0,Math.PI*2);c.fill();
+// Axis and range ruler
+c.setLineDash([5,6]);c.strokeStyle='#3f6484';c.lineWidth=1;c.beginPath();c.moveTo(xL+42,yC+144);c.lineTo(xR-23,yC+144);c.stroke();c.setLineDash([]);
+text(c,'거리 '+formattedDist(),(xL+xR)/2+5,yC+163,'#b2d6ee',15,'800');
+// Field lines / radio waves, schematic only
+if(!isUHF){for(let i=0;i<7;i++){let mag=(i-3);const A=(43+Math.abs(mag)*16);let dy=mag*8;for(const side of [-1,1]){c.beginPath();c.moveTo(xL+32,yC+dy);c.bezierCurveTo(xL+90,yC+side*A,xR-66,yC+side*A,xR-26,yC+dy*.4);c.lineWidth=i===3?3.4:1.7;c.globalAlpha=(.17+.64*s)*(.72+.28*Math.sin(phase+i*0.6));c.strokeStyle=i===3?'#8effde':'#49c3e1';c.stroke();c.globalAlpha=1;}}
+ for(let j=0;j<5;j++){let shift=((time*.12+j/5)%1);let bx=xL+37+(xR-xL-68)*shift;c.beginPath();c.fillStyle=`rgba(130,255,218,${.13+.75*s})`;c.shadowColor='#65ffda';c.shadowBlur=10;c.arc(bx,yC+Math.sin(shift*Math.PI)*17*Math.sin(j*1.7),2.6+1.2*s,0,Math.PI*2);c.fill();c.shadowBlur=0;}
+}else{for(let i=0;i<5;i++){let xx=xL+65+((time*.25+i/5)%1)*(xR-xL+60);let spread=20+xx/11;c.strokeStyle='#ffb86e';c.lineWidth=2.2;c.globalAlpha=.20+.65*s;c.beginPath();c.arc(xx,yC,spread,-.46*Math.PI,.46*Math.PI);c.stroke();c.globalAlpha=1}
+ c.setLineDash([6,8]);c.strokeStyle='#ffd184';c.globalAlpha=.5*s;c.beginPath();c.moveTo(xR-30,yC-24);c.quadraticCurveTo((xL+xR)/2,yC-100,xL+40,yC-35);c.stroke();c.globalAlpha=1;c.setLineDash([])}
+// Phone / RFID reader.
+const c1=isUHF?'#9f7445':'#4fcbbd';rr(c,xL-53,yC-114,108,228,22,'#193349','#6495a3',3);rr(c,xL-42,yC-103,86,205,15,'#0b1e30','#27526b',1.5);rr(c,xL-14,yC-97,28,4,2,'#5c859e');
+if(!isUHF){for(let i=0;i<4;i++){c.beginPath();c.ellipse(xL,yC,23+i*7,57+i*9,0,0,Math.PI*2);c.strokeStyle=`rgba(87,236,199,${.85-i*.12})`;c.lineWidth=2;c.stroke()}
+ text(c,'교류 코일',xL,yC+105,'#9df6de',12,'750');}
+else{c.strokeStyle='#ffc37d';c.lineWidth=4;c.beginPath();c.moveTo(xL-15,yC-65);c.lineTo(xL+7,yC-15);c.lineTo(xL-15,yC+35);c.moveTo(xL+20,yC-65);c.lineTo(xL+42,yC-15);c.lineTo(xL+20,yC+35);c.stroke();text(c,'RF 안테나',xL,yC+105,'#ffd59e',12,'750')}
+text(c,mode==='nfc'?'스마트폰 리더기':'RFID 리더기',xL,yC-134,'#e8f5ff',15,'800');text(c,cfg[mode].f,xL,yC-119,'#90b8ce',11,'700');
+// Tag, rotated to illustrate coil plane orientation. z rotation = demonstrative projection.
+c.save();c.translate(xR,yC);c.rotate(angle*Math.PI/180);c.shadowColor=isUHF?'#ffbb7e':'#5be8ce';c.shadowBlur=7*s;rr(c,-44,-82,88,164,14,isUHF?'#393326':'#16394b',isUHF?'#ce9955':'#61d8c7',3);c.shadowBlur=0;
+if(isUHF){for(let j=0;j<3;j++){c.strokeStyle='#ffcb85';c.lineWidth=2;c.beginPath();c.moveTo(-30,-57+j*8);c.lineTo(23,-57+j*8);c.lineTo(23,50-j*4);c.stroke()}c.fillStyle='#ffd18d';c.fillRect(-12,0,24,22)}else{for(let k=0;k<4;k++){rr(c,-32+k*4,-68+k*4,64-k*8,136-k*8,11,'',`rgba(112,250,210,${.87-k*.12})`,2)}rr(c,-15,-15,30,30,4,'#91e9d7','#cffff4',1.2);text(c,'칩',0,5,'#113d44',12,'900')}
+c.restore();
+// status chip and annotations
+rr(c,xR-58,yC-127,116,26,13,readOK()?'#103c37':'#402b38',readOK()?'#4aaf95':'#a35e71',1);
+text(c,readOK()?'✓ 인식 가능':'× 인식 불가',xR,yC-109,readOK()?'#a5ffe6':'#ffb6c0',12,'850');text(c,isUHF?'UHF 태그':'수동형 태그',xR,yC+113,'#deefff',14,'850');text(c,isUHF?'후방산란 신호':'코일 · 칩 (배터리 없음)',xR,yC+129,'#9dbbd0',11,'650');
+// Desktop-only indicator; mobile uses the full-sized metrics below the scene.
+if(!mob){rr(c,19,194,146,97,11,'#0e2439','#2d5770',1.2);text(c,isUHF?'수신 / 반사':'유도 결합',92,217,'#a3c5dd',12,'700');text(c,Math.round(s*100)+'%',92,252,isUHF?'#ffd18d':'#8df8d9',29,'900');
+rr(c,27,267,130,7,4,'#23425a');rr(c,27,267,130*s,7,4,isUHF?'#eeb16c':'#44d9b6');}
+if(!isUHF){text(c,'B(t) 변화',xL+92,yC-137,'#80e8d3',12,'750')}else{text(c,'전자기파 진행 →',xL+110,yC-137,'#ffcb91',12,'750')}
+c.restore();}
+function drawGraph(){
+ const D=fit(wave,wctx);if(!D)return;let {w,h}=D;wctx.clearRect(0,0,w,h);
+ let mid=h*.56,amp=Math.min(h*.30,39),val=signal(),isUHF=mode==='uhf';
+ wctx.strokeStyle='#26445b';wctx.lineWidth=1;
+ for(let k=0;k<4;k++){let y=(k+.5)*h/4;wctx.beginPath();wctx.moveTo(0,y);wctx.lineTo(w,y);wctx.stroke()}
+ wctx.strokeStyle='#3b6c87';wctx.beginPath();wctx.moveTo(0,mid);wctx.lineTo(w,mid);wctx.stroke();
+ function curve(kind){
+   wctx.beginPath();for(let x=0;x<=w;x+=2){const theta=2*Math.PI*(x/w*3.2-time*.72);let y;
+     if(isUHF)y=mid-amp*(kind===0?.7*Math.sin(theta):val*Math.sin(theta-1.1));
+     else y=mid-amp*val*(kind===0?Math.sin(theta):-Math.cos(theta));
+     if(x===0)wctx.moveTo(x,y);else wctx.lineTo(x,y)}
+   wctx.lineWidth=kind===0?1.5:2.3;wctx.setLineDash(kind===0?[4,5]:[]);
+   wctx.strokeStyle=kind===0?(isUHF?'#8a93a0':'#508eae'):(isUHF?'#ffcf8a':'#67f3d2');wctx.stroke();wctx.setLineDash([]);
+ }
+ curve(0);curve(1);
+ wctx.font='10px system-ui';wctx.textAlign='left';wctx.fillStyle='#6d9fbb';wctx.fillText(isUHF?'-- 입사파':'-- 자기선속 Φ',5,11);
+ wctx.fillStyle=isUHF?'#ffcf8a':'#67f3d2';wctx.fillText(isUHF?'— 반사파':'— 유도전압 ε',Math.min(w*.52,115),11);
+}
+scene.addEventListener('pointerdown',e=>{if(!tagHit)return;let b=scene.getBoundingClientRect();let px=(e.clientX-b.left)/b.width*(b.width<600?640:950),py=(e.clientY-b.top)/b.height*460;if(Math.abs(px-tagHit.x)<76&&Math.abs(py-tagHit.y)<110){drag=true;scene.setPointerCapture(e.pointerId);scene.style.cursor='grabbing'}});
+scene.addEventListener('pointermove',e=>{let rect=scene.getBoundingClientRect(),mob=rect.width<600,px=(e.clientX-rect.left)/rect.width*(mob?640:950),py=(e.clientY-rect.top)/rect.height*460;if(drag){distance=clamp((px-(mob?343:440))/(mob?190:355)*cfg[mode].max,0,cfg[mode].max);distance=Math.round(distance*10)/10;$('dist').value=distance;renderValues()}else scene.style.cursor=tagHit&&Math.abs(px-tagHit.x)<76&&Math.abs(py-tagHit.y)<110?'grab':'default'});
+function endDrag(){drag=false;scene.style.cursor='default'}scene.addEventListener('pointerup',endDrag);scene.addEventListener('pointercancel',endDrag);scene.addEventListener('lostpointercapture',endDrag);
+function animate(t){const dt=tPrev?Math.min(.06,(t-tPrev)/1000):0;tPrev=t;if(animOn)time+=dt; if($('lab').classList.contains('active')){drawScene();drawGraph()}requestAnimationFrame(animate)}
+window.addEventListener('resize',resizes,{passive:true});document.addEventListener('visibilitychange',()=>{tPrev=0});adaptMode();requestAnimationFrame(animate);
+})();
+</script>
+</body>
+</html>
