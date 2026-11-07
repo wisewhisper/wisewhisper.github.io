@@ -1,8 +1,8 @@
 /* WiseWhisper scanner service worker. Only bundled app assets are cached. */
 'use strict';
-const VERSION='2.0.0',PREFIX='wisewhisper-scanner-',SHELL=PREFIX+'shell-'+VERSION,DATA=PREFIX+'offline-'+VERSION;
+const VERSION='2.0.1',PREFIX='wisewhisper-scanner-',SHELL=PREFIX+'shell-'+VERSION,DATA=PREFIX+'offline-'+VERSION;
 const SHELL_PATHS=['index.html','pwa.js','manifest.webmanifest','icons/icon-192.png','icons/icon-512.png','pdf/searchable.js','resolution.js','browser-adapter.js','document-detection.js','document-camera.js','document-viewer.js','adjustment-view.js','workflow.js','document-zoom.js','web-camera.js','ui-refresh.css','curve-assist.worker.js'];
-const EXTRA_PATHS=['ocr/tesseract.min.js','ocr/worker.min.js','ocr/core/tesseract-core-lstm.wasm.js','ocr/core/tesseract-core-relaxedsimd-lstm.wasm.js','ocr/core/tesseract-core-simd-lstm.wasm.js','ocr/lang/eng.traineddata.gz','ocr/lang/kor.traineddata.gz','ocr/best/eng.traineddata.gz','ocr/best/kor.traineddata.gz','pdf/font-info.json','pdf/font.deflate'];
+const EXTRA_PATHS=['ocr/tesseract.min.js','ocr/worker.min.js','ocr/core-v2/tesseract-core-lstm.wasm.js','ocr/core-v2/tesseract-core-relaxedsimd-lstm.wasm.js','ocr/core-v2/tesseract-core-simd-lstm.wasm.js','ocr/lang/eng.traineddata.gz','ocr/lang/kor.traineddata.gz','ocr/best/eng.traineddata.gz','ocr/best/kor.traineddata.gz','pdf/font-info.json','pdf/font.deflate'];
 const assetURL=p=>new URL(p,self.registration.scope).href;
 const all=new Set([...SHELL_PATHS,...EXTRA_PATHS].map(assetURL));
 async function getAsset(path){const response=await fetch(assetURL(path),{cache:'reload',credentials:'same-origin'});if(!response.ok||response.redirected)throw Error('파일을 준비하지 못했습니다: '+path);const type=response.headers.get('content-type')||'';if(type.includes('text/html')&&path!=='index.html')throw Error('로그인 또는 연결을 확인하세요.');if(path==='index.html'&&!(await response.clone().text()).includes('data-scanner-version="'+VERSION+'"'))throw Error('앱 버전 확인에 실패했습니다.');return response;}
