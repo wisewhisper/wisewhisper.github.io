@@ -1,0 +1,9 @@
+Local OCR assets for WiseWhisper Scanner v0.3
+Tesseract.js 7.0.0, Tesseract.js-core 7.0.0: Apache-2.0.
+Packages supplied by the installed primary runtime, distributed with licenses.
+Korean model: https://github.com/tesseract-ocr/tessdata_fast/blob/main/kor.traineddata
+English model: /usr/share/tesseract-ocr/5/tessdata/eng.traineddata (Tesseract distribution).
+Tessdata models: Apache-2.0; license included in licenses/Tessdata-LICENSE.
+Only LSTM-only core variants are included because createWorker uses engine mode 1.
+Language models are gzipped locally without changing their contents.
+Images are processed by the in-browser worker; they are not uploaded to an OCR service.

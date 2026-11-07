@@ -1,0 +1,2 @@
+Noto Sans KR: SIL OFL 1.1. See FONT-OFL.txt. Font instantiated at weight 400; embedded in PDFs. Source https://github.com/google/fonts/tree/main/ofl/notosanskr
+Tesseract Korean precise model: https://github.com/tesseract-ocr/tessdata_best/blob/main/kor.traineddata . Converted to integer with combine_tessdata -c for WebAssembly compatibility. Fast English model unchanged. Model source is Apache 2.0.

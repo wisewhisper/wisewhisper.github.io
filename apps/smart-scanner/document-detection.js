@@ -1,0 +1,22 @@
+/* Bounded Sobel/Hough line proposals, ranked by four-side edge support. Local only. */
+'use strict';
+function detectDocumentQuad(image,max=640){
+ const scale=Math.min(1,max/Math.max(image.width,image.height)),w=Math.max(8,Math.round(image.width*scale)),h=Math.max(8,Math.round(image.height*scale)),c=canvas(w,h),ctx=c.getContext('2d');ctx.drawImage(image,0,0,w,h);const rgba=ctx.getImageData(0,0,w,h).data,g=new Float32Array(w*h),blur=new Float32Array(w*h),mag=new Float32Array(w*h),angle=new Float32Array(w*h),samples=[];
+ for(let i=0;i<g.length;i++)g[i]=rgba[i*4]*.299+rgba[i*4+1]*.587+rgba[i*4+2]*.114;
+ for(let y=1;y<h-1;y++)for(let x=1;x<w-1;x++){const i=y*w+x;blur[i]=(g[i-w-1]+2*g[i-w]+g[i-w+1]+2*g[i-1]+4*g[i]+2*g[i+1]+g[i+w-1]+2*g[i+w]+g[i+w+1])/16;}
+ for(let y=3;y<h-3;y++)for(let x=3;x<w-3;x++){const i=y*w+x,gx=-blur[i-w-1]+blur[i-w+1]-2*blur[i-1]+2*blur[i+1]-blur[i+w-1]+blur[i+w+1],gy=-blur[i-w-1]-2*blur[i-w]-blur[i-w+1]+blur[i+w-1]+2*blur[i+w]+blur[i+w+1];mag[i]=Math.hypot(gx,gy);angle[i]=(Math.atan2(gy,gx)+Math.PI)%Math.PI;if(mag[i]>8)samples.push(mag[i]);}
+ if(samples.length<w*h*.006)throw Error('문서 외곽이 뚜렷하지 않습니다.');samples.sort((a,b)=>a-b);const threshold=Math.max(14,samples[Math.floor(samples.length*.65)]*.45),diag=Math.ceil(Math.hypot(w,h)),bins=60,stride=diag*2+1,acc=new Float32Array(bins*stride),cos=[],sin=[],edges=new Uint8Array(w*h);
+ for(let t=0;t<bins;t++){cos[t]=Math.cos(t*Math.PI/bins);sin[t]=Math.sin(t*Math.PI/bins);}
+ for(let y=3;y<h-3;y++)for(let x=3;x<w-3;x++){const i=y*w+x;if(mag[i]<threshold)continue;edges[i]=1;const t=Math.round(angle[i]/Math.PI*bins)%bins;for(let d=-1;d<=1;d++){const k=(t+d+bins)%bins,r=Math.round(x*cos[k]+y*sin[k])+diag;acc[k*stride+r]+=Math.min(48,mag[i]);}}
+ const peaks=[];for(let t=0;t<bins;t++)for(let r=0;r<stride;r++){const value=acc[t*stride+r];if(value>Math.min(w,h)*9)peaks.push({t,r:r-diag,value});}peaks.sort((a,b)=>b.value-a.value);const lines=[];
+ for(const p of peaks){if(lines.some(q=>{const delta=Math.abs(p.t-q.t);return (delta<=2&&Math.abs(p.r-q.r)<9)||(delta>=bins-2&&Math.abs(p.r+q.r)<9)}))continue;lines.push({...p,a:cos[p.t],b:sin[p.t]});if(lines.length>=24)break;}
+ const vertical=lines.filter(l=>Math.abs(l.a)>.65).slice(0,12),horizontal=lines.filter(l=>Math.abs(l.b)>.65).slice(0,12);
+ function intersection(a,b){const det=a.a*b.b-a.b*b.a;if(Math.abs(det)<.2)return null;return{x:(a.r*b.b-a.b*b.r)/det,y:(a.a*b.r-a.r*b.a)/det};}
+ function support(a,b){const len=Math.hypot(b.x-a.x,b.y-a.y),steps=Math.max(10,Math.ceil(len/3));let hit=0;for(let k=1;k<steps;k++){const xx=Math.round(a.x+(b.x-a.x)*k/steps),yy=Math.round(a.y+(b.y-a.y)*k/steps);let found=false;for(let dy=-2;dy<=2&&!found;dy++)for(let dx=-2;dx<=2;dx++){const x=xx+dx,y=yy+dy;if(x>=0&&x<w&&y>=0&&y<h&&edges[y*w+x]){found=true;break;}}if(found)hit++;}return hit/(steps-1);}
+ let best=null;
+ function consider(points){if(points.some(p=>!p||p.x<3||p.y<3||p.x>w-4||p.y>h-4))return;const cx=points.reduce((s,p)=>s+p.x,0)/4,cy=points.reduce((s,p)=>s+p.y,0)/4;points.sort((a,b)=>Math.atan2(a.y-cy,a.x-cx)-Math.atan2(b.y-cy,b.x-cx));let first=0;for(let i=1;i<4;i++)if(points[i].x+points[i].y<points[first].x+points[first].y)first=i;points=points.slice(first).concat(points.slice(0,first));let area=0;const sides=[];for(let i=0;i<4;i++){const a=points[i],b=points[(i+1)%4],d=points[(i+2)%4];if((b.x-a.x)*(d.y-b.y)-(b.y-a.y)*(d.x-b.x)<=0)return;const len=Math.hypot(a.x-b.x,a.y-b.y);if(len<Math.min(w,h)*.17)return;area+=a.x*b.y-b.x*a.y;sides.push(support(a,b));}area=Math.abs(area)/2/(w*h);if(area<.15||area>.94||Math.min(...sides)<.42)return;const avg=sides.reduce((s,v)=>s+v,0)/4;if(avg<.68)return;const centered=1-Math.hypot(cx/w-.5,cy/h-.5),score=avg*.65+area*.3+centered*.05;if(!best||score>best.score)best={score,points:points.map(p=>({x:p.x/(w-1),y:p.y/(h-1)}))};}
+ for(let i=0;i<vertical.length;i++)for(let j=i+1;j<vertical.length;j++){const a=vertical[i],b=vertical[j];if(Math.abs(a.a*b.a+a.b*b.b)<.8)continue;for(let k=0;k<horizontal.length;k++)for(let l=k+1;l<horizontal.length;l++){const d=horizontal[k],e=horizontal[l];if(Math.abs(d.a*e.a+d.b*e.b)<.8)continue;consider([intersection(a,d),intersection(b,d),intersection(b,e),intersection(a,e)]);}}
+ // Bright-region proposal remains a candidate, but needs the same four-edge evidence.
+ try{consider(autoPoints(c).map(p=>({x:p.x*(w-1),y:p.y*(h-1)})));}catch(e){}
+ if(!best)throw Error('확실한 문서 경계를 찾지 못했습니다. 모서리를 직접 조절하세요.');return best.points;
+}

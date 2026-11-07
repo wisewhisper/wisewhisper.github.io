@@ -1,0 +1,27 @@
+{
+  "id": "./",
+  "name": "스마트 스캐너",
+  "short_name": "스마트 스캐너",
+  "description": "문서 촬영·책 보정·한글 OCR·검색 PDF를 기기에서 처리합니다.",
+  "lang": "ko",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f2f5f7",
+  "theme_color": "#007f78",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
