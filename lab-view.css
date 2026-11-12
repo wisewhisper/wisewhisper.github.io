@@ -144,3 +144,17 @@ body.lab-compact[data-lab-page*="전기장과전위"][data-electric-tab="graph"]
 @media(max-width:850px){
  body.lab-compact[data-lab-page*="전기장과전위"] .app{height:auto!important;min-height:100dvh!important;overflow:visible!important}
 }
+
+/* Electric lab scene must remain a real flex item: generic main{display:contents}
+   destroys its height once the shared compact view is enabled. */
+body.lab-compact[data-lab-page*="전기장과전위"] .app .layout>main{
+ display:flex!important;flex-direction:column!important;min-height:0!important;
+ min-width:0!important;margin:0!important;max-width:none!important;
+ padding:0!important
+}
+body.lab-compact[data-lab-page*="전기장과전위"] .app .layout>main .scene{
+ display:block!important;flex:1 1 auto!important;min-height:0!important;
+ height:auto!important;overflow:hidden!important
+}
+body.lab-compact[data-lab-page*="전기장과전위"] .app>.layout[hidden],
+body.lab-compact[data-lab-page*="전기장과전위"] .app>.electric-concepts[hidden]{display:none!important}
