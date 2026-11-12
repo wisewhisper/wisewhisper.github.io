@@ -6,6 +6,103 @@
 <style>
 :root{font-family:Pretendard,'Noto Sans KR',system-ui,sans-serif;color:#e8f3ff;background:#07101f;font-synthesis:none}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 80% 0%,#173456 0,#07101f 55%)}button,input{font:inherit}button{cursor:pointer;border:1px solid #345577;background:#152c49;color:#eaf4ff;border-radius:10px;padding:10px 12px;font-weight:700;touch-action:manipulation}button:hover{background:#214469}button.active{background:#166c8b;border-color:#42d8ff;box-shadow:inset 0 0 0 1px #42d8ff}button:focus-visible,input:focus-visible{outline:2px solid #7be4ff;outline-offset:2px}.app{max-width:1450px;margin:auto;padding:18px}.top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px}.top h1{font-size:clamp(22px,3vw,32px);margin:0 0 5px}.subtitle{color:#9fb9d5;font-size:14px;margin:0}.badge{background:#173351;color:#8de8fa;border:1px solid #325b7b;border-radius:30px;padding:8px 12px;white-space:nowrap;font-size:12px}.layout{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:14px}.card{background:#101e32;border:1px solid #29415e;border-radius:16px;box-shadow:0 15px 45px #0003;overflow:hidden}.toolbar{display:flex;gap:7px;padding:11px;flex-wrap:wrap;border-bottom:1px solid #2a405c}.toolbar .spacer{flex:1}.toolbar button{padding:8px 10px;font-size:13px}.scene{position:relative;min-height:420px;height:min(64vh,650px);background:#0b1730;overflow:hidden;touch-action:none;cursor:crosshair}.scene canvas{width:100%;height:100%;display:block;touch-action:none}.scene .floating{position:absolute;bottom:10px;left:10px;background:#071624da;padding:7px 10px;border-radius:9px;color:#c6e2f4;font-size:12px;pointer-events:none}.hint{padding:9px 13px;color:#a8bfda;font-size:12px;line-height:1.5}.side{display:flex;flex-direction:column;gap:12px}.section{padding:14px}.section h2{font-size:16px;margin:0 0 11px}.group{display:flex;gap:6px;flex-wrap:wrap}.group button{font-size:12px;padding:7px 8px}.labelrow{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:13px;margin:10px 0 4px}.labelrow strong{color:#82deff}input[type=range]{width:100%;accent-color:#4fd1f3}.small{font-size:12px;color:#a8c0d9;line-height:1.55}.toggles{display:grid;grid-template-columns:1fr 1fr;gap:6px}.toggles label{font-size:12px;display:flex;align-items:center;gap:6px;border:1px solid #304965;border-radius:8px;padding:7px;cursor:pointer}.toggles input{accent-color:#38c9ed}.readout{display:grid;grid-template-columns:1fr 1fr;gap:7px}.metric{background:#0a192c;border-radius:9px;padding:9px}.metric b{font-size:11px;color:#9db6ce;display:block;margin-bottom:4px}.metric span{font-weight:800;font-size:14px;font-variant-numeric:tabular-nums}.metric.full{grid-column:span 2}.chart{width:100%;height:150px;display:block;background:#07182b;border-radius:8px}.legend{display:flex;align-items:center;gap:6px;font-size:11px;color:#a9c1d7;margin:9px 0}.ramp{flex:1;height:11px;border-radius:9px;background:linear-gradient(90deg,#ea6873,#9f537d,#273b6d,#4c8295,#5dd7cf)}.explain{border-left:3px solid #34cdeb;padding:8px 10px;background:#0a2036;border-radius:4px;font-size:12px;line-height:1.55;color:#c6dcef}.muted{color:#9fb9d5}@media(max-width:900px){.layout{grid-template-columns:1fr}.side{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.scene{height:57vh;min-height:350px}}@media(max-width:550px){.app{padding:9px}.top{padding:5px;flex-wrap:wrap}.top h1{font-size:23px}.badge{display:none}.side{display:flex}.scene{height:52vh;min-height:340px}.toolbar button{font-size:12px;padding:7px 8px}.toolbar{gap:5px}.scene .floating{font-size:11px}}
 </style>
+<style id="electric-unified-style">
+
+/* Electric field/potential lab: one native four-tab presentation, not two competing views. */
+.app{max-width:1800px!important;height:100dvh;min-height:560px;display:flex;flex-direction:column;overflow:hidden;padding:7px 11px 10px}
+body:has(#lab-viewbar) .app{height:calc(100dvh - var(--electric-bar-height,52px))}
+.app .top{flex:0 0 auto;align-items:center;margin:0 0 6px;gap:8px}
+.app .top h1{font-size:clamp(20px,2vw,25px);margin:0}
+.app .subtitle{font-size:12px;line-height:1.3}
+.app .badge{padding:4px 9px}
+.electric-tabs{display:flex;flex:0 0 auto;align-items:center;gap:7px;margin:0 0 8px;padding:2px 0;min-height:40px;overflow-x:auto}
+.electric-tabs button{background:#14263c;border:1px solid #3a5575;color:#e6f1ff;padding:7px 12px;border-radius:9px;white-space:nowrap;min-height:34px;font-size:13px}
+.electric-tabs button[aria-selected="true"]{background:#126e83;color:#fff;border-color:#78ddec;box-shadow:inset 0 -2px #b3f3fa}
+.electric-screen{display:none;flex:1;min-height:0;overflow:hidden}
+.electric-screen.is-active{display:block}
+.app .layout{height:100%;min-height:0;display:grid;grid-template-columns:minmax(0,7fr) minmax(270px,3fr);gap:10px;align-items:stretch}
+.app .layout>main{display:flex;flex-direction:column;min-height:0;min-width:0}
+.app .toolbar{padding:7px;gap:6px;align-items:center;flex:0 0 auto}
+.app .toolbar button{min-height:35px;padding:6px 9px;line-height:1.25;font-size:12px}
+.app .scene{flex:1;min-height:0;height:auto!important;position:relative}
+.app .hint{flex:0 0 auto;padding:7px 11px;line-height:1.4;font-size:12px}
+.app .side{min-height:0;display:flex;flex-direction:column;overflow-y:auto;gap:8px;padding:0 2px 1px 0;scrollbar-width:thin}
+.app .section{padding:10px 12px}
+.app .section h2{font-size:15px;margin-bottom:7px}
+.app .group button{padding:6px 9px;font-size:12px}
+.app .labelrow{margin:7px 0 3px}
+.app .small{font-size:11px;line-height:1.4}
+.app .metric{padding:7px}
+.app .metric b{margin-bottom:2px}
+.app .metric span{font-size:13px}
+.app .toggles label{padding:6px;line-height:1.35}
+body[data-electric-tab="field"] #electric-motion-panel,
+body[data-electric-tab="field"] #electric-chart-panel,
+body[data-electric-tab="field"] #electric-compare-panel,
+body[data-electric-tab="motion"] #electric-chart-panel,
+body[data-electric-tab="motion"] #electric-compare-panel,
+body[data-electric-tab="graph"] #electric-settings-panel,
+body[data-electric-tab="graph"] #electric-motion-panel{display:none!important}
+body[data-electric-tab="field"] #runBtn,
+body[data-electric-tab="field"] #resetParticleBtn,
+body[data-electric-tab="graph"] #runBtn,
+body[data-electric-tab="graph"] #resetParticleBtn,
+body[data-electric-tab="motion"] #addPos,
+body[data-electric-tab="motion"] #addNeg,
+body[data-electric-tab="motion"] #probeBtn{display:none!important}
+body[data-electric-tab="motion"] #electric-motion-panel{order:0}
+body[data-electric-tab="motion"] #electric-readout-panel{order:1}
+body[data-electric-tab="motion"] #electric-settings-panel{order:2}
+body[data-electric-tab="motion"] #electric-settings-panel .toggles,
+body[data-electric-tab="motion"] #electric-settings-panel .legend,
+body[data-electric-tab="motion"] #electric-settings-panel .labelrow:has(> span){display:none}
+body[data-electric-tab="graph"] .app .layout{grid-template-columns:minmax(0,1.58fr) minmax(340px,1fr)}
+body[data-electric-tab="graph"] #electric-chart-panel{order:0}
+body[data-electric-tab="graph"] #electric-readout-panel{order:1}
+body[data-electric-tab="graph"] #electric-compare-panel{order:2}
+body[data-electric-tab="graph"] .app .chart{height:clamp(190px,31vh,265px)}
+.electric-chart-legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px;font-size:11px;color:#bad1e5}
+.electric-chart-legend .sample{display:inline-block;width:18px;border-top:2px solid #79e1e8;vertical-align:middle;margin-right:4px}
+.electric-chart-legend .sample.a{border-color:#ffbe73;border-top-style:dashed}
+.electric-chart-legend .sample.b{border-color:#e5aeff;border-top-style:dashed}
+.electric-compare-actions{display:flex;gap:7px;flex-wrap:wrap}
+.electric-compare-actions button{padding:6px 8px;font-size:12px}
+.electric-table{width:100%;border-collapse:collapse;font-size:11px;margin-top:6px}
+.electric-table td,.electric-table th{padding:5px 4px;border-bottom:1px solid #39536e;text-align:left}
+.electric-concepts{height:100%;overflow:auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-content:start;padding:0 2px 10px 0}
+.electric-concepts .concept-card,.electric-concepts #electric-prompt-panel{background:#101e32;border:1px solid #29415e;border-radius:12px;padding:15px;color:#e8f3ff}
+.electric-concepts .concept-card h2{font-size:17px;margin:0 0 8px;color:#9feaf5}
+.electric-concepts .concept-card p,.electric-concepts .concept-card li{font-size:14px;line-height:1.65;margin:6px 0}
+.electric-concepts .equation{background:#0b3043;border-radius:8px;padding:10px;margin:8px 0;font-weight:700;font-size:16px;overflow-wrap:anywhere}
+.electric-concepts .concept-card.full{grid-column:1/-1}
+.electric-concepts .diagram{display:block;max-width:100%;width:100%;height:126px}
+.electric-concepts #electric-prompt-panel h2{color:#9feaf5}
+.electric-experiment-tip{font-size:11px;color:#c2d9eb;line-height:1.4}
+body[data-electric-tab="motion"] #electric-settings-panel .small{display:none}
+@media(max-width:850px){
+ .app{height:auto!important;min-height:100dvh;overflow:visible;padding:8px}
+ .app .top{align-items:flex-start}.app .subtitle{display:none}
+ .electric-tabs{position:sticky;top:0;z-index:3;background:#07101f;padding:6px 0}
+ body:has(#lab-viewbar) .electric-tabs{top:0}
+ .electric-screen{overflow:visible;height:auto;min-height:0}
+ .app .layout,body[data-electric-tab="graph"] .app .layout{display:flex;flex-direction:column;height:auto;gap:9px}
+ .app .layout>main{min-height:0}
+ .app .scene{height:clamp(340px,53vh,520px)!important;min-height:340px;flex:auto}
+ .app .side{overflow:visible}
+ .electric-concepts{display:flex;flex-direction:column;overflow:visible}
+ .electric-concepts .concept-card.full{grid-column:auto}
+ body[data-electric-tab="graph"] .app .chart{height:240px}
+}
+@media(max-width:480px){
+ .app .top h1{font-size:20px}
+ .app .toolbar{gap:4px;padding:6px}
+ .app .toolbar button{font-size:11px;padding:6px 7px}
+ .electric-tabs button{font-size:12px;padding:6px 8px}
+ .app .scene{height:49vh!important}
+ .app .hint{font-size:11px}
+}
+
+</style>
 </head>
 <body>
 <div class="app"><header class="top"><div><h1>⚡ 전기장과 전위 실험실</h1><p class="subtitle">전하를 끌어 옮기고 탐침으로 전기장의 방향과 전위를 관찰해 보세요.</p></div><span class="badge">고등학교 물리 · 점전하 모형</span></header>
@@ -44,7 +141,7 @@ particle.vx+=f.ex*(testSign*1e-9/1e-6)*h;particle.vy+=f.ey*(testSign*1e-9/1e-6)*
 function loop(now){let dt=Math.min(.04,(now-last)/1000);last=now;step(dt);draw();requestAnimationFrame(loop)}
 function num(x,units){if(!Number.isFinite(x))return '—';return ((Math.abs(x)>=1000||Math.abs(x)<.01&&x!==0)?x.toExponential(2):x.toFixed(Math.abs(x)<10?2:1))+' '+units}
 function updateReadout(){const f=phys(probe.x,probe.y);if(f.near){$('readV').textContent='정의되지 않음';$('readE').textContent='정의되지 않음';$('readForce').textContent='정의되지 않음';$('readDir').textContent='전하 중심에서는 측정할 수 없음';return}let mag=Math.hypot(f.ex,f.ey);if(mag<1e-7)mag=0;const potential=Math.abs(f.v)<1e-10?0:f.v;$('readV').textContent=num(potential,'V');$('readE').textContent=num(mag,'N/C');let degrees=((Math.atan2(-f.ey,f.ex)*180/Math.PI)+360)%360;$('readForce').textContent=num(mag*1e-9,'N')+' · '+(mag<1e-7?'방향 없음':testSign>0?'전기장 방향':'전기장 반대 방향');$('readDir').textContent=(mag<1e-7?'방향 없음':degrees.toFixed(0)+'° (오른쪽 기준 반시계)')+' · x '+(probe.x*WORLD_W*100).toFixed(1)+' cm, y '+(probe.y*worldH()*100).toFixed(1)+' cm'}
-function drawChart(){const w=plot.width/dpr,h=plot.height/dpr;if(w<20||h<20)return;pctx.clearRect(0,0,w,h);pctx.fillStyle='#07182b';pctx.fillRect(0,0,w,h);const pad={l:42,r:10,t:12,b:23},cw=w-pad.l-pad.r,ch=h-pad.t-pad.b,limits=300;const graphY=v=>pad.t+(1-clamp(v/limits,-1,1))*.5*ch;pctx.strokeStyle='#486482';pctx.lineWidth=1;pctx.setLineDash([4,4]);pctx.beginPath();pctx.moveTo(pad.l,graphY(0));pctx.lineTo(w-pad.r,graphY(0));pctx.stroke();pctx.setLineDash([]);pctx.fillStyle='#9cb8ce';pctx.font='10px system-ui';pctx.fillText('+300 V',3,19);pctx.fillText('0 V',13,graphY(0)-4);pctx.fillText('−300 V',3,h-24);pctx.fillText('0 cm',pad.l,h-5);pctx.fillText('60 cm',w-44,h-5);pctx.strokeStyle='#79e1e8';pctx.lineWidth=2;pctx.beginPath();let inLine=false;for(let i=0;i<=320;i++){let x=i/320,f=phys(x,probe.y),px=pad.l+x*cw;if(f.near||Math.abs(f.v)>limits*1.2){inLine=false;continue}let py=graphY(f.v);if(!inLine)pctx.moveTo(px,py);else pctx.lineTo(px,py);inLine=true}pctx.stroke();const val=phys(probe.x,probe.y);if(!val.near){pctx.fillStyle='#fff';pctx.beginPath();pctx.arc(pad.l+probe.x*cw,graphY(val.v),4,0,7);pctx.fill()}}
+function drawChart(){const w=plot.width/dpr,h=plot.height/dpr;if(w<20||h<20)return;pctx.clearRect(0,0,w,h);pctx.fillStyle='#07182b';pctx.fillRect(0,0,w,h);const pad={l:42,r:10,t:12,b:23},cw=w-pad.l-pad.r,ch=h-pad.t-pad.b,limits=300;const graphY=v=>pad.t+(1-clamp(v/limits,-1,1))*.5*ch;pctx.strokeStyle='#486482';pctx.lineWidth=1;pctx.setLineDash([4,4]);pctx.beginPath();pctx.moveTo(pad.l,graphY(0));pctx.lineTo(w-pad.r,graphY(0));pctx.stroke();pctx.setLineDash([]);pctx.fillStyle='#9cb8ce';pctx.font='10px system-ui';pctx.fillText('+300 V',3,19);pctx.fillText('0 V',13,graphY(0)-4);pctx.fillText('−300 V',3,h-24);pctx.fillText('0 cm',pad.l,h-5);pctx.fillText('60 cm',w-44,h-5);pctx.strokeStyle='#79e1e8';pctx.lineWidth=2;pctx.beginPath();let inLine=false;for(let i=0;i<=320;i++){let x=i/320,f=phys(x,probe.y),px=pad.l+x*cw;if(f.near||Math.abs(f.v)>limits*1.2){inLine=false;continue}let py=graphY(f.v);if(!inLine)pctx.moveTo(px,py);else pctx.lineTo(px,py);inLine=true}pctx.stroke();const val=phys(probe.x,probe.y);if(!val.near){pctx.fillStyle='#fff';pctx.beginPath();pctx.arc(pad.l+probe.x*cw,graphY(val.v),4,0,7);pctx.fill()}if(window.__electricDrawCompare)window.__electricDrawCompare({ctx:pctx,w,h,pad,cw,ch,limits,graphY});}
 function eventPoint(e){const r=canvas.getBoundingClientRect();return{x:clamp((e.clientX-r.left)/r.width,0,1),y:clamp((e.clientY-r.top)/r.height,0,1)}}
 function hitCharge(p){let nearest=-1,dist=23;charges.forEach((c,i)=>{let d=Math.hypot((p.x-c.x)*W,(p.y-c.y)*H);if(d<dist){dist=d;nearest=i}});return nearest}
 canvas.addEventListener('pointerdown',e=>{e.preventDefault();const p=eventPoint(e),hit=hitCharge(p);if(hit>=0){selected=hit;drag='charge';syncSlider()}else if(mode==='positive'||mode==='negative'){if(charges.length>=8){$('status').textContent='전하는 최대 8개까지 추가할 수 있습니다.';return}charges.push({x:p.x,y:p.y,q:mode==='positive'?2:-2});selected=charges.length-1;drag='charge';syncSlider();dirty=true;updateReadout();drawChart();setMode('probe')}else{drag='probe';probe=p;updateReadout();drawChart();if(!run)resetParticle()}canvas.setPointerCapture(e.pointerId)});
@@ -53,8 +150,98 @@ function setMode(m){mode=m;$('addPos').classList.toggle('active',m==='positive')
 $('addPos').onclick=()=>setMode('positive');$('addNeg').onclick=()=>setMode('negative');$('probeBtn').onclick=()=>setMode('probe');$('presetDipole').onclick=()=>preset('dipole');$('presetPositive').onclick=()=>preset('positive');$('presetSingle').onclick=()=>preset('single');$('resetBtn').onclick=()=>{for(const id of toggleIds)$(id).checked=true;setTestSign(1);preset('dipole');setMode('probe')};$('removeBtn').onclick=()=>{if(!charges.length)return;charges.splice(selected,1);selected=clamp(selected,0,charges.length-1);syncSlider();dirty=true;updateReadout();drawChart()};$('chargeSlider').oninput=e=>{if(!charges.length)return;let q=Number(e.target.value);if(Math.abs(q)<.1)q=.2*(Math.sign(charges[selected].q)||1);charges[selected].q=q;syncSlider();dirty=true;updateReadout();drawChart()};for(const id of toggleIds)$(id).onchange=()=>dirty=true;
 function setTestSign(s){testSign=s;run=false;resetParticle();$('runBtn').textContent='▶ 시작';$('testPositive').classList.toggle('active',s>0);$('testNegative').classList.toggle('active',s<0);$('status').textContent=(s>0?'양':'음')+'의 시험 전하를 선택했습니다.';updateReadout()}$('testPositive').onclick=()=>setTestSign(1);$('testNegative').onclick=()=>setTestSign(-1);
 $('runBtn').onclick=()=>{if(!particle.alive)resetParticle();run=!run;$('runBtn').textContent=run?'⏸ 일시정지':'▶ 계속';$('status').textContent=run?(testSign>0?'노란 입자: +1 nC':'보라 입자: −1 nC')+', 질량 1 mg. F = qE에 따라 이동합니다.':'일시정지되었습니다.'};$('resetParticleBtn').onclick=()=>{run=false;resetParticle();$('runBtn').textContent='▶ 시작';$('status').textContent='시험 입자를 탐침 위치로 되돌렸습니다.'};
-new ResizeObserver(resize).observe(wrap);preset('dipole');resize();requestAnimationFrame(loop);
+window.__electricLabAPI={resize:resize,drawChart:drawChart,probe:function(){return {x:probe.x,y:probe.y}},charges:function(){return charges.map(function(c){return {x:c.x,y:c.y,q:c.q}})},measure:function(){return phys(probe.x,probe.y)},sample:function(x,y){return phys(x,y)},pause:function(){if(run){run=false;$('runBtn').textContent='▶ 계속'}},setMode:setMode};new ResizeObserver(resize).observe(wrap);preset('dipole');resize();requestAnimationFrame(loop);
 })();
+</script>
+<script id="electric-unified-tabs">
+
+(function(){
+'use strict';
+var app=document.querySelector('.app'), layout=app&&app.querySelector('.layout');
+if(!app||!layout||!window.__electricLabAPI)return;
+var api=window.__electricLabAPI;
+var header=app.querySelector('.top'), main=layout.querySelector('main'), side=layout.querySelector('.side');
+var sections=Array.from(side.querySelectorAll(':scope > section'));
+if(sections.length<5)return;
+sections[0].id='electric-settings-panel';
+sections[1].id='electric-motion-panel';
+sections[2].id='electric-readout-panel';
+sections[3].id='electric-chart-panel';
+sections[4].id='electric-prompt-panel';
+var nav=document.createElement('nav');
+nav.className='electric-tabs';nav.setAttribute('role','tablist');nav.setAttribute('aria-label','전기장과 전위 탐구 선택');
+var tabs=[['field','① 전기장·전위'],['motion','② 시험전하 운동'],['graph','③ 그래프·비교'],['concept','④ 개념 설명']];
+var screens={};
+tabs.forEach(function(t){
+ var btn=document.createElement('button');btn.type='button';btn.id='electric-tab-'+t[0];btn.textContent=t[1];btn.setAttribute('role','tab');btn.setAttribute('aria-controls','electric-screen-'+t[0]);nav.append(btn);
+ var panel=document.createElement('section');panel.className='electric-screen';panel.id='electric-screen-'+t[0];panel.setAttribute('role','tabpanel');panel.setAttribute('aria-labelledby',btn.id);app.append(panel);screens[t[0]]=panel;
+ btn.addEventListener('click',function(){openTab(t[0]);});
+ btn.addEventListener('keydown',function(e){if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft')return;e.preventDefault();var idx=tabs.findIndex(function(v){return v[0]===t[0]});var next=(idx+(e.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length;nav.children[next].focus();openTab(tabs[next][0]);});
+});
+header.after(nav);
+var concepts=document.createElement('div');concepts.className='electric-concepts';
+concepts.innerHTML=[
+ '<article class="concept-card"><h2>1. 전기장과 전기력</h2><p>전기장은 원천 전하가 주변 공간에 만드는 벡터장입니다. 시험전하의 부호를 바꾸어도 원천 전하가 만드는 전기장은 변하지 않습니다.</p><div class="equation">E⃗ = k Σ qᵢ r̂ᵢ / rᵢ²　　F⃗ = q₀ E⃗</div><p>양의 시험전하는 전기장 방향으로, 음의 시험전하는 전기장과 반대 방향으로 힘을 받습니다. 단위는 N/C입니다.</p></article>',
+ '<article class="concept-card"><h2>2. 전위와 전기장</h2><p>전위는 단위 전하당 전기적 위치에너지이며, 방향이 없는 스칼라입니다. 무한히 멀리 떨어진 곳의 전위를 0 V로 정합니다.</p><div class="equation">V = k Σ qᵢ/rᵢ　　U = q₀V</div><p>전위는 부호를 가질 수 있고, 같은 위치의 전기장과 전위는 서로 다른 물리량입니다. 전기장 세기 단위 N/C는 V/m와 같습니다.</p></article>',
+ '<article class="concept-card"><h2>3. 전기장선과 등전위선</h2><svg class="diagram" viewBox="0 0 420 126" aria-label="양전하와 음전하 사이의 전기장 방향과 등전위선 예시"><defs><marker id="ed-head" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto"><path d="M0 0L5 2.5L0 5" fill="#ffd37d"/></marker></defs><circle cx="75" cy="63" r="18" fill="#30ccd7"/><text x="75" y="71" text-anchor="middle" font-size="25" fill="#062132">+</text><circle cx="345" cy="63" r="18" fill="#ef667f"/><text x="345" y="71" text-anchor="middle" font-size="25" fill="#3a1221">−</text><path d="M97 63H322M96 50Q210 -5 324 50M96 76Q210 131 324 76" stroke="#ffd37d" fill="none" stroke-width="2" marker-end="url(#ed-head)"/><path d="M155 14Q199 63 155 112M265 14Q221 63 265 112" stroke="#bfe9ff" stroke-dasharray="5 4" stroke-width="2" fill="none"/><text x="210" y="17" text-anchor="middle" fill="#fff" font-size="10">전기장: 양전하 → 음전하</text></svg><p>전기장선은 양전하에서 나와 음전하로 들어갑니다. 등전위선은 전위가 같은 점들의 연결선이며 전기장 방향과 직교합니다. 전기장은 전위가 감소하는 방향입니다(E⃗ = −∇V).</p></article>',
+ '<article class="concept-card"><h2>4. 대칭 위치에서의 비교</h2><p><strong>＋ / − 쌍의 가운데:</strong> 크기가 같은 두 전하의 전위는 서로 상쇄되어 V = 0이지만, 전기장 벡터는 같은 방향으로 합쳐져 E ≠ 0입니다.</p><p><strong>＋ / ＋ 쌍의 가운데:</strong> 전기장은 반대 방향으로 상쇄되어 E = 0이지만, 두 전위는 더해져 V &gt; 0입니다.</p><p>첫 번째 탭에서 두 배치를 번갈아 선택하고 탐침을 한가운데로 옮겨 비교하세요.</p></article>',
+ '<article class="concept-card full"><h2>5. 모델의 가정과 주의점</h2><p>정지한 점전하를 진공에서 계산하고, 3차원 전기장의 2차원 단면을 표시합니다. 원천 전하의 위치에서는 점전하 식이 발산하므로 측정값을 정의하지 않습니다. 시뮬레이션 화면의 전하 표식 크기와 색의 채도는 실제 전하 크기나 전위의 선형 척도를 뜻하지 않습니다. 시험전하 운동은 질량 1 mg, 전하량 ±1 nC를 가정하며 자기력, 중력, 충돌 이후의 운동은 생략합니다.</p></article>'
+].join('');
+concepts.append(sections[4]);
+screens.concept.append(concepts);
+var compare=document.createElement('section');compare.className='card section';compare.id='electric-compare-panel';
+compare.innerHTML='<h2>조건 A · B 비교</h2><div class="electric-compare-actions"><button type="button" data-save="A">현재 → A 저장</button><button type="button" data-save="B">현재 → B 저장</button><button type="button" id="electric-clear-compare">비교 초기화</button></div><table class="electric-table"><thead><tr><th>조건</th><th>전하 배치</th><th>V (V)</th><th>|E| (N/C)</th></tr></thead><tbody id="electric-compare-body"></tbody></table><p class="electric-experiment-tip">현재 전위 그래프는 실선, A·B는 점선입니다. 그래프는 탐침의 y 좌표를 지나는 가로선에서 비교합니다.</p>';
+side.append(compare);
+var graphLegend=document.createElement('div');graphLegend.className='electric-chart-legend';graphLegend.innerHTML='<span><i class="sample"></i>현재</span><span><i class="sample a"></i>조건 A</span><span><i class="sample b"></i>조건 B</span>';
+sections[3].append(graphLegend);
+var saved={A:null,B:null};
+function fmt(v){return Number.isFinite(v)?(Math.abs(v)>=1000?v.toExponential(2):v.toFixed(2)):'—';}
+function capture(){
+ var probe=api.probe(),m=api.measure(),ch=api.charges(),vals=[];
+ for(var i=0;i<=320;i++){var f=api.sample(i/320,probe.y);vals.push(f.near||!Number.isFinite(f.v)?null:f.v);}
+ return {probe:probe,v:m.near?NaN:m.v,e:m.near?NaN:Math.hypot(m.ex,m.ey),charge:ch.map(function(c){return (c.q>0?'+':'')+c.q.toFixed(1);}).join('/'),profile:vals};
+}
+function updateCompare(){
+ var body=document.getElementById('electric-compare-body');
+ body.innerHTML=['A','B'].map(function(key){
+  var s=saved[key];return '<tr><th>'+key+'</th><td>'+(s?s.charge+' nC':'—')+'</td><td>'+(s?fmt(s.v):'—')+'</td><td>'+(s?fmt(s.e):'—')+'</td></tr>';
+ }).join('');
+ api.drawChart();
+}
+compare.querySelectorAll('[data-save]').forEach(function(btn){btn.addEventListener('click',function(){saved[btn.dataset.save]=capture();updateCompare();});});
+document.getElementById('electric-clear-compare').addEventListener('click',function(){saved={A:null,B:null};updateCompare();});
+window.__electricDrawCompare=function(d){
+ ['A','B'].forEach(function(key){
+  var s=saved[key];if(!s)return;
+  var c=d.ctx;c.save();c.strokeStyle=key==='A'?'#ffbe73':'#e5aeff';c.lineWidth=1.7;c.setLineDash(key==='A'?[7,4]:[3,4]);c.beginPath();
+  var started=false;for(var i=0;i<s.profile.length;i++){var v=s.profile[i];if(v===null||Math.abs(v)>d.limits*1.2){started=false;continue;}
+    var x=d.pad.l+i/320*d.cw,y=d.graphY(v);if(!started)c.moveTo(x,y);else c.lineTo(x,y);started=true;
+  }c.stroke();c.restore();
+ });
+};
+function openTab(key){
+ if(key!=='motion')api.pause();
+ if(key==='motion')api.setMode('probe');
+ document.body.dataset.electricTab=key;
+ tabs.forEach(function(t){
+  var on=t[0]===key,btn=document.getElementById('electric-tab-'+t[0]),panel=screens[t[0]];
+  btn.setAttribute('aria-selected',String(on));btn.setAttribute('tabindex',on?'0':'-1');
+  panel.classList.toggle('is-active',on);panel.hidden=!on;
+ });
+ if(key!=='concept')screens[key].append(layout);
+ if(key==='graph')side.scrollTop=0;
+ requestAnimationFrame(function(){if(key!=='concept'){api.resize();if(key==='graph')api.drawChart();}});
+}
+var barResizeObserver;
+function syncBar(){
+ var bar=document.getElementById('lab-viewbar');if(!bar)return;
+ document.documentElement.style.setProperty('--electric-bar-height',Math.ceil(bar.getBoundingClientRect().height)+'px');
+ if(!barResizeObserver){barResizeObserver=new ResizeObserver(syncBar);barResizeObserver.observe(bar);}
+}
+new MutationObserver(syncBar).observe(document.body,{childList:true});
+syncBar();updateCompare();openTab('field');
+})();
+
 </script>
 </body>
 </html>
