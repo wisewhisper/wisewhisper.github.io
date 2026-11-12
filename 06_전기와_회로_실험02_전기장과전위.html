@@ -172,7 +172,25 @@ html,body{background:#050910!important;color:#eef6ff!important}
 .app :is(button,select){color:#f1fbff!important;background:#213e5a!important;border-color:#4f7694!important}
 .app button:is(.active,[aria-selected="true"]){color:#fff!important;background:#117589!important;border-color:#6cdbed!important}
 </style>
-</head>
+<style id="electric-field-v7-dark">
+/* Native electric field/potential laboratory — unified dark-scene palette. */
+html,body,.app{background:#07111e!important;color:#edf7ff!important}
+.app .scene,.app #scene{background:#0a1c30!important;border:1px solid #34566f!important}
+.app #field{background:#0a1c30!important}
+.app :is(.card,.section,.metric,.readout,.explain,.chart,.concept-card,.equation,.electric-table){background:#12243a!important;color:#eaf6ff!important;border-color:#395b75!important}
+.app :is(.card,.section,.metric,.readout,.explain,.chart,.concept-card,.equation,.electric-table) :is(p,div,span,strong,b,small,td,th,label){color:#e9f5ff!important}
+.app :is(.metric,.readout) :is(b,span){color:#e8f6ff!important}
+.app .chart{background:#0b1e31!important;border:1px solid #35556d!important}
+.app button:not(.active):not([aria-selected="true"]){background:#23405b!important;color:#e9f6ff!important}
+.app button:is(.active,[aria-selected="true"]){background:#0d7488!important;color:#fff!important}
+.app :is(input,select){accent-color:#74e5ed!important;color:#eaf6ff!important}
+.app .electric-concepts :is(.diagram,.equation){background:#10283e!important}
+@media(min-width:901px){
+ .app .layout,body[data-electric-tab="graph"] .app .layout{grid-template-columns:minmax(0,4fr) minmax(245px,1fr)!important}
+ .app .scene{min-height:0!important;flex:1 1 auto!important}
+ .app .scene canvas{height:100%!important;width:100%!important}
+}
+</style></head>
 <body>
 <div class="app"><header class="top"><div><h1>⚡ 전기장과 전위 실험실</h1><p class="subtitle">전하를 끌어 옮기고 탐침으로 전기장의 방향과 전위를 관찰해 보세요.</p></div><span class="badge">고등학교 물리 · 점전하 모형</span></header>
 <div class="layout"><main class="card"><div class="toolbar"><button id="addPos">＋ 양전하 추가</button><button id="addNeg">− 음전하 추가</button><button id="probeBtn" class="active">⊕ 탐침 이동</button><span class="spacer"></span><button id="runBtn">▶ 시작</button><button id="resetParticleBtn">↺ 입자 되돌리기</button><button id="resetBtn">초기화</button></div><div class="scene" id="scene"><canvas id="field" aria-label="전하를 드래그하여 전기장과 전위를 탐구하는 시뮬레이션"></canvas><div class="floating" id="sceneHint">전하 ● 드래그 · 빈 곳 터치: 탐침 이동</div></div><div class="hint">빨강은 음의 전위, 청록은 양의 전위입니다. 흰색 등전위선과 화살표를 함께 비교해 보세요. 화살표는 전기장의 <b>방향</b>을 나타냅니다.</div></main>
