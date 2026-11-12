@@ -1,74 +1,524 @@
 <!doctype html>
-<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>34번 전력 | 물리 공식 실험실</title><style>
-:root{color-scheme:light;--ink:#16283d;--muted:#576c82;--blue:#245bd6;--orange:#ba550a;--border:#d8e3ef}*{box-sizing:border-box}body{margin:0;background:#eef3f9;color:var(--ink);font:16px/1.6 system-ui,sans-serif}main{max-width:1150px;margin:auto;padding:24px}header{margin-bottom:20px}.tag{font-size:13px;font-weight:700;color:var(--blue);letter-spacing:1px}h1{font-size:clamp(26px,5vw,38px);margin:5px 0}h2{font-size:20px;margin:0 0 12px}p{margin:8px 0}.lead{color:var(--muted)}.layout{display:grid;grid-template-columns:1.25fr 1fr;gap:18px}.card{background:white;border:1px solid var(--border);border-radius:18px;padding:20px;min-width:0;margin-bottom:18px}.formula{font-size:25px;font-weight:700;color:var(--blue)}.small{font-size:14px;color:var(--muted)}svg{display:block;width:100%;height:auto}label{display:block;font-weight:650}input[type=range]{width:100%;min-height:44px;accent-color:var(--blue)}input[type=number]{width:100px}input,select,button{font:inherit;min-height:44px;border:1px solid #b6c8dc;border-radius:9px;background:white;color:var(--ink);padding:7px 10px}button{cursor:pointer;font-weight:650}button.primary{background:var(--blue);color:white;border-color:var(--blue)}button:disabled{opacity:.5;cursor:default}.row{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.control{margin-bottom:16px}.control .row{justify-content:space-between}.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.stat{padding:12px;background:#f3f7fc;border-radius:12px}.stat strong{display:block;font-size:23px;color:var(--blue)}.substitute{background:#f1f6ff;padding:12px;border-radius:10px;overflow-wrap:anywhere;margin-top:12px}details{border-top:1px solid var(--border);padding:12px 0}summary{cursor:pointer;font-weight:650;min-height:36px}table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:8px 4px;border-bottom:1px solid var(--border)}.scroll{overflow-x:auto}.notice{border-left:4px solid #dd921e;padding:8px 12px;background:#fff8e9}.bar{height:10px;background:#e3ecfa;border-radius:8px;overflow:hidden}.bar span{display:block;height:100%;background:var(--blue);width:0}#status{min-height:24px}button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #dd921e;outline-offset:3px}@media(max-width:760px){main{padding:14px}.layout{display:block}.card{padding:16px}h1{font-size:28px}.stats strong{font-size:21px}}
-</style><link rel="stylesheet" href="electric-lab-v6.css?v=20261112-7"><link rel="stylesheet" href="electric-lab-v7-dark.css?v=20261112-11"><script src="electric-lab-v6.js?v=20261112-8" defer></script></head><body><main>
-<header><div class="tag">PHYSICS LAB · 34 / 40</div><h1>전력 <span class="formula">P = VI</span></h1><p class="lead">전압과 저항을 바꾸면 전류, 전력, 소비 에너지가 어떻게 변할까요?</p></header>
-<div class="layout"><div><section class="card"><h2>직류 저항 회로</h2><p class="small">전압원 → 저항 → 전압원으로 흐르는 관습적 전류의 방향을 표시합니다.</p>
-<svg viewBox="0 0 540 285" role="img" aria-label="입체감 있게 표현한 직류 전원, 전선, 발열 저항, 관습적 전류 방향 및 전력 표시">
-<defs>
- <linearGradient id="electricWire34" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#9dd8ed"/><stop offset=".48" stop-color="#558fae"/><stop offset="1" stop-color="#315d7f"/></linearGradient>
- <linearGradient id="electricBattery34" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#5e8cb0"/><stop offset=".22" stop-color="#1d3d57"/><stop offset=".75" stop-color="#17354a"/><stop offset="1" stop-color="#66849b"/></linearGradient>
- <filter id="electricShadow34"><feDropShadow dx="2" dy="3" stdDeviation="3" flood-opacity=".42"/></filter>
- <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#54ddeb"/></marker>
- </defs>
- <rect x="15" y="13" width="510" height="259" rx="17" fill="#0a1c2e" stroke="#27435a"/>
- <path d="M90 116V62H440V104M440 176V222H90V174" stroke="#183c58" stroke-width="11" stroke-linejoin="round" fill="none"/>
- <path d="M90 116V62H440V104M440 176V222H90V174" stroke="url(#electricWire34)" stroke-width="6" stroke-linejoin="round" fill="none"/>
- <g filter="url(#electricShadow34)">
- <rect x="52" y="115" width="76" height="62" rx="13" fill="url(#electricBattery34)" stroke="#9abed1" stroke-width="2"/>
- <rect x="60" y="118" width="60" height="8" rx="3" fill="#a6d0e9" opacity=".6"/>
- <rect x="63" y="128" width="54" height="36" rx="4" fill="#17374e"/>
- <path d="M68 135H111" stroke="#fc9c92" stroke-width="6" stroke-linecap="round"/>
- <path d="M78 158H101" stroke="#8cc9fa" stroke-width="5" stroke-linecap="round"/>
- <text x="90" y="148" font-size="12" text-anchor="middle" fill="#f0f8ff">DC</text>
- </g>
- <text x="43" y="138" font-size="17" fill="#ffad9f">+</text><text x="43" y="171" font-size="17" fill="#94c9fb">−</text>
- <text id="source" x="90" y="260" text-anchor="middle" font-size="17" font-weight="700" fill="#eaf6ff"></text>
- <path id="flow" d="M158 62H254" stroke="#54ddeb" stroke-width="4" marker-end="url(#arrow)" fill="none"/>
- <text id="flowLabel" x="288" y="36" text-anchor="middle" font-size="17" fill="#84e8ef"></text>
- <rect x="402" y="98" width="76" height="86" rx="13" fill="#071a29" stroke="#748fa5" stroke-width="2" filter="url(#electricShadow34)"/>
- <rect id="resistor" x="407" y="103" width="66" height="76" rx="9" fill="#994d2b" stroke="#ffca82" stroke-width="3"/>
- <path d="M412 111V171M468 111V171" stroke="#ffd49b" stroke-width="3" opacity=".64"/>
- <path d="M417 107H463" stroke="#ffe6bf" stroke-width="2" opacity=".48"/>
- <text x="440" y="134" text-anchor="middle" font-size="17" font-weight="800" fill="#fff5df">저항</text>
- <text id="rLabel" x="440" y="159" text-anchor="middle" font-size="16" fill="#fff5df"></text>
- <path d="M487 110 Q496 102 488 92 M495 130 Q505 122 497 111 M487 150 Q498 142 489 131" fill="none" stroke="#ffb66f" stroke-width="2.8" opacity=".78"/>
- <g text-anchor="middle">
- <text x="265" y="109" font-size="15" fill="#a7d0e3">전기 에너지 → 열에너지</text>
- <text id="powerLabel" x="265" y="158" font-size="25" font-weight="800" fill="#ffc783"></text>
- <text x="265" y="184" font-size="13" fill="#b4cddd">저항에서 전달되는 에너지의 속도</text>
- </g>
- <rect x="140" y="234" width="278" height="27" rx="9" fill="#152c42" stroke="#34566f"/>
- <text x="279" y="251" text-anchor="middle" font-size="12" fill="#c8e3f0">전류 방향 · 전압 · 저항 · 발열의 관계를 관찰하세요</text>
- </svg>
-<div class="stats"><div class="stat">전류 I<strong id="current"></strong></div><div class="stat">전력 P<strong id="power"></strong></div><div class="stat">측정 경과 시간<strong id="time"></strong></div><div class="stat">누적 소비 에너지 E<strong id="energy"></strong></div></div><div id="equation" class="substitute"></div>
-</section><section class="card"><h2>에너지 측정</h2><p class="small">측정 시작 시각은 0 s입니다. 시작하면 E = Pt를 따라 누적됩니다.</p><div class="row"><button id="start" class="primary">시작</button><button id="pause" disabled>일시정지</button><button id="restart">측정 재시작</button><label for="speed">재생 속도</label><select id="speed"><option value="0.5">0.5배</option><option value="1" selected>1배</option><option value="2">2배</option><option value="4">4배</option></select></div><p id="status" class="small" aria-live="polite">시작을 눌러 에너지를 측정하세요.</p><div class="bar"><span id="progress"></span></div><p id="target" class="small"></p></section></div>
-<div><section class="card"><h2>예측하고 조작하기</h2><p class="small">독립 변수: V, R · 계산 변수: I = V/R, P = VI</p><div class="control"><div class="row"><label for="v">전압 V (V)</label><input id="vn" type="number" min="0" max="24" step="0.1" value="12" aria-label="전압 숫자 입력"></div><input id="v" type="range" min="0" max="24" step="0.1" value="12"></div><div class="control"><div class="row"><label for="r">저항 R (Ω)</label><input id="rn" type="number" min="1" max="100" step="0.1" value="12" aria-label="저항 숫자 입력"></div><input id="r" type="range" min="1" max="100" step="0.1" value="12"></div><div class="control"><div class="row"><label for="duration">측정 구간 (s)</label><input id="durationn" type="number" min="1" max="120" step="1" value="10" aria-label="측정 구간 숫자 입력"></div><input id="duration" type="range" min="1" max="120" step="1" value="10"></div><p class="notice small">전압·저항·측정 구간을 바꾸면 측정이 정지하고 시간과 누적 에너지가 0으로 돌아갑니다. 비교 기록은 유지됩니다.</p><button id="reset">모두 초기화</button></section>
-<section class="card"><h2>관계 그래프</h2><label for="graph">관찰할 관계</label><select id="graph" style="width:100%"><option value="voltage">전압–전력 · 저항 고정</option><option value="resistance">저항–전력 · 전압 고정</option><option value="energy">시간–에너지 · 전력 고정</option></select><p id="graphInfo" class="small"></p><svg id="chart" viewBox="0 0 500 325" role="img" aria-label="관계 그래프"></svg><p class="small">실선: 이론 관계 · ● 현재 상태 · △ 조건 A · □ 조건 B<br>시간–에너지 실선은 예상값이며, ●는 실제 측정 경과 시간입니다.</p></section></div></div>
-<section class="card"><h2>조건 A · B 비교</h2><p class="small">두 조건 모두 같은 10 s 동안의 소비 에너지를 비교합니다. 현재 측정 구간과 무관한 공통 기준입니다.</p><div class="row"><button id="saveA">조건 A 저장</button><button id="saveB">조건 B 저장</button><button id="clear">비교 기록 지우기</button></div><div class="scroll"><table><thead><tr><th>조건</th><th>V (V)</th><th>R (Ω)</th><th>I (A)</th><th>P (W)</th><th>E₁₀ (J)</th></tr></thead><tbody id="compare"></tbody></table></div><p id="comparison" class="small" aria-live="polite"></p></section>
-<section class="card"><h2>예측 → 조작 → 관찰 → 설명</h2><details><summary>기본 · 12 V, 12 Ω에서 10 s 동안 소비하는 에너지는?</summary><p>먼저 예측하고 시작을 누르세요. I = 12/12 = 1 A, P = 12 × 1 = 12 W입니다. 10 s 동안 E = 12 × 10 = 120 J = 0.0333 Wh를 소비합니다. 1 W = 1 J/s입니다.</p></details><details><summary>응용 · 저항을 고정하고 전압을 2배로 하면 전력은?</summary><p>12 V, 12 Ω를 A로 저장하고 24 V, 12 Ω를 B로 저장하세요. 전류도 2배가 되어 전력은 4배입니다. P = V²/R이므로 12 W에서 48 W로 증가합니다. 단순히 전압만 2배이므로 전력도 2배라고 설명하면 전류 변화를 빠뜨린 것입니다.</p></details><details><summary>도전 · “저항이 클수록 전력이 크다”는 항상 맞을까요?</summary><p>아닙니다. 전압을 고정하면 P = V²/R이므로 저항이 2배일 때 전력은 절반입니다. 전류를 고정한다면 P = I²R이므로 저항이 2배일 때 전력도 2배입니다. 이 실험실에서는 전압과 저항을 조절하므로 저항만 바꿀 때 전류는 고정되지 않습니다.</p></details><details><summary>오개념 · 전력과 전기 에너지는 같은 양인가요?</summary><p>전력은 에너지 소비율이며 단위는 W, 에너지는 J 또는 Wh입니다. 같은 전력이라도 사용 시간이 2배면 소비 에너지는 2배입니다. 측정 구간을 10 s와 20 s로 바꾸어 확인하세요. 1 Wh = 3600 J, 1 kWh = 3.6 × 10⁶ J입니다.</p></details><details><summary>공식의 기호 · 적용 조건 · 모형의 한계</summary><p>V: 저항 양단 전압, I: 관습적 전류, R: 저항, P: 저항에서 소비되는 전력, E: 소비 에너지, t: 경과 시간입니다. E는 이 실험실에서 전기장이 아닌 에너지 기호입니다.</p><p>이상적인 직류 전압원, 저항이 일정한 옴성 저항, 저항이 없는 도선을 가정합니다. P = VI는 직류 소비 전력이며 P = V²/R = I²R은 옴의 법칙을 만족하는 저항에 적용합니다. 교류에서는 일반적으로 순간 전력 p(t) = v(t)i(t)를 평균해야 하므로 이 모형의 범위를 벗어납니다.</p><p>입력 범위는 0 ≤ V ≤ 24 V, 1 ≤ R ≤ 100 Ω입니다. R = 0인 단락 회로와 음의 저항은 다루지 않습니다. 회로 크기, 저항 색은 개념적 표현이며 실제 온도나 전자의 이동 속도를 나타내지 않습니다. 실제 전구는 온도에 따라 저항이 변하므로 이 일정 저항 모형과 다를 수 있습니다. 전압이 0이면 전류·전력·에너지는 모두 0입니다.</p></details></section>
-<footer class="small">물리 공식 40 · 34번 전력 | 외부 연결 없이 실행되는 단일 HTML</footer></main>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#081525">
+<title>34번 전력 실험실 | 전류·발열·소비 에너지</title>
+<style>
+:root{color-scheme:dark;--bg:#081321;--panel:#10243a;--card:#18334a;--edge:#375a74;--ink:#eff8ff;--sub:#b9d3e5;--cyan:#6be8e2;--amber:#ffd48a;--blue:#8dc6ff}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font:14px/1.48 system-ui,-apple-system,"Malgun Gothic",sans-serif}
+button,select,input{font:inherit}button{cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #a9f7ff;outline-offset:2px}
+button:disabled{opacity:.48;cursor:default}
+.app{height:100dvh;min-height:600px;padding:9px 11px;display:flex;flex-direction:column;gap:7px;overflow:hidden}
+header{display:flex;align-items:center;gap:14px;min-height:35px;flex:0 0 auto}
+header h1{font-size:clamp(19px,1.85vw,26px);line-height:1.2;margin:0}
+header .sub{font-size:12px;color:var(--sub)}
+header button{margin-left:auto}
+button{background:#244660;border:1px solid #507b94;color:#f1fcff;border-radius:8px;min-height:34px;padding:6px 11px;font-weight:700}
+button:hover:not(:disabled){background:#315a77}
+button.primary{background:#08778b;border-color:#84e8eb;color:white}
+.tabs{display:flex;gap:6px;align-items:center;flex:0 0 auto;min-height:37px;overflow-x:auto;padding-bottom:3px}
+.tabs button{white-space:nowrap}
+.tabs button[aria-selected=true]{background:#087c8f;border-color:#98f4f3;box-shadow:inset 0 -2px #bcffff}
+.workspace{display:grid;grid-template-columns:minmax(0,4fr) minmax(250px,1fr);grid-template-rows:minmax(0,1fr);gap:9px;flex:1 1 auto;min-height:0;min-width:0}
+.stage,.graphs,.side,.concepts{min-width:0;min-height:0}
+.stage{display:flex;flex-direction:column;gap:6px}
+.scene-card{display:flex;flex-direction:column;flex:1 1 auto;min-height:0;overflow:hidden;gap:7px;padding:9px 11px;background:var(--panel);border:1px solid var(--edge);border-radius:12px}
+.scene-head{display:flex;align-items:center;flex-wrap:wrap;gap:6px;flex:0 0 auto}
+.scene-head h2{font-size:16px;margin:0 9px 0 0}
+.scene-head button{font-size:12px;padding:5px 10px}
+.scene-head .tag{color:#a8deeb;font-size:12px}
+.figure{display:flex;flex:1 1 auto;min-height:0}
+#scene{width:100%;height:100%;display:block;flex:1 1 auto;min-height:160px;background:#091b2e;border:1px solid #34546b;border-radius:10px;overflow:hidden}
+.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;flex:0 0 auto}
+.metric{border:1px solid #385b72;background:#19344b;border-radius:9px;padding:7px 9px;min-width:0}
+.metric small{font-size:11px;color:#b6d3e3;display:block;white-space:nowrap}
+.metric strong{font-size:clamp(15px,1.6vw,21px);color:#f5fbff;display:block;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.metric strong.accent{color:#7be7de}.metric strong.warm{color:#ffd18b}
+.energy-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);gap:8px;min-height:116px;flex:0 0 auto;align-items:stretch}
+.energy-summary{border:1px solid #385971;background:#122c42;padding:8px 10px;border-radius:9px;display:flex;flex-direction:column;justify-content:center;gap:4px}
+.energy-summary b{color:#f9d18f;font-size:15px}
+.energy-summary span{font-size:12px;color:#c6deeb}
+.progress{height:8px;background:#244156;border-radius:8px;border:1px solid #3b5e76;overflow:hidden;margin:2px 0}
+.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,#0b8491,#7be8d8)}
+.energy-chart{background:#0b1e31;width:100%;height:120px;min-height:105px;border:1px solid #35556f;border-radius:9px;display:block}
+.scene-caption{font-size:11px;color:#b9d3e3;margin:0;flex:0 0 auto}
+.status{min-height:18px;color:#a5f0e4;font-size:12px;font-weight:700;flex:0 0 auto}
+.side{overflow-y:auto;scrollbar-width:thin;display:flex;flex-direction:column;gap:7px;padding-right:2px}
+.card{background:var(--panel);border:1px solid var(--edge);border-radius:11px;padding:10px 11px}
+.card h2{font-size:15px;margin:0 0 7px}
+.field{margin:0 0 9px}
+.field label{font-size:12px;font-weight:700;display:flex;gap:6px;align-items:center;justify-content:space-between}
+.field output{color:#7be9ee;font-variant-numeric:tabular-nums}
+.field input[type=range]{display:block;width:100%;height:25px;accent-color:#65e3e9;margin:2px 0 0}
+.field select{display:block;width:100%;margin:4px 0 0;padding:7px;border-radius:7px;background:#1a3850;border:1px solid #507a96;color:#eafaff}
+.quick{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.quick button{font-size:12px;padding:6px 5px}
+.calc{background:#1b354d;border:1px solid #45647b;border-radius:8px;padding:8px;margin-top:6px;font-size:12px;line-height:1.65}
+.calc b{color:#8bf0ed}
+.tiny{font-size:11px!important;color:#b7d1df!important;line-height:1.52!important;margin:5px 0!important}
+.side-message{color:#baeedd;font-size:12px;font-weight:650;margin:5px 0}
+.graphs{display:none;flex-direction:column;gap:7px;overflow-y:auto}
+.graph-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:7px}
+.graph-head h2{font-size:16px;margin:0}
+.graph-head p{font-size:11px;color:#b9d4e4;margin:0}
+.graph-controls{display:flex;gap:5px;flex-wrap:wrap}
+.graph-controls button{font-size:12px;padding:6px 10px}
+.graph-controls button[aria-pressed=true]{background:#0c7b8b;border-color:#93f3f3}
+.graph-panel{display:flex;flex:1 1 auto;flex-direction:column;min-height:0;gap:6px;background:var(--panel);border:1px solid var(--edge);border-radius:11px;padding:10px}
+.graph-panel h3{margin:0;font-size:15px}
+#bigGraph{display:block;width:100%;min-height:240px;flex:1 1 auto;background:#0b1e31;border:1px solid #36566d;border-radius:9px}
+.graph-help{font-size:12px;color:#bad3e5;line-height:1.5;margin:0}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12px}
+.legend span::before{content:"";display:inline-block;width:13px;height:3px;background:currentColor;vertical-align:middle;margin-right:4px}
+.legend .now{color:#6ceadd}.legend .a{color:#ff9dac}.legend .b{color:#b5a4ff}.legend .marker{color:#ffd184}
+.compare{border:1px solid var(--edge);background:var(--panel);border-radius:10px;padding:8px;overflow-x:auto;flex:0 0 auto}
+table{border-collapse:collapse;width:100%;text-align:center;font-size:12px;white-space:nowrap}
+th,td{padding:5px 7px;border-bottom:1px solid #36536e}
+th{color:#e5f3fb}
+.compare p{font-size:12px;color:#b5e7dc;margin:6px 0 0}
+.concepts{display:none;overflow-y:auto}
+.lessons{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.lesson{background:var(--panel);border:1px solid var(--edge);padding:17px;border-radius:11px}
+.lesson h2{font-size:17px;color:#88eaf1;margin:0 0 9px}
+.lesson p{margin:7px 0;line-height:1.72}
+.lesson .formula{background:#1a3a52;border:1px solid #446a82;border-radius:8px;padding:11px;font-size:18px}
+.lesson.wide{grid-column:1/-1}
+.lesson details{border-top:1px solid #38536b;padding:9px 0}
+.lesson summary{font-weight:700;cursor:pointer}
+.workspace[data-view=graphs] .stage{display:none}
+.workspace[data-view=graphs] .graphs{display:flex}
+.workspace[data-view=concepts]{display:block}
+.workspace[data-view=concepts] .stage,.workspace[data-view=concepts] .graphs,.workspace[data-view=concepts] .side{display:none}
+.workspace[data-view=concepts] .concepts{display:block}
+.workspace[data-view=energy] .figure{flex:1 1 55%}
+.workspace[data-view=energy] .energy-row{flex:1 1 30%;min-height:170px;max-height:38%}
+.workspace[data-view=energy] .energy-chart{height:100%;min-height:125px}
+@media(min-width:901px) and (max-height:760px){.app{padding:7px 9px;gap:5px}.scene-card{padding:7px 9px;gap:5px}.metric{padding:5px 7px}.energy-row{min-height:90px}.energy-chart{height:106px;min-height:90px}.card{padding:8px 10px}.field{margin-bottom:6px}}
+@media(max-width:900px){.app{height:auto;min-height:100dvh;overflow:visible}.workspace{display:flex;flex-direction:column}.stage{min-height:645px}.scene-card{min-height:620px}.side{overflow:visible}.graphs{overflow:visible}.graph-panel{min-height:400px}#bigGraph{height:315px;flex:none}.lessons{grid-template-columns:1fr}.lesson.wide{grid-column:auto}.concepts{overflow:visible}.tabs{position:sticky;top:0;z-index:5;padding:4px 0;background:#081321}}
+@media(max-width:460px){header h1{font-size:18px}header .sub,header button{display:none}.tabs button{font-size:12px;padding:6px 8px}.scene-head h2{width:100%}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.energy-row{grid-template-columns:1fr}.energy-chart{height:150px}.stage,.scene-card{min-height:760px}}
+</style>
+</head>
+<body>
+<div class="app">
+ <header><h1>⚡ 34번 · 전력과 에너지 실험실</h1><span class="sub">전류가 흐르면 전기 에너지가 열에너지로 전환됩니다</span><button id="full" type="button">⛶ 전체화면</button></header>
+ <nav class="tabs" aria-label="전력 실험 선택" role="tablist">
+  <button data-tab="heat" aria-selected="true" role="tab" type="button">① 전력과 발열</button>
+  <button data-tab="energy" aria-selected="false" role="tab" type="button">② 소비 에너지 측정</button>
+  <button data-tab="graphs" aria-selected="false" role="tab" type="button">③ 그래프·비교</button>
+  <button data-tab="concepts" aria-selected="false" role="tab" type="button">④ 개념 설명</button>
+ </nav>
+ <div class="workspace" id="workspace" data-view="heat">
+  <section class="stage" aria-label="전류 흐름과 전력에 따른 발열 실험">
+   <div class="scene-card">
+    <div class="scene-head">
+     <h2 id="stageTitle">전류 흐름 → 전력 → 열에너지</h2>
+     <button id="start" class="primary" type="button">▶ 시작</button>
+     <button id="pause" type="button">Ⅱ 일시정지</button>
+     <button id="restart" type="button">↺ 처음부터</button>
+     <span class="tag" id="runningTag">대기 중</span>
+    </div>
+    <div class="figure">
+     <svg id="scene" viewBox="0 0 760 420" role="img" aria-label="전지, 전류계, 저항, 전압계가 연결된 회로에서 이동하는 전하 및 열에너지 방출을 나타낸 시뮬레이션">
+      <defs>
+       <linearGradient id="wireMetal" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#b6e0ef"/><stop offset=".45" stop-color="#5a9cba"/><stop offset="1" stop-color="#2c5575"/></linearGradient>
+       <linearGradient id="battery" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#739db7"/><stop offset=".25" stop-color="#183a50"/><stop offset=".75" stop-color="#123147"/><stop offset="1" stop-color="#88a8bb"/></linearGradient>
+       <linearGradient id="ceramic" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#d8b17c"/><stop offset=".3" stop-color="#986038"/><stop offset=".73" stop-color="#71401f"/><stop offset="1" stop-color="#c28b56"/></linearGradient>
+       <radialGradient id="heatAura"><stop stop-color="#ffa347" stop-opacity=".83"/><stop offset=".5" stop-color="#ff992a" stop-opacity=".35"/><stop offset="1" stop-color="#ff992a" stop-opacity="0"/></radialGradient>
+       <filter id="deviceShadow"><feDropShadow dx="2" dy="4" stdDeviation="4" flood-opacity=".55"/></filter>
+       <marker id="directionArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#6ceee4"/></marker>
+      </defs>
+      <rect x="8" y="8" width="744" height="404" rx="16" fill="#0b1d30" stroke="#294a63"/>
+      <path d="M132 98H620V303H132Z" fill="none" stroke="#1c3e56" stroke-width="12" stroke-linejoin="round"/>
+      <path id="carrierTrack" d="M132 98H620V303H132Z" fill="none" stroke="url(#wireMetal)" stroke-width="5" stroke-linejoin="round"/>
+      <path id="currentArrow1" d="M397 98H444" fill="none" stroke="#68e6e0" stroke-width="3.5" marker-end="url(#directionArrow)"/>
+      <path id="currentArrow2" d="M620 173V225" fill="none" stroke="#68e6e0" stroke-width="3.5" marker-end="url(#directionArrow)"/>
+      <path id="currentArrow3" d="M466 303H407" fill="none" stroke="#68e6e0" stroke-width="3.5" marker-end="url(#directionArrow)"/>
+      <text x="403" y="61" font-size="14" fill="#81eee5" text-anchor="middle" font-weight="700">관습적 전류 방향</text>
+      <g filter="url(#deviceShadow)">
+       <rect x="102" y="178" width="60" height="69" rx="11" fill="url(#battery)" stroke="#9abed0" stroke-width="2.5"/>
+       <rect x="109" y="187" width="46" height="51" rx="6" fill="#193b52" stroke="#557b98"/>
+       <path d="M116 199H149" stroke="#ff9c9b" stroke-width="6" stroke-linecap="round"/>
+       <path d="M120 228H145" stroke="#8acbff" stroke-width="5" stroke-linecap="round"/>
+       <text x="132" y="217" font-size="13" text-anchor="middle" fill="#ebfaff" font-weight="800">DC</text>
+      </g>
+      <text x="91" y="196" font-size="19" fill="#ffacac" font-weight="800">+</text>
+      <text x="91" y="242" font-size="19" fill="#a3ceff" font-weight="800">−</text>
+      <text x="132" y="342" id="batteryLabel" fill="#e5f3ff" font-size="16" text-anchor="middle">12 V</text>
+      <circle cx="315" cy="98" r="32" fill="#143249" stroke="#9bc9df" stroke-width="3" filter="url(#deviceShadow)"/>
+      <circle cx="315" cy="98" r="25" fill="#23485f" stroke="#4f7890"/>
+      <text x="315" y="106" text-anchor="middle" font-size="25" fill="#f1fcff" font-weight="850">A</text>
+      <text id="ampReading" x="315" y="151" text-anchor="middle" font-size="17" font-weight="800" fill="#8ff1e4">1.00 A</text>
+      <circle id="heatGlow" cx="533" cy="98" r="112" fill="url(#heatAura)" opacity=".45"/>
+      <rect x="473" y="79" width="120" height="39" rx="11" fill="#0d2132" stroke="#92b2c8" stroke-width="2" filter="url(#deviceShadow)"/>
+      <rect id="resistorBody" x="483" y="82" width="100" height="32" rx="8" fill="url(#ceramic)" stroke="#f8c990" stroke-width="2.5"/>
+      <path id="filament" d="M491 96L501 90L511 106L521 90L531 106L541 90L551 106L561 90L574 96" stroke="#ffdfa9" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" fill="none"/>
+      <text id="resLabel" x="533" y="147" text-anchor="middle" fill="#ffd7a2" font-size="17" font-weight="800">12 Ω</text>
+      <path d="M463 98V179H485 M581 98V179H568" fill="none" stroke="#8db4c9" stroke-width="2.6" stroke-linejoin="round"/>
+      <circle cx="527" cy="179" r="27" fill="#16364e" stroke="#8fc5d9" stroke-width="3"/>
+      <text x="527" y="187" font-size="24" text-anchor="middle" fill="#ecfaff" font-weight="800">V</text>
+      <text id="voltReading" x="527" y="218" font-size="14" text-anchor="middle" fill="#c5eaff">12.0 V</text>
+      <g id="heatRays" fill="none" stroke="#ffb461" stroke-width="3" stroke-linecap="round">
+       <path id="rayA" d="M485 70Q473 59 482 47"/>
+       <path id="rayB" d="M510 70Q497 55 511 41"/>
+       <path id="rayC" d="M540 70Q528 54 543 39"/>
+       <path id="rayD" d="M567 70Q553 55 571 43"/>
+      </g>
+      <g id="chargeDots" aria-hidden="true"></g>
+      <rect x="184" y="194" width="248" height="89" rx="12" fill="#152f45" stroke="#3c5d75"/>
+      <text x="308" y="220" text-anchor="middle" fill="#c1e0ee" font-size="14">저항에서 전기 에너지 소비</text>
+      <text id="powerLabel" x="308" y="254" text-anchor="middle" fill="#ffd18b" font-size="29" font-weight="900">12 W</text>
+      <text x="308" y="275" text-anchor="middle" fill="#aacbdc" font-size="13">전력 = 초당 에너지 전달량</text>
+      <text x="380" y="376" text-anchor="middle" font-size="15" fill="#aacee1">전류의 이동은 표시용 모형 · 발광은 발열 강도의 표현</text>
+      <text x="380" y="396" text-anchor="middle" font-size="12" fill="#8fb5c8">실제 전자 속도와 저항 온도는 계산하지 않습니다.</text>
+     </svg>
+    </div>
+    <div class="metrics">
+     <div class="metric"><small>전류 I</small><strong id="current">1.00 A</strong></div>
+     <div class="metric"><small>소비 전력 P</small><strong class="warm" id="power">12.00 W</strong></div>
+     <div class="metric"><small>측정 경과 시간</small><strong id="elapsed">0.00 s</strong></div>
+     <div class="metric"><small>누적 소비 에너지 E</small><strong class="accent" id="energy">0.00 J</strong></div>
+    </div>
+    <div class="energy-row">
+     <div class="energy-summary">
+      <b id="energySummary">전력 12 W × 경과 시간 0 s</b>
+      <span id="target">10 s 뒤 예상 에너지: 120 J</span>
+      <div class="progress" role="progressbar" aria-label="소비 에너지 측정 진행도" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progress"><i id="progressFill"></i></div>
+      <span id="heatCaption">저항의 발광: 전력의 크기를 나타내는 가상 효과</span>
+     </div>
+     <canvas class="energy-chart" id="energyGraph" aria-label="시간에 따른 소비 에너지의 실시간 그래프"></canvas>
+    </div>
+    <p class="scene-caption" id="sceneCaption">▶ 시작을 누르면 전하가 회로를 따라 움직이고 저항의 발열 효과와 누적 에너지가 함께 표시됩니다.</p>
+    <div class="status" id="status" role="status">시작 버튼을 눌러 실험을 진행하세요.</div>
+   </div>
+  </section>
+  <section class="graphs" aria-label="전력 그래프 및 조건 A B 비교">
+   <div class="graph-head"><h2>전압·저항·시간에 따른 전력과 에너지</h2><p>세로축은 비교 중 자동 축소되지 않습니다.</p></div>
+   <div class="graph-controls" role="group" aria-label="그래프 종류">
+    <button type="button" id="graphVoltage" aria-pressed="true">전압–전력 P–V</button>
+    <button type="button" id="graphResistance" aria-pressed="false">저항–전력 P–R</button>
+    <button type="button" id="graphEnergy" aria-pressed="false">시간–에너지 E–t</button>
+    <button type="button" id="axisReset">축 초기화</button>
+   </div>
+   <div class="legend"><span class="now">현재 조건</span><span class="a">조건 A</span><span class="b">조건 B</span><span class="marker">실시간 현재점</span></div>
+   <div class="graph-panel">
+    <h3 id="graphTitle">전압을 바꾸면 소비 전력은?</h3>
+    <canvas id="bigGraph" aria-label="전력 및 에너지 관계 그래프"></canvas>
+    <p class="graph-help" id="graphHelp">저항 R을 고정했을 때 P=V²/R이므로 전압이 2배면 소비 전력은 4배가 됩니다.</p>
+   </div>
+   <div class="compare"><table aria-label="현재 조건과 조건 A B의 비교"><thead><tr><th>조건</th><th>전압 V</th><th>저항 R</th><th>전류 I</th><th>전력 P</th><th>10초 에너지</th></tr></thead><tbody id="compareBody"></tbody></table><p id="compareNote">조건 A·B를 저장하면 같은 기준의 10초간 에너지를 비교할 수 있습니다.</p></div>
+  </section>
+  <aside class="side" aria-label="전력 실험 조작부">
+   <section class="card">
+    <h2>전압·저항·시간 조절</h2>
+    <div class="field"><label for="voltage">전압 V <output id="voltageOut">12.0 V</output></label><input id="voltage" type="range" min="0" max="24" step=".1" value="12"></div>
+    <div class="field"><label for="resistance">저항 R <output id="resistanceOut">12.0 Ω</output></label><input id="resistance" type="range" min="1" max="100" step=".5" value="12"></div>
+    <div class="field"><label for="duration">측정 시간 <output id="durationOut">10 s</output></label><input id="duration" type="range" min="1" max="120" step="1" value="10"></div>
+    <div class="field"><label for="carrier">전하 이동 표시</label>
+     <select id="carrier"><option value="electron" selected>전자 (−) · 관습적 전류와 반대</option><option value="positive">양전하 (+) · 관습적 전류와 같은 방향</option></select>
+    </div>
+    <div class="field"><label for="speed">재생 배속</label>
+     <select id="speed"><option value=".5">느리게 · 0.5배</option><option value="1" selected>기본 · 1배</option><option value="2">빠르게 · 2배</option><option value="4">빨리 · 4배</option></select>
+    </div>
+    <div class="quick">
+     <button id="presetDefault" type="button">기본 12 V / 12 Ω</button>
+     <button id="presetVoltage" type="button">전압 2배</button>
+     <button id="presetResistance" type="button">저항 2배</button>
+     <button id="reset" type="button">전체 초기화</button>
+    </div>
+    <p class="tiny">전압·저항·측정 시간을 변경하면 시간과 누적 에너지는 0으로 초기화됩니다. 재생 배속은 실제 전류·전력 수치에 영향을 주지 않습니다.</p>
+   </section>
+   <section class="card">
+    <h2>계산·조건 비교</h2>
+    <div class="calc" id="equation">I = V/R = 1 A<br>P = VI = 12 W<br>E = Pt</div>
+    <div class="quick">
+     <button id="saveA" type="button">조건 A 저장</button>
+     <button id="saveB" type="button">조건 B 저장</button>
+     <button id="clearSaves" type="button">비교 기록 지우기</button>
+     <button id="openGraphs" type="button">그래프 보기</button>
+    </div>
+    <p class="side-message" id="sideMessage">전압과 저항을 바꾸어 전력의 차이를 확인하세요.</p>
+    <p class="tiny">이상적 직류 전압원·옴성 저항을 가정합니다. 발열 빛은 실제 온도·열전달량 측정이 아닌 개념적 표시입니다.</p>
+   </section>
+  </aside>
+  <section class="concepts" aria-label="전력과 소비 에너지의 개념 설명">
+   <div class="lessons">
+    <article class="lesson"><h2>① 전류와 전력의 차이</h2><div class="formula">I=V/R<br>P=VI=V²/R=I²R</div><p>전류 I는 단위 시간에 흐르는 순전하량입니다. 전력 P는 에너지가 전달·소비되는 속도이며 단위 W(와트)는 J/s입니다. 전압과 저항이 일정한 직류 회로에서는 P=V²/R이 성립합니다.</p><p>전압을 2배로 높이고 저항을 고정하면 전류는 2배, 소비 전력은 4배가 됩니다.</p></article>
+    <article class="lesson"><h2>② 전력과 소비 에너지</h2><div class="formula">E=Pt<br>1 W=1 J/s<br>1 Wh=3600 J</div><p>전력은 소비 속도, 에너지는 누적된 양입니다. 12 W 저항을 10초 사용하면 120 J를 소비합니다. 같은 전력에서 사용 시간이 2배면 소비 에너지도 2배입니다.</p><p>② 탭의 시작 버튼을 누르면 그래프 위에서 실제 경과 시간에 따라 에너지가 증가합니다.</p></article>
+    <article class="lesson"><h2>③ 전기 에너지는 어디로 갈까?</h2><p>전하가 이동하며 저항 내부에 전기 에너지가 전달되고, 이상적 저항에서는 에너지가 주로 내부 에너지(열)로 전환됩니다. 이 실험실은 발열 강도를 밝기와 열기 흐름으로 표현합니다.</p><p>**주의:** 회로에 표시된 빛은 실제 저항 온도를 계산한 결과가 아닙니다. 전력과 발광의 관계도 실제 백열전구의 복잡한 온도–저항–광효율 관계를 구현한 것이 아닙니다.</p></article>
+    <article class="lesson"><h2>④ 그래프 읽기</h2><p>R 고정 P–V 그래프는 위로 볼록한 포물선입니다. V 고정 P–R 그래프는 반비례 곡선입니다. P 고정 E–t 그래프는 원점을 지나는 직선이며, 그 기울기는 전력 P입니다.</p><p>조건 A·B 그래프는 각 조건이 설정한 전압 또는 저항에서 얻은 결과를 비교합니다. 서로 다른 고정 조건의 곡선은 일치할 필요가 없습니다.</p></article>
+    <article class="lesson wide"><h2>⑤ 탐구 문제와 모형의 한계</h2>
+     <details><summary>기본 · 12 V, 12 Ω에서 10초 동안의 전력과 에너지는?</summary><p>전류는 1 A, 전력은 12 W, 에너지는 120 J입니다. 시간–에너지 그래프의 기울기는 12 J/s입니다.</p></details>
+     <details><summary>응용 · 저항이 일정할 때 전압을 12 V에서 24 V로 높이면?</summary><p>전류가 1 A에서 2 A로 늘고, 전력은 12 W에서 48 W로 4배가 됩니다. 10초간 에너지도 120 J에서 480 J로 4배가 됩니다.</p></details>
+     <details><summary>도전 · 같은 전압에서 저항이 2배로 늘면?</summary><p>12 V에서 12 Ω → 24 Ω이면 전류는 1 A → 0.5 A, 전력은 12 W → 6 W가 됩니다. 고정 전압에서는 P=V²/R이기 때문입니다.</p></details>
+     <details><summary>음속처럼 전류도 입자가 화면 속 속도로 이동하나요?</summary><p>아닙니다. 화면의 전하 점은 많은 전하의 이동을 대표하는 개념적 입자이며 움직임의 속도는 물리적 전자 표류 속도가 아닙니다. 실제 전기적 신호의 전파 속도와 전자의 평균 표류 속도도 다릅니다.</p></details>
+     <details><summary>시작 버튼을 누르지 않으면 전력이 0인가요?</summary><p>아닙니다. 전압과 저항을 설정하면 계산상 전류와 전력이 존재합니다. 시작·일시정지는 화면 재생과 소비 에너지 측정 시간만 제어하는 기능입니다. 전기적 회로를 실제로 개폐하는 스위치가 아닙니다.</p></details>
+     <details><summary>실제 전구·전열기에도 같은 계산을 쓰나요?</summary><p>저항이 일정한 옴성 저항에 가장 잘 적용됩니다. 실제 백열전구는 온도가 변하면서 저항이 변하므로 단일한 일정 R 가정이 충분하지 않을 수 있습니다. 도선 저항, 전원 내부 저항, 열손실·온도 변화, 교류의 유효전력 계산은 생략했습니다.</p></details>
+    </article>
+   </div>
+  </section>
+ </div>
+</div>
 <script>
-'use strict';
-const $=id=>document.getElementById(id);const state={v:12,r:12,duration:10,t:0,running:false,speed:1,a:null,b:null};let last=null;
-const fmt=n=>Number(n.toPrecision(5)).toLocaleString('ko-KR',{maximumFractionDigits:4});
-function calculate(v,r){return {i:v/r,p:v*v/r};}
-function stop(message){state.running=false;last=null;$('status').textContent=message;$('start').disabled=false;$('pause').disabled=true;}
-function measurementReset(message){stop(message);state.t=0;render();}
-for(const key of ['v','r','duration']){for(const id of [key,key+'n']){$(id).addEventListener('input',()=>{const el=$(id);if(el.value.trim()===''||!Number.isFinite(Number(el.value)))return;const n=Math.max(Number(el.min),Math.min(Number(el.max),Number(el.value)));state[key]=Math.round(n/Number(el.step))*Number(el.step);$(key).value=state[key];if(id===key)$(key+'n').value=state[key];measurementReset('조건 변경: 측정을 0 s부터 다시 시작하세요.');});$(id).addEventListener('change',()=>{$(key).value=$(key+'n').value=state[key];});}}
-$('start').onclick=()=>{if(state.t>=state.duration)state.t=0;state.running=true;last=null;$('status').textContent='측정 중 · 전기 에너지가 열로 전환됩니다.';$('start').disabled=true;$('pause').disabled=false;render();};$('pause').onclick=()=>{stop('일시정지 · 시작을 누르면 이어서 측정합니다.');render();};$('restart').onclick=()=>measurementReset('측정 초기화 · 시작을 누르세요.');$('speed').onchange=()=>{state.speed=Number($('speed').value);last=null;};
-$('reset').onclick=()=>{Object.assign(state,{v:12,r:12,duration:10,t:0,running:false,speed:1,a:null,b:null});for(const k of ['v','r','duration'])$(k).value=$(k+'n').value=state[k];$('speed').value='1';$('graph').value='voltage';stop('전체 초기화 · 시작을 눌러 에너지를 측정하세요.');render();};
-for(const name of ['A','B'])$('save'+name).onclick=()=>{state[name.toLowerCase()]={v:state.v,r:state.r,...calculate(state.v,state.r)};render();};$('clear').onclick=()=>{state.a=state.b=null;render();};$('graph').onchange=render;
-function render(){const {i,p}=calculate(state.v,state.r),e=p*state.t;$('current').textContent=fmt(i)+' A';$('power').textContent=fmt(p)+' W';$('time').textContent=state.t.toFixed(2)+' s';$('energy').textContent=fmt(e)+' J';$('source').textContent=fmt(state.v)+' V';$('rLabel').textContent=fmt(state.r)+' Ω';$('flowLabel').textContent='I = '+fmt(i)+' A →';$('flow').style.opacity=i>0?1:.15;$('powerLabel').textContent=fmt(p)+' J/s';$('resistor').setAttribute('fill',`hsl(28 75% ${Math.max(32,50-13*Math.sqrt(p/576))}%)`);$('equation').innerHTML=`P = VI = V²/R<br> = ${fmt(state.v)} × ${fmt(i)} = <b>${fmt(p)} W</b><br>E = Pt = ${fmt(p)} × ${state.t.toFixed(2)} = <b>${fmt(e)} J</b> (${fmt(e/3600)} Wh)`;$('progress').style.width=(100*state.t/state.duration)+'%';$('target').textContent=`예상 측정 종료: ${state.duration} s · 종료 시 E = ${fmt(p*state.duration)} J`;
-$('compare').innerHTML=['a','b'].map(k=>{const s=state[k];return s?`<tr><th>${k==='a'?'△ A':'□ B'}</th><td>${fmt(s.v)}</td><td>${fmt(s.r)}</td><td>${fmt(s.i)}</td><td>${fmt(s.p)}</td><td>${fmt(s.p*10)}</td></tr>`:`<tr><th>${k.toUpperCase()}</th><td colspan="5">저장한 조건이 없습니다.</td></tr>`;}).join('');$('comparison').textContent=state.a&&state.b?(state.a.p===0?`전력 차이 B − A = ${fmt(state.b.p)} W · A가 0 W여서 배수는 정의되지 않습니다.`:`전력 B/A = ${fmt(state.b.p/state.a.p)}배 · 전력 차이 ${fmt(state.b.p-state.a.p)} W`):'조건을 저장해 전력과 같은 시간 동안의 에너지를 비교하세요.';drawGraph();}
-let axis34={voltage:0,resistance:0,energy:0};function drawGraph(){const type=$('graph').value,{p}=calculate(state.v,state.r);let xmin=0,xmax=24,xlabel='전압 V (V)',ylabel='전력 P (W)',fn=x=>x*x/state.r,cx=state.v,cy=p,info=`변화: V · 고정: R = ${fmt(state.r)} Ω`;
-if(type==='resistance'){xmin=1;xmax=100;xlabel='저항 R (Ω)';fn=x=>state.v*state.v/x;cx=state.r;info=`변화: R · 고정: V = ${fmt(state.v)} V`;}
-if(type==='energy'){xmax=state.duration;xlabel='시간 t (s)';ylabel='에너지 E (J)';fn=x=>p*x;cx=state.t;cy=p*state.t;info=`예상 시간 변화 · 고정: P = ${fmt(p)} W`;}
-const points=['a','b'].filter(k=>state[k]).map(k=>{const s=state[k];return {k,x:type==='voltage'?s.v:type==='resistance'?s.r:state.duration,y:type==='energy'?s.p*state.duration:s.p};});
-let ymax=(axis34[type]=Math.max(axis34[type],Math.max(1,fn(xmin),fn(xmax),...points.map(q=>q.y))*1.12));const X=x=>78+(x-xmin)/(xmax-xmin)*392,Y=y=>260-y/ymax*216;let markup='<title>'+xlabel+'와 '+ylabel+'</title>';
-for(let j=0;j<=4;j++){let yy=ymax*j/4,xx=xmin+(xmax-xmin)*j/4;markup+=`<path d="M78 ${Y(yy)}H470" stroke="#e1e9f3"/><text x="69" y="${Y(yy)+5}" text-anchor="end" font-size="13" fill="#576c82">${fmt(yy)}</text><text x="${X(xx)}" y="283" text-anchor="middle" font-size="13" fill="#576c82">${fmt(xx)}</text>`;}
-markup+='<path d="M78 44V260H470" fill="none" stroke="#50677e"/>';let d='';for(let j=0;j<=240;j++){let x=xmin+(xmax-xmin)*j/240;d+=(j?'L':'M')+X(x)+' '+Y(fn(x))+' ';}markup+=`<path d="${d}" fill="none" stroke="#245bd6" stroke-width="3"/><text x="275" y="313" text-anchor="middle" font-size="16">${xlabel}</text><text x="78" y="25" font-size="16">${ylabel}</text>`;
-for(const q of points){let x=X(q.x),y=Y(q.y);markup+=q.k==='a'?`<path d="M${x} ${y-7}l-7 13h14Z" fill="white" stroke="#ba550a" stroke-width="2"><title>조건 A: ${fmt(q.x)}, ${fmt(q.y)}</title></path>`:`<rect x="${x-6}" y="${y-6}" width="12" height="12" fill="white" stroke="#7250a2" stroke-width="2"><title>조건 B: ${fmt(q.x)}, ${fmt(q.y)}</title></rect>`;}
-markup+=`<circle cx="${X(cx)}" cy="${Y(cy)}" r="5" fill="#16283d"><title>현재: ${fmt(cx)}, ${fmt(cy)}</title></circle>`;$('chart').innerHTML=markup;$('chart').setAttribute('aria-label',info+'; 현재 '+fmt(cx)+'; '+ylabel+' '+fmt(cy));$('graphInfo').textContent=info+ (points.length&&type!=='energy'?' · A/B는 저장 당시의 실제 값이며, 고정 조건이 다르면 현재 실선 위에 놓이지 않습니다.':'');}
-function tick(now){if(state.running&&!document.hidden){if(last!==null){state.t=Math.min(state.duration,state.t+Math.max(0,(now-last)/1000)*state.speed);if(state.t>=state.duration)stop('측정 완료 · 시작을 누르면 0 s부터 다시 측정합니다.');render();}last=state.running?now:null;}else last=null;requestAnimationFrame(tick);}document.addEventListener('visibilitychange',()=>{last=null;});window.powerLab={state,calculate,render};render();requestAnimationFrame(tick);
-</script></body></html>
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+const defaults={V:12,R:12,duration:10,speed:1,carrier:"electron"};
+const s={...defaults,tab:"heat",graphType:"voltage",running:false,t:0,last:null,phase:0,saveA:null,saveB:null,completed:false};
+const axisMax={voltage:50,resistance:150,energy:150};
+const fmt=(n,dec=2)=>!Number.isFinite(n)?"—":Number(n.toFixed(dec)).toLocaleString("ko-KR",{maximumFractionDigits:dec});
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const calc=o=>({I:o.V/o.R,P:o.V*o.V/o.R});
+const snapshot=()=>({V:s.V,R:s.R,duration:s.duration});
+const dataFor=x=>x?{...x,...calc(x)}:null;
+const electricity=()=>calc(s);
+let particleNodes=[],pathLength=0;
+const path=$("carrierTrack"),dotLayer=$("chargeDots");
+function makeParticles(){
+ const NS="http://www.w3.org/2000/svg";
+ pathLength=path.getTotalLength();
+ for(let i=0;i<16;i++){
+  const g=document.createElementNS(NS,"g"),circle=document.createElementNS(NS,"circle"),txt=document.createElementNS(NS,"text");
+  circle.setAttribute("r","6");circle.setAttribute("stroke","#d5eeff");circle.setAttribute("stroke-width","1");
+  txt.setAttribute("x","0");txt.setAttribute("y","3.6");txt.setAttribute("text-anchor","middle");
+  txt.setAttribute("font-size","12");txt.setAttribute("font-weight","900");txt.setAttribute("fill","#11273a");
+  g.append(circle,txt);dotLayer.append(g);particleNodes.push({g,circle,txt});
+ }
+}
+function motionFrame(now){
+ const {I,P}=electricity(),active=s.running&&!document.hidden;
+ if(active){
+  if(s.last!==null){const dt=clamp((now-s.last)/1000,0,.08);
+   s.t=Math.min(s.duration,s.t+dt*s.speed);
+   // Visual loop rate is intentionally arbitrary; it only preserves the current-magnitude trend.
+   if(I>0)s.phase=(s.phase+dt*s.speed*(30+125*Math.sqrt(I/(I+.5))))%pathLength;
+   if(s.t>=s.duration){s.t=s.duration;s.running=false;s.completed=true;s.last=null;}
+  }
+  if(s.running)s.last=now;
+ }else s.last=null;
+ const carrierDir=s.carrier==="electron"?-1:1;
+ for(let i=0;i<particleNodes.length;i++){
+  const item=particleNodes[i],dist=(i+.3)*pathLength/particleNodes.length+s.phase*carrierDir;
+  const pos=path.getPointAtLength(((dist%pathLength)+pathLength)%pathLength);
+  const behind=(pos.y<111&&((pos.x>279&&pos.x<350)||(pos.x>469&&pos.x<600)))||(pos.x<147&&pos.y>176&&pos.y<252);
+  item.g.setAttribute("transform","translate("+pos.x.toFixed(2)+","+pos.y.toFixed(2)+")");
+  item.g.style.opacity=I>0&&!behind?".88":"0";
+  item.circle.setAttribute("fill",s.carrier==="electron"?"#83caff":"#ffce8b");
+  item.txt.textContent=s.carrier==="electron"?"−":"+";
+ }
+ const glow=P<=0?0:clamp(.12+.86*(1-Math.exp(-P/34)),0,1);
+ $("heatGlow").setAttribute("opacity",String(glow));
+ $("heatRays").setAttribute("opacity",String(P>0?glow:0));
+ $("filament").setAttribute("stroke",P>0?"hsl(38 95% "+fmt(72+22*glow,0)+"%)":"#806c61");
+ $("currentArrow1").setAttribute("opacity",I>0?".95":".16");
+ $("currentArrow2").setAttribute("opacity",I>0?".95":".16");
+ $("currentArrow3").setAttribute("opacity",I>0?".95":".16");
+ if(active){const pulse=.8+.2*Math.sin(now/190);$("heatRays").setAttribute("transform","translate(0 "+(-4*glow*pulse).toFixed(1)+")");}
+ if(!motionFrame.lastUI||now-motionFrame.lastUI>55||s.completed){
+  motionFrame.lastUI=now;
+  updateReadouts();
+  if(s.tab==="heat"||s.tab==="energy")drawSmallGraph();
+  if(s.tab==="graphs"&&s.graphType==="energy")drawBigGraph();
+ }
+ requestAnimationFrame(motionFrame);
+}
+function resetMeasurement(message){
+ s.running=false;s.t=0;s.last=null;s.phase=0;s.completed=false;
+ $("status").textContent=message||"측정 초기화 · 시작 버튼을 누르세요.";
+ render();
+}
+function setValues(obj){
+ Object.assign(s,obj);
+ for(const key of ["V","R","duration"])$(key==="V"?"voltage":key==="R"?"resistance":"duration").value=s[key];
+ resetMeasurement("조건 변경 · 경과 시간과 누적 에너지가 0으로 돌아갔습니다.");
+}
+function setTab(view){
+ s.tab=view;$("workspace").dataset.view=view;
+ document.querySelectorAll(".tabs button").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.tab===view)));
+ $("stageTitle").textContent=view==="energy"?"실시간 소비 에너지 측정": "전류 흐름 → 전력 → 열에너지";
+ $("sceneCaption").textContent=view==="energy"?"시간이 흐르면 E=Pt에 따라 에너지 수치와 그래프가 동시에 증가합니다. 시작·일시정지는 측정 시계의 제어입니다.":"전류의 이동 속도는 표시용이며, 저항 빛은 전력의 크기를 나타냅니다. 실제 온도는 계산하지 않습니다.";
+ requestAnimationFrame(()=>{render();if(view==="graphs")drawBigGraph();});
+}
+function updateReadouts(){
+ const x=electricity(),E=x.P*s.t;
+ $("voltageOut").textContent=fmt(s.V,1)+" V";
+ $("resistanceOut").textContent=fmt(s.R,1)+" Ω";
+ $("durationOut").textContent=s.duration+" s";
+ $("current").textContent=fmt(x.I,3)+" A";
+ $("power").textContent=fmt(x.P,2)+" W";
+ $("elapsed").textContent=fmt(s.t,2)+" s";
+ $("energy").textContent=fmt(E,2)+" J";
+ $("energySummary").textContent="전력 "+fmt(x.P,2)+" W × 시간 "+fmt(s.t,2)+" s";
+ $("target").textContent=s.duration+" s 뒤 예상 에너지: "+fmt(x.P*s.duration,2)+" J";
+ $("progressFill").style.width=(100*s.t/s.duration).toFixed(1)+"%";
+ $("progress").setAttribute("aria-valuenow",(100*s.t/s.duration).toFixed(1));
+ $("equation").innerHTML="I = V/R = "+fmt(s.V,1)+"/"+fmt(s.R,1)+" = <b>"+fmt(x.I,3)+" A</b><br>"+
+ "P = VI = V²/R = <b>"+fmt(x.P,2)+" W</b><br>"+
+ "E = Pt = "+fmt(x.P,2)+" × "+fmt(s.t,2)+" = <b>"+fmt(E,2)+" J</b>";
+ $("batteryLabel").textContent=fmt(s.V,1)+" V";
+ $("resLabel").textContent=fmt(s.R,1)+" Ω";
+ $("ampReading").textContent=fmt(x.I,3)+" A";
+ $("voltReading").textContent=fmt(s.V,1)+" V";
+ $("powerLabel").textContent=fmt(x.P,2)+" W";
+ $("runningTag").textContent=s.running?"● 재생·측정 중":s.completed?"■ 측정 완료":s.t>0?"Ⅱ 일시정지":"○ 대기 중";
+ $("start").disabled=s.running;$("pause").disabled=!s.running;
+ if(s.completed)$("status").textContent="측정 완료 · 소비 에너지 "+fmt(E,2)+" J를 확인하세요. ▶ 시작을 누르면 다시 측정합니다.";
+ else if(s.running)$("status").textContent="측정 중 · 전하가 이동하고 소비 에너지가 누적되고 있습니다.";
+ else if(s.t>0)$("status").textContent="일시정지 · 시작을 누르면 이어서 측정합니다.";
+ else $("status").textContent="전압·저항을 조절하고 ▶ 시작을 눌러 전력과 누적 에너지를 관찰하세요.";
+ $("sideMessage").textContent="전류 "+fmt(x.I,3)+" A · 전력 "+fmt(x.P,2)+" W · 같은 전력에서 시간 2배 → 에너지 2배";
+}
+function canvasPrepare(canvas){
+ const b=canvas.getBoundingClientRect(),w=Math.floor(b.width),h=Math.floor(b.height);
+ if(w<95||h<75)return null;
+ const dpr=Math.min(window.devicePixelRatio||1,2),pw=Math.max(1,Math.round(w*dpr)),ph=Math.max(1,Math.round(h*dpr));
+ if(canvas.width!==pw||canvas.height!==ph){canvas.width=pw;canvas.height=ph;}
+ const c=canvas.getContext("2d");c.setTransform(dpr,0,0,dpr,0,0);
+ c.clearRect(0,0,w,h);c.fillStyle="#0b1d30";c.fillRect(0,0,w,h);
+ return {c,w,h};
+}
+function label(c,text,x,y,size=11,color="#c1d8e8",align="center",weight=500){
+ c.font=weight+" "+size+"px system-ui,sans-serif";c.fillStyle=color;c.textAlign=align;c.fillText(String(text),x,y);
+}
+function chartAxes(o,xmin,xmax,ymax,xtext,ytext,small=false){
+ const {c,w,h}=o,L=small?48:65,R=small?12:18,T=small?16:29,B=small?29:45,
+       W=w-L-R,H=h-T-B,X=x=>L+(x-xmin)/(xmax-xmin)*W,Y=y=>h-B-y/ymax*H;
+ c.lineWidth=1;
+ for(let k=0;k<=4;k++){
+  const x=xmin+(xmax-xmin)*k/4,y=ymax*k/4;
+  c.strokeStyle="#304c63";c.beginPath();c.moveTo(L,Y(y));c.lineTo(w-R,Y(y));c.stroke();
+  c.beginPath();c.moveTo(X(x),T);c.lineTo(X(x),h-B);c.stroke();
+  label(c,fmt(x,small?0:1),X(x),h-B+15,small?9:11,"#b5d0e4");
+  label(c,fmt(y,ymax>10?0:2),L-7,Y(y)+3,small?9:11,"#b5d0e4","right");
+ }
+ c.strokeStyle="#a2cadd";c.lineWidth=1.5;c.beginPath();c.moveTo(L,T);c.lineTo(L,h-B);c.lineTo(w-R,h-B);c.stroke();
+ label(c,ytext,8,small?11:16,small?10:13,"#e8f7ff","left",700);
+ label(c,xtext,w-R,h-5,small?10:13,"#e8f7ff","right",700);
+ return {c,X,Y};
+}
+function lineGraph(g,fn,xmin,xmax,color,width=3,dashes=[]){
+ if(!g)return;
+ const {c,X,Y}=g;c.save();c.lineWidth=width;c.strokeStyle=color;c.setLineDash(dashes);c.beginPath();
+ for(let k=0;k<=200;k++){
+  const x=xmin+(xmax-xmin)*k/200,y=fn(x);
+  if(k===0)c.moveTo(X(x),Y(y));else c.lineTo(X(x),Y(y));
+ }
+ c.stroke();c.restore();
+}
+function graphDot(g,x,y,color,r=5){
+ if(!g)return;const {c,X,Y}=g;
+ c.beginPath();c.arc(X(x),Y(y),r,0,Math.PI*2);c.fillStyle=color;c.fill();
+ c.lineWidth=2;c.strokeStyle="#071725";c.stroke();
+}
+function drawSmallGraph(){
+ const o=canvasPrepare($("energyGraph"));if(!o)return;
+ const {P}=electricity(), ymax=Math.max(1,P*s.duration*1.2),g=chartAxes(o,0,s.duration,ymax,"시간 (s)","E (J)",true);
+ lineGraph(g,t=>P*t,0,s.duration,"#6de9df",2.7);
+ graphDot(g,s.t,P*s.t,"#ffcc88",5);
+}
+function graphConfig(){
+ const cur=dataFor(snapshot()),arr=[cur,dataFor(s.saveA),dataFor(s.saveB)].filter(Boolean);
+ const type=s.graphType;
+ let xmin=0,xmax=24,ymax=1,xlabel="전압 V (V)",ylabel="전력 P (W)",
+     fn=d=>(d.V?d.V:0),title="전압–전력: 저항 일정",help="저항 R을 일정하게 두면 P=V²/R이며 전압이 2배일 때 전력은 4배입니다.";
+ if(type==="voltage"){
+  ymax=Math.max(1,...arr.map(x=>24*24/x.R*1.14));
+  fn=(point,x)=>x*x/point.R;
+ }else if(type==="resistance"){
+  xmin=1;xmax=100;xlabel="저항 R (Ω)";
+  ymax=Math.max(1,...arr.map(x=>x.V*x.V*1.14));
+  fn=(point,x)=>point.V*point.V/x;
+  title="저항–전력: 전압 일정";help="전압 V를 고정하면 P=V²/R입니다. 저항을 2배로 하면 전력은 절반이 됩니다.";
+ }else{
+  xlabel="시간 t (s)";ylabel="에너지 E (J)";
+  xmax=Math.max(s.duration,s.saveA?.duration||0,s.saveB?.duration||0,10);
+  ymax=Math.max(1,...arr.map(x=>x.P*xmax*1.14));
+  fn=(point,x)=>point.P*x;
+  title="시간–소비 에너지: 전력 일정";help="E=Pt입니다. 노란색 현재 측정점이 시간에 따라 움직이며, 직선의 기울기는 P(W)=J/s입니다.";
+ }
+ axisMax[type]=Math.max(axisMax[type],ymax);
+ return {arr,xmin,xmax,ymax:axisMax[type],xlabel,ylabel,fn,title,help};
+}
+function drawBigGraph(){
+ if(s.tab!=="graphs")return;
+ const o=canvasPrepare($("bigGraph"));if(!o)return;
+ const gspec=graphConfig(),g=chartAxes(o,gspec.xmin,gspec.xmax,gspec.ymax,gspec.xlabel,gspec.ylabel);
+ for(const [point,color,dashes] of [[gspec.arr.find(x=>x===null),null,[]],[dataFor(s.saveA),"#ffa5b3",[9,5]],[dataFor(s.saveB),"#b8a8ff",[3,6]],[dataFor(snapshot()),"#65e8df",[]]]){
+  if(!point)continue;
+  lineGraph(g,x=>gspec.fn(point,x),gspec.xmin,gspec.xmax,color,point===dataFor(snapshot())?3:2.4,dashes);
+ }
+ for(const [saved,color] of [[dataFor(s.saveA),"#ffa5b3"],[dataFor(s.saveB),"#b8a8ff"]]){
+  if(!saved)continue;
+  const x=s.graphType==="voltage"?saved.V:s.graphType==="resistance"?saved.R:saved.duration;
+  graphDot(g,x,s.graphType==="energy"?saved.P*saved.duration:saved.P,color,5);
+ }
+ const current=dataFor(snapshot());
+ const cx=s.graphType==="voltage"?s.V:s.graphType==="resistance"?s.R:s.t;
+ const cy=s.graphType==="energy"?current.P*s.t:current.P;
+ graphDot(g,cx,cy,"#ffd18a",6);
+ $("graphTitle").textContent=gspec.title;$("graphHelp").textContent=gspec.help;
+}
+function compare(){
+ const body=$("compareBody");body.replaceChildren();
+ for(const [name,item] of [["현재",snapshot()],["A",s.saveA],["B",s.saveB]]){
+  const tr=document.createElement("tr"),d=dataFor(item);
+  const values=d?[name,fmt(d.V,1)+" V",fmt(d.R,1)+" Ω",fmt(d.I,3)+" A",fmt(d.P,2)+" W",fmt(d.P*10,2)+" J"]:[name,"—","—","—","—","—"];
+  for(const x of values){const td=document.createElement("td");td.textContent=x;tr.append(td);}
+  body.append(tr);
+ }
+ const a=dataFor(s.saveA),b=dataFor(s.saveB);
+ $("compareNote").textContent=a&&b?(a.P>0?"조건 B/A 전력 비: "+fmt(b.P/a.P,3)+"배 · 10초 소비 에너지 차: "+fmt((b.P-a.P)*10,2)+" J":"조건 A의 전력이 0 W이므로 B/A 전력 비는 정의되지 않습니다."):
+ "A·B 조건을 저장하면 동일한 10초 기준으로 에너지 소비량을 비교할 수 있습니다.";
+}
+function render(){
+ updateReadouts();compare();
+ if(s.tab==="heat"||s.tab==="energy")drawSmallGraph();
+ if(s.tab==="graphs")drawBigGraph();
+}
+function bind(){
+ for(const [id,key] of [["voltage","V"],["resistance","R"],["duration","duration"]]){
+  $(id).addEventListener("input",event=>{s[key]=Number(event.target.value);resetMeasurement("조건 변경 · 측정을 다시 시작하세요.");});
+ }
+ $("speed").onchange=event=>{s.speed=Number(event.target.value);s.last=null;};
+ $("carrier").onchange=event=>{s.carrier=event.target.value;s.phase=0;render();};
+ $("start").onclick=()=>{if(s.t>=s.duration){s.t=0;s.phase=0;s.completed=false;}s.running=true;s.last=null;render();};
+ $("pause").onclick=()=>{s.running=false;s.last=null;render();};
+ $("restart").onclick=()=>{s.t=0;s.phase=0;s.completed=false;s.running=true;s.last=null;render();};
+ $("presetDefault").onclick=()=>setValues({V:12,R:12});
+ $("presetVoltage").onclick=()=>setValues({V:clamp(s.V*2,0,24)});
+ $("presetResistance").onclick=()=>setValues({R:clamp(s.R*2,1,100)});
+ $("reset").onclick=()=>{
+  Object.assign(s,defaults,{running:false,t:0,last:null,phase:0,completed:false,saveA:null,saveB:null});
+  for(const key of ["V","R","duration"])$(key==="V"?"voltage":key==="R"?"resistance":"duration").value=s[key];
+  $("speed").value=String(s.speed);$("carrier").value=s.carrier;
+  axisMax.voltage=50;axisMax.resistance=150;axisMax.energy=150;
+  render();
+ };
+ for(const name of ["A","B"])$("save"+name).onclick=()=>{s["save"+name]=snapshot();render();};
+ $("clearSaves").onclick=()=>{s.saveA=s.saveB=null;render();};
+ $("openGraphs").onclick=()=>setTab("graphs");
+ for(const [id,type] of [["graphVoltage","voltage"],["graphResistance","resistance"],["graphEnergy","energy"]]){
+  $(id).onclick=()=>{s.graphType=type;
+   for(const [id2,type2] of [["graphVoltage","voltage"],["graphResistance","resistance"],["graphEnergy","energy"]])$(id2).setAttribute("aria-pressed",String(type===type2));
+   requestAnimationFrame(drawBigGraph);
+  };
+ }
+ $("axisReset").onclick=()=>{axisMax.voltage=50;axisMax.resistance=150;axisMax.energy=150;drawBigGraph();};
+ document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>setTab(b.dataset.tab));
+ $("full").onclick=()=>{const p=document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();if(p&&p.catch)p.catch(()=>{});};
+ document.addEventListener("fullscreenchange",()=>$("full").textContent=document.fullscreenElement?"⛶ 전체화면 종료":"⛶ 전체화면");
+ document.addEventListener("visibilitychange",()=>{s.last=null;if(document.hidden){s.running=false;render();}});
+ window.addEventListener("resize",()=>requestAnimationFrame(render));
+ if(typeof ResizeObserver!=="undefined"){
+  const obs=new ResizeObserver(()=>requestAnimationFrame(render));
+  obs.observe($("workspace"));
+ }
+}
+makeParticles();bind();render();requestAnimationFrame(motionFrame);
+})();
+</script>
+</body>
+</html>
