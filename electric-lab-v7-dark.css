@@ -1,0 +1,57 @@
+
+/* Electric Lab V7 — DARK SCENE / DARK GRAPH / CONSISTENT READABILITY
+   Overrides earlier per-lab light themes; original physics engines remain unchanged. */
+:root{color-scheme:dark}
+body[data-electric-v6="1"]>.e7-shell{background:#070f1b!important;color:#eaf6ff!important}
+body[data-electric-v6="1"] .e7-shell .e7-workspace{grid-template-columns:minmax(0,4fr) minmax(235px,1fr)!important}
+.e7-shell .e7-panel,.e7-shell .e7-concept-card,.e7-shell .e7-meterstrip,.e7-shell .e7-toolbar{background:#101f32!important;background-image:none!important;border-color:#35546d!important;color:#e8f5ff!important}
+.e7-shell .e7-stage,.e7-shell .e7-graphstage{background:#081525!important;border-radius:12px}
+.e7-shell .e7-stage :is(svg,canvas),.e7-shell .e7-graphstage :is(svg,canvas){background:#0b1d31!important;background-image:radial-gradient(ellipse at 22% 12%,#18344a55,transparent 60%)!important;border-radius:10px!important}
+.e7-shell.e7-light-art :is(.e7-stage,.e7-graphstage) :is(svg,canvas,.scene){background:#0b1d31!important;color:#e8f5ff!important}
+.e7-shell :is(.e7-stage,.e7-graphstage) svg :is(text,tspan){fill:#e8f4ff!important;paint-order:stroke;stroke:#0b1d3100;stroke-width:.25}
+.e7-shell :is(.e7-stage,.e7-graphstage) svg :is(.symbolPos,.positive,.plusText){fill:#ff7c91!important}
+.e7-shell :is(.e7-stage,.e7-graphstage) svg :is(.symbolNeg,.negative,.minusText){fill:#71b9ff!important}
+.e7-shell :is(.e7-stage,.e7-graphstage) svg :is(rect,path,polygon)[fill="#fff"],
+.e7-shell :is(.e7-stage,.e7-graphstage) svg :is(rect,path,polygon)[fill="#ffffff"],
+.e7-shell :is(.e7-stage,.e7-graphstage) svg :is(rect,path,polygon)[fill="#fbfdff"],
+.e7-shell :is(.e7-stage,.e7-graphstage) svg :is(rect,path,polygon)[fill="#f7fafc"],
+.e7-shell :is(.e7-stage,.e7-graphstage) svg :is(rect,path,polygon)[fill="#f5f9ff"],
+.e7-shell :is(.e7-stage,.e7-graphstage) svg :is(rect,path,polygon)[fill="#f4f8ff"],
+.e7-shell :is(.e7-stage,.e7-graphstage) svg :is(rect,path,polygon)[fill="#eef5fc"]{fill:#10263a!important}
+.e7-shell :is(.e7-stage,.e7-graphstage) svg :is(rect,path)[stroke="#d6e0ed"],
+.e7-shell :is(.e7-stage,.e7-graphstage) svg :is(rect,path)[stroke="#b5c5d1"],
+.e7-shell :is(.e7-stage,.e7-graphstage) svg :is(line,path)[stroke="#e1e7ef"],
+.e7-shell :is(.e7-stage,.e7-graphstage) svg :is(line,path)[stroke="#e1e9f3"],
+.e7-shell :is(.e7-stage,.e7-graphstage) svg :is(line,path)[stroke="#d9e2ef"],
+.e7-shell :is(.e7-stage,.e7-graphstage) svg :is(line,path)[stroke="#d9e3eb"]{stroke:#35566e!important}
+.e7-shell :is(.e7-stage,.e7-graphstage) svg .wire{stroke:#84c3da!important;filter:drop-shadow(0 1px 2px #090c1c)}
+.e7-shell :is(.e7-stage,.e7-graphstage) svg :is(.component,.resistor){filter:drop-shadow(0 0 5px #ffb35c60)}
+.e7-shell :is(.e7-stage,.e7-graphstage) svg :is(.platePos,.plateNeg){filter:drop-shadow(0 0 6px #7edaf654)}
+/* Dark background for ALL calculation and results tiles, including old class names. */
+.e7-shell :is(.values,.value,.metric,.meter,.readout,.readings,.readouts,.results,.result,.result-card,.stats,.stat,.statbox,.notice,.hint,.note,.calc,.calculation,.math,.formula,.equation,.explain,.explanation,.interpretation,.step,.output,.output-value,.tablewrap,.history,.detail,.measurement,.status,.data-box,.data,.info,.pill,.badge):not(svg):not(svg *){
+ background-color:#162e45!important;background-image:none!important;color:#eef8ff!important;border-color:#3c6179!important
+}
+.e7-shell :is(.values,.value,.metric,.meter,.readout,.readings,.readouts,.results,.result,.stat,.notice,.hint,.note,.calc,.math,.formula,.equation,.explain,.step,.output,.tablewrap,.status,.data-box,.info) :is(span,strong,b,small,label,output,em,p,td,th,div):not(svg):not(svg *){color:#f3faff!important}
+.e7-shell :is(.e7-panel,.e7-meterstrip,.e7-toolbar,.e7-concept-card) :is(p,span,small,div,label,li,strong,b,output,summary,th,td,h2,h3,h4):not(svg):not(svg *){color:#e8f3ff}
+.e7-shell :is(.e7-panel,.e7-side) :is(input,select,textarea){accent-color:#69e0ef!important;color:#f2fbff!important}
+.e7-shell :is(.e7-panel,.e7-side) :is(input[type="number"],input[type="text"],select,textarea){background:#1a354d!important;border:1px solid #51748e!important;color:#f2fbff!important}
+.e7-shell :is(.e7-panel,.e7-side) button{background-color:#24435e!important;color:#f2fbff!important;border-color:#4b7692!important}
+.e7-shell :is(.e7-panel,.e7-side) button:is(.primary,.active,[aria-pressed="true"]){background-color:#0e7589!important;color:#fff!important}
+.e7-shell .e7-graphstage .e7-panel{display:flex!important;flex-direction:column;gap:5px;min-height:0}
+.e7-shell .e7-graphstage :is(svg,canvas){flex:1 1 auto!important;min-height:190px;max-height:calc(100dvh - 210px)!important}
+.e7-shell .e7-graphstage svg text{font-size:clamp(12px,1.03vw,15px)}
+/* Physical components: emphasize depth without obscuring wires and field directions. */
+.e7-shell .e7-stage :is(.circuit,.diagramwrap,.scene){filter:drop-shadow(0 8px 18px #0005)}
+.e7-shell .e7-stage :is(.circuit,.diagramwrap,.scene) :is(.wire,.component){stroke-linecap:round;stroke-linejoin:round}
+.e7-shell .e7-stage :is(.circuit,.diagramwrap) :is(.wire,.component){filter:drop-shadow(0 1.5px 1px #000a)}
+.e7-shell .e7-scene-label{font-size:12px!important;color:#96dbea!important}
+@media(min-width:901px){
+ .e7-shell .e7-stage>.e7-panel{height:100%!important}
+ .e7-shell .e7-stage>.e7-panel:has(svg)>svg{flex:1 1 auto!important;min-height:0!important;object-fit:contain}
+ .e7-shell .e7-stage>.e7-panel .canvasbox:has(canvas){flex:1 1 auto!important;min-height:0!important}
+ .e7-shell .e7-stage>.e7-panel .canvasbox canvas{max-height:calc(100dvh - 180px)!important}
+ .e7-shell .e7-side .e7-panel :is(p,.small,.hint){line-height:1.37!important}
+}
+@media(max-width:900px){
+ .e7-shell .e7-graphstage :is(svg,canvas){min-height:160px;max-height:50vh!important}
+}
