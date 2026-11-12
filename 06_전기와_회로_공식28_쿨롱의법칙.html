@@ -220,14 +220,14 @@ function sphere(x,y,q,which,draggable){
  const label=q>0?"+":q<0?"−":"0";
  const key=q>0?"posGradient":q<0?"negGradient":"neutralGradient";
  const dragAttr=draggable?' data-drag="right" style="cursor:ew-resize"':'';
- return '<g'+dragAttr+'><circle cx="'+x+'" cy="'+y+'" r="38" fill="'+key.replace("Gradient","Grad")+' " opacity="0"/>'+
+ return '<g'+dragAttr+'><circle cx="'+x+'" cy="'+y+'" r="38" fill="transparent"/>'+
  '<circle cx="'+x+'" cy="'+y+'" r="31" fill="url(#'+key+')" stroke="'+edge+'" stroke-width="2.2" filter="url(#chargeShadow)"/>'+
  '<text x="'+x+'" y="'+(y+10)+'" fill="#0a283d" text-anchor="middle" font-size="33" font-weight="900" pointer-events="none">'+label+'</text>'+
  '<circle cx="'+x+'" cy="'+y+'" r="42" fill="transparent"/>'+
  '<text x="'+x+'" y="'+(y+73)+'" fill="'+col+'" font-size="21" font-weight="800" text-anchor="middle" pointer-events="none">'+which+' = '+signed(q,1)+' μC</text></g>';
 }
 function drawScene(){
- const svg=$("scene"),p=physics(),r=model.r,x1=170,x2=170+130+(r-.2)*205,y=244;
+ const svg=$("scene"),p=physics(),r=model.r,x1=170,x2=170+130+(r-.2)*160,y=244;
  const maxArrow=118;
  const forceArrow=p.f?Math.min(maxArrow,29+83*Math.sqrt(p.f/(p.f+.23))):0;
  const ratio=originalF>0?p.f/originalF:0;
@@ -239,7 +239,7 @@ function drawScene(){
  for(let yy=25;yy<480;yy+=35)grid+='<path d="M0 '+yy+'H920" stroke="#193a50" stroke-width=".65"/>';
  const typeColor=p.kind==="인력"?"#ffc985":p.kind==="척력"?"#8ce3e3":"#c1d2e2";
  const symbol=p.kind==="인력"?"⇥ 서로 당김 ⇤":p.kind==="척력"?"⇤ 서로 밀어냄 ⇥":"전기력이 작용하지 않음";
- const barWidth=Math.min(300,Math.max(0,ratio*115));
+ const barWidth=Math.min(370,Math.max(0,ratio*115));
  const q2Hint=model.tab==="distance"?"오른쪽 전하를 드래그하거나 시작을 누르세요":"오른쪽 전하를 좌우로 드래그할 수 있습니다";
  svg.innerHTML=
  '<defs><radialGradient id="posGradient" cx="30%" cy="25%" r="85%"><stop stop-color="#fff1f3"/><stop offset=".45" stop-color="#ff92a8"/><stop offset="1" stop-color="#b93f60"/></radialGradient>'+
@@ -424,7 +424,7 @@ function bind(){
  svg.addEventListener("pointermove",event=>{
   if(!model.drag)return;
   const pos=getElementXY(event,svg);
-  model.r=Number(clamp(.2+(pos.x-170-130)/205,.2,3).toFixed(2));
+  model.r=Number(clamp(.2+(pos.x-170-130)/160,.2,3).toFixed(2));
   model.origin=model.r;model.finished=false;render();
  });
  const endDrag=()=>{model.drag=false;};svg.addEventListener("pointerup",endDrag);svg.addEventListener("pointercancel",endDrag);
