@@ -1,27 +1,435 @@
 <!doctype html>
-<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>29번 전기장 | 물리 공식 실험실</title><style>
-:root{color-scheme:light;--ink:#173149;--blue:#245dc6;--orange:#b74c12;--mint:#ddf5eb}*{box-sizing:border-box}body{margin:0;background:#eef3f7;color:var(--ink);font:16px/1.6 system-ui,sans-serif}main{max-width:1100px;margin:auto;padding:24px}header{background:#173149;color:white;padding:25px;border-radius:20px;margin-bottom:20px}h1{margin:4px 0;font-size:clamp(25px,5vw,36px)}h2{font-size:20px;margin:0 0 12px}h3{font-size:17px}.tag{color:#aee8d0;letter-spacing:2px;font-size:13px}.formula{font-size:25px;color:#b9efd8}.layout{display:grid;grid-template-columns:1.3fr 1fr;gap:18px}.panel{background:white;border:1px solid #d9e3eb;border-radius:18px;padding:20px;margin-bottom:18px}.hint{font-size:14px;color:#4f6374}svg{width:100%;display:block}label{display:block;font-weight:650;margin:12px 0 5px}.inputs{display:flex;align-items:center;gap:10px}input[type=range]{min-width:0;flex:1;height:44px;accent-color:var(--blue)}input[type=number]{width:100px;padding:10px;border:1px solid #9baebf;border-radius:8px;font:inherit}button{min-height:44px;padding:10px 15px;background:#eaf0f8;color:var(--ink);border:1px solid #9db1c6;border-radius:10px;font:inherit;cursor:pointer}button:hover{background:#d8e6f6}.buttons{display:flex;gap:8px;flex-wrap:wrap;margin:15px 0}.primary{background:var(--ink);color:white}.values{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.metric{background:#f0f6fa;padding:12px;border-radius:12px}.metric strong{display:block;font-size:22px;overflow-wrap:anywhere}.calc{background:var(--mint);padding:15px;border-radius:12px;overflow-wrap:anywhere}table{width:100%;border-collapse:collapse;font-size:14px}td,th{padding:9px 6px;text-align:left;border-bottom:1px solid #d5e1e9}details{border-top:1px solid #d8e3eb;padding:12px 0}summary{cursor:pointer;font-weight:650;min-height:44px}.scroll{overflow-x:auto}.legend{display:flex;gap:15px;flex-wrap:wrap;font-size:14px}.blue{color:var(--blue)}.orange{color:var(--orange)}.prediction{width:100%;padding:10px;font:inherit;border-radius:8px;border:1px solid #a8b9c9}footer{font-size:13px;text-align:center;color:#516677}@media(max-width:720px){main{padding:12px}.layout{grid-template-columns:1fr}.panel{padding:16px}header{padding:20px}.values{gap:8px}input[type=number]{width:88px}svg text{font-size:23px}}
-</style><link rel="stylesheet" href="electric-lab-v6.css?v=20261112-7"><link rel="stylesheet" href="electric-lab-v7-dark.css?v=20261112-11"><script src="electric-lab-v6.js?v=20261112-8" defer></script></head><body><main><header><div class="tag">PHYSICS LAB · 29 / 40</div><h1>전기장 실험실</h1><div class="formula">E⃗ = F⃗ / q₀　 ·　 F⃗ = q₀E⃗</div><p>시험 전하의 크기와 부호를 바꾸면 힘과 전기장은 어떻게 달라질까?</p></header>
-<div class="layout"><section><div class="panel"><h2>① 예측 → 조작 → 관찰</h2><label for="prediction">전하를 +2 μC에서 −2 μC로 바꾸면?</label><select id="prediction" class="prediction"><option>예측을 선택하세요</option><option>힘의 방향만 반대가 된다</option><option>전기장의 방향도 반대가 된다</option><option>힘의 크기가 2배가 된다</option></select><svg id="scene" viewBox="0 0 600 340" role="img" aria-label="균일 전기장과 시험 전하에 작용하는 힘"></svg><div class="legend"><span class="blue">→ 파란 실선: 전기장 E⃗</span><span class="orange">⇢ 주황 굵은선: 전기력 F⃗</span></div><p id="direction" class="hint" aria-live="polite"></p><p class="hint">시험 전하는 고정된 위치에서 관찰합니다. 화살표는 서로 다른 척도이며 길이는 각 물리량의 크기에 비례합니다.</p></div>
-<div class="panel"><h2>③ 관계 그래프</h2><p class="hint" id="graphnote"></p><svg id="graph" viewBox="0 0 600 340" role="img" aria-label="시험 전하에 따른 전기력의 전기장 방향 성분 그래프"></svg><p class="hint">가로축은 전하의 부호를 포함합니다. 세로축은 전기장 방향의 힘 성분 F∥이며, 음수는 전기장과 반대 방향입니다.</p></div></section>
-<section><div class="panel"><h2>② 변수 조작</h2><div id="controls"></div><div class="buttons"><button id="positive">+2 μC</button><button id="negative">−2 μC</button><button id="neutral">0 μC</button><button id="reset" class="primary">초기화</button></div><div class="values" aria-live="polite"><div class="metric">전기장 크기<strong id="ev"></strong></div><div class="metric">전기력 크기<strong id="fv"></strong></div><div class="metric">Fₓ / Fᵧ (N)<strong id="components"></strong></div><div class="metric">전하 q₀<strong id="qv"></strong></div></div><h3>공식 → 대입 → 결과</h3><div class="calc" id="calc"></div><p class="hint">E: 전기장(N/C), F: 전기력(N), q₀: 시험 전하(C). 1 μC = 10⁻⁶ C. θ는 +x축에서 반시계 방향으로 측정합니다.</p></div>
-<div class="panel"><h2>④ 조건 A·B 비교</h2><div class="buttons"><button id="saveA">현재 조건 → A</button><button id="saveB">현재 조건 → B</button></div><div class="scroll"><table><thead><tr><th>항목</th><th>A</th><th>B</th></tr></thead><tbody id="comparison"></tbody></table></div><p class="hint">같은 좌표계와 단위로 비교합니다. 초기화하면 예측과 비교 기록도 지워집니다.</p></div></section></div>
-<div class="panel"><h2>⑤ 설명하며 탐구하기</h2><details><summary>기본 · 전하를 2배로 늘리면 무엇이 2배가 될까?</summary><p>E = 2000 N/C, q₀ = +2 μC에서 F = 0.004 N입니다. q₀ = +4 μC로 바꾸면 F = 0.008 N이 됩니다. 전기장은 외부 원천이 만드는 값이므로 그대로입니다.</p></details><details><summary>응용 · 음전하가 받는 힘으로 전기장 방향을 알아낼 수 있을까?</summary><p>F⃗ = q₀E⃗에서 q₀가 음수이면 힘은 전기장과 반대 방향입니다. −2 μC 버튼을 눌러 확인하세요. E⃗ = F⃗/q₀에서는 음수로 나누므로 전기장 방향을 올바르게 복원할 수 있습니다.</p></details><details><summary>도전 · 전하가 0일 때 전기장도 0일까?</summary><p>q₀ = 0이면 F⃗ = 0이지만 외부 전기장은 그대로 존재할 수 있습니다. 이때 F⃗/q₀는 0/0이므로 정의되지 않습니다. 전기장의 정의는 원래 장을 교란하지 않는 아주 작은 양의 시험 전하로 측정한다는 뜻입니다.</p></details><details><summary>오개념 확인 · 힘 화살표가 전기장 방향이다?</summary><p>양의 전하일 때만 두 방향이 같습니다. 음전하를 놓으면 전기력은 반대 방향입니다. 전하의 부호를 바꾼 뒤 파란 전기장 화살표가 변하는지 확인해 보세요.</p></details><details><summary>적용 조건과 모형의 한계</summary><p>외부 원천이 일정하게 유지하는 균일한 정전기장을 가정합니다. 시험 전하는 충분히 작아 원래 전하 분포에 영향을 주지 않으며, 자체 전기장은 계산에서 제외합니다. 중력·자기력·전하의 운동은 다루지 않습니다. 위치와 전하 그림의 크기는 개념 표현이며 실제 척도가 아닙니다. 전기장이 0이면 전기력도 0이고 두 벡터의 방향은 정의되지 않습니다.</p></details></div><footer>물리 공식 40 · 독립 실행 HTML · 인터넷 연결 없이 사용</footer></main>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>29번 전기장 실험실 | 평행판 전기장·전기력·전하 운동</title>
+<style>
+:root{color-scheme:dark;--bg:#07111f;--panel:#11243a;--pane2:#173049;--line:#365670;--ink:#edf8ff;--sub:#b4d0e3;--cyan:#62e4ee;--amber:#ffcb80;--plus:#ff8d9d;--minus:#86bfff}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font:14px/1.48 system-ui,-apple-system,"Malgun Gothic",sans-serif}
+button,input,select{font:inherit}
+button{cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible,canvas:focus-visible{outline:3px solid #a7f4ff;outline-offset:2px}
+button:disabled{opacity:.45;cursor:default}
+.lab{height:100dvh;min-height:600px;padding:9px 12px;display:flex;flex-direction:column;gap:7px;overflow:hidden}
+.top{display:flex;align-items:center;gap:13px;min-height:37px;flex:0 0 auto}
+.top h1{font-size:clamp(19px,1.8vw,26px);margin:0;line-height:1.2;white-space:nowrap}
+.top .sub{font-size:12px;color:var(--sub)}
+.top button{margin-left:auto}
+button{min-height:33px;padding:6px 10px;border:1px solid #527892;border-radius:8px;color:#f2fcff;background:#24425d;font-weight:650}
+button:hover:not(:disabled){background:#305a77}
+button.primary{background:#087a8b;border-color:#75eaf0;color:white}
+.tabs{display:flex;gap:6px;align-items:center;flex:0 0 auto;min-height:37px;overflow-x:auto;padding-bottom:3px}
+.tabs button{white-space:nowrap}
+.tabs button[aria-selected=true]{background:#097a8c;border-color:#8af3f5;box-shadow:inset 0 -2px #b5ffff}
+.content{display:grid;grid-template-columns:minmax(0,4fr) minmax(245px,1fr);grid-template-rows:minmax(0,1fr);gap:9px;flex:1 1 auto;min-height:0;min-width:0}
+.stage,.graphs,.side,.concepts{min-height:0;min-width:0}
+.stage{display:flex;flex-direction:column;gap:7px}
+.canvas-card{display:flex;flex:1 1 auto;flex-direction:column;gap:7px;min-height:0;overflow:hidden;border:1px solid var(--line);border-radius:12px;padding:9px 11px;background:var(--panel)}
+.card-top{display:flex;align-items:center;flex-wrap:wrap;gap:6px;flex:0 0 auto}
+.card-top h2{font-size:16px;line-height:1.2;margin:0 11px 0 0}
+.card-top button{font-size:12px}
+.canvas-stage{display:flex;min-height:0;flex:1 1 auto;position:relative}
+#fieldCanvas{display:block;width:100%;height:100%;min-height:180px;background:#091b2c;border:1px solid #2f506b;border-radius:10px;touch-action:none}
+#canvasHint{font-size:12px;color:#b5d1df;margin:0;flex:0 0 auto}
+.readouts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;flex:0 0 auto}
+.readout{padding:8px 10px;border:1px solid #365873;border-radius:9px;background:#18334b;min-width:0}
+.readout small{display:block;font-size:11px;color:#bbd4e5}
+.readout strong{display:block;font-size:clamp(14px,1.5vw,19px);font-variant-numeric:tabular-nums;color:#f5fcff;overflow-wrap:anywhere}
+.readout strong.cyan{color:var(--cyan)}
+.readout strong.amber{color:var(--amber)}
+.statusbar{flex:0 0 auto;min-height:22px;font-size:12px;color:#a9ebdf;font-weight:650}
+.side{display:flex;flex-direction:column;gap:7px;overflow-y:auto;scrollbar-width:thin;padding-right:2px}
+.side-card{border:1px solid var(--line);background:var(--panel);padding:10px 11px;border-radius:11px}
+.side-card h2{font-size:15px;margin:0 0 7px;color:#f3fbff}
+.field{margin-bottom:8px}
+.field label{display:flex;justify-content:space-between;gap:5px;font-size:12px;font-weight:700;margin:0 0 4px;color:#e6f6ff}
+.field label output{color:#80eced;font-weight:800;font-variant-numeric:tabular-nums}
+.field input[type=range]{display:block;width:100%;height:24px;accent-color:#62dfe7;margin:0}
+.field select{display:block;width:100%;background:#19354e;color:#f0fbff;border:1px solid #537a92;padding:7px;border-radius:8px}
+.grid-buttons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}
+.grid-buttons button{font-size:12px;padding:6px 4px}
+.tiny{font-size:11px!important;line-height:1.55!important;color:#b6cfdf!important;margin:6px 0}
+.equation{background:#1b354c;border:1px solid #41627c;border-radius:9px;padding:8px;margin-top:6px;font-size:12px;line-height:1.7;overflow-wrap:anywhere}
+.equation b{color:#90f3ef}
+#sideStatus{color:#b7f1e5;font-size:12px;font-weight:650;line-height:1.45;margin:6px 0 0}
+.graphs{display:none;flex-direction:column;gap:7px;overflow-y:auto}
+.graph-head{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap}
+.graph-head h2{font-size:16px;margin:0}
+.graph-head p{font-size:11px;color:#bdd3e5;margin:0}
+.graph-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;min-height:0;flex:1 1 auto}
+.graph-card{display:flex;flex-direction:column;gap:5px;min-width:0;min-height:0;border:1px solid var(--line);background:var(--panel);border-radius:11px;padding:10px}
+.graph-card h3{font-size:14px;margin:0}
+.graph-card canvas{display:block;flex:1 1 auto;width:100%;min-height:210px;border:1px solid #35556c;border-radius:8px;background:#0b1e31}
+.graph-card p{color:#b4d0e1;font-size:12px;line-height:1.45;margin:3px 0}
+.legend{display:flex;gap:10px;flex-wrap:wrap;font-size:12px;color:#d2e7f2}
+.legend span:before{content:"";display:inline-block;width:12px;height:3px;background:currentColor;vertical-align:middle;margin-right:5px}
+.legend .now{color:var(--cyan)}.legend .a{color:#ff9aa5}.legend .b{color:#b6a4ff}.legend .marker{color:var(--amber)}
+.compare{padding:8px 10px;background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow-x:auto}
+.compare table{border-collapse:collapse;width:100%;font-size:12px;white-space:nowrap}
+.compare th,.compare td{border-bottom:1px solid #35516a;padding:5px 6px;text-align:center}
+.compare th{color:#d7edfa}
+.concepts{display:none;overflow-y:auto}
+.lesson-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.lesson{padding:16px;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.lesson h2{font-size:17px;color:#8ce9f4;margin:0 0 10px}
+.lesson p{margin:7px 0;line-height:1.76}
+.lesson .formula{padding:12px;background:#1c3a52;border:1px solid #466b84;border-radius:9px;font-size:19px;color:#f2fdff}
+.lesson.wide{grid-column:1/-1}
+.lesson details{padding:8px 0;border-bottom:1px solid #335069}
+.lesson summary{font-weight:700;cursor:pointer}
+.content[data-view=graphs] .stage{display:none}
+.content[data-view=graphs] .graphs{display:flex}
+.content[data-view=concepts]{display:block}
+.content[data-view=concepts] .stage,.content[data-view=concepts] .graphs,.content[data-view=concepts] .side{display:none}
+.content[data-view=concepts] .concepts{display:block}
+@media(min-width:901px) and (max-height:790px){.lab{padding:7px 10px;gap:5px}.canvas-card{padding:7px 9px;gap:5px}.readout{padding:6px 8px}.side-card{padding:8px 10px}.field{margin-bottom:6px}.graph-card{padding:7px}}
+@media(max-width:900px){.lab{height:auto;min-height:100dvh;overflow:visible}.content{display:flex;flex-direction:column}.stage{min-height:560px}.canvas-card{min-height:530px}.side{overflow:visible}.graphs{overflow:visible}.graph-grid,.lesson-grid{grid-template-columns:1fr}.graph-card{min-height:320px}.graph-card canvas{height:265px;flex:none}.concepts{overflow:visible}.tabs{position:sticky;top:0;background:#07111f;z-index:5;padding:4px 0}.lesson.wide{grid-column:auto}}
+@media(max-width:430px){.top h1{font-size:18px}.top .sub,.top button{display:none}.tabs button{font-size:12px;padding:6px 9px}.card-top h2{width:100%}.readouts{grid-template-columns:repeat(2,minmax(0,1fr))}.stage{min-height:590px}.canvas-card{min-height:560px}}
+</style>
+</head>
+<body>
+<div class="lab">
+ <header class="top"><h1>⚡ 29번 · 전기장 실험실</h1><span class="sub">균일 전기장 · 시험 전하의 힘과 운동</span><button id="full" type="button">⛶ 전체화면</button></header>
+ <nav class="tabs" role="tablist" aria-label="전기장 실험 유형">
+  <button type="button" role="tab" data-tab="field" aria-selected="true">① 전기장과 전기력</button>
+  <button type="button" role="tab" data-tab="motion" aria-selected="false">② 전하의 운동</button>
+  <button type="button" role="tab" data-tab="graphs" aria-selected="false">③ 그래프·비교</button>
+  <button type="button" role="tab" data-tab="concepts" aria-selected="false">④ 개념 설명</button>
+ </nav>
+ <div class="content" id="content" data-view="field">
+  <section class="stage" aria-label="전기장과 시험 전하 실험">
+   <div class="canvas-card">
+    <div class="card-top">
+      <h2 id="stageTitle">평행판 전기장 속 시험 전하</h2>
+      <button id="pos" type="button">양전하 +2 μC</button>
+      <button id="neg" type="button">음전하 −2 μC</button>
+      <button id="neutral" type="button">전하 0</button>
+      <button id="goMotion" class="primary" type="button">▶ 전하 운동 관찰</button>
+      <button id="start" class="primary" type="button" hidden>▶ 시작</button>
+      <button id="pause" type="button" hidden>Ⅱ 일시정지</button>
+      <button id="again" type="button" hidden>↺ 처음부터</button>
+    </div>
+    <div class="canvas-stage"><canvas id="fieldCanvas" tabindex="0" aria-label="양·음극 평행판 사이 전기장과 시험 전하, 전기력 벡터 및 전하 운동"></canvas></div>
+    <p id="canvasHint">중앙 전하를 드래그해도 균일 전기장 속 전기력은 변하지 않습니다. 전하 부호를 바꾸어 힘의 방향을 비교하세요.</p>
+    <div class="readouts">
+      <div class="readout"><small>전기장 E</small><strong class="cyan" id="eMeter">2,000 N/C</strong></div>
+      <div class="readout"><small>전기력 |F|</small><strong class="amber" id="fMeter">0.0040 N</strong></div>
+      <div class="readout"><small>가속도 |a|</small><strong id="aMeter">0.400 m/s²</strong></div>
+      <div class="readout"><small>시각 t / 속력</small><strong id="motionMeter">0.00 s · 0.00 m/s</strong></div>
+    </div>
+    <div class="statusbar" id="status" role="status">전기장은 외부 극판이 만드는 장입니다. 시험 전하의 부호에 따라 힘 방향이 바뀝니다.</div>
+   </div>
+  </section>
+  <section class="graphs" aria-label="전기장 그래프와 조건 비교">
+    <div class="graph-head"><h2>전기력·운동 그래프</h2><p>축 범위는 비교 중 자동 축소되지 않으며, 더 큰 값이 필요할 때만 확장됩니다.</p></div>
+    <div class="legend"><span class="now">현재 곡선</span><span class="marker">현재 위치</span><span class="a">조건 A</span><span class="b">조건 B</span></div>
+    <div class="graph-grid">
+      <div class="graph-card"><h3>전하량 q₀ – 전기력의 전기장 방향 성분 F∥</h3><canvas id="forceGraph" aria-label="전하량과 전기력의 전기장 방향 성분 그래프"></canvas><p>기울기는 E입니다. 음전하의 F∥는 음수이며, 현재 점은 전하량에 따라 움직입니다.</p></div>
+      <div class="graph-card"><h3>시간 t – 전기장 방향 변위 u(t)</h3><canvas id="motionGraph" aria-label="시간에 따른 전기장 방향 변위 그래프"></canvas><p>정지 출발·등가속도 모형입니다. 판에 도달하면 멈추며, 움직이는 점이 현재 상태를 나타냅니다.</p></div>
+    </div>
+    <div class="compare"><table><thead><tr><th>조건</th><th>E (N/C)</th><th>q₀ (μC)</th><th>m (g)</th><th>θ (°)</th><th>F∥ (N)</th><th>a∥ (m/s²)</th></tr></thead><tbody id="comparison"></tbody></table></div>
+  </section>
+  <aside class="side" aria-label="실험 조작부">
+   <section class="side-card">
+    <h2>실험 변수</h2>
+    <div class="field"><label for="eInput">전기장 크기 E <output id="eOutput">2,000 N/C</output></label><input id="eInput" type="range" min="0" max="10000" step="100" value="2000"></div>
+    <div class="field"><label for="qInput">시험 전하 q₀ <output id="qOutput">+2.0 μC</output></label><input id="qInput" type="range" min="-5" max="5" step="0.1" value="2"></div>
+    <div class="field"><label for="mInput">가상 입자 질량 m <output id="mOutput">10 g</output></label><input id="mInput" type="range" min="1" max="30" step="1" value="10"></div>
+    <div class="field"><label for="angleInput">전기장 방향 θ <output id="angleOutput">0°</output></label><input id="angleInput" type="range" min="0" max="360" step="15" value="0"></div>
+    <div class="field"><label for="speedInput">재생 배속 <output id="speedOutput">1배</output></label><input id="speedInput" type="range" min="0.25" max="2" step="0.25" value="1"></div>
+    <p class="tiny">θ는 +x축에서 반시계방향으로 측정합니다. 극판도 함께 회전하며 전기장은 항상 (+)극판 → (−)극판입니다.</p>
+   </section>
+   <section class="side-card">
+    <h2>계산·비교</h2>
+    <div class="equation" id="equation">F = q₀E = 0.0040 N</div>
+    <div class="grid-buttons">
+      <button id="saveA" type="button">조건 A 저장</button><button id="saveB" type="button">조건 B 저장</button>
+      <button id="axisReset" type="button">그래프 축 초기화</button><button id="reset" type="button">전체 초기화</button>
+    </div>
+    <p id="sideStatus">현재 시험 전하가 받는 힘을 관찰합니다.</p>
+    <p class="tiny">가상 입자의 질량은 운동 설명에만 사용합니다. 실제 전자 1개의 질량이 아닙니다.</p>
+   </section>
+  </aside>
+  <section class="concepts" aria-label="개념 설명">
+   <div class="lesson-grid">
+    <article class="lesson"><h2>① 전기장은 어디에서 생길까?</h2><p>전하가 전기장을 만듭니다. 여기서는 넓고 평행한 두 극판에 서로 반대 부호의 전하가 분포하여, 가장자리에서 멀리 떨어진 두 극판 사이에 거의 <b>균일한 전기장</b>을 만든다고 가정합니다.</p><div class="formula">전기장 방향: (+)극판 → (−)극판<br>E = |ΔV| / d (이상적 균일장)</div><p>화면에서 전기장은 <b>청록색 화살표</b>로 나타나며 시험 전하의 부호를 바꾸어도 방향이 바뀌지 않습니다.</p></article>
+    <article class="lesson"><h2>② 전기장과 전기력의 차이</h2><div class="formula">벡터 관계: F⃗ = q₀E⃗<br>전기장: E⃗ = F⃗ / q₀ (q₀ ≠ 0)</div><p>양전하가 받는 힘은 전기장과 같은 방향, 음전하가 받는 힘은 반대 방향입니다. 전하가 0이면 전기력은 0이지만 전기장은 그대로 존재할 수 있습니다.</p><p>전기장의 단위는 N/C, 전기력의 단위는 N입니다.</p></article>
+    <article class="lesson"><h2>③ 전하가 움직이는 이유</h2><div class="formula">a⃗ = F⃗ / m = (q₀/m)E⃗<br>u(t) = ½a∥t² · v∥(t)=a∥t</div><p>처음 정지한 가상 입자에 일정한 전기력이 작용하면 등가속도 운동을 합니다. 전하가 음수이면 <b>가속도는 전기장과 반대</b>입니다.</p><p>이상적 극판의 안쪽 면에 도달하면 입자 운동을 멈추도록 처리했습니다. 중력과 공기 저항은 계산하지 않습니다.</p></article>
+    <article class="lesson"><h2>④ 그래프에서 확인할 내용</h2><p>전하량–전기력 그래프는 <b>원점을 지나는 직선</b>입니다. 전기장 크기 E를 늘리면 기울기가 커지고, 시험 전하 q₀를 바꾸면 현재 점이 직선 위를 이동합니다.</p><p>변위–시간 그래프는 정지 출발 등가속도 운동이므로 포물선이며, 반대 부호의 전하는 전기장 반대쪽 극판으로 이동합니다.</p></article>
+    <article class="lesson wide"><h2>⑤ 탐구 문제와 모형의 한계</h2>
+      <details><summary>기본 · q₀를 +2 μC에서 −2 μC로 바꾸면?</summary><p>E가 일정하면 전기력의 크기 |F|는 같고, 전기력과 가속도의 방향은 반대가 됩니다. 전기장 화살표는 변하지 않습니다.</p></details>
+      <details><summary>응용 · E를 2배, 입자 질량 m을 2배로 하면?</summary><p>전기력의 크기는 2배가 되지만, 질량도 2배가 되어 가속도 크기 |a|는 그대로입니다.</p></details>
+      <details><summary>도전 · 시험 전하의 위치를 바꾸면 전기력은?</summary><p>균일 전기장에서는 이상적으로 극판 사이 어느 위치에서도 전기장 E가 일정합니다. 따라서 q₀와 E가 같다면 힘도 같습니다. 실제 극판 가장자리 부근에서는 가장자리 효과 때문에 균일하지 않을 수 있습니다.</p></details>
+      <details><summary>전하가 0인 경우 E = F/q₀를 쓸 수 있나요?</summary><p>아닙니다. 0/0은 정의되지 않습니다. 전기장은 시험 전하를 놓지 않아도 외부 극판에 의해 존재하며, 아주 작은 양의 시험 전하를 사용하는 극한적인 정의로 이해합니다.</p></details>
+      <details><summary>물리 모형과 실제 실험의 차이</summary><p>극판 사이 거리 d=1.2 m는 계산과 운동 시각화를 위한 가상 설정이며, 극판은 이상적으로 넓고 평행합니다. E는 설정값으로 주어지며 극판 전압과 표면 전하 밀도 자체는 계산하지 않습니다. 질량이 1~30 g인 가상 대전 입자를 사용하며 전자·양성자의 실제 질량이나 열운동, 자기력, 중력, 유전체, 가장자리 효과, 전하가 만드는 추가 전기장은 생략했습니다. 움직임의 화면 속도는 가속 운동 관계를 보여주기 위한 표현이며 화면 픽셀 크기는 실제 길이의 축척이 아닙니다.</p></details>
+    </article>
+   </div>
+  </section>
+ </div>
+</div>
 <script>
-'use strict';
-const defaults={E:2000,q:2,angle:0};let state={...defaults},saved={A:null,B:null};const $=id=>document.getElementById(id);
-const config=[['E','전기장 크기 E (N/C)',0,10000,100],['q','시험 전하 q₀ (μC)',-5,5,.1],['angle','전기장 방향 θ (°)',0,360,5]];
-for(const [id,label,min,max,step] of config){const d=document.createElement('div');d.innerHTML=`<label for="${id}num">${label}</label><div class="inputs"><input id="${id}range" aria-label="${label}" type="range" min="${min}" max="${max}" step="${step}"><input id="${id}num" type="number" min="${min}" max="${max}" step="${step}"></div>`;$('controls').append(d);for(const type of ['range','num']){$(id+type).addEventListener('input',e=>{if(e.target.value.trim()===''||!Number.isFinite(e.target.valueAsNumber))return;state[id]=Math.min(max,Math.max(min,e.target.valueAsNumber));render(type==='num'?id:null)});$(id+type).addEventListener('change',()=>render())}}
-function model(s){const rad=s.angle*Math.PI/180,F=s.E*s.q*1e-6;return{F,abs:Math.abs(F),x:F*Math.cos(rad),y:F*Math.sin(rad)}}
-const fmt=(v,d=5)=>Math.abs(v)<1e-12?'0':Number(v.toPrecision(d)).toString();
-function line(x1,y1,x2,y2,color,width=2,head=true){return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${color}" stroke-width="${width}" ${head?'marker-end="url(#'+(color==='#245dc6'?'eb':'fb')+')"':''}/>`}
-function drawScene(m){let out='<defs><marker id="eb" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7" fill="#245dc6"/></marker><marker id="fb" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7" fill="#b74c12"/></marker></defs><rect x="1" y="1" width="598" height="338" rx="15" fill="#f3f8fc"/>';
-const c=Math.cos(state.angle*Math.PI/180),s=Math.sin(state.angle*Math.PI/180),len=state.E/10000*68;
-for(let x=80;x<=520;x+=110)for(let y=65;y<=285;y+=110)if(state.E>0)out+=line(x-c*len/2,y+s*len/2,x+c*len/2,y-s*len/2,'#245dc6');
-out+='<line x1="255" y1="175" x2="365" y2="175" stroke="#687e90"/><line x1="300" y1="210" x2="300" y2="110" stroke="#687e90"/><text x="367" y="179" fill="#173149" font-size="15">+x</text><text x="308" y="112" fill="#173149" font-size="15">+y</text>';
-const fLength=m.F/.05*130;if(Math.abs(fLength)>0)out+=line(300,175,300+c*fLength,175-s*fLength,'#b74c12',5);out+=`<circle cx="300" cy="175" r="22" fill="${state.q<0?'#e5eefa':state.q>0?'#fff0e4':'#e6ebed'}" stroke="#173149" stroke-width="2"/><text x="300" y="182" text-anchor="middle" font-size="24" fill="#173149">${state.q>0?'+':state.q<0?'−':'0'}</text><text x="20" y="32" fill="#173149" font-size="17">균일 전기장 · 고정된 시험 전하</text>`;$('scene').innerHTML=out}
-let graphAxis29=0;function drawGraph(m){const left=80,right=560,top=35,bottom=265,mid=150,max=(graphAxis29=Math.max(graphAxis29,state.E*5e-6,.001)),px=q=>left+(q+5)/10*(right-left),py=f=>mid-f/max*100;let o=`<rect x="${left}" y="${top}" width="480" height="230" fill="#fbfdff" stroke="#b5c5d1"/>`;for(const q of [-5,0,5]){o+=`<line x1="${px(q)}" y1="35" x2="${px(q)}" y2="265" stroke="#d9e3eb"/><text x="${px(q)}" y="288" text-anchor="middle" font-size="17" fill="#173149">${q}</text>`}for(const v of [-max,0,max])o+=`<line x1="80" y1="${py(v)}" x2="560" y2="${py(v)}" stroke="#d9e3eb"/><text x="72" y="${py(v)+5}" text-anchor="end" font-size="15" fill="#173149">${fmt(v,3)}</text>`;o+=`<path d="M${px(-5)},${py(-state.E*5e-6)} L${px(5)},${py(state.E*5e-6)}" stroke="#245dc6" stroke-width="3"/><circle cx="${px(state.q)}" cy="${py(m.F)}" r="7" fill="#b74c12" stroke="white" stroke-width="2"/><text x="320" y="325" text-anchor="middle" font-size="18" fill="#173149">試験電荷</text>`;o=o.replace('試験電荷','시험 전하 q₀ (μC)');o+='<text x="80" y="22" font-size="17" fill="#173149">F∥ (N)</text>';$('graph').innerHTML=o;$('graphnote').textContent=`변화 변수: q₀ · 고정 변수: E = ${fmt(state.E)} N/C, θ = ${fmt(state.angle)}° · F∥ = Eq₀`}
-function comparison(){const rows=[['E (N/C)',s=>fmt(s.E)],['q₀ (μC)',s=>fmt(s.q)],['θ (°)',s=>fmt(s.angle)],['|F| (N)',s=>fmt(model(s).abs)],['Fₓ (N)',s=>fmt(model(s).x)],['Fᵧ (N)',s=>fmt(model(s).y)]];$('comparison').innerHTML=rows.map(([label,fn])=>`<tr><th>${label}</th>${['A','B'].map(k=>`<td>${saved[k]?fn(saved[k]):'미저장'}</td>`).join('')}</tr>`).join('')}
-function render(editing=null){for(const [id] of config){$(id+'range').value=state[id];if(editing!==id)$(id+'num').value=state[id]}const m=model(state);$('ev').textContent=fmt(state.E)+' N/C';$('fv').textContent=fmt(m.abs)+' N';$('components').textContent=fmt(m.x,3)+' / '+fmt(m.y,3);$('qv').textContent=fmt(state.q)+' μC';$('calc').innerHTML=`F∥ = q₀E = (${fmt(state.q)} × 10⁻⁶ C) × ${fmt(state.E)} N/C<br><b>F∥ = ${fmt(m.F)} N</b><br>`+(state.q===0?'q₀ = 0 → F⃗ = 0. F⃗/q₀는 정의되지 않으며, 외부 전기장은 유지됩니다.':`E⃗ = F⃗/q₀ → 전기장 크기 ${fmt(state.E)} N/C`);$('direction').textContent=state.E===0?'E = 0: 전기력도 0이며 방향은 정의되지 않습니다.':state.q===0?'q₀ = 0: 힘은 0, 외부 전기장은 유지됩니다.':`전기력은 전기장과 ${state.q>0?'같은':'반대'} 방향입니다. 전기장 방향 ${fmt(state.angle)}°, 힘 방향 ${fmt((state.angle+(state.q<0?180:0))%360)}°.`;drawScene(m);drawGraph(m);comparison()}
-$('positive').onclick=()=>{state.q=2;render()};$('negative').onclick=()=>{state.q=-2;render()};$('neutral').onclick=()=>{state.q=0;render()};for(const k of ['A','B'])$('save'+k).onclick=()=>{saved[k]={...state};render()};$('reset').onclick=()=>{state={...defaults};saved={A:null,B:null};$('prediction').selectedIndex=0;render()};render();
-</script></body></html>
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+const defaults={E:2000,q:2,m:10,angle:0,speed:1};
+const s={...defaults,t:0,running:false,last:null,tab:"field",savedA:null,savedB:null,probeS:0,probeT:0,drag:false,ended:false};
+const plateD=1.2,plateBound=.57;
+const forceCanvas=$("forceGraph"),motionCanvas=$("motionGraph"),mainCanvas=$("fieldCanvas");
+const graphAxes={force:.012,time:4};
+const clamp=(v,low,high)=>Math.min(high,Math.max(low,v));
+const number=(v,places=2)=>Math.abs(v)<1e-12?"0":Number(v.toFixed(places)).toString();
+const signNum=(v,d=3)=>(v>0?"+":"")+(Math.abs(v)<1e-12?"0":v.toFixed(d));
+function force(p=s){return p.q*1e-6*p.E;}
+function acceleration(p=s){return force(p)/(p.m/1000);}
+function hitTime(p=s){const a=Math.abs(acceleration(p));return a===0?Infinity:Math.sqrt(2*plateBound/a);}
+function displacement(p,t){const a=acceleration(p),tm=Math.min(Math.max(0,t),hitTime(p));return .5*a*tm*tm;}
+function snapshot(){return {E:s.E,q:s.q,m:s.m,angle:s.angle};}
+function sizeCanvas(canvas){
+ const bounds=canvas.getBoundingClientRect(),w=Math.floor(bounds.width),h=Math.floor(bounds.height);
+ if(w<80||h<80)return null;
+ const dpr=Math.min(window.devicePixelRatio||1,2),px=Math.round(w*dpr),py=Math.round(h*dpr);
+ if(canvas.width!==px||canvas.height!==py){canvas.width=px;canvas.height=py;}
+ const c=canvas.getContext("2d");if(!c)return null;c.setTransform(dpr,0,0,dpr,0,0);return {c,w,h};
+}
+function text(c,t,x,y,color="#e8f7ff",size=14,align="center",weight=500){
+ c.font=weight+" "+size+"px system-ui, sans-serif";c.textAlign=align;c.fillStyle=color;c.fillText(t,x,y);
+}
+function line(c,x,y,X,Y,color,width=2){c.beginPath();c.strokeStyle=color;c.lineWidth=width;c.moveTo(x,y);c.lineTo(X,Y);c.stroke();}
+function arrow(c,x,y,X,Y,color,width=3,head=9){
+ const dx=X-x,dy=Y-y,L=Math.hypot(dx,dy);if(L<2)return;
+ const ux=dx/L,uy=dy/L;
+ line(c,x,y,X,Y,color,width);c.beginPath();c.moveTo(X,Y);c.lineTo(X-ux*head-uy*head*.62,Y-uy*head+ux*head*.62);c.lineTo(X-ux*head+uy*head*.62,Y-uy*head-ux*head*.62);c.closePath();c.fillStyle=color;c.fill();
+}
+function plate(c,x1,y1,x2,y2,positive){
+ const w=positive?"#ff8c9d":"#86bfff",base=positive?"#7a3041":"#244d78";
+ c.save();c.lineCap="round";c.lineWidth=21;c.strokeStyle="#061523";c.shadowColor=positive?"#f96b8666":"#55b8ff66";c.shadowBlur=15;line(c,x1,y1,x2,y2,base,16);c.shadowBlur=0;line(c,x1,y1,x2,y2,w,8);line(c,x1-1,y1-1,x2-1,y2-1,"#f3faff88",2);c.restore();
+}
+function projection(){
+ const theta=s.angle*Math.PI/180,ex=Math.cos(theta),ey=-Math.sin(theta);
+ return {ex,ey,tx:-ey,ty:ex};
+}
+function stageGeometry(w,h){
+ const centerX=w/2,centerY=h/2+8,scale=Math.max(60,Math.min((w-120)/2.4,(h-100)/2.25));
+ const b=projection();
+ return {cx:centerX,cy:centerY,scale,...b,
+  at(u,v){return [centerX+(u*b.ex+v*b.tx)*scale,centerY+(u*b.ey+v*b.ty)*scale];},
+  inverse(x,y){const dx=(x-centerX)/scale,dy=(y-centerY)/scale;return [dx*b.ex+dy*b.ey,dx*b.tx+dy*b.ty];}
+ };
+}
+let geometry=null;
+function drawField(){
+ const out=sizeCanvas(mainCanvas);if(!out)return;
+ const {c,w,h}=out;c.clearRect(0,0,w,h);
+ const bg=c.createLinearGradient(0,0,w,h);bg.addColorStop(0,"#112b42");bg.addColorStop(.6,"#0a1c30");bg.addColorStop(1,"#071622");c.fillStyle=bg;c.fillRect(0,0,w,h);
+ c.lineWidth=1;c.strokeStyle="#163750";
+ for(let x=20;x<w;x+=40)line(c,x,0,x,h,"#193349",.7);
+ for(let y=20;y<h;y+=40)line(c,0,y,w,y,"#193349",.7);
+ geometry=stageGeometry(w,h);const g=geometry;
+ function at(u,v){return g.at(u,v);}
+ const quad=[at(-.6,-.62),at(.6,-.62),at(.6,.62),at(-.6,.62)];
+ c.beginPath();quad.forEach((p,i)=>i?c.lineTo(...p):c.moveTo(...p));c.closePath();c.fillStyle="#1d40505b";c.fill();c.strokeStyle="#2d6d8a";c.lineWidth=1;c.stroke();
+ const Efrac=s.E/10000;
+ for(const v of [-.37,0,.37])for(const uu of [-.42,-.04,.34]){
+  const p=at(uu-.13,v),q=at(uu+.13,v);
+  if(s.E>0){c.globalAlpha=.45+.5*Math.sqrt(Efrac);arrow(c,p[0],p[1],q[0],q[1],"#69e7ed",2.2,7);c.globalAlpha=1;}
+ }
+ for(const [u,positive] of [[-.6,true],[.6,false]]){
+  const a=at(u,-.64),b=at(u,.64);
+  plate(c,a[0],a[1],b[0],b[1],positive);
+  const pp=at(u,0);
+  const outward=positive?-1:1;
+  const labelP=at(u+outward*.18,0);
+  text(c,positive?"+ 극판":"− 극판",labelP[0],labelP[1]-10,positive?"#ffbdc4":"#a9d8ff",Math.max(11,Math.min(16,w/50)),"center",800);
+ }
+ text(c,"균일 전기장 E",24,28,"#8aeaf1",Math.max(12,Math.min(18,w/58)),"left",750);
+ text(c,"(+ ) → (− )",w-22,28,"#b8d5e3",13,"right",600);
+ text(c,"전기장 방향 θ = "+s.angle+"°",24,h-22,"#b4d2e5",12,"left");
+ // Position in the local field basis.
+ const isMotion=s.tab==="motion";
+ const displacementVal=isMotion?displacement(s,s.t):s.probeS;
+ const transverseVal=isMotion?0:s.probeT;
+ const p=at(displacementVal,transverseVal);
+ const qSign=Math.sign(s.q),F=force(),a=acceleration();
+ if(isMotion&&s.t>0){
+   c.save();c.strokeStyle="#ffd089";c.lineWidth=2.8;c.setLineDash([5,4]);c.beginPath();
+   const N=50;
+   for(let i=0;i<=N;i++){
+    const pos=at(displacement(s,s.t*i/N),0);
+    if(i)c.lineTo(pos[0],pos[1]);else c.moveTo(pos[0],pos[1]);
+   }c.stroke();c.restore();
+ }
+ if(qSign!==0&&s.E>0){
+  const len=clamp(44+Math.sqrt(Math.abs(F)/.05)*100,46,122);
+  arrow(c,p[0],p[1],p[0]+g.ex*qSign*len,p[1]+g.ey*qSign*len,"#ffca77",4,12);
+  const end=[p[0]+g.ex*qSign*(len+12),p[1]+g.ey*qSign*(len+12)];
+  text(c,"F",end[0],end[1]-7,"#ffda9f",18,"center",850);
+ } else text(c,"F=0",p[0],p[1]-39,"#ffd08b",15,"center",750);
+ // Test charge uses a bright rim; its charge symbol is always visible.
+ c.shadowColor=qSign>=0?"#f67b8c99":"#64b9f999";c.shadowBlur=16;
+ c.beginPath();c.arc(p[0],p[1],22,0,Math.PI*2);c.fillStyle=qSign>0?"#ff8297":qSign<0?"#8abbff":"#a4b3c1";c.fill();c.shadowBlur=0;c.strokeStyle="#f1faff";c.lineWidth=2;c.stroke();
+ text(c,qSign>0?"+":qSign<0?"−":"0",p[0],p[1]+8,"#102639",26,"center",850);
+ if(isMotion){
+   const pos=at(0,-.83);
+   const currentA=a,nowV=currentA*s.t;
+   text(c,"t="+s.t.toFixed(2)+"s · v∥="+number(nowV,2)+"m/s",pos[0],pos[1],"#f7d18d",13);
+ }else{
+   text(c,"시험 전하를 드래그해 이동",w/2,h-22,"#b6cadb",12);
+ }
+}
+function updateStatus(){
+ const F=force(),a=acceleration();
+ $("eOutput").textContent=s.E.toLocaleString("ko-KR")+" N/C";
+ $("qOutput").textContent=signNum(s.q,1)+" μC";
+ $("mOutput").textContent=s.m+" g";
+ $("angleOutput").textContent=s.angle+"°";
+ $("speedOutput").textContent=number(s.speed,2)+"배";
+ $("eMeter").textContent=s.E.toLocaleString("ko-KR")+" N/C";
+ $("fMeter").textContent=number(Math.abs(F),5)+" N";
+ $("aMeter").textContent=number(Math.abs(a),3)+" m/s²";
+ $("motionMeter").textContent=s.t.toFixed(2)+" s · "+number(Math.abs(a*s.t),2)+" m/s";
+ $("equation").innerHTML="F∥ = q₀E = ("+signNum(s.q,1)+" × 10⁻⁶ C) × "+s.E.toLocaleString("ko-KR")+" N/C<br><b>F∥ = "+signNum(F,6)+" N</b><br>a∥ = F∥/m = "+signNum(a,3)+" m/s²";
+ const status=s.E===0?"전기장 E=0: 시험 전하에 전기력이 작용하지 않습니다.":s.q===0?"시험 전하 q₀=0: 전기장은 유지되지만 전기력은 0입니다.":s.q>0?"양전하: 전기장과 같은 방향으로 전기력과 가속도가 작용합니다.":"음전하: 전기장과 반대 방향으로 전기력과 가속도가 작용합니다.";
+ let motionText;
+ if(s.tab==="motion")motionText=s.ended?"극판에 도달해 정지했습니다. 처음부터 버튼으로 다시 실험하세요.":s.running?"운동 중 · 전기력에 의해 속력이 증가합니다.":s.t>0?"일시정지 · 시작을 누르면 이어집니다.":"▶ 시작을 눌러 전하의 가속 운동을 관찰하세요.";
+ else motionText=status;
+ $("status").textContent=motionText;
+ $("sideStatus").textContent=status;
+ $("start").disabled=s.running||Math.abs(a)<1e-12;
+ $("pause").disabled=!s.running;
+}
+function maxGraphAxes(){
+ const v=[snapshot(),s.savedA,s.savedB].filter(Boolean);
+ graphAxes.force=Math.max(graphAxes.force,.012,...v.map(x=>Math.abs(x.E)*5e-6*1.2));
+ graphAxes.time=Math.max(graphAxes.time,4,...v.map(x=>{const t=hitTime(x);return Number.isFinite(t)?Math.min(90,t*1.15):4;}));
+}
+function grid(ctx,w,h,xmin,xmax,ymin,ymax,xlabel,ylabel){
+ const L=58,R=14,T=29,B=45,WW=w-L-R,HH=h-T-B;
+ const X=x=>L+(x-xmin)/(xmax-xmin)*WW;
+ const Y=y=>T+(ymax-y)/(ymax-ymin)*HH;
+ ctx.lineWidth=1;ctx.strokeStyle="#35546e";
+ for(let k=0;k<=4;k++){
+  const x=xmin+(xmax-xmin)*k/4,y=ymin+(ymax-ymin)*k/4;
+  line(ctx,X(x),T,X(x),h-B,"#2e4c63",1);
+  line(ctx,L,Y(y),w-R,Y(y),"#2e4c63",1);
+  text(ctx,number(x,2),X(x),h-B+18,"#b3ccdf",11);
+  text(ctx,number(y,3),L-7,Y(y)+4,"#b3ccdf",11,"right");
+ }
+ line(ctx,L,T,L,h-B,"#91b9cf",1.5);line(ctx,L,h-B,w-R,h-B,"#91b9cf",1.5);
+ text(ctx,ylabel,9,16,"#dfeff8",12,"left",700);
+ text(ctx,xlabel,w-R,h-8,"#dfeff8",12,"right",700);
+ return {X,Y};
+}
+function path(ctx,fn,xmin,xmax,N,color,width=3,dash=[]){
+ ctx.save();ctx.strokeStyle=color;ctx.lineWidth=width;ctx.setLineDash(dash);ctx.beginPath();
+ for(let i=0;i<=N;i++){const t=xmin+(xmax-xmin)*i/N,point=fn(t);if(i)ctx.lineTo(point[0],point[1]);else ctx.moveTo(point[0],point[1]);}
+ ctx.stroke();ctx.restore();
+}
+function marker(ctx,x,y,color){
+ ctx.beginPath();ctx.arc(x,y,5.8,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();ctx.strokeStyle="#0b1d30";ctx.lineWidth=2;ctx.stroke();
+}
+function forcePlot(){
+ const o=sizeCanvas(forceCanvas);if(!o)return;const {c,w,h}=o;
+ c.fillStyle="#0b1e31";c.fillRect(0,0,w,h);
+ const g=grid(c,w,h,-5,5,-graphAxes.force,graphAxes.force,"q₀ (μC)","F∥ (N)");
+ for(const [v,color,dash] of [[s.savedA,"#ff9ba8",[8,5]],[s.savedB,"#b7a9ff",[3,5]]]){
+  if(!v)continue;
+  path(c,q=>[g.X(q),g.Y(q*1e-6*v.E)],-5,5,100,color,2.4,dash);
+  marker(c,g.X(v.q),g.Y(force(v)),color);
+ }
+ path(c,q=>[g.X(q),g.Y(q*1e-6*s.E)],-5,5,100,"#60e9e5",3);
+ marker(c,g.X(s.q),g.Y(force()),"#ffd080");
+}
+function motionPlot(){
+ const o=sizeCanvas(motionCanvas);if(!o)return;const {c,w,h}=o;
+ c.fillStyle="#0b1e31";c.fillRect(0,0,w,h);
+ const g=grid(c,w,h,0,graphAxes.time,-.65,.65,"t (s)","u (m)");
+ for(const [v,color,dash] of [[s.savedA,"#ff9ba8",[8,5]],[s.savedB,"#b7a9ff",[3,5]]]){
+  if(!v)continue;
+  path(c,t=>[g.X(t),g.Y(displacement(v,t))],0,graphAxes.time,200,color,2.4,dash);
+ }
+ path(c,t=>[g.X(t),g.Y(displacement(s,t))],0,graphAxes.time,200,"#60e9e5",3);
+ marker(c,g.X(Math.min(s.t,graphAxes.time)),g.Y(displacement(s,s.t)),"#ffd080");
+}
+function makeTable(){
+ const rows=$("comparison");rows.replaceChildren();
+ for(const [name,v] of [["현재",snapshot()],["A",s.savedA],["B",s.savedB]]){
+  const tr=document.createElement("tr");
+  const vals=v?[name,number(v.E,0),signNum(v.q,1),number(v.m,0),number(v.angle,0),signNum(force(v),5),signNum(acceleration(v),3)]:[name,"—","—","—","—","—","—"];
+  vals.forEach(value=>{const td=document.createElement("td");td.textContent=value;tr.append(td);});rows.append(tr);
+ }
+}
+function render(){
+ updateStatus();
+ if(s.tab==="field"||s.tab==="motion")drawField();
+ if(s.tab==="graphs"){maxGraphAxes();forcePlot();motionPlot();}
+ makeTable();
+}
+function resetMotion(){s.t=0;s.last=null;s.running=false;s.ended=false;render();}
+function setQ(q){s.q=q;$("qInput").value=q;resetMotion();}
+function setTab(name,autorun=false){
+ s.tab=name;$("content").dataset.view=name;
+ document.querySelectorAll(".tabs button").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.tab===name)));
+ const motion=name==="motion";
+ for(const id of ["start","pause","again"])$(id).hidden=!motion;
+ for(const id of ["pos","neg","neutral","goMotion"])$(id).hidden=motion;
+ $("stageTitle").textContent=motion?"전하의 가속 운동 · 시작·일시정지":"평행판 전기장 속 시험 전하";
+ $("canvasHint").textContent=motion?"가상 입자가 정지 출발하여 전기력 방향으로 가속합니다. 극판에 도달하면 정지합니다.":"중앙 전하를 드래그해도 균일 전기장 속 전기력은 변하지 않습니다. 부호를 바꾸어 힘 방향을 비교하세요.";
+ if(name!=="motion")s.running=false;s.last=null;
+ if(autorun){s.t=0;s.ended=false;s.running=Math.abs(acceleration())>1e-12;}
+ requestAnimationFrame(render);
+}
+function setup(){
+ for(const [id,key,transform] of [["eInput","E",Number],["qInput","q",Number],["mInput","m",Number],["angleInput","angle",Number]]){
+  $(id).addEventListener("input",event=>{s[key]=transform(event.target.value);s.probeS=0;s.probeT=0;resetMotion();});
+ }
+ $("speedInput").addEventListener("input",event=>{s.speed=Number(event.target.value);s.last=null;render();});
+ $("pos").onclick=()=>setQ(2);
+ $("neg").onclick=()=>setQ(-2);
+ $("neutral").onclick=()=>setQ(0);
+ $("goMotion").onclick=()=>setTab("motion",true);
+ $("start").onclick=()=>{if(s.ended){s.t=0;s.ended=false;}s.running=Math.abs(acceleration())>1e-12;s.last=null;render();};
+ $("pause").onclick=()=>{s.running=false;s.last=null;render();};
+ $("again").onclick=()=>{s.t=0;s.ended=false;s.running=Math.abs(acceleration())>1e-12;s.last=null;render();};
+ $("saveA").onclick=()=>{s.savedA=snapshot();maxGraphAxes();render();};
+ $("saveB").onclick=()=>{s.savedB=snapshot();maxGraphAxes();render();};
+ $("axisReset").onclick=()=>{graphAxes.force=.012;graphAxes.time=4;maxGraphAxes();render();};
+ $("reset").onclick=()=>{Object.assign(s,defaults,{savedA:null,savedB:null,t:0,last:null,running:false,ended:false,probeS:0,probeT:0});
+  for(const [key,id] of [["E","eInput"],["q","qInput"],["m","mInput"],["angle","angleInput"],["speed","speedInput"]])$(id).value=s[key];
+  graphAxes.force=.012;graphAxes.time=4;render();};
+ $("full").onclick=()=>{const p=document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();if(p?.catch)p.catch(()=>{});};
+ document.addEventListener("fullscreenchange",()=>$("full").textContent=document.fullscreenElement?"⛶ 전체화면 종료":"⛶ 전체화면");
+ document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>setTab(b.dataset.tab));
+ mainCanvas.addEventListener("pointerdown",event=>{if(s.tab!=="field"||!geometry)return;const box=mainCanvas.getBoundingClientRect(),x=event.clientX-box.left,y=event.clientY-box.top;
+  const p=geometry.at(s.probeS,s.probeT);if(Math.hypot(x-p[0],y-p[1])>45)return;
+  s.drag=true;mainCanvas.setPointerCapture(event.pointerId);});
+ mainCanvas.addEventListener("pointermove",event=>{if(!s.drag||!geometry)return;const box=mainCanvas.getBoundingClientRect(),u=geometry.inverse(event.clientX-box.left,event.clientY-box.top);
+  s.probeS=clamp(u[0],-.5,.5);s.probeT=clamp(u[1],-.47,.47);render();});
+ const endDrag=()=>{s.drag=false;};mainCanvas.addEventListener("pointerup",endDrag);mainCanvas.addEventListener("pointercancel",endDrag);
+ document.addEventListener("visibilitychange",()=>{if(document.hidden){s.running=false;s.last=null;updateStatus();}});
+ window.addEventListener("resize",()=>requestAnimationFrame(render));
+ if(typeof ResizeObserver!=="undefined"){
+  const observer=new ResizeObserver(()=>requestAnimationFrame(render));
+  observer.observe($("content"));
+ }
+}
+function frame(ms){
+ if(s.running&&!document.hidden){
+  if(s.last!==null){
+   const dt=Math.min(.07,Math.max(0,(ms-s.last)/1000));
+   s.t+=dt*s.speed;
+   const stop=hitTime();
+   if(s.t>=stop){s.t=stop;s.ended=true;s.running=false;s.last=null;}
+  }
+  if(s.running)s.last=ms;
+  updateStatus();
+  if(s.tab==="motion")drawField();
+ }
+ requestAnimationFrame(frame);
+}
+setup();render();requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
