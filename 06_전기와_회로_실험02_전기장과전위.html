@@ -137,7 +137,42 @@ html,body{background:#050910!important;color:#eef6ff!important}
 .app :is(.metric,.card,.section,.small,.labelrow,.hint,.explain,.electric-concepts){color:#e6f3ff!important}
 .app :is(.metric,.small,.hint,.explain) :is(span,strong,b){color:#eaf6ff!important}
 .app :is(.section,.card) :is(input,select){accent-color:#4fe1ef}
-</style></head>
+</style><style id="electric-field-v6-compact">
+/* Keep this native field/potential lab's four original tabs intact. */
+@media(min-width:901px){
+ html,body{background:#07111e!important;color:#edf6ff!important;overflow:hidden!important}
+ .app{width:100%!important;max-width:none!important;height:100dvh!important;min-height:0!important;padding:7px 10px 8px!important;margin:0!important;overflow:hidden!important;background:#07111e!important}
+ body:has(#lab-viewbar) .app{height:calc(100dvh - var(--electric-bar-height,52px))!important}
+ .app .top{margin:0 0 3px!important;flex:0 0 auto!important}
+ .app .top h1{font-size:clamp(20px,1.8vw,26px)!important}
+ .electric-tabs{margin:0 0 5px!important;min-height:36px!important;gap:5px!important}
+ .electric-screen.is-active{min-height:0!important;flex:1 1 auto!important;overflow:hidden!important}
+ .app .layout,body[data-electric-tab="graph"] .app .layout{height:100%!important;min-height:0!important;grid-template-columns:minmax(0,4fr) minmax(245px,1fr)!important;gap:8px!important;align-items:stretch!important}
+ .app .layout>main{display:flex!important;flex-direction:column!important;min-height:0!important;height:100%!important;padding:0!important}
+ .app .toolbar{flex:0 0 auto!important;padding:6px!important;gap:5px!important}
+ .app .toolbar button{font-size:12px!important;padding:5px 8px!important;min-height:31px!important}
+ .app .scene{flex:1 1 auto!important;min-height:0!important;height:auto!important;max-height:none!important;overflow:hidden!important}
+ .app .scene canvas{width:100%!important;height:100%!important;display:block!important}
+ .app .side{min-width:0!important;overflow:auto!important;gap:7px!important}
+ .app .section{padding:9px 10px!important}
+ .app .section h2{font-size:14px!important;margin:0 0 6px!important}
+ .app .metric{padding:6px!important}
+ .app .metric span{font-size:12px!important}
+ .app .group{gap:4px!important}
+ .app .group button{font-size:11px!important;padding:5px 7px!important;min-height:29px!important}
+ .app .labelrow{margin:6px 0 3px!important}
+ .app .small{font-size:11px!important;line-height:1.3!important}
+ .app .hint{flex:0 0 auto!important;padding:6px 9px!important}
+}
+.app,.app .card,.app .section,.app .electric-concepts{color:#edf6ff!important}
+.app .card,.app .section,.app .electric-concepts .concept-card{background:#112238!important;border-color:#395b76!important}
+.app :is(.small,.hint,.labelrow,.explain,.subtitle,.muted){color:#d0e5f6!important}
+.app :is(.metric,.readout,.explain){background:#182c43!important;color:#f4fbff!important}
+.app :is(.metric,.readout,.explain) :is(span,b,strong){color:#f3fbff!important}
+.app :is(button,select){color:#f1fbff!important;background:#213e5a!important;border-color:#4f7694!important}
+.app button:is(.active,[aria-selected="true"]){color:#fff!important;background:#117589!important;border-color:#6cdbed!important}
+</style>
+</head>
 <body>
 <div class="app"><header class="top"><div><h1>⚡ 전기장과 전위 실험실</h1><p class="subtitle">전하를 끌어 옮기고 탐침으로 전기장의 방향과 전위를 관찰해 보세요.</p></div><span class="badge">고등학교 물리 · 점전하 모형</span></header>
 <div class="layout"><main class="card"><div class="toolbar"><button id="addPos">＋ 양전하 추가</button><button id="addNeg">− 음전하 추가</button><button id="probeBtn" class="active">⊕ 탐침 이동</button><span class="spacer"></span><button id="runBtn">▶ 시작</button><button id="resetParticleBtn">↺ 입자 되돌리기</button><button id="resetBtn">초기화</button></div><div class="scene" id="scene"><canvas id="field" aria-label="전하를 드래그하여 전기장과 전위를 탐구하는 시뮬레이션"></canvas><div class="floating" id="sceneHint">전하 ● 드래그 · 빈 곳 터치: 탐침 이동</div></div><div class="hint">빨강은 음의 전위, 청록은 양의 전위입니다. 흰색 등전위선과 화살표를 함께 비교해 보세요. 화살표는 전기장의 <b>방향</b>을 나타냅니다.</div></main>
