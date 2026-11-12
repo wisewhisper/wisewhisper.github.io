@@ -135,7 +135,25 @@ const modeDefs=(MODES[ID]||[["실험 장면",null]]).map((mode,i)=>({id:"m"+i,la
 const tabs=[...modeDefs,{id:"graphs",label:"그래프·비교"},{id:"concepts",label:"개념 설명"}];
 const buttons=[];
 let active=null;
-function announceResize(){requestAnimationFrame(()=>window.dispatchEvent(new Event("resize")));}
+function announceResize(){
+ requestAnimationFrame(()=>{
+  window.dispatchEvent(new Event("resize"));
+  // Rendering while a tab is hidden can leave Canvas at zero width. Redraw once it is visible.
+  if(root.dataset.view==="graphs"){
+   try{
+    if(ID==="공식28_쿨롱의법칙"||ID==="공식29_전기장"||ID==="공식31_전기용량"||ID==="공식34_전력"){
+      if(typeof window.render==="function")window.render();
+    }else if(ID==="공식33_옴의법칙"){
+      if(typeof window.drawGraph==="function")window.drawGraph();
+    }else if(ID==="실험01_옴의법칙과저항연결"){
+      if(typeof window.update==="function")window.update();
+    }else if(ID==="실험05_NPN트랜지스터스위치"){
+      if(typeof window.drawGraph==="function")window.drawGraph();
+    }
+   }catch(error){console.warn("Electric graph refresh:",ID,error);}
+  }
+ });
+}
 function choose(tab,activate){
  if(tab.id===active){if(activate&&tab.action){const btn=document.querySelector(tab.action);if(btn)btn.click();}return;}
  active=tab.id;
@@ -151,6 +169,7 @@ function choose(tab,activate){
  if(root.dataset.view!=="concepts"){
   announceResize();
   requestAnimationFrame(()=>requestAnimationFrame(announceResize));
+  setTimeout(announceResize,180);
  }
 }
 tabs.forEach((t,i)=>{
