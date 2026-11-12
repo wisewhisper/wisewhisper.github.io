@@ -20,7 +20,7 @@ function init(){
  const root=document.querySelector("main");if(!root)return;
  const panels=[...root.querySelectorAll(d.selector)];
  const types=d.types.split(",");
- if(panels.length!==types.length){console.warn("Electric lab panel mismatch",id,panels.length,types.length);return;}
+ if(!panels.length){console.warn("Electric lab: no matching panels",id);return;}if(panels.length!==types.length){console.warn("Electric lab panel mismatch; preserving unmatched panels",id,panels.length,types.length);}
  const shell=document.createElement("div");shell.className="e6-shell";
  const header=document.createElement("header");header.className="e6-header";
  const h=document.createElement("h1");h.textContent="⚡ "+(root.querySelector("h1")?.textContent||d.topic).replace(/^⚡\s*/,"");
@@ -33,7 +33,7 @@ function init(){
  const concepts=document.createElement("div");concepts.className="e6-concepts";
  const extras=[];
  const grouped={s:[],g:[],c:[],r:[],b:[],l:[]};
- panels.forEach((p,i)=>{const type=types[i];p.classList.add("e6-card");grouped[type].push(p);});
+ panels.forEach((p,i)=>{const type=types[i]||"l";p.classList.add("e6-card");grouped[type].push(p);});
  grouped.s.forEach(p=>scene.append(p));
  [...grouped.c,...grouped.r].forEach(p=>controls.append(p));
  area.append(scene,controls,concepts);shell.append(header,nav,area);document.body.append(shell);
@@ -48,7 +48,7 @@ function init(){
  const buttons=tabs.map(([key,label])=>{const b=document.createElement("button");b.type="button";b.textContent=label;b.dataset.tab=key;b.setAttribute("role","tab");b.onclick=()=>select(key);nav.append(b);return b;});
  function select(key){
  document.body.classList.toggle("e6-concept-mode",key==="concept");
- scene.replaceChildren(...(key==="graph"?[...grouped.g,...grouped.b]:grouped.s));
+ scene.replaceChildren(...(key==="graph"?([ ...grouped.g,...grouped.b].length?[...grouped.g,...grouped.b]:grouped.s):grouped.s));
  controls.replaceChildren(...(key==="graph"?[...grouped.c,...grouped.r]:[...grouped.c,...grouped.r]));
  buttons.forEach(b=>b.setAttribute("aria-selected",String(b.dataset.tab===key)));
  if(key!=="concept"){requestAnimationFrame(()=>{window.dispatchEvent(new Event("resize"));setTimeout(()=>window.dispatchEvent(new Event("resize")),80);});}
