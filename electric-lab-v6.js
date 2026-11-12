@@ -135,25 +135,46 @@ const modeDefs=(MODES[ID]||[["실험 장면",null]]).map((mode,i)=>({id:"m"+i,la
 const tabs=[...modeDefs,{id:"graphs",label:"그래프·비교"},{id:"concepts",label:"개념 설명"}];
 const buttons=[];
 let active=null;
+const GRAPH_RENDERER={
+ "공식28_쿨롱의법칙":"render",
+ "공식29_전기장":"render",
+ "공식30_점전하의전위":"render",
+ "공식31_전기용량":"render",
+ "공식32_전류":"render",
+ "공식33_옴의법칙":"drawGraph",
+ "공식34_전력":"render",
+ "실험01_옴의법칙과저항연결":"update",
+ "실험05_NPN트랜지스터스위치":"drawGraph",
+ "실험06_NPN트랜지스터증폭":"render"
+};
+let repaintPending=false;
+function graphRedraw(){
+ if(root.dataset.view!=="graphs"||repaintPending)return;
+ repaintPending=true;
+ requestAnimationFrame(()=>{
+  repaintPending=false;
+  if(root.dataset.view!=="graphs"||graphstage.getBoundingClientRect().width<1)return;
+  try{
+   // Existing per-lab renderers recalculate graphs using the latest input state.
+   // The graph remains mounted even when hidden, so old nodes and listeners survive.
+   window.dispatchEvent(new Event("resize"));
+   const fn=GRAPH_RENDERER[ID];
+   if(fn&&typeof window[fn]==="function")window[fn]();
+  }catch(error){console.warn("Electric lab graph redraw",ID,error);}
+ });
+}
 function announceResize(){
  requestAnimationFrame(()=>{
   window.dispatchEvent(new Event("resize"));
-  // Rendering while a tab is hidden can leave Canvas at zero width. Redraw once it is visible.
-  if(root.dataset.view==="graphs"){
-   try{
-    if(ID==="공식28_쿨롱의법칙"||ID==="공식29_전기장"||ID==="공식31_전기용량"||ID==="공식34_전력"){
-      if(typeof window.render==="function")window.render();
-    }else if(ID==="공식33_옴의법칙"){
-      if(typeof window.drawGraph==="function")window.drawGraph();
-    }else if(ID==="실험01_옴의법칙과저항연결"){
-      if(typeof window.update==="function")window.update();
-    }else if(ID==="실험05_NPN트랜지스터스위치"){
-      if(typeof window.drawGraph==="function")window.drawGraph();
-    }
-   }catch(error){console.warn("Electric graph refresh:",ID,error);}
-  }
+  graphRedraw();
  });
 }
+// Run AFTER each native input handler, not before it, so the chart uses current values.
+side.addEventListener("input",()=>queueMicrotask(graphRedraw));
+side.addEventListener("change",()=>queueMicrotask(graphRedraw));
+side.addEventListener("click",event=>{
+ if(event.target.closest("button"))queueMicrotask(graphRedraw);
+});
 function choose(tab,activate){
  if(tab.id===active){if(activate&&tab.action){const btn=document.querySelector(tab.action);if(btn)btn.click();}return;}
  active=tab.id;
