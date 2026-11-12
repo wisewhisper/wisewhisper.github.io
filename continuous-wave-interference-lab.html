@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0d1527">
+<title>연속파 중첩·간섭·정상파 통합실험실</title>
+<style>
+:root{color-scheme:dark;--bg:#08111f;--panel:#101d32;--pane:#0b182a;--border:#2d425b;--grid:#24364b;--txt:#f3f7fc;--muted:#b2c7de;--a:#4bc6ff;--b:#ffba62;--sum:#66efa5;--em:#ff79d1;--focus:#aadfff}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at 0 0,#172945,#08111f 55%);color:var(--txt);font-family:system-ui,-apple-system,'Noto Sans KR','Malgun Gothic',sans-serif}
+button,input,select{font:inherit}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.app{max-width:1450px;margin:0 auto;padding:14px 16px 18px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px;flex-wrap:wrap}
+h1{font-size:clamp(20px,2vw,27px);margin:0;font-weight:800;letter-spacing:-.5px}header p{color:var(--muted);margin:2px 0 0;font-size:13px}
+.title-legend{display:flex;gap:12px;flex-wrap:wrap}.item{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:#e0eaf8}
+.bullet{display:inline-block;width:12px;height:12px;border-radius:50%;background:var(--a)}.item.b .bullet{background:var(--b)}.item.s .bullet{background:var(--sum)}.item.m .bullet{background:var(--em)}
+.tabs{display:flex;gap:6px;overflow-x:auto;border-bottom:1px solid var(--border);padding-bottom:8px;margin-bottom:9px;scrollbar-width:thin}
+.tabs button{flex:none;white-space:nowrap;background:#15263e;border:1px solid #30445c;color:#c8daec;padding:8px 15px;border-radius:9px;cursor:pointer;font-size:14px;font-weight:700}
+.tabs button[aria-selected="true"]{background:#22668c;color:#fff;border-color:#6ebbe6}
+.toolbar{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:9px 10px;display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:9px}
+button.action{padding:8px 10px;cursor:pointer;border:1px solid #40617e;background:#213951;color:var(--txt);border-radius:8px;font-weight:700;font-size:13px;white-space:nowrap}
+button.action.primary{background:#186995;border-color:#53b2dd}button.action:hover{filter:brightness(1.15)}button.action:disabled{opacity:.4;cursor:not-allowed}
+#seek{flex:1 1 180px;accent-color:#7bcffe;min-width:105px;height:18px;cursor:pointer}
+.readout{font-size:13px;padding:6px 9px;color:#e6f6ff;white-space:nowrap;font-weight:800;border-radius:8px;background:#162a40;font-variant-numeric:tabular-nums}
+.readout.accent{color:#9af6cc}
+.subbar{display:flex;align-items:center;flex-wrap:wrap;gap:8px;font-size:13px;color:#d9e6f3;padding:0 2px 9px}
+.subbar label{white-space:nowrap}.subbar input[type=range]{accent-color:#77d6f5;max-width:180px}.subbar select{background:#152b42;border:1px solid #3c5b79;color:#fff;padding:5px 7px;border-radius:8px}
+.subbar .smallpush{margin-left:auto;color:var(--muted)}
+.workspace{display:grid;grid-template-columns:minmax(0,1.78fr) minmax(315px,1fr);gap:10px;height:clamp(335px,calc(100dvh - 315px),620px)}
+.plotcard{min-width:0;min-height:0;display:flex;flex-direction:column;border:1px solid var(--border);border-radius:14px;background:var(--pane);padding:10px}
+.plotcard h2{font-size:16px;line-height:1.3;margin:0 0 4px}.plotcard .blurb{font-size:12px;color:var(--muted);margin:0 0 5px;line-height:1.45}
+.canvas-wrap{flex:1;min-height:0;position:relative;overflow:hidden}
+canvas{display:block;width:100%;height:100%;border-radius:7px;background:#081321}
+.legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px;min-height:18px}.legend .item{font-size:12px}
+.message{margin-top:9px;min-height:39px;border-left:3px solid var(--sum);background:#132839;padding:9px 12px;border-radius:8px;font-size:13px;color:#e2eef6;line-height:1.48}
+.keyfoot{font-size:12px;color:var(--muted);margin:7px 0 0}
+[hidden]{display:none!important}
+.concept{background:var(--pane);border:1px solid var(--border);border-radius:14px;padding:18px;max-height:calc(100dvh - 247px);overflow:auto}
+.concept h2{font-size:18px;margin:0 0 10px}.concept h3{font-size:15px;margin:18px 0 6px}.concept p{font-size:14px;line-height:1.7;color:#d6e4f1;margin:6px 0}
+.formula{padding:12px;background:#152b40;border-radius:9px;border:1px solid #2e4b63;color:#fff;font-family:ui-monospace,Consolas,monospace;overflow-x:auto;font-size:15px}
+.concept-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.concept-grid>div{background:#102338;border:1px solid #2d435e;padding:12px;border-radius:10px}
+@media(max-width:940px){.app{padding:10px}.workspace{grid-template-columns:1fr;height:auto}.plotcard{height:360px}.plotcard:nth-child(2){height:330px}.title-legend{gap:8px}.subbar .smallpush{margin-left:0}.concept-grid{grid-template-columns:1fr}}
+@media(max-width:540px){.plotcard{height:315px}.plotcard:nth-child(2){height:315px}.toolbar{gap:5px}.toolbar .action{font-size:12px;padding:8px}.tabs button{font-size:12px;padding:8px 10px} .readout{font-size:12px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div><h1>🌊 연속파 중첩 · 간섭 · 정상파 실험실</h1><p>2022 개정 물리학 · 양쪽 파원에서 파동이 끊이지 않고 발생하며, 서로 통과한 뒤에도 계속 진동합니다.</p></div>
+    <div class="title-legend" aria-label="파동 색 구분"><span class="item"><i class="bullet"></i>파동 A →</span><span class="item b"><i class="bullet"></i>파동 B ←</span><span class="item s"><i class="bullet"></i>합성파 A+B</span></div>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="실험실 탭">
+    <button type="button" role="tab" aria-selected="true" data-tab="approach">① 접근과 지속 중첩</button>
+    <button type="button" role="tab" aria-selected="false" data-tab="zoom">② 중첩부 확대</button>
+    <button type="button" role="tab" aria-selected="false" data-tab="standing">③ 정상파의 마디·배</button>
+    <button type="button" role="tab" aria-selected="false" data-tab="phase">④ 위상차 실험</button>
+    <button type="button" role="tab" aria-selected="false" data-tab="concept">⑤ 원리 설명</button>
+  </nav>
+
+  <section id="simArea">
+    <div class="toolbar" aria-label="시간 조작">
+      <button class="action" id="reset">↺ 처음</button>
+      <button class="action" id="prev">− ¼T</button>
+      <button class="action primary" id="next">+ ¼T</button>
+      <button class="action" id="play">▶ 재생</button>
+      <button class="action" id="meet">만남 3T</button>
+      <button class="action" id="peak">진폭 2A 순간</button>
+      <button class="action" id="steady">정상파 8.25T</button>
+      <span class="readout" id="timeLabel">t = 0.00T</span>
+      <span class="readout accent" id="stageLabel">접근 중</span>
+      <input type="range" min="0" max="12" step="0.25" value="0" id="seek" aria-label="시간을 4분의 1주기 단위로 변경">
+    </div>
+    <div class="subbar">
+      <label>재생 속도 <select id="speed"><option value="0.5">느리게 (0.5T/s)</option><option value="0.8" selected>보통 (0.8T/s)</option><option value="1.6">빠르게 (1.6T/s)</option></select></label>
+      <label>관측 위치 x = <output id="probeLabel">0.00λ</output> <input id="probe" type="range" min="-1" max="1" step="0.25" value="0" aria-label="시간 그래프 관측 위치 선택"></label>
+      <label id="phaseControl" hidden>파원 B의 위상차 <select id="phaseValue"><option value="0">0° (같은 위상)</option><option value="90">90°</option><option value="180">180° (반대 위상)</option><option value="270">270°</option></select></label>
+      <span class="smallpush">A = B = 1 · λ = 1 · T = 1 · v = λ/T · 양쪽 동일 속력</span>
+    </div>
+
+    <div class="workspace" id="workspace">
+      <section class="plotcard">
+        <h2 id="mainTitle">공간에 따른 변위: 파동 A / B / 합성파</h2>
+        <p class="blurb" id="mainDesc">각 파동을 별도 줄에 표시합니다. 가로축은 위치 x, 세로축은 변위 y입니다. 연속파의 앞부분이 서로 만나면서 중첩 범위가 넓어집니다.</p>
+        <div class="canvas-wrap"><canvas id="mainCanvas" role="img" aria-label="두 연속파가 마주 오며 중첩되는 공간 그래프"></canvas></div>
+        <div class="legend"><span class="item"><i class="bullet"></i>파동 A</span><span class="item b"><i class="bullet"></i>파동 B</span><span class="item s"><i class="bullet"></i>합성파</span><span class="item m"><i class="bullet"></i>보강점·마디·배 표시</span></div>
+      </section>
+      <section class="plotcard">
+        <h2 id="sideTitle">관측점의 시간-변위 그래프</h2>
+        <p class="blurb" id="sideDesc">가로축: 시간 t · 세로축: 변위 y. 시간 변화와 현재 순간을 동시에 표시합니다.</p>
+        <div class="canvas-wrap"><canvas id="sideCanvas" role="img" aria-label="선택한 위치에서 파동 A B 합성파의 시간 변위 그래프"></canvas></div>
+        <div class="legend"><span class="item"><i class="bullet"></i>yA(t)</span><span class="item b"><i class="bullet"></i>yB(t)</span><span class="item s"><i class="bullet"></i>yA(t)+yB(t)</span></div>
+      </section>
+    </div>
+    <div class="message" id="message" role="status" aria-live="polite">처음에는 두 연속파의 앞부분이 떨어져 있습니다. ¼T 버튼을 누르면 각각 λ/4만큼 나아갑니다.</div>
+    <p class="keyfoot">조작: ←/→ = ¼T씩 이동, 스페이스 = 재생·일시정지. 재생은 12T 이후에도 계속됩니다. 그래프에서 ±2A 눈금은 합성파의 최대 가능 진폭입니다.</p>
+  </section>
+
+  <section class="concept" id="conceptArea" hidden>
+    <h2>개념 정리: 연속된 두 파동이 만나면 어떻게 될까?</h2>
+    <div class="concept-grid">
+      <div><h3>1. 파원은 계속 진동한다</h3><p>왼쪽 파원 A(x = −5λ)는 오른쪽으로, 오른쪽 파원 B(x = +5λ)는 왼쪽으로 <b>같은 진폭 A, 파장 λ, 주기 T, 속력 v</b>의 정현파를 끊임없이 발생시킵니다. 처음에는 각 파동의 앞부분이 떨어져 있지만, t = 3T에 중앙에서 처음 만나고, t ≈ 8T 이후에는 두 파동이 전 영역에서 중첩됩니다.</p></div>
+      <div><h3>2. 합성파는 변위의 합이다</h3><p>같은 위치 x, 같은 시간 t에서 <b>각 파동의 변위를 부호까지 포함하여 더합니다.</b> 파동은 충돌해 반사되는 것이 아니라 서로 통과해 본래 진행 방향으로 계속 갑니다.</p></div>
+      <div><h3>3. 보강점과 상쇄점</h3><p>같은 위상일 때 공간에 고정되는 <b>배(antinode)</b>에서는 진폭이 2A이고, <b>마디(node)</b>에서는 변위가 늘 0입니다. 2A는 항상 위로 2만큼 올라가 있다는 뜻이 아니라, 그 지점이 진동하며 도달할 수 있는 최대 변위의 크기를 의미합니다.</p></div>
+      <div><h3>4. ¼주기로 움직여 관찰</h3><p>완전 중첩 상태에서 배의 순간 변위는 0 → +2A → 0 → −2A → 0 순서로 바뀔 수 있습니다. 반면 마디의 변위는 항상 0이며, 이 차이가 정상파의 핵심 특징입니다.</p></div>
+    </div>
+    <h3>수학적 관계 (동일 위상·양쪽 동일 진폭, 중첩 영역)</h3>
+    <div class="formula">yA(x,t) = A sin[2π(t/T − x/λ − 3)]
+
+yB(x,t) = A sin[2π(t/T + x/λ − 3)]
+
+y합(x,t) = 2A sin[2π(t/T − 3)] cos(2πx/λ)</div>
+    <p>이 식은 두 파동이 <b>이미 도달해 겹친 영역</b>에 적용됩니다. 아직 파동이 도달하지 않은 지점의 변위는 0입니다. 시간의 기준은 양쪽 파동이 t = 0일 때 이미 파원에서 2λ만큼 진행한 상태로 잡았습니다.</p>
+    <h3>마디와 배의 위치</h3>
+    <p><b>배:</b> x = nλ/2 (n은 정수), 최대 진폭 2A. <b>마디:</b> x = (2n+1)λ/4, 항상 변위 0. 이웃한 마디 사이 거리와 이웃한 배 사이 거리는 모두 λ/2입니다.</p>
+    <h3>확인 질문</h3>
+    <p>① t = 3.25T에 중앙 x = 0에서 yA, yB, y합을 비교해 보세요. ② t = 8.25T 이후 x = 0.25λ에서 합성파가 왜 움직이지 않는지 살펴보세요. ③ 탭 ④에서 파원 B를 180° 늦추거나 앞당기면 마디와 배의 위치가 어떻게 바뀌나요?</p>
+    <p class="keyfoot">모형의 단위: λ = 1, T = 1, v = 1, A = 1. 이상적인 선형 매질을 가정하며, 파원 가동 직후 생기는 앞부분만 아주 짧게 부드럽게 처리했습니다.</p>
+  </section>
+</div>
+<script>
+(()=>{
+'use strict';
+const C={bg:'#081321',grid:'#2b4158',axis:'#ccdeee',sub:'#a4bdd5',a:'#4bc6ff',b:'#ffba62',s:'#66efa5',mark:'#ff79d1',guide:'#8198ae'};
+const TAU=2*Math.PI, FROM=-5, TO=5, START_LEAD=2, FRONT_MEET=3, FULL=8;
+const $=id=>document.getElementById(id);
+const main=$('mainCanvas'),side=$('sideCanvas');const g=main.getContext('2d'),h=side.getContext('2d');
+const state={tab:'approach',t:0,play:false,last:0,raf:null,speed:.8,probe:0,delta:0,extent:12};
+let W=900,H=500,SW=450,SH=500;
+function clamp(x,a,b){return Math.max(a,Math.min(b,x))}
+function reached(x,time,which){return which===0 ? time+START_LEAD-(x-FROM) : time+START_LEAD-(TO-x)}
+function wave(x,time,which,delta=state.tab==='phase'?state.delta:0){
+ if(x<FROM-1e-8||x>TO+1e-8)return 0;
+ const age=reached(x,time,which);if(age<=0)return 0;
+ const ramp=age>=.09?1:.5-.5*Math.cos(Math.PI*age/.09);
+ return ramp*Math.sin(TAU*age+(which===1?delta:0));
+}
+function sum(x,time,d){return wave(x,time,0,d)+wave(x,time,1,d)}
+function xmap(x,x0,x1,r){return r.x+(x-x0)*(r.w/(x1-x0))}
+function ymap(y,y0,y1,r){return r.y+(y1-y)*(r.h/(y1-y0))}
+function text(ctx,s,x,y,color=C.sub,font='12px system-ui',align='left'){
+ ctx.fillStyle=color;ctx.font=font;ctx.textAlign=align;ctx.textBaseline='middle';ctx.fillText(s,x,y)
+}
+function dash(ctx,arr){ctx.setLineDash(arr)}
+function axes(ctx,r,xi,xa,yi,ya,xt,yt,opts={}){
+ ctx.strokeStyle=C.grid;ctx.lineWidth=1;
+ xt.forEach(v=>{const x=xmap(v,xi,xa,r);ctx.beginPath();ctx.moveTo(x,r.y);ctx.lineTo(x,r.y+r.h);ctx.stroke()});
+ yt.forEach(v=>{const y=ymap(v,yi,ya,r);ctx.beginPath();ctx.moveTo(r.x,y);ctx.lineTo(r.x+r.w,y);ctx.stroke()});
+ ctx.strokeStyle=C.axis;ctx.lineWidth=1.3;
+ if(yi<=0&&ya>=0){let y=ymap(0,yi,ya,r);ctx.beginPath();ctx.moveTo(r.x,y);ctx.lineTo(r.x+r.w,y);ctx.stroke()}
+ if(xi<=0&&xa>=0){let x=xmap(0,xi,xa,r);ctx.beginPath();ctx.moveTo(x,r.y);ctx.lineTo(x,r.y+r.h);ctx.stroke()}
+ if(opts.yLabels!==false)yt.forEach(v=>text(ctx,`${v}`,r.x-8,ymap(v,yi,ya,r),C.sub,'11px system-ui','right'));
+ if(opts.xLabels!==false)xt.forEach(v=>text(ctx,opts.xText?opts.xText(v):`${v}`,xmap(v,xi,xa,r),r.y+r.h+13,C.sub,'11px system-ui','center'));
+ if(opts.xTitle)text(ctx,opts.xTitle,r.x+r.w/2,r.y+r.h+32,C.axis,'12px system-ui','center');
+ if(opts.yTitle){ctx.save();ctx.translate(Math.max(10,r.x-34),r.y+r.h/2);ctx.rotate(-Math.PI/2);text(ctx,opts.yTitle,0,0,C.axis,'12px system-ui','center');ctx.restore()}
+}
+function plot(ctx,r,xi,xa,yi,ya,fn,color,style='solid',width=2.7,onlyActive=false,which=0){
+ ctx.save();ctx.lineWidth=width;ctx.lineJoin='round';ctx.lineCap='round';ctx.strokeStyle=color;
+ if(style==='dashed')dash(ctx,[9,7]);else if(style==='dotted')dash(ctx,[3,6]);
+ ctx.beginPath();let begun=false;
+ const n=Math.max(600,Math.ceil(r.w*1.5));
+ for(let j=0;j<=n;j++){
+  const x=xi+(xa-xi)*j/n;
+  const active=!onlyActive || reached(x,state.t,which)>0;
+  if(!active){begun=false;continue}
+  const y=fn(x);const px=xmap(x,xi,xa,r),py=ymap(y,yi,ya,r);
+  if(!begun){ctx.moveTo(px,py);begun=true}else ctx.lineTo(px,py)
+ }
+ ctx.stroke();ctx.restore()
+}
+function curveFromTime(ctx,r,ti,tf,yi,ya,fn,color,style='solid',width=2.4){
+ ctx.save();ctx.lineWidth=width;ctx.strokeStyle=color;
+ if(style==='dashed')dash(ctx,[8,7]);else if(style==='dotted')dash(ctx,[3,7]);
+ ctx.beginPath();const n=700;
+ for(let j=0;j<=n;j++){
+  let t=ti+(tf-ti)*j/n;let x=xmap(t,ti,tf,r),y=ymap(fn(t),yi,ya,r);
+  if(j===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)
+ }
+ ctx.stroke();ctx.restore()
+}
+function ticks(a,b,step){let out=[];for(let n=Math.ceil((a-1e-8)/step);n*step<=b+1e-8;n++)out.push(+((n*step).toFixed(6)));return out}
+function fmt(t){return (Math.round(t*100)/100).toFixed(2)}
+function drawSourceFronts(ctx,r,xi,xa,yi,ya,withLabels=true){
+ const l=FROM+START_LEAD+state.t, rr=TO-START_LEAD-state.t;
+ // left/right emission fronts, clipped to domain; the front never disappears, it travels beyond the opposite source
+ const valid=[{x:l,col:C.a,label:'A 파면 →'},{x:rr,col:C.b,label:'← B 파면'}];
+ valid.forEach(o=>{if(o.x<xi||o.x>xa)return;const px=xmap(o.x,xi,xa,r);ctx.save();dash(ctx,[4,5]);ctx.strokeStyle=o.col;ctx.globalAlpha=.75;ctx.beginPath();ctx.moveTo(px,r.y);ctx.lineTo(px,r.y+r.h);ctx.stroke();ctx.restore();if(withLabels)text(ctx,o.label,px+3,r.y+9,o.col,'11px system-ui')});
+}
+function overlapShading(ctx,r,xi,xa){
+ const left=Math.max(xi,TO-START_LEAD-state.t),right=Math.min(xa,FROM+START_LEAD+state.t);
+ if(right<=left)return;
+ ctx.fillStyle='rgba(102,239,165,.07)';ctx.fillRect(xmap(left,xi,xa,r),r.y,xmap(right,xi,xa,r)-xmap(left,xi,xa,r),r.h)
+}
+function nodeLocations(kind,xi,xa,delta=0){
+ const d=delta/(4*Math.PI);let result=[];
+ for(let n=-30;n<=30;n++){
+  const x=(kind==='node' ? .25:.0)+.5*n-d;
+  if(x>=xi-1e-5&&x<=xa+1e-5)result.push(+x.toFixed(4));
+ }
+ return result
+}
+function markNodes(ctx,r,xi,xa,yi,ya,delta=0,fullLabels=true){
+ const inOverlap=x=>reached(x,state.t,0)>0 && reached(x,state.t,1)>0;
+ nodeLocations('node',xi,xa,delta).forEach(x=>{
+  if(!inOverlap(x))return;
+  const px=xmap(x,xi,xa,r);ctx.save();dash(ctx,[3,5]);ctx.strokeStyle='#bd9bc5';ctx.globalAlpha=.55;ctx.beginPath();ctx.moveTo(px,r.y);ctx.lineTo(px,r.y+r.h);ctx.stroke();ctx.restore();
+  ctx.beginPath();ctx.arc(px,ymap(0,yi,ya,r),4.5,0,TAU);ctx.fillStyle='#d2a3db';ctx.fill();
+  if(fullLabels&&Math.abs(x)<.61)text(ctx,'마디',px,r.y+r.h-11,'#efbdea','10px system-ui','center')
+ });
+ nodeLocations('anti',xi,xa,delta).forEach(x=>{
+  if(!inOverlap(x))return;
+  const px=xmap(x,xi,xa,r);ctx.save();dash(ctx,[2,6]);ctx.strokeStyle=C.mark;ctx.globalAlpha=.5;ctx.beginPath();ctx.moveTo(px,r.y);ctx.lineTo(px,r.y+r.h);ctx.stroke();ctx.restore();
+  if(fullLabels&&Math.abs(x)<.75)text(ctx,'배 (최대 2A)',px,r.y+12,C.mark,'11px system-ui','center')
+ });
+}
+function plotSpaceTriple(){
+ const xi=FROM,xa=TO,l=48,right=15,top=19,bottom=47;
+ const width=W-l-right,panelH=(H-top-bottom)/3;
+ const specs=[
+  {fn:x=>wave(x,state.t,0,0),color:C.a,label:'A → 오른쪽',range:1.22,which:0},
+  {fn:x=>wave(x,state.t,1,0),color:C.b,label:'B ← 왼쪽',range:1.22,which:1},
+  {fn:x=>sum(x,state.t,0),color:C.s,label:'합성파 A+B',range:2.25,which:2}
+ ];
+ specs.forEach((s,i)=>{
+  const r={x:l,y:top+i*panelH+22,w:width,h:panelH-39};
+  overlapShading(g,r,xi,xa);
+  axes(g,r,xi,xa,-s.range,s.range,ticks(-5,5,1),i===2?[-2,-1,0,1,2]:[-1,0,1],{xLabels:i===2,xTitle:i===2?'위치 x (λ 단위)':undefined,yLabels:true});
+  if(i===2){
+    g.save();dash(g,[5,5]);g.strokeStyle='rgba(255,121,209,.65)';
+    for(let v of [-2,2]){const y=ymap(v,-s.range,s.range,r);g.beginPath();g.moveTo(r.x,y);g.lineTo(r.x+r.w,y);g.stroke()}g.restore();
+    if(state.t>=3){let x=0,ya=wave(0,state.t,0,0),yb=wave(0,state.t,1,0),v=ya+yb;
+      if(Math.abs(v)>1.8){const px=xmap(0,xi,xa,r),py=ymap(v,-s.range,s.range,r);g.beginPath();g.arc(px,py,6,0,TAU);g.fillStyle=C.mark;g.fill();text(g,`${fmt(v)}A`,px+10,py-12,C.mark,'bold 12px system-ui')}}
+  }
+  plot(g,r,xi,xa,-s.range,s.range,s.fn,s.color,'solid',i===2?3.5:2.8,i!==2,s.which);
+  if(i===2&&state.t>=3)markNodes(g,r,xi,xa,-s.range,s.range,0,false);
+  if(i!==2)drawSourceFronts(g,r,xi,xa,-s.range,s.range,false);
+  text(g,s.label,l+8,top+i*panelH+10,s.color,'bold 13px system-ui');
+ });
+ text(g,'연두색 음영: 두 연속파가 모두 도달한 중첩 구간',l+4,H-6,C.sub,'11px system-ui');
+}
+function dynamicTimeWindow(){const width=4.5;return Math.max(0,state.t-2.15)}
+function plotSideTime(xprobe=state.probe){
+ const left=54,right=15,top=16,bottom=46,r={x:left,y:top,w:SW-left-right,h:SH-top-bottom};
+ let ti=dynamicTimeWindow(),tf=ti+4.5;
+ const xlabels=ticks(ti,tf,.5);
+ axes(h,r,ti,tf,-2.25,2.25,xlabels,[-2,-1,0,1,2],{xTitle:'시간 t (T 단위)',yTitle:'변위 y (A 단위)',xText:v=>Number.isInteger(v)?String(v):v.toFixed(1)});
+ curveFromTime(h,r,ti,tf,-2.25,2.25,t=>wave(xprobe,t,0,0),C.a,'dashed',2.5);
+ curveFromTime(h,r,ti,tf,-2.25,2.25,t=>wave(xprobe,t,1,0),C.b,'dotted',2.8);
+ curveFromTime(h,r,ti,tf,-2.25,2.25,t=>sum(xprobe,t,0),C.s,'solid',3.0);
+ const px=xmap(state.t,ti,tf,r);h.save();dash(h,[6,5]);h.strokeStyle='rgba(240,247,255,.85)';h.beginPath();h.moveTo(px,r.y);h.lineTo(px,r.y+r.h);h.stroke();h.restore();
+ [[wave(xprobe,state.t,0,0),C.a],[wave(xprobe,state.t,1,0),C.b],[sum(xprobe,state.t,0),C.s]].forEach(([val,c])=>{h.beginPath();h.arc(px,ymap(val,-2.25,2.25,r),4.5,0,TAU);h.fillStyle=c;h.fill();h.strokeStyle='#fff9';h.lineWidth=1;h.stroke()});
+ text(h,`x = ${fmt(xprobe)}λ  |  yA=${fmt(wave(xprobe,state.t,0,0))}  yB=${fmt(wave(xprobe,state.t,1,0))}  합=${fmt(sum(xprobe,state.t,0))}`,left+4,11,C.axis,'11px system-ui');
+}
+function drawOverlay(xi=-1.5,xa=1.5,phase=0,withGuides=true){
+ const left=56,right=17,top=27,bottom=49,r={x:left,y:top,w:W-left-right,h:H-top-bottom};
+ overlapShading(g,r,xi,xa);
+ axes(g,r,xi,xa,-2.25,2.25,ticks(xi,xa,.25),[-2,-1,0,1,2],{xLabels:true,xTitle:'위치 x (λ 단위)',yTitle:'변위 y (A 단위)',xText:x=>Number.isInteger(x)?`${x}`:`${x.toFixed(2)}`});
+ if(withGuides)markNodes(g,r,xi,xa,-2.25,2.25,phase,true);
+ plot(g,r,xi,xa,-2.25,2.25,x=>wave(x,state.t,0,phase),C.a,'dashed',2.8,true,0);
+ plot(g,r,xi,xa,-2.25,2.25,x=>wave(x,state.t,1,phase),C.b,'dotted',3.0,true,1);
+ plot(g,r,xi,xa,-2.25,2.25,x=>sum(x,state.t,phase),C.s,'solid',4);
+ drawSourceFronts(g,r,xi,xa,-2.25,2.25,false);
+ // reference amplitude levels
+ g.save();dash(g,[7,6]);g.strokeStyle=C.mark;g.globalAlpha=.8;
+ for(const val of [-2,2]){let py=ymap(val,-2.25,2.25,r);g.beginPath();g.moveTo(r.x,py);g.lineTo(r.x+r.w,py);g.stroke();text(g,val>0?'+2A':'−2A',r.x+7,py-10,C.mark,'bold 12px system-ui')}
+ g.restore();
+ if(state.t>=3){const ya=wave(0,state.t,0,phase),yb=wave(0,state.t,1,phase);text(g,`중심점 x=0:  A ${fmt(ya)}  +  B ${fmt(yb)}  =  ${fmt(ya+yb)}`,r.x+8,r.y+16,C.axis,'bold 13px system-ui')}
+}
+function drawStanding(){
+ const xi=-2.2,xa=2.2,left=54,right=15,top=22,bottom=46,r={x:left,y:top,w:W-left-right,h:H-top-bottom};
+ overlapShading(g,r,xi,xa);
+ axes(g,r,xi,xa,-2.25,2.25,ticks(-2,2,.25),[-2,-1,0,1,2],{xTitle:'위치 x (λ 단위)',yTitle:'변위 y (A 단위)',xText:v=>Number.isInteger(v)?String(v):v.toFixed(2)});
+ markNodes(g,r,xi,xa,-2.25,2.25,0,true);
+ if(state.t>=FULL){
+  plot(g,r,xi,xa,-2.25,2.25,x=>2*Math.abs(Math.cos(TAU*x)),C.mark,'dashed',1.7);
+  plot(g,r,xi,xa,-2.25,2.25,x=>-2*Math.abs(Math.cos(TAU*x)),C.mark,'dashed',1.7);
+ }
+ plot(g,r,xi,xa,-2.25,2.25,x=>wave(x,state.t,0,0),C.a,'dashed',2.4,true,0);
+ plot(g,r,xi,xa,-2.25,2.25,x=>wave(x,state.t,1,0),C.b,'dotted',2.6,true,1);
+ plot(g,r,xi,xa,-2.25,2.25,x=>sum(x,state.t,0),C.s,'solid',3.8);
+ text(g,`배: x = 0, ±0.5λ, ±1λ…  /  마디: x = ±0.25λ, ±0.75λ…`,left+6,12,C.axis,'12px system-ui');
+}
+function drawComparison(){
+ const left=52,right=16,top=14,bottom=40;
+ const hh=(SH-top-bottom-32)/2;
+ let ti=Math.max(6.5,state.t-2.1),tf=ti+4.25;
+ const stations=[{x:0,label:'배 x = 0 (최대 진폭 2A)',color:C.s},{x:.25,label:'마디 x = 0.25λ (진폭 0)',color:C.mark}];
+ stations.forEach((s,i)=>{
+  const r={x:left,y:top+i*(hh+30)+23,w:SW-left-right,h:hh-10};
+  axes(h,r,ti,tf,-2.2,2.2,ticks(ti,tf,1),[-2,0,2],{xLabels:i===1,xText:v=>String(v)});
+  curveFromTime(h,r,ti,tf,-2.2,2.2,tm=>sum(s.x,tm,0),s.color,'solid',2.8);
+  const tcur=clamp(state.t,ti,tf);const px=xmap(tcur,ti,tf,r);
+  h.save();dash(h,[5,5]);h.strokeStyle='#eff7ffa5';h.beginPath();h.moveTo(px,r.y);h.lineTo(px,r.y+r.h);h.stroke();h.restore();
+  text(h,s.label,left+7,top+i*(hh+30)+7,s.color,'bold 13px system-ui')
+ });
+ text(h,'시간 t (T 단위)',SW/2,SH-10,C.axis,'12px system-ui','center');
+}
+function drawPhase(){
+ const delta=state.delta,xi=-2,xa=2,left=53,right=14,top=29,bottom=47,r={x:left,y:top,w:W-left-right,h:H-top-bottom};
+ overlapShading(g,r,xi,xa);
+ axes(g,r,xi,xa,-2.25,2.25,ticks(-2,2,.25),[-2,-1,0,1,2],{xTitle:'위치 x (λ 단위)',yTitle:'변위 y (A 단위)',xText:v=>Number.isInteger(v)?String(v):v.toFixed(2)});
+ markNodes(g,r,xi,xa,-2.25,2.25,delta,true);
+ if(state.t>=8){
+  plot(g,r,xi,xa,-2.25,2.25,x=>2*Math.abs(Math.cos(TAU*x+delta/2)),C.mark,'dashed',1.3);
+  plot(g,r,xi,xa,-2.25,2.25,x=>-2*Math.abs(Math.cos(TAU*x+delta/2)),C.mark,'dashed',1.3);
+ }
+ plot(g,r,xi,xa,-2.25,2.25,x=>wave(x,state.t,0,delta),C.a,'dashed',2.6,true,0);
+ plot(g,r,xi,xa,-2.25,2.25,x=>wave(x,state.t,1,delta),C.b,'dotted',2.9,true,1);
+ plot(g,r,xi,xa,-2.25,2.25,x=>sum(x,state.t,delta),C.s,'solid',3.8);
+ text(g,`파원 B의 위상차 = ${Math.round(delta*180/Math.PI)}°  ·  마디·배의 이동을 확인`,left+6,12,C.axis,'12px system-ui');
+}
+function drawPhaseSide(){
+ const left=52,right=15,top=16,bottom=42,r={x:left,y:top,w:SW-left-right,h:SH-top-bottom};
+ const ti=Math.max(7,state.t-2),tf=ti+4;
+ axes(h,r,ti,tf,-2.25,2.25,ticks(ti,tf,.5),[-2,-1,0,1,2],{xTitle:'시간 t (T 단위)',yTitle:'변위 y (A 단위)',xText:v=>Number.isInteger(v)?String(v):v.toFixed(1)});
+ curveFromTime(h,r,ti,tf,-2.25,2.25,tm=>wave(0,tm,0,state.delta),C.a,'dashed',2.5);
+ curveFromTime(h,r,ti,tf,-2.25,2.25,tm=>wave(0,tm,1,state.delta),C.b,'dotted',2.5);
+ curveFromTime(h,r,ti,tf,-2.25,2.25,tm=>sum(0,tm,state.delta),C.s,'solid',3.2);
+ const px=xmap(state.t,ti,tf,r);
+ h.save();dash(h,[5,5]);h.strokeStyle=C.axis;h.beginPath();h.moveTo(px,r.y);h.lineTo(px,r.y+r.h);h.stroke();h.restore();
+ text(h,`x = 0 · 합성 최대 진폭 = ${Math.abs(2*Math.cos(state.delta/2)).toFixed(2)}A`,left+5,11,C.axis,'12px system-ui');
+}
+function stage(){if(state.t<FRONT_MEET-1e-5)return '서로 접근';if(state.t<FRONT_MEET+.01)return '중앙에서 만남';if(state.t<FULL-.01)return '중첩 영역 확장';return '정상파 지속 진동'}
+function updateMessage(){
+ const t=state.t,tab=state.tab,probe=state.probe;
+ let s='';
+ if(tab==='approach'){
+  if(t<3)s=`A와 B는 아직 만나지 않았습니다. 각 파원이 계속 정현파를 내보내고 있으며, 가운데 빈 구간의 폭은 약 ${fmt(Math.max(0,6-2*t))}λ입니다.`;
+  else if(t<8)s=`중앙에서 만나 파동의 중첩 구간이 넓어지고 있습니다. t = 3.25T에 x = 0에서 yA = +1, yB = +1, 합성 변위 = +2A를 확인할 수 있습니다.`;
+  else s=`양쪽 파동이 전체 영역에 도달했습니다. 보강되는 위치(배)에서는 진폭이 2A, 상쇄되는 위치(마디)에서는 0이며 두 파원은 계속 진동합니다.`;
+ } else if(tab==='zoom'){
+  const a=wave(0,t,0,0),b=wave(0,t,1,0);
+  s=`중첩부를 확대했습니다. 중앙 x=0에서 현재 A=${fmt(a)}A, B=${fmt(b)}A, 합성=${fmt(a+b)}A입니다. 분홍 점선 ±2A는 진폭 한계이며 순간 변위는 시간에 따라 변합니다.`;
+ } else if(tab==='standing'){
+  s=t<8?'정상파가 공간 전체에 자리 잡는 중입니다. [정상파 8.25T] 버튼으로 충분히 중첩된 뒤의 마디·배를 확인해 보세요.':'분홍색 점선은 정상파 진폭의 경계입니다. 배(x=0)는 +2A↔−2A로 진동하지만 마디(x=0.25λ)는 항상 변위 0을 유지합니다.';
+ } else if(tab==='phase'){
+  const degree=Math.round(state.delta*180/Math.PI);
+  s=`기본 실험에서는 두 파원이 같은 위상(0°)입니다. 이 탭에서만 B에 ${degree}° 위상차를 주었습니다. 마디·배는 기본 위치에서 왼쪽으로 ${fmt(degree/720)}λ 이동합니다.`;
+ }
+ const msg=$('message');msg.textContent=s;
+}
+function updateControls(){
+ $('timeLabel').textContent=`t = ${fmt(state.t)}T`;$('stageLabel').textContent=stage();
+ if(state.t>state.extent-.001){state.extent=Math.ceil((state.t+4)/4)*4;}
+ $('seek').max=state.extent;
+ // playback can show intermediate frames while slider retains 1/4T step, so value is rounded for the slider only
+ $('seek').value=String(Math.round(state.t*4)/4);
+ $('prev').disabled=state.t<=0;
+ $('play').textContent=state.play?'❚❚ 일시정지':'▶ 재생';
+ $('phaseControl').hidden=state.tab!=='phase';
+ $('probeLabel').textContent=`${fmt(state.probe)}λ`;
+ $('probe').disabled=state.tab==='standing'||state.tab==='phase';
+}
+function draw(){
+ updateControls();updateMessage();
+ if(state.tab==='concept')return;
+ g.clearRect(0,0,W,H);h.clearRect(0,0,SW,SH);
+ g.fillStyle=C.bg;g.fillRect(0,0,W,H);h.fillStyle=C.bg;h.fillRect(0,0,SW,SH);
+ if(state.tab==='approach'){plotSpaceTriple();plotSideTime()}
+ else if(state.tab==='zoom'){drawOverlay(-1.5,1.5,0,true);plotSideTime()}
+ else if(state.tab==='standing'){drawStanding();drawComparison()}
+ else if(state.tab==='phase'){drawPhase();drawPhaseSide()}
+}
+const tabDesc={
+ approach:['공간에서 본 연속파 A · B · 합성파','파란색 A와 주황색 B는 별도 줄에, 초록색 합성파는 아래 줄에 표시합니다. 가로축=위치, 세로축=변위.','관측점에서 기록한 시간-변위','가로축=시간 t · 세로축=변위 y. 관측 위치를 바꿔 파동이 도달하는 시점과 보강을 비교합니다.'],
+ zoom:['중첩부 확대: 같은 좌표축에서 겹쳐 보기','가로축=위치 x · 세로축=변위 y. 분홍 ±2A 안내선과 마디·배 위치를 확인해 보세요.','관측점의 시간-변위 변화','x=0을 선택하고 t=3.25T로 이동해 yA=1, yB=1, 합성파=2를 비교해 보세요.'],
+ standing:['정상파의 마디·배와 진폭 경계','연속파가 충분히 도달한 뒤, 분홍 점선은 배의 최대 진폭 ±2A 및 마디의 0을 보여 줍니다.','배 vs. 마디의 시간-변위 비교','위: 배 x=0 · 아래: 마디 x=0.25λ. 두 곳을 같은 시간축에서 비교합니다.'],
+ phase:['파원 B의 위상차 변화 실험','기본 상태는 같은 위상(0°)입니다. 이 탭에서만 B의 위상을 바꿔 마디·배의 위치 이동을 탐색합니다.','중앙 x=0의 시간-변위 그래프','같은 파장과 속력에서 위상차에 따른 A+B 결과를 비교합니다.']
+};
+function switchTab(tab){
+ state.tab=tab;
+ document.querySelectorAll('[data-tab]').forEach(b=>b.setAttribute('aria-selected',b.dataset.tab===tab?'true':'false'));
+ $('simArea').hidden=tab==='concept';$('conceptArea').hidden=tab!=='concept';
+ if(tab!=='concept'){
+  const [a,b,c,d]=tabDesc[tab];$('mainTitle').textContent=a;$('mainDesc').textContent=b;$('sideTitle').textContent=c;$('sideDesc').textContent=d;
+  if(tab==='standing'||tab==='phase'){
+   if(state.t<8.01)state.t=8.25;
+  }
+  requestAnimationFrame(resize);
+ }
+ draw();
+}
+function setTime(newtime,quantize=true){
+ state.t=Math.max(0,quantize?Math.round(newtime*4)/4:newtime);draw()
+}
+function stop(){state.play=false;state.last=0;if(state.raf)cancelAnimationFrame(state.raf);state.raf=null;updateControls()}
+function frame(now){
+ if(!state.play)return;
+ if(state.last)state.t+=(now-state.last)/1000*state.speed;
+ state.last=now;draw();state.raf=requestAnimationFrame(frame)
+}
+function start(){if(state.play){stop();return}state.play=true;state.last=0;state.raf=requestAnimationFrame(frame);updateControls()}
+function canvasSize(canvas,ctx){
+ const r=canvas.getBoundingClientRect(),w=Math.max(180,r.width),h=Math.max(190,r.height),dpr=Math.min(devicePixelRatio||1,2);
+ canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);return [w,h]
+}
+function resize(){if(state.tab==='concept')return;[W,H]=canvasSize(main,g);[SW,SH]=canvasSize(side,h);draw()}
+$('reset').onclick=()=>{stop();state.extent=12;setTime(0);switchTab('approach')};
+$('prev').onclick=()=>{stop();setTime(Math.floor(state.t*4+1e-7)/4-.25)};
+$('next').onclick=()=>{stop();setTime(Math.ceil(state.t*4-1e-7)/4+.25)};
+$('meet').onclick=()=>{stop();setTime(3)};
+$('peak').onclick=()=>{stop();setTime(3.25)};
+$('steady').onclick=()=>{stop();setTime(8.25)};
+$('play').onclick=start;
+$('seek').oninput=e=>{const chosen=+e.target.value;stop();setTime(chosen)};
+$('speed').onchange=e=>{state.speed=+e.target.value};
+$('probe').oninput=e=>{state.probe=+e.target.value;draw()};
+$('phaseValue').onchange=e=>{state.delta=+e.target.value*Math.PI/180;draw()};
+document.querySelectorAll('[data-tab]').forEach(btn=>btn.addEventListener('click',()=>switchTab(btn.dataset.tab)));
+document.addEventListener('keydown',e=>{
+ if(e.target.closest('input,button,select'))return;
+ if(e.key==='ArrowRight'){stop();setTime(Math.ceil(state.t*4-1e-7)/4+.25)}
+ if(e.key==='ArrowLeft'){stop();setTime(Math.floor(state.t*4+1e-7)/4-.25)}
+ if(e.code==='Space'){e.preventDefault();start()}
+});
+window.addEventListener('resize',resize);
+if('ResizeObserver'in window){new ResizeObserver(()=>{if(state.tab!=='concept')resize()}).observe($('workspace'))}
+resize();
+})();
+</script>
+</body>
+</html>
