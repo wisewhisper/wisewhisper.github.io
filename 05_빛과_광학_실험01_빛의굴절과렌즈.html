@@ -158,7 +158,7 @@ header button{margin-left:auto}
 const $=id=>document.getElementById(id),PI=Math.PI,rad=x=>x*PI/180,deg=x=>x*180/PI;
 const media={air:1,water:1.33,glass:1.5,diamond:2.42};
 const s={tab:"ref",n1:1,n2:1.33,theta:40,f:12,u:30,H:12,zoom:1,view:"fixed",
-         lensType:"convex",supMode:"snell",progress:1,running:false,last:null,grab:false};
+         lensType:"convex",supMode:"snell",progress:1,running:false,last:null,grab:false,dragScale:1,dragLensX:0};
 const colors={in:"#ffd17f",reflection:"#f8a5ca",refraction:"#6de8e0",ray1:"#76bfff",ray2:"#a2e8ff",ray3:"#c1b3ff"};
 const E=id=>$(id);
 const fixed=(n,d=2)=>Number(n).toFixed(d);
@@ -234,6 +234,8 @@ function drawRef(){
  if(!outRay.tir){const b=rad(outRay.beta);pT=outRay.atCritical?[Math.min(w-12,cx+L),cy]:[cx+L*Math.sin(b),cy+L*Math.cos(b)];}
  path(c,[[0,cy],[w,cy]],"#e2f5ff",2.2);
  path(c,[[cx,15],[cx,h-15]],"#aacde8",1.6,[7,6]);
+ if(s.theta>0){c.beginPath();c.arc(cx,cy,49,-PI/2-a,-PI/2);c.strokeStyle="#ffd17f";c.lineWidth=2;c.stroke();}
+ if(!outRay.tir&&outRay.beta>0&&outRay.beta<90){c.beginPath();c.arc(cx,cy,47,PI/2-rad(outRay.beta),PI/2);c.strokeStyle="#6de8e0";c.lineWidth=2;c.stroke();}
  text(c,"매질 1 · n₁="+fixed(s.n1,2),22,28,"#d8eaff",15);
  text(c,"매질 2 · n₂="+fixed(s.n2,2),22,h-22,"#d5f9eb",15);
  text(c,"법선",cx+11,24,"#c3e2f2",13);
@@ -499,14 +501,14 @@ function binding(){
   const box=canvas.getBoundingClientRect(),g=lensGeometry(box.width,box.height,optical().v);
   const objectX=g.X(-s.u),objectY=g.Y(s.H),x=e.clientX-box.left,y=e.clientY-box.top;
   if(Math.abs(x-objectX)>42||Math.min(Math.abs(y-objectY),Math.abs(y-g.oy))>85&&Math.abs(y-(objectY+g.oy)/2)>65)return;
-  s.grab=true;canvas.setPointerCapture(e.pointerId);
+  s.grab=true;s.dragScale=g.scale;s.dragLensX=g.lensX;canvas.setPointerCapture(e.pointerId);
  });
  canvas.addEventListener("pointermove",e=>{
   if(!s.grab)return;
   const box=canvas.getBoundingClientRect(),g=lensGeometry(box.width,box.height,optical().v);
-  const x=e.clientX-box.left,y=e.clientY-box.top;
-  s.u=clamp(Math.round((g.lensX-x)/g.scale),5,150);
-  s.H=clamp(Math.round((g.oy-y)/g.scale),2,60);
+  const x=e.clientX-box.left;
+  // Horizontal dragging changes object distance only. Object height stays under its own slider.
+  s.u=clamp(Math.round((s.dragLensX-x)/s.dragScale),5,150);
   resetRun();
  });
  const stop=()=>{s.grab=false;};canvas.addEventListener("pointerup",stop);canvas.addEventListener("pointercancel",stop);
