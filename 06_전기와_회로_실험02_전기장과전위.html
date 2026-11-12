@@ -102,6 +102,13 @@ body[data-electric-tab="motion"] #electric-settings-panel .small{display:none}
  .app .hint{font-size:11px}
 }
 
+
+/* Keep the simulation DOM fixed. Only tab-specific visibility changes. */
+.app>.layout{flex:1 1 auto;min-height:0;min-width:0}
+.app>.layout[hidden],.app>.electric-concepts[hidden]{display:none!important}
+.app>.electric-concepts{flex:1 1 auto;min-height:0;height:auto}
+.app>.layout>main{min-width:0}
+
 </style>
 </head>
 <body>
@@ -171,15 +178,14 @@ sections[4].id='electric-prompt-panel';
 var nav=document.createElement('nav');
 nav.className='electric-tabs';nav.setAttribute('role','tablist');nav.setAttribute('aria-label','전기장과 전위 탐구 선택');
 var tabs=[['field','① 전기장·전위'],['motion','② 시험전하 운동'],['graph','③ 그래프·비교'],['concept','④ 개념 설명']];
-var screens={};
+layout.id='electric-layout';layout.setAttribute('role','tabpanel');
 tabs.forEach(function(t){
- var btn=document.createElement('button');btn.type='button';btn.id='electric-tab-'+t[0];btn.textContent=t[1];btn.setAttribute('role','tab');btn.setAttribute('aria-controls','electric-screen-'+t[0]);nav.append(btn);
- var panel=document.createElement('section');panel.className='electric-screen';panel.id='electric-screen-'+t[0];panel.setAttribute('role','tabpanel');panel.setAttribute('aria-labelledby',btn.id);app.append(panel);screens[t[0]]=panel;
+ var btn=document.createElement('button');btn.type='button';btn.id='electric-tab-'+t[0];btn.textContent=t[1];btn.setAttribute('role','tab');btn.setAttribute('aria-controls',t[0]==='concept'?'electric-concepts':'electric-layout');nav.append(btn);
  btn.addEventListener('click',function(){openTab(t[0]);});
  btn.addEventListener('keydown',function(e){if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft')return;e.preventDefault();var idx=tabs.findIndex(function(v){return v[0]===t[0]});var next=(idx+(e.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length;nav.children[next].focus();openTab(tabs[next][0]);});
 });
 header.after(nav);
-var concepts=document.createElement('div');concepts.className='electric-concepts';
+var concepts=document.createElement('div');concepts.className='electric-concepts';concepts.id='electric-concepts';concepts.setAttribute('role','tabpanel');
 concepts.innerHTML=[
  '<article class="concept-card"><h2>1. 전기장과 전기력</h2><p>전기장은 원천 전하가 주변 공간에 만드는 벡터장입니다. 시험전하의 부호를 바꾸어도 원천 전하가 만드는 전기장은 변하지 않습니다.</p><div class="equation">E⃗ = k Σ qᵢ r̂ᵢ / rᵢ²　　F⃗ = q₀ E⃗</div><p>양의 시험전하는 전기장 방향으로, 음의 시험전하는 전기장과 반대 방향으로 힘을 받습니다. 단위는 N/C입니다.</p></article>',
  '<article class="concept-card"><h2>2. 전위와 전기장</h2><p>전위는 단위 전하당 전기적 위치에너지이며, 방향이 없는 스칼라입니다. 무한히 멀리 떨어진 곳의 전위를 0 V로 정합니다.</p><div class="equation">V = k Σ qᵢ/rᵢ　　U = q₀V</div><p>전위는 부호를 가질 수 있고, 같은 위치의 전기장과 전위는 서로 다른 물리량입니다. 전기장 세기 단위 N/C는 V/m와 같습니다.</p></article>',
@@ -188,7 +194,7 @@ concepts.innerHTML=[
  '<article class="concept-card full"><h2>5. 모델의 가정과 주의점</h2><p>정지한 점전하를 진공에서 계산하고, 3차원 전기장의 2차원 단면을 표시합니다. 원천 전하의 위치에서는 점전하 식이 발산하므로 측정값을 정의하지 않습니다. 시뮬레이션 화면의 전하 표식 크기와 색의 채도는 실제 전하 크기나 전위의 선형 척도를 뜻하지 않습니다. 시험전하 운동은 질량 1 mg, 전하량 ±1 nC를 가정하며 자기력, 중력, 충돌 이후의 운동은 생략합니다.</p></article>'
 ].join('');
 concepts.append(sections[4]);
-screens.concept.append(concepts);
+layout.after(concepts);
 var compare=document.createElement('section');compare.className='card section';compare.id='electric-compare-panel';
 compare.innerHTML='<h2>조건 A · B 비교</h2><div class="electric-compare-actions"><button type="button" data-save="A">현재 → A 저장</button><button type="button" data-save="B">현재 → B 저장</button><button type="button" id="electric-clear-compare">비교 초기화</button></div><table class="electric-table"><thead><tr><th>조건</th><th>전하 배치</th><th>V (V)</th><th>|E| (N/C)</th></tr></thead><tbody id="electric-compare-body"></tbody></table><p class="electric-experiment-tip">현재 전위 그래프는 실선, A·B는 점선입니다. 그래프는 탐침의 y 좌표를 지나는 가로선에서 비교합니다.</p>';
 side.append(compare);
@@ -224,11 +230,13 @@ function openTab(key){
  if(key==='motion')api.setMode('probe');
  document.body.dataset.electricTab=key;
  tabs.forEach(function(t){
-  var on=t[0]===key,btn=document.getElementById('electric-tab-'+t[0]),panel=screens[t[0]];
+  var on=t[0]===key,btn=document.getElementById('electric-tab-'+t[0]);
   btn.setAttribute('aria-selected',String(on));btn.setAttribute('tabindex',on?'0':'-1');
-  panel.classList.toggle('is-active',on);panel.hidden=!on;
  });
- if(key!=='concept')screens[key].append(layout);
+ layout.hidden=key==='concept';
+ concepts.hidden=key!=='concept';
+ layout.setAttribute('aria-labelledby','electric-tab-'+key);
+ concepts.setAttribute('aria-labelledby','electric-tab-concept');
  if(key==='graph')side.scrollTop=0;
  requestAnimationFrame(function(){if(key!=='concept'){api.resize();if(key==='graph')api.drawChart();}});
 }
