@@ -115,7 +115,7 @@ th{color:#d4edf9}
    </div>
   </div>
   <canvas id="scene" aria-label="전지와 전류계로 연결된 회로 및 전자 또는 양전하 묶음의 도선 단면 통과 애니메이션"></canvas>
-  <p class="sceneCaption">점 하나는 실제 전자 1개가 아닌 <b>전하량 0.5 C를 대표하는 가상 묶음</b>입니다. 점선 단면 통과 시마다 전하량이 누적됩니다.</p>
+  <p class="sceneCaption">점 하나는 실제 전자 1개가 아닌 <b>전하량 0.5 C를 대표하는 가상 묶음</b>입니다. 점선 단면 통과 시마다 전하량이 누적됩니다. <b>아래 확대 화면은 회로의 위쪽 도선</b>을 나타냅니다.</p>
   <div class="metrics">
    <div class="metric"><small>설정한 평균 전류</small><strong class="highlight" id="targetCurrent">+2.00 A</strong></div>
    <div class="metric"><small>관측 누적 통과량</small><strong id="measuredQ">+0.0 C</strong></div>
@@ -246,9 +246,15 @@ function drawScene(){
  label(c,"R",rx,yTop+6,"#fff3de",17,"center",800);
  label(c,"전류계",amX,yTop+43,"#baddec",12);
  label(c,"회로 모식도 · 전압과 저항은 계산하지 않음",w/2,yBot+26,"#a4c9dd",Math.max(10,Math.min(13,w/65)));
- arrow(c,w*.48,yBot,w*.48+state.sign*70,"#6fe3df");
- label(c,"관습적 전류",w*.52,yBot-13,"#7be8e3",12);
- // Lower enlarged cutaway of the wire.
+ // Conventional current exits (+), crosses the upper wire and returns along the lower wire.
+ const topMid=(amX+rx)/2;
+ const topSpan=Math.max(14,Math.min(48,(rx-amX-85)*.4));
+ arrow(c,topMid-state.sign*topSpan/2,yTop,topMid+state.sign*topSpan/2,"#6fe3df");
+ label(c,"상단 · 관습적 전류",topMid,yTop-24,"#7be8e3",12);
+ const returnMid=w*.57;
+ arrow(c,returnMid,yBot,returnMid-state.sign*Math.min(78,w*.11),"#6fe3df");
+ label(c,"하단 · 귀환 전류",returnMid,yBot-12,"#7be8e3",12);
+ // Lower enlarged cutaway is a magnification of the UPPER wire, not the return wire.
  const tubeL=27,tubeR=w-27,tubeY=Math.max(yBot+61,h*.56),tubeH=Math.min(128,Math.max(76,h*.275));
  const metal=c.createLinearGradient(0,tubeY,0,tubeY+tubeH);
  metal.addColorStop(0,"#6da0b9");metal.addColorStop(.1,"#274f6c");metal.addColorStop(.47,"#142d43");metal.addColorStop(.9,"#27475c");metal.addColorStop(1,"#77a7c2");
@@ -257,7 +263,7 @@ function drawScene(){
  c.fillStyle="#b2e0f1";c.globalAlpha=.29;c.fillRect(tubeL+17,tubeY+10,tubeR-tubeL-34,3);c.globalAlpha=1;
  const mid=(tubeL+tubeR)/2;
  c.setLineDash([7,6]);c.strokeStyle="#ffd98a";c.lineWidth=2.5;c.beginPath();c.moveTo(mid,tubeY-18);c.lineTo(mid,tubeY+tubeH+17);c.stroke();c.setLineDash([]);
- label(c,"측정 단면 S",mid,tubeY-25,"#ffd98a",13,"center",750);
+ label(c,"상단 도선 확대 · 측정 단면 S",mid,tubeY-25,"#ffd98a",13,"center",750);
  const carrierDir=state.sign*(state.carrier==="electron"?-1:1);
  const n=totalPackets(),velocity=170;
  // A fixed 0.5 C packet crosses the midplane at each scheduled event time.
