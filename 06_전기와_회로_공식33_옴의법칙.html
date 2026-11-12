@@ -1,7 +1,77 @@
 <!doctype html>
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>33 · 옴의 법칙 실험실</title><style>
 :root{color-scheme:light;--ink:#102640;--muted:#51647a;--blue:#1565c0;--paper:#f3f7fc;--line:#d6e0ed}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.6 system-ui,'Malgun Gothic',sans-serif}main{max-width:1060px;margin:auto;padding:24px 18px}header{margin-bottom:22px}.eyebrow{color:var(--blue);font-weight:750;font-size:14px}h1{font-size:clamp(26px,5vw,38px);margin:6px 0}h2{font-size:20px;margin:0 0 12px}h3{font-size:17px;margin:0}.formula{font-size:28px;font-weight:800}.muted,small{color:var(--muted)}.layout{display:grid;grid-template-columns:1.2fr 1fr;gap:18px}.panel{background:white;border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:18px}.layout .panel{margin:0}.full{margin-top:18px}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}button{font:inherit;border:1px solid var(--line);background:#f3f7fc;color:var(--ink);border-radius:10px;min-height:44px;padding:9px 15px;cursor:pointer}button.primary{background:var(--blue);color:white}button:hover{filter:brightness(.96)}input[type=number]{font:inherit;width:100px;padding:8px;border:1px solid #9aacc1;border-radius:8px;min-height:44px}input[type=range]{width:100%;min-height:44px;accent-color:var(--blue)}label{font-weight:700}.control{margin:18px 0}.control .row{justify-content:space-between}.results{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}.metric{background:#edf5ff;border-radius:12px;padding:12px 8px;text-align:center}.metric b{display:block;font-size:clamp(19px,3vw,26px);overflow-wrap:anywhere}.metric span{font-size:14px}#substitution{background:#f3f7fc;border-radius:10px;padding:12px;overflow-wrap:anywhere}svg{display:block;width:100%}#circuit{max-height:260px}#graph{height:310px}#graph text{font-family:system-ui,sans-serif;font-size:12px;fill:var(--ink)}.legend{font-size:14px}.dot{font-weight:750}table{border-collapse:collapse;width:100%;font-size:15px}td,th{border-bottom:1px solid var(--line);padding:9px 4px;text-align:right}th:first-child,td:first-child{text-align:left}details{border-top:1px solid var(--line);padding:12px 0}summary{cursor:pointer;min-height:44px;font-weight:700}p{margin:8px 0 12px}.notice{font-size:14px;color:var(--muted)}.error{color:#b33228;min-height:24px;font-size:14px}textarea{font:inherit;width:100%;min-height:76px;padding:10px;border:1px solid var(--line);border-radius:10px}@media(max-width:720px){main{padding:18px 12px}.layout{grid-template-columns:1fr}.panel{padding:16px}.results{gap:5px}.metric{padding:10px 4px}table{font-size:14px}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
-</style><link rel="stylesheet" href="electric-lab-v6.css?v=20261112-7"><link rel="stylesheet" href="electric-lab-v7-dark.css?v=20261112-11"><script src="electric-lab-v6.js?v=20261112-8" defer></script></head><body><main>
+</style><style id="ohm33-standalone-style">
+html,body{background:#07111e!important;color:#ecf8ff!important}
+body.ohm33-ready{overflow:hidden!important;margin:0!important}
+body.ohm33-ready>main{display:none!important}
+body.ohm33-ready>.ohm33-shell{position:fixed;inset:0;z-index:2147483000;padding:8px 11px;background:#07111e;color:#ecf8ff;display:flex;flex-direction:column;gap:7px;font:14px/1.5 system-ui,"Malgun Gothic",sans-serif}
+.ohm33-shell *{box-sizing:border-box}
+.ohm33-top{display:flex;align-items:center;gap:12px;min-height:34px;flex:0 0 auto}
+.ohm33-top h1{font-size:clamp(19px,1.8vw,26px);line-height:1.2;margin:0;color:#f5fcff}
+.ohm33-top span{font-size:12px;color:#a9d0e5}
+.ohm33-top button{margin-left:auto}
+.ohm33-tabs{display:flex;align-items:center;gap:6px;min-height:39px;flex:0 0 auto;overflow-x:auto}
+.ohm33-tabs button,.ohm33-top button{font:700 13px system-ui;white-space:nowrap;border:1px solid #4b7391;border-radius:8px;background:#1b3852;color:#ecfaff;padding:7px 11px;min-height:33px;cursor:pointer}
+.ohm33-tabs button[aria-selected="true"]{background:#09798a;border-color:#81eaf1;box-shadow:inset 0 -2px #baffff}
+.ohm33-workspace{display:grid;grid-template-columns:minmax(0,4fr) minmax(240px,1fr);grid-template-rows:minmax(0,1fr);flex:1 1 auto;min-width:0;min-height:0;gap:8px}
+.ohm33-stage,.ohm33-graphs,.ohm33-side,.ohm33-concepts{min-width:0;min-height:0}
+.ohm33-stage{display:flex;flex-direction:column;overflow:hidden}
+.ohm33-side{display:flex;flex-direction:column;gap:7px;overflow-y:auto;scrollbar-width:thin}
+.ohm33-graphs{display:none;flex-direction:column;gap:7px;overflow-y:auto}
+.ohm33-concepts{display:none;overflow-y:auto}
+.ohm33-workspace[data-view="graphs"] .ohm33-stage{display:none}
+.ohm33-workspace[data-view="graphs"] .ohm33-graphs{display:flex}
+.ohm33-workspace[data-view="concepts"]{display:block}
+.ohm33-workspace[data-view="concepts"] .ohm33-stage,.ohm33-workspace[data-view="concepts"] .ohm33-graphs,.ohm33-workspace[data-view="concepts"] .ohm33-side{display:none}
+.ohm33-workspace[data-view="concepts"] .ohm33-concepts{display:block}
+.ohm33-shell .panel,.ohm33-explain,.ohm33-runbar,.ohm33-extra{background:#112339!important;border:1px solid #395a72!important;border-radius:11px!important;color:#ecf8ff!important;box-shadow:none!important}
+.ohm33-shell .panel{margin:0!important;min-width:0!important;padding:9px 11px!important}
+.ohm33-shell .panel h2{font-size:clamp(14px,1.23vw,18px)!important;color:#effaff!important;margin:0 0 7px!important}
+.ohm33-shell :is(p,small,label,summary,td,th,span,b,div){color:#e7f4ff}
+.ohm33-shell :is(.notice,.muted,small){color:#b7d4e8!important;font-size:11px!important;line-height:1.4!important}
+.ohm33-stage>.panel{height:100%;min-height:0;display:flex;flex-direction:column;gap:5px;overflow:hidden}
+.ohm33-runbar{display:flex;align-items:center;gap:5px;flex-wrap:wrap;padding:5px 7px!important;flex:0 0 auto}
+.ohm33-runbar label{font-size:11px;font-weight:650}
+.ohm33-shell button,.ohm33-shell select{background:#244560!important;color:#f2fbff!important;border:1px solid #537a91!important;border-radius:8px!important;font:650 12px system-ui!important;padding:6px 9px!important;min-height:32px!important}
+.ohm33-shell button.primary,.ohm33-runbar button:first-child{background:#0d7788!important;border-color:#74e3e9!important}
+.ohm33-runbar select{max-width:134px}
+.ohm33-shell #circuit{display:block!important;width:100%!important;height:auto!important;min-height:160px!important;max-height:none!important;flex:1 1 auto!important;object-fit:contain!important;background:#0b1e31!important;border:1px solid #294a60;border-radius:10px}
+.ohm33-shell #direction{padding:5px 8px;background:#173348;border-radius:8px;margin:0!important;color:#8ee9df!important;font-size:12px;font-weight:700;flex:0 0 auto}
+.ohm33-shell .ohm33-stage .notice{margin:0!important;flex:0 0 auto}
+.ohm33-shell .results{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px!important;flex:0 0 auto;margin:0!important}
+.ohm33-shell .metric{background:#1a344a!important;color:#f5fcff!important;border:1px solid #406078;border-radius:9px;padding:7px!important;min-width:0}
+.ohm33-shell .metric span{font-size:11px!important;color:#bfd7e7!important}
+.ohm33-shell .metric b{font-size:clamp(15px,1.75vw,22px)!important;color:#f6fbff!important}
+.ohm33-shell .metric:last-child b{color:#79ebdd!important}
+.ohm33-side .panel{padding:8px 10px!important}
+.ohm33-side .control{margin:7px 0!important}
+.ohm33-side .row{gap:5px}
+.ohm33-side label{font-size:12px}
+.ohm33-side input[type=range]{height:26px!important;min-height:24px!important;accent-color:#6ee1e9!important}
+.ohm33-side input[type=number]{width:77px!important;min-height:32px!important;font-size:12px!important;background:#1a344b!important;color:#f4fbff!important;border:1px solid #587a92!important;padding:4px!important}
+.ohm33-shell :is(.metric,.formula,#substitution,.notice,.legend,.ohm33-extra){background-color:#18334b!important;color:#eaf7ff!important;border-color:#3c607a!important}
+.ohm33-shell #substitution,.ohm33-extra{padding:8px!important;font-size:12px!important}
+.ohm33-shell #graph{width:100%!important;height:auto!important;min-height:245px!important;max-height:calc(100dvh - 210px)!important;flex:1;background:#0c2034!important;border-radius:8px}
+.ohm33-shell #graph text{fill:#e0f4ff!important;font-size:12px}
+.ohm33-shell #graph rect[fill="#fff"]{fill:#0e263a!important}
+.ohm33-shell #graph path[stroke="#e1e7ef"]{stroke:#355770!important}
+.ohm33-graphs>.panel:first-child{flex:1;min-height:0;display:flex;flex-direction:column;gap:5px}
+.ohm33-graphs>.panel:nth-child(2){flex:0 0 auto}
+.ohm33-shell .legend{display:flex;flex-wrap:wrap;gap:8px;font-size:12px!important}
+.ohm33-shell table{width:100%;font-size:12px!important}
+.ohm33-shell td,.ohm33-shell th{border-color:#39566d!important;padding:5px 6px!important}
+.ohm33-shell #prediction{background:#19344b;color:#f2faff;border:1px solid #54738d}
+.ohm33-explain{padding:15px 18px!important;margin:0 0 10px}
+.ohm33-explain h2{color:#91eaf0!important}
+.ohm33-explain p{line-height:1.7}
+.ohm33-shell #error{color:#ffbaba!important}
+.ohm33-quick{display:flex;gap:5px;flex-wrap:wrap;margin:4px 0 7px}
+.ohm33-quick button{flex:1 1 45%}
+#ohmMotionStatus{font-size:11px;color:#9fece9!important}
+@media(max-width:900px){body.ohm33-ready{overflow:auto!important}body.ohm33-ready>.ohm33-shell{position:relative;min-height:100dvh;height:auto}.ohm33-workspace{display:flex;flex-direction:column;overflow:visible}.ohm33-stage{min-height:550px}.ohm33-stage>.panel{min-height:540px}.ohm33-side{overflow:visible}.ohm33-graphs{overflow:visible}.ohm33-graphs>.panel:first-child{min-height:400px}.ohm33-shell #circuit{min-height:250px}.ohm33-shell #graph{min-height:270px}.ohm33-concepts{overflow:visible}.ohm33-tabs{position:sticky;top:0;z-index:5;background:#07111e;padding:4px 0}.ohm33-top span{display:none}}
+@media(max-width:430px){.ohm33-top h1{font-size:18px}.ohm33-top button{display:none}.ohm33-runbar{gap:4px}.ohm33-runbar button{padding:6px!important}}
+</style></head><body><main>
 <header><div class="eyebrow">물리 공식 40 · INTERACTIVE LAB 33</div><h1>옴의 법칙 실험실</h1><div class="formula">V = IR</div><p>전압과 저항을 바꾸면 전류의 크기와 방향은 어떻게 달라질까?</p></header>
 <div class="layout"><section class="panel"><h2>① 조작 · 이상적인 직류 회로</h2><svg id="circuit" viewBox="0 0 500 250" role="img" aria-label="전원, 전류계, 저항이 연결된 직류 회로. 전류계는 직렬, 저항은 부하로 표시">
 <defs>
@@ -37,7 +107,7 @@
 <text x="255" y="233" text-anchor="middle" font-size="13" fill="#a8ccde">전압의 부호에 따라 전류 방향이 달라집니다</text>
 </svg><p id="direction" aria-live="polite"></p><p class="notice">화살표는 관습적 전류 방향을 표시합니다. 전류계는 직렬 연결되며, 전압 V는 저항 양단의 전압입니다.</p><div class="results" aria-live="polite"><div class="metric"><span>전압 V</span><b id="vOut"></b></div><div class="metric"><span>저항 R</span><b id="rOut"></b></div><div class="metric"><span>전류 I</span><b id="iOut"></b></div></div></section>
 <section class="panel"><h2>② 예측 → 조작 → 관찰</h2><p class="muted">먼저 전압을 2배로 하면 전류가 어떻게 될지 예측해 보세요.</p><div class="control"><div class="row"><label for="voltage">전압 V (V)</label><input id="voltageNum" type="number" aria-label="전압 숫자 입력 V" min="-12" max="12" step="0.1" value="6"></div><input id="voltage" type="range" min="-12" max="12" step="0.1" value="6"><small>−12 ~ +12 V · 음수는 전압원 극성 반전</small></div><div class="control"><div class="row"><label for="resistance">저항 R (Ω)</label><input id="resistanceNum" type="number" aria-label="저항 숫자 입력 Ω" min="1" max="100" step="1" value="20"></div><input id="resistance" type="range" min="1" max="100" step="1" value="20"><small>1 ~ 100 Ω · 저항 0 Ω는 이 모형에서 제외</small></div><div id="error" class="error" role="alert"></div><div id="substitution" aria-live="polite"></div><div class="row" style="margin-top:14px"><button id="reverse">극성 반전</button><button id="reset">전체 초기화</button></div><p class="notice">V: 전압(V), I: 전류(A), R: 저항(Ω). 양의 전류는 시계 방향으로 정합니다.</p></section></div>
-<section class="panel full"><h2>③ 전압–전류 관계 그래프</h2><p id="graphNote"></p><svg id="graph" role="img" aria-label="전압 V에 따른 전류 I의 관계 그래프"></svg><div class="row legend"><span style="color:#1565c0">● 현재 / 실선</span><span style="color:#9b4b00">■ A / 긴 점선</span><span style="color:#753dab">▲ B / 짧은 점선</span></div><p class="notice">시간 그래프가 아닙니다. 각 선은 해당 조건의 저항을 고정한 I = V/R 관계이며, 점은 저장한 실제 전압과 전류입니다. 비교 조건에 맞춰 세로축 범위가 바뀝니다.</p></section>
+<section class="panel full"><h2>③ 전압–전류 관계 그래프</h2><p id="graphNote"></p><svg id="graph" role="img" aria-label="전압 V에 따른 전류 I의 관계 그래프"></svg><div class="row legend"><span style="color:#1565c0">● 현재 / 실선</span><span style="color:#9b4b00">■ A / 긴 점선</span><span style="color:#753dab">▲ B / 짧은 점선</span></div><p class="notice">시간 그래프가 아닙니다. 각 선은 해당 조건의 저항을 고정한 I = V/R 관계이며, 점은 저장한 실제 전압과 전류입니다. 세로축 범위가 확장되면 그래프 비교 중 자동으로 줄어들지 않습니다.</p></section>
 <section class="panel"><h2>④ 같은 기준으로 조건 비교</h2><div class="row"><button class="primary" id="saveA">현재 조건 A 저장</button><button id="saveB">현재 조건 B 저장</button></div><table><thead><tr><th>조건</th><th>V (V)</th><th>R (Ω)</th><th>I (A)</th></tr></thead><tbody id="compare"></tbody></table><p id="comparison" aria-live="polite"></p></section>
 <section class="panel"><h2>⑤ 설명 · 탐구 질문</h2><label for="prediction">내 관찰과 설명</label><textarea id="prediction" placeholder="고정한 변수, 바꾼 변수, 전류의 변화와 이유를 기록하세요."></textarea><details><summary>기본 · 전압을 6 V에서 12 V로 바꾸면?</summary><p>R = 20 Ω를 고정하면 I는 0.300 A에서 0.600 A로 2배가 됩니다. 저항이 일정할 때 전류는 전압에 비례합니다.</p></details><details><summary>응용 · 같은 전압에서 저항을 2배로 바꾸면?</summary><p>V = 6 V일 때 R을 20 Ω에서 40 Ω로 바꾸면 I는 0.300 A에서 0.150 A로 절반이 됩니다. 조건 A·B로 확인하세요.</p></details><details><summary>도전 · 극성을 바꾸면 그래프와 전류는?</summary><p>같은 R에서 V를 +6 V에서 −6 V로 바꾸면 I도 +0.300 A에서 −0.300 A로 바뀝니다. 전류의 크기는 같고 방향이 반대이며 그래프의 기울기 1/R은 유지됩니다.</p></details><details><summary>오개념 · 저항이 전류를 모두 소비할까?</summary><p>정상 상태의 직렬 회로에서는 저항 앞뒤의 전류가 같습니다. 저항에서 전기 에너지가 열로 전환되지만 전하가 사라지지는 않습니다. 저항을 바꾸어도 회로 전체에 하나의 전류값이 적용되는 것을 확인하세요.</p></details><details><summary>적용 조건 · 온도와 모형의 한계</summary><p>온도 등 물리적 조건이 일정한 옴성 저항을 다룹니다. 각 설정에서 저항은 전압과 무관하게 일정하다고 가정합니다. 전압원 내부 저항, 전선 저항, 전류계 저항은 0으로 둡니다. LED·다이오드·가열되는 전구는 이 직선 모형으로 일반화할 수 없습니다.</p><p>실제 큰 전류에서는 발열로 저항이 달라질 수 있으나 이 실험은 온도를 일정하게 유지한 개념 모형입니다. 회로 크기와 화살표 길이는 실제 크기·전자 속력을 나타내지 않습니다. V = 0일 때 I = 0이고, R = V/I의 역산은 사용할 수 없습니다.</p></details></section>
 <footer class="notice">인터넷 없이 실행되는 단일 HTML · 초기화는 입력, 비교 기록, 관찰 메모와 펼친 해설을 모두 되돌립니다.</footer>
@@ -51,10 +121,116 @@ $('sourceTop').textContent=c.V<0?'−':c.V===0?'0':'+';$('sourceBottom').textCon
 $('compare').innerHTML=[['현재',c],['A',saved.A],['B',saved.B]].map(([name,x])=>`<tr><th>${name}</th><td>${x?fmt(x.V,1):'—'}</td><td>${x?x.R:'—'}</td><td>${x?fmt(x.I):'—'}</td></tr>`).join('');
 if(saved.A&&saved.B){const a=saved.A,b=saved.B;$('comparison').textContent=`B − A: ΔV = ${fmt(b.V-a.V,1)} V, ΔR = ${b.R-a.R} Ω, ΔI = ${fmt(b.I-a.I)} A.`+(a.R===b.R?' 저항이 같으므로 전압 변화만 비교할 수 있습니다.':a.V===b.V?' 전압이 같으므로 저항 변화만 비교할 수 있습니다.':' 두 변수가 함께 바뀌었습니다. 비례 관계를 확인하려면 하나를 고정하세요.');}else $('comparison').textContent='하나의 변수만 바꾸어 A와 B를 저장하면 비례 관계를 비교하기 쉽습니다.';
 drawGraph();}
-let axis33=0;function drawGraph(){const svg=$('graph'),w=Math.max(240,svg.getBoundingClientRect().width),h=310,L=64,T=20,right=w-18,bottom=h-55;svg.setAttribute('viewBox',`0 0 ${w} ${h}`);const c=calculate(state.V,state.R),series=[{...c,color:'#1565c0',dash:'',name:'현재',shape:'circle'},...['A','B'].filter(k=>saved[k]).map(k=>({...saved[k],name:k,color:k==='A'?'#9b4b00':'#753dab',dash:k==='A'?'9 5':'3 4',shape:k==='A'?'rect':'triangle'}))];const maxI=(axis33=Math.max(axis33,...series.map(s=>12/s.R*1.15)));const X=v=>L+(v+12)/24*(right-L),Y=i=>T+(maxI-i)/(2*maxI)*(bottom-T);let out=`<title>전압–전류 관계</title><desc>저항을 고정하면 전류는 전압에 비례합니다. 현재 저항 ${state.R} Ω.</desc><rect x="${L}" y="${T}" width="${right-L}" height="${bottom-T}" fill="#fff" stroke="#d6e0ed"/>`;
+let axis33=.75;function drawGraph(){const svg=$('graph'),w=Math.max(240,svg.getBoundingClientRect().width),h=310,L=64,T=20,right=w-18,bottom=h-55;svg.setAttribute('viewBox',`0 0 ${w} ${h}`);const c=calculate(state.V,state.R),series=[{...c,color:'#1565c0',dash:'',name:'현재',shape:'circle'},...['A','B'].filter(k=>saved[k]).map(k=>({...saved[k],name:k,color:k==='A'?'#9b4b00':'#753dab',dash:k==='A'?'9 5':'3 4',shape:k==='A'?'rect':'triangle'}))];const maxI=(axis33=Math.max(axis33,...series.map(s=>12/s.R*1.15)));const X=v=>L+(v+12)/24*(right-L),Y=i=>T+(maxI-i)/(2*maxI)*(bottom-T);let out=`<title>전압–전류 관계</title><desc>저항을 고정하면 전류는 전압에 비례합니다. 현재 저항 ${state.R} Ω.</desc><rect x="${L}" y="${T}" width="${right-L}" height="${bottom-T}" fill="#fff" stroke="#d6e0ed"/>`;
 [-12,-6,0,6,12].forEach(v=>{out+=`<path d="M${X(v)} ${T}V${bottom}" stroke="#e1e7ef"/><text x="${X(v)}" y="${bottom+22}" text-anchor="${v===-12?'start':v===12?'end':'middle'}">${v}</text>`});[-1,-.5,0,.5,1].forEach(k=>{const i=k*maxI;out+=`<path d="M${L} ${Y(i)}H${right}" stroke="#e1e7ef"/><text x="${L-8}" y="${Y(i)+4}" text-anchor="end">${i===0?'0':i.toPrecision(2)}</text>`});out+=`<path d="M${X(0)} ${T}V${bottom}M${L} ${Y(0)}H${right}" stroke="#798ca2"/><text x="${(L+right)/2}" y="${h-7}" text-anchor="middle">전압 V (V)</text><text x="17" y="${(T+bottom)/2}" text-anchor="middle" transform="rotate(-90 17 ${(T+bottom)/2})">전류 I (A)</text>`;
 series.forEach(s=>{out+=`<path d="M${X(-12)} ${Y(-12/s.R)}L${X(12)} ${Y(12/s.R)}" stroke="${s.color}" stroke-width="2.5" stroke-dasharray="${s.dash}" fill="none"/>`;const x=X(s.V),y=Y(s.I);out+=s.shape==='circle'?`<circle cx="${x}" cy="${y}" r="6" fill="${s.color}" stroke="white"/>`:s.shape==='rect'?`<rect x="${x-5}" y="${y-5}" width="10" height="10" fill="${s.color}" stroke="white"/>`:`<path d="M${x} ${y-7}L${x+7} ${y+5}H${x-7}Z" fill="${s.color}" stroke="white"/>`;});svg.innerHTML=out;}
 function sync(){for(const [id,key] of [['voltage','V'],['resistance','R']]){$(id).value=state[key];$(id+'Num').value=state[key];}update();}
 for(const [id,key,min,max,step] of [['voltage','V',-12,12,.1],['resistance','R',1,100,1]]){const range=$(id),number=$(id+'Num');range.addEventListener('input',()=>{state[key]=+range.value;number.value=state[key];$('error').textContent='';update();});number.addEventListener('input',()=>{const n=number.valueAsNumber;if(!Number.isFinite(n)||n<min||n>max||Math.abs(n/step-Math.round(n/step))>1e-7){$('error').textContent=`${key}는 ${min} ~ ${max} 범위에서 ${step} 간격으로 입력하세요. 마지막 유효값을 유지합니다.`;number.setAttribute('aria-invalid','true');return;}number.removeAttribute('aria-invalid');state[key]=n;range.value=n;$('error').textContent='';update();});number.addEventListener('change',()=>{number.value=state[key];number.removeAttribute('aria-invalid');$('error').textContent='';});}
 $('reverse').onclick=()=>{state.V=-state.V;sync();};$('saveA').onclick=()=>{saved.A=calculate(state.V,state.R);update();};$('saveB').onclick=()=>{saved.B=calculate(state.V,state.R);update();};$('reset').onclick=()=>{state={...defaults};saved={A:null,B:null};$('prediction').value='';$('error').textContent='';document.querySelectorAll('details').forEach(d=>d.open=false);document.querySelectorAll('[aria-invalid]').forEach(e=>e.removeAttribute('aria-invalid'));sync();};new ResizeObserver(drawGraph).observe($('graph'));sync();
+</script><script id="ohm33-standalone">
+(function(){
+"use strict";
+const el=id=>document.getElementById(id),main=document.querySelector("body>main");
+if(!main||!el("circuit")||el("ohm33-shell"))return;
+const scenePanel=el("circuit").closest("section.panel");
+const controlsPanel=el("voltage").closest("section.panel");
+const graphPanel=el("graph").closest("section.panel");
+const comparePanel=el("compare").closest("section.panel");
+const lessonPanel=el("prediction").closest("section.panel");
+if([scenePanel,controlsPanel,graphPanel,comparePanel,lessonPanel].some(x=>!x))return;
+const shell=document.createElement("div");shell.className="ohm33-shell";shell.id="ohm33-shell";
+const head=document.createElement("header");head.className="ohm33-top";
+const h=document.createElement("h1");h.textContent="⚡ 옴의 법칙 · 33번 실험실";
+const subtitle=document.createElement("span");subtitle.textContent="전압·저항에 따른 전류와 회로의 변화를 관찰합니다";
+const full=document.createElement("button");full.type="button";full.textContent="⛶ 전체화면";
+full.onclick=()=>{const p=document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();if(p&&p.catch)p.catch(()=>{});};head.append(h,subtitle,full);
+const tabs=document.createElement("nav");tabs.className="ohm33-tabs";tabs.setAttribute("role","tablist");
+const work=document.createElement("div");work.className="ohm33-workspace";work.dataset.view="experiment";
+const stage=document.createElement("section");stage.className="ohm33-stage";
+const graphs=document.createElement("section");graphs.className="ohm33-graphs";
+const side=document.createElement("aside");side.className="ohm33-side";
+const concepts=document.createElement("section");concepts.className="ohm33-concepts";
+stage.append(scenePanel);graphs.append(graphPanel,comparePanel);side.append(controlsPanel);
+const expl=document.createElement("article");expl.className="ohm33-explain";
+expl.innerHTML='<h2>전압·저항·전류의 관계</h2><p>온도가 일정한 옴성 저항에서는 <b>전류 I = 전압 V / 저항 R</b>입니다. 예를 들어 6 V, 20 Ω이면 0.300 A이며 전압을 12 V로 높이면 0.600 A가 됩니다. 같은 전압에서 저항을 40 Ω으로 높이면 전류는 0.150 A가 됩니다.</p><p><b>관습적 전류 방향:</b> 전지 (+)극에서 외부 회로를 돌아 (−)극으로 흐릅니다. 위쪽 (+)극 상태에서는 시계 방향이며 전지 극성을 뒤집으면 반시계 방향입니다. 금속 도선 속 전자는 반대 방향으로 이동합니다.</p><p>전류계는 직렬, 전압계는 저항 양단에 병렬 연결합니다. 이 모형의 움직이는 점은 실제 전자 크기나 표류 속도를 나타내지 않습니다. 점의 이동은 전류 크기 변화에 대한 <b>개념적 시각화</b>입니다.</p>';
+concepts.append(expl,lessonPanel);work.append(stage,graphs,side,concepts);shell.append(head,tabs,work);document.body.append(shell);
+document.body.classList.add("ohm33-ready");
+scenePanel.querySelector("h2").textContent="회로와 전류계 · 전하 이동";
+const circuit=el("circuit");
+const bar=document.createElement("div");bar.className="ohm33-runbar";
+bar.innerHTML='<button id="ohmStart" type="button">▶ 시작</button><button id="ohmPause" type="button">Ⅱ 정지</button><button id="ohmRestart" type="button">↺ 처음부터</button><label for="ohmCarrier">운반자</label><select id="ohmCarrier"><option value="electron">전자 (−)</option><option value="positive">양전하 (+) 모형</option></select><label for="ohmSpeed">속도</label><select id="ohmSpeed"><option value="0.5">0.5배</option><option value="1" selected>1배</option><option value="2">2배</option></select><span id="ohmMotionStatus">대기 중</span>';
+circuit.before(bar);
+const notice=scenePanel.querySelector(".notice");if(notice)notice.textContent="움직이는 전하 점은 관찰용 모형입니다. 회로에서 양의 전류는 시계 방향, 전자 이동은 반대 방향입니다.";
+const graphNotice=graphPanel.querySelector(".notice");if(graphNotice)graphNotice.textContent="그래프의 세로축은 비교 중 자동 축소되지 않습니다. 한 번 커진 축 범위를 초기화하려면 '그래프 축 초기화'를 선택하세요.";
+const graphTools=document.createElement("div");graphTools.className="ohm33-quick";
+graphTools.innerHTML='<button id="ohmAxisReset" type="button">그래프 축 초기화</button>';
+graphPanel.append(graphTools);
+const quick=document.createElement("div");quick.className="ohm33-quick";
+quick.innerHTML='<button id="ohmDoubleV" type="button">전압 ×2</button><button id="ohmDoubleR" type="button">저항 ×2</button>';
+controlsPanel.querySelector("h2").after(quick);
+const info=document.createElement("div");info.className="ohm33-extra";
+info.innerHTML='<b style="color:#9cefe3">현재 회로 상태</b><div id="ohmCurrentDetail">전류계: 0.300 A</div><div id="ohmSceneInfo">시작을 누르면 도선의 전하가 움직입니다.</div>';
+controlsPanel.append(info);
+let view="experiment";
+for(const [id,name] of [["experiment","① 회로 실험"],["graphs","② 그래프·비교"],["concepts","③ 개념 설명"]]){
+ const button=document.createElement("button");button.type="button";button.textContent=name;button.dataset.view=id;button.setAttribute("role","tab");
+ button.setAttribute("aria-selected",String(id===view));button.onclick=()=>{view=id;work.dataset.view=id;tabs.querySelectorAll("button").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.view===id)));if(id==="graphs")requestAnimationFrame(()=>{drawGraph();window.dispatchEvent(new Event("resize"));});if(id==="experiment")requestAnimationFrame(drawDots);};
+ tabs.append(button);
+}
+const NS="http://www.w3.org/2000/svg";
+function node(tag,attributes={},value){const n=document.createElementNS(NS,tag);Object.keys(attributes).forEach(k=>n.setAttribute(k,String(attributes[k])));if(value!==undefined)n.textContent=value;return n;}
+const additions=node("g",{id:"ohm33Extras"});
+const wires=node("path",{d:"M325 55V143H345 M405 143H426V55",fill:"none",stroke:"#80b2ce","stroke-width":2.5});
+const voltmeter=node("circle",{cx:375,cy:143,r:29,fill:"#19394f",stroke:"#94c8dd","stroke-width":3});
+const voltLabel=node("text",{x:375,y:150,"text-anchor":"middle","font-size":23,fill:"#f2faff","font-weight":800},"V");
+const topArrow=node("path",{d:"M266 55H312",stroke:"#5de5ee","stroke-width":3,fill:"none","marker-end":"url(#arrow)"});
+const rightArrow=node("path",{d:"M450 95V165",stroke:"#5de5ee","stroke-width":3,fill:"none","marker-end":"url(#arrow)"});
+const meterLabel=node("text",{x:220,y:135,"text-anchor":"middle","font-size":17,"font-weight":800,fill:"#87f0e4"},"+0.300 A");
+const voltmeterHint=node("text",{x:375,y:188,"text-anchor":"middle","font-size":12,fill:"#b5d9e9"},"병렬 전압계");
+const dots=node("g",{"pointer-events":"none"});
+const sprites=[];const count=11;
+for(let i=0;i<count;i++){const g=node("g"),circle=node("circle",{r:5,fill:"#86c8ff",stroke:"#c9ebff","stroke-width":1}),glyph=node("text",{y:3.2,"text-anchor":"middle","font-size":10,fill:"#112439","font-weight":800},"−");g.append(circle,glyph);dots.append(g);sprites.push({g,circle,glyph});}
+additions.append(wires,voltmeter,voltLabel,topArrow,rightArrow,meterLabel,voltmeterHint,dots);circuit.append(additions);
+const len=1040;let playing=false,carrier="electron",speed=1,phase=0,last=0,lastV=null,lastR=null;
+function position(distance){let d=((distance%len)+len)%len;if(d<370)return [80+d,55];d-=370;if(d<150)return [450,55+d];d-=150;if(d<370)return [450-d,205];return [80,205-(d-370)];}
+function drawDots(){
+ const I=state.V/state.R,sign=Math.sign(I),direction=sign*(carrier==="electron"?-1:1);
+ dots.style.opacity=sign===0?"0":"1";
+ sprites.forEach((sprite,j)=>{const xy=position(52+j*len/count+phase*direction);sprite.g.setAttribute("transform","translate("+xy[0].toFixed(1)+","+xy[1].toFixed(1)+")");sprite.circle.setAttribute("fill",carrier==="electron"?"#82c3ff":"#ffce8d");sprite.glyph.textContent=carrier==="electron"?"−":"+";});
+}
+function refresh(){
+ const I=state.V/state.R,sign=Math.sign(I);
+ topArrow.setAttribute("d",sign>=0?"M266 55H311":"M311 55H266");
+ rightArrow.setAttribute("d",sign>=0?"M450 94V161":"M450 161V94");
+ topArrow.style.display=I?"":"none";rightArrow.style.display=I?"":"none";
+ const value=(I>0?"+":"")+I.toFixed(3)+" A";
+ meterLabel.textContent=value;
+ el("ohmCurrentDetail").textContent="전류계: "+value+" · 저항 양단 전압: "+state.V.toFixed(1)+" V";
+ el("ohmSceneInfo").textContent="관습적 전류: "+(I>0?"시계 방향":I<0?"반시계 방향":"흐르지 않음")+" · 입자 이동 속도는 관찰용 표현";
+ if(lastV!==null&&(lastV!==state.V||lastR!==state.R))phase=0;
+ lastV=state.V;lastR=state.R;
+ drawDots();
+}
+el("ohmStart").onclick=()=>{playing=true;last=0;};
+el("ohmPause").onclick=()=>{playing=false;last=0;};
+el("ohmRestart").onclick=()=>{playing=true;phase=0;last=0;drawDots();};
+el("ohmCarrier").onchange=x=>{carrier=x.target.value;phase=0;drawDots();};
+el("ohmSpeed").onchange=x=>{speed=Number(x.target.value);last=0;};
+el("ohmAxisReset").onclick=()=>{axis33=.75;drawGraph();};
+el("ohmDoubleV").onclick=()=>{state.V=Math.max(-12,Math.min(12,state.V*2));sync();refresh();};
+el("ohmDoubleR").onclick=()=>{state.R=Math.max(1,Math.min(100,state.R*2));sync();refresh();};
+for(const id of ["voltage","resistance","voltageNum","resistanceNum"])el(id).addEventListener("input",refresh);
+for(const id of ["reverse","reset"])el(id).addEventListener("click",()=>{if(id==="reset"){playing=false;phase=0;axis33=.75;}refresh();});
+document.addEventListener("visibilitychange",()=>{last=0;if(document.hidden)playing=false;});
+new ResizeObserver(()=>{if(view==="graphs")requestAnimationFrame(drawGraph);}).observe(graphPanel);
+function loop(now){
+ if(playing&&!document.hidden){if(last!==0){const dt=Math.min(.06,(now-last)/1000);const I=Math.abs(state.V/state.R);if(I>0)phase=(phase+dt*(40+95*Math.sqrt(I))*speed)%len;}}
+ last=now;
+ if(view==="experiment")drawDots();
+ el("ohmMotionStatus").textContent=playing?"● 재생 중":"Ⅱ 일시정지";
+ el("ohmStart").disabled=playing;el("ohmPause").disabled=!playing;
+ requestAnimationFrame(loop);
+}
+refresh();requestAnimationFrame(loop);
+})();
 </script></body></html>
