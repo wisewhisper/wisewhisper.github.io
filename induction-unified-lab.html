@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#080e19">
+<meta name="description" content="WiseWhisper 전자기 유도 통합 실험실: 코일 내부 자석 통과, 패러데이 법칙, 렌츠 법칙, 자속·기전력·전류 그래프">
+<title>전자기 유도 통합 가상실험실 | WiseWhisper</title>
+<style>
+:root{color-scheme:dark;--bg:#060c15;--panel:#101e30;--panel2:#0b1726;--line:#293e56;--txt:#edf6ff;--muted:#abc1d6;--blue:#54c5ff;--pink:#ff728e;--gold:#ffc765;--green:#67e2ae;--focus:#ffffff}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 14% -15%,#17344f 0,#080f1b 45%,#050910 100%);color:var(--txt);font-family:system-ui,-apple-system,"Noto Sans KR","Malgun Gothic",sans-serif}button,select,input{font:inherit}button{cursor:pointer}button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.app{max-width:1680px;margin:0 auto;padding:12px 16px 24px}.hero{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px}.eyebrow{font-size:11px;letter-spacing:.13em;color:#83d7fb;font-weight:800}.hero h1{font-size:clamp(22px,2.5vw,32px);margin:2px 0 4px;letter-spacing:-.03em}.hero p{font-size:13px;color:var(--muted);margin:0}.law{border:1px solid #345776;border-radius:11px;background:#12233a;padding:10px 13px;font-size:15px;font-weight:750;white-space:nowrap}
+.tabs{display:flex;gap:7px;overflow-x:auto;padding:2px 0 9px;margin:0 0 8px;scrollbar-width:thin;border-bottom:1px solid var(--line)}.tabs button{border:1px solid #344a63;background:#162539;border-radius:9px;color:#c8d9ed;font-weight:750;font-size:13px;white-space:nowrap;min-height:39px;padding:9px 13px}.tabs button[aria-selected=true]{background:#135a86;border-color:#70c4ef;color:#fff}
+.toolbar{display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:9px;background:#101d2e;border:1px solid var(--line);border-radius:12px;margin-bottom:9px}.btn{min-height:36px;padding:7px 11px;border:1px solid #405a75;background:#20354d;border-radius:8px;color:var(--txt);font-weight:750;font-size:13px}.btn:hover{background:#294c6d}.btn.primary{background:#106b9b;border-color:#49afd9}.btn.selected{background:#114a3c;border-color:#56bb91}.inline{display:flex;align-items:center;gap:6px;font-size:12px;color:#d9e9f7;font-weight:750}.inline select{max-width:145px;background:#101f32;color:white;border:1px solid #405a75;padding:7px 6px;border-radius:7px}.inline input[type=range]{width:100px;accent-color:#64cafa}.inline input[type=checkbox]{accent-color:#5ad6ad;width:18px;height:18px}.grow{flex:1}.tiny{font-size:11px;color:#9eb8cc}
+.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:0 0 10px}.metric{border:1px solid #2d435c;background:#102035;border-radius:10px;padding:9px 12px}.metric small{font-size:11px;color:#aac1d7;display:block}.metric strong{display:block;font-size:clamp(15px,1.5vw,20px);font-variant-numeric:tabular-nums;margin-top:2px;white-space:nowrap}.metric:nth-child(1) strong{color:#fff}.metric:nth-child(2) strong{color:var(--blue)}.metric:nth-child(3) strong{color:var(--pink)}.metric:nth-child(4) strong{color:var(--gold)}
+[hidden]{display:none!important}.panel{margin-top:0}.work{display:grid;grid-template-columns:minmax(0,2.5fr) minmax(260px,1fr);gap:10px}.card{background:linear-gradient(180deg,#101e30,#0a1523);border:1px solid var(--line);border-radius:14px;padding:12px;min-width:0}.card h2{font-size:17px;margin:0 0 6px}.lead{font-size:12px;line-height:1.5;color:var(--muted);margin:0 0 8px}.scene{display:block;width:100%;height:clamp(370px,54vh,690px);border:1px solid #254762;background:#081523;border-radius:10px;touch-action:none;cursor:grab}.scene.dragging{cursor:grabbing}.side{display:flex;flex-direction:column;gap:9px}.info{padding:11px 12px;border-radius:10px;background:#15293e;border:1px solid #2b4c66;font-size:13px;line-height:1.55}.info b{color:var(--green)}.bar{margin:9px 0;display:flex;align-items:center;gap:8px;flex-wrap:wrap}.tag{font-size:12px;color:#83d7ff;padding:5px 8px;border-radius:99px;background:#102b41;border:1px solid #2f6384;font-weight:700}.field{margin-bottom:12px}.field label{display:flex;justify-content:space-between;gap:10px;align-items:center;color:#d8e7f6;font-size:13px;font-weight:700;margin-bottom:4px}.field output{color:#8bddff;font-variant-numeric:tabular-nums}.field input[type=range]{width:100%;accent-color:var(--blue)}.field p{font-size:11px;line-height:1.5;color:#9eb6cb;margin:4px 0 0}.legend{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:11px;color:#bad0e1}.swatch{display:inline-block;width:13px;height:4px;border-radius:8px;margin-right:4px;vertical-align:middle}.meter{width:100%;height:115px;position:relative;border-radius:11px;background:#0a1727;border:1px solid #31506b;display:flex;flex-direction:column;align-items:center;justify-content:center}.meter svg{width:min(100%,235px);height:105px}.meter .caption{position:absolute;top:7px;left:9px;font-size:11px;color:#9fc4db}
+.graph{display:block;width:100%;height:clamp(430px,62vh,720px);background:#071423;border:1px solid #274563;border-radius:10px}.graphside .info{margin-top:10px}.scenario{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.scenario button{padding:10px 8px;min-height:48px}.lesson{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.lesson article{padding:16px;border:1px solid #2d4660;background:#101f32;border-radius:13px}.lesson h2{font-size:18px;margin:0 0 10px;color:#9bdafd}.lesson p,.lesson li{font-size:14px;line-height:1.8;color:#d3e0ee}.lesson ul,.lesson ol{padding-left:19px}.formula{padding:12px;background:#091728;border-left:3px solid #56bdec;border-radius:6px;color:#e7f8ff;font-size:16px;overflow-wrap:anywhere}.lesson details{margin:9px 0;padding:9px 12px;border:1px solid #304960;border-radius:8px}.lesson summary{cursor:pointer;color:#e6f4ff;font-weight:700}.footer{font-size:11px;color:#8dabc3;margin-top:12px;line-height:1.6}
+@media(max-width:900px){.work{grid-template-columns:1fr}.scene{height:clamp(350px,48vh,560px)}.side{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.side>*{min-width:0}.lesson{grid-template-columns:1fr}}@media(max-width:550px){.app{padding:10px 9px 20px}.hero h1{font-size:22px}.law{display:none}.tabs button{padding:8px 9px;font-size:12px}.toolbar{gap:5px}.btn{padding:7px 8px;font-size:12px}.metrics{gap:5px}.metric{padding:8px 6px}.metric strong{font-size:14px}.scene{height:365px}.side{display:flex}.lesson article{padding:12px}.scenario{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+</head>
+<body><div class="app">
+<header class="hero"><div><div class="eyebrow">WISEWHISPER · INTERACTIVE PHYSICS LAB</div><h1>🧲 전자기 유도 통합 가상실험실</h1><p>자석이 코일 <b>속을 통과</b>하면서 자속 · 유도 기전력 · 전류가 어떻게 바뀌는지 탐구합니다.</p></div><div class="law">패러데이 법칙: ε = −d(NΦ)/dt &nbsp; · &nbsp; I = ε/R</div></header>
+<nav class="tabs" role="tablist" aria-label="실험 탭">
+<button data-tab="basic" role="tab" aria-selected="true">① 기본 실험</button>
+<button data-tab="variables" role="tab" aria-selected="false">② 변수 실험</button>
+<button data-tab="graphs" role="tab" aria-selected="false">③ 그래프 분석</button>
+<button data-tab="lenz" role="tab" aria-selected="false">④ 렌츠 법칙</button>
+<button data-tab="extra" role="tab" aria-selected="false">⑤ 확장 실험</button>
+<button data-tab="learn" role="tab" aria-selected="false">⑥ 개념·탐구</button>
+</nav>
+<div class="toolbar" id="toolbar">
+<button id="play" class="btn primary">▶ 재생</button>
+<button id="pause" class="btn">⏸ 정지</button>
+<button id="reset" class="btn">↺ 초기화</button>
+<button id="reverse" class="btn">⇄ 방향 반전</button>
+<label class="inline">방식 <select id="mode"><option value="auto">자동 왕복</option><option value="manual">직접 드래그</option></select></label>
+<label class="inline">속력 <input id="speed" type="range" min="5" max="60" step="5" value="20"><output id="speedOut">20 cm/s</output></label>
+<label class="inline">자석 극 <select id="pole"><option value="1">S | N →</option><option value="-1">← N | S</option></select></label>
+<label class="inline"><input id="closed" type="checkbox" checked> 회로 닫기</label>
+</div>
+<div class="metrics" role="status" aria-live="off">
+<div class="metric"><small>자석 위치 / 속도</small><strong id="position">−36.0 cm</strong><small id="velocity">0.0 cm/s</small></div>
+<div class="metric"><small>총 자속 연결 NΦ</small><strong id="flux">0.00 mWb</strong><small>감은 수를 포함한 선속</small></div>
+<div class="metric"><small>유도 기전력 ε</small><strong id="emf">0.0 mV</strong><small>개방 회로에서도 존재</small></div>
+<div class="metric"><small>유도 전류 I</small><strong id="current">0.00 mA</strong><small id="currentDir">회로 닫힘 · 정지</small></div>
+</div>
+<section class="panel" id="panel-basic" role="tabpanel">
+<div class="work">
+<div class="card"><h2>코일 내부 관통 실험</h2><p class="lead">자석은 코일 뒤로 숨지 않고 원통 내부를 통과합니다. 앞쪽·뒤쪽 코일 권선을 따로 그려 입체적인 통과 과정을 보여 줍니다.</p><canvas class="scene" id="sceneBasic" aria-label="막대자석이 코일 원통 내부를 왼쪽에서 오른쪽으로 관통하는 실험 장면"></canvas><div class="bar"><span class="tag" id="stage">코일 왼쪽 · 접근 전</span><span class="tag" id="motion">정지</span></div></div>
+<div class="side">
+<div class="card"><h2>실시간 관찰</h2><p class="lead">자석의 위치와 운동 방향에 따른 결과입니다.</p><div class="info" id="statusBasic">자석이 정지해 있습니다.</div><p class="lead" style="margin-top:10px">검류계 (바늘은 유도 전류만 표시)</p><div class="meter" id="meterBasic"><span class="caption">I = ε / R</span><svg viewBox="0 0 220 102"><path d="M30 83 A80 80 0 0 1 190 83" fill="none" stroke="#567d9a" stroke-width="3"/><path d="M45 85V79M175 85V79" stroke="#9cb4c9" stroke-width="2"/><text x="20" y="92" fill="#ff829c" font-size="13">−</text><text x="198" y="92" fill="#6fe4b1" font-size="13">+</text><text x="108" y="13" fill="#cddff0" font-size="12">0</text><g id="needle" transform="rotate(0 110 87)"><path d="M110 87 L110 19" stroke="#ff8090" stroke-width="3" stroke-linecap="round"/></g><circle cx="110" cy="87" r="7" fill="#85b8d8"/></svg></div></div>
+<div class="card"><h2>관찰 포인트</h2><div class="info">① 왼쪽에서 접근하며 기전력의 부호 관찰<br>② 중심 통과에서 기전력 약 0 확인<br>③ 오른쪽으로 이탈하며 부호 반전 확인</div><p class="lead" style="margin-top:10px">직접 끌기 모드에서 자석을 드래그한 뒤 손을 떼면 속도가 0으로 돌아옵니다.</p></div>
+</div></div></section>
+<section class="panel" id="panel-variables" role="tabpanel" hidden>
+<div class="work"><div class="card"><h2>조건을 바꾸면서 코일을 통과시키기</h2><p class="lead">한 번에 하나의 변수만 조절하고 나머지는 일정하게 유지해 유도 기전력과 전류의 변화를 비교하세요.</p><canvas class="scene" id="sceneVariables"></canvas><div class="bar"><span class="tag" id="variableStage">변수 실험</span><button class="btn" id="defaultVars">변수 기본값</button></div></div>
+<div class="side"><div class="card"><h2>실험 변수</h2>
+<div class="field"><label for="turns">코일 감은 수 N <output id="turnsOut">200회</output></label><input id="turns" type="range" min="50" max="500" step="10" value="200"><p>N이 증가하면 같은 선속 변화에서 기전력도 증가합니다.</p></div>
+<div class="field"><label for="strength">자석 세기 <output id="strengthOut">1.0배</output></label><input id="strength" type="range" min="0.2" max="2" step="0.1" value="1"><p>자석 세기를 높이면 자기 선속 변화량이 커집니다.</p></div>
+<div class="field"><label for="radius">코일 반지름 <output id="radiusOut">50 mm</output></label><input id="radius" type="range" min="30" max="80" step="1" value="50"><p>유효 면적과 자속 분포 모양이 함께 변하는 근사 모형입니다.</p></div>
+<div class="field"><label for="resistance">회로 저항 R <output id="resistanceOut">8 Ω</output></label><input id="resistance" type="range" min="1" max="30" step="1" value="8"><p>같은 기전력에서 R이 커지면 전류가 작아집니다.</p></div>
+</div><div class="info">상단의 속력·자석 극·회로 개폐 조건은 모든 탭에 공통 적용됩니다.</div></div></div>
+</section>
+<section class="panel" id="panel-graphs" role="tabpanel" hidden>
+<div class="work"><div class="card"><h2>세 물리량의 시간 그래프</h2><p class="lead">세로축은 각 그래프마다 별도 단위와 눈금을 사용합니다. 가로축은 최근 12초이며, 자속 연결 → 기전력 → 전류의 관계를 비교합니다.</p><canvas class="graph" id="timeGraph" aria-label="시간에 따른 자속 연결, 기전력, 전류의 개별 그래프"></canvas><div class="legend" style="margin-top:8px"><span><i class="swatch" style="background:var(--blue)"></i>NΦ (mWb)</span><span><i class="swatch" style="background:var(--pink)"></i>ε (mV)</span><span><i class="swatch" style="background:var(--gold)"></i>I (mA)</span></div></div>
+<div class="side graphside"><div class="card"><h2>그래프 분석</h2><div class="info">유도 기전력의 부호는 <b>자속 연결 그래프의 기울기와 반대</b>입니다. 회로를 열어도 자속 연결과 기전력은 그대로 계산되지만 전류는 0이 됩니다.</div><button id="clearHistory" class="btn" style="margin-top:9px">그래프 기록 초기화</button></div><div class="card"><h2>그래프 탐구</h2><p class="lead">① 자속 연결이 가장 클 때 기전력은?<br>② 기전력이 +에서 −로 바뀌는 위치는?<br>③ 회로 저항을 2배로 하면 전류 곡선은?<br>④ 자석을 멈추면 그래프는?</p></div></div></div>
+</section>
+<section class="panel" id="panel-lenz" role="tabpanel" hidden>
+<div class="work"><div class="card"><h2>렌츠 법칙 — 전류 방향과 코일 극성</h2><p class="lead">왼쪽에서 코일을 바라볼 때의 시계·반시계 방향을 기준으로 표시합니다. 움직이는 자석의 자기 선속 변화를 방해하도록 코일의 유도 자기장이 나타납니다.</p><canvas class="scene" id="sceneLenz"></canvas><div class="bar"><span class="tag" id="lenzState">코일의 극성</span><span class="tag" id="fieldState">유도 자기장 없음</span></div></div>
+<div class="side"><div class="card"><h2>현재 상황 분석</h2><div id="lenzExplain" class="info">자석을 움직여 유도 전류를 관찰하세요.</div></div><div class="card"><h2>방향 판정 기준</h2><p class="lead">코일의 왼쪽을 바라보는 것이 아니라, <b>왼쪽에서 오른쪽으로 코일을 바라보는</b> 관찰자 기준입니다.</p><div class="info">시계 방향 전류 → 코일 자기장 오른쪽(+x)<br>반시계 방향 전류 → 코일 자기장 왼쪽(−x)</div></div><div class="card"><h2>자주 혼동하는 상황</h2><p class="lead">자석이 코일 반대편으로 이동해도 자석의 N·S극이 뒤집히는 것은 아닙니다. 코일이 만드는 자기장의 방향은 <b>자속 변화율</b>에 따라 결정됩니다.</p></div></div></div>
+</section>
+<section class="panel" id="panel-extra" role="tabpanel" hidden>
+<div class="work"><div class="card"><h2>추가 상황 실험</h2><p class="lead">실험 조건 버튼을 누르고 자석이 코일 속을 통과할 때의 물리량과 전류 방향을 비교해 보세요.</p><canvas class="scene" id="sceneExtra"></canvas><div class="bar"><span class="tag" id="scenarioName">기본 조건</span></div></div>
+<div class="side"><div class="card"><h2>탐구 시나리오</h2><div class="scenario">
+<button class="btn" data-case="north">① N·S극 반전</button><button class="btn" data-case="fast">② 속력 2배</button>
+<button class="btn" data-case="turns">③ 감은 수 2배</button><button class="btn" data-case="open">④ 회로 열기</button>
+<button class="btn" data-case="resistance">⑤ 저항 2배</button><button class="btn" data-case="reset">⑥ 기본 조건</button>
+</div></div><div class="info" id="scenarioExplain">시나리오를 선택하면 변화되는 물리량과 예상 결과가 표시됩니다.</div><div class="card"><h2>실험 설계 원칙</h2><p class="lead">각 버튼은 기본 조건에서 한 변수만 바꾼 상태로 시작합니다. 관찰할 물리량과 바뀌지 않아야 할 물리량을 구분하세요.</p></div></div></div>
+</section>
+<section class="panel" id="panel-learn" role="tabpanel" hidden>
+<div class="lesson">
+<article><h2>① 자기 선속과 유도 기전력</h2><p>코일을 통과하는 자기장이 시간에 따라 변하면 기전력이 유도됩니다. 유도 기전력의 크기는 코일의 감은 수와 자기 선속의 시간 변화율에 비례합니다.</p><div class="formula">Φ = ∫ B · dA &nbsp;&nbsp; / &nbsp;&nbsp; ε = −N dΦ/dt</div><p>− 부호는 유도 전류의 방향이 선속 변화를 방해한다는 렌츠 법칙을 나타냅니다.</p></article>
+<article><h2>② 코일 속을 통과하는 자석</h2><p>자석을 코일 내부로 밀어 넣으면 자속 연결이 증가하고, 코일 중심을 지나 반대편으로 이동하면 감소합니다. 자화 방향을 바꾸면 자속·기전력의 부호가 함께 반전됩니다.</p><div class="formula">코일 왼쪽 → 코일 내부 → 코일 오른쪽<br>접근 → 중심 통과 → 이탈</div><p>대칭적인 근사 모형에서 코일 중심의 자속 연결은 극값이고, 일정 속력이라면 해당 순간 ε ≈ 0입니다.</p></article>
+<article><h2>③ 회로 저항과 전류</h2><p>유도 기전력은 회로가 열려 있어도 존재할 수 있지만, 전류는 닫힌 회로에서 흐릅니다. 저항이 커지면 같은 기전력에서 전류는 작아집니다.</p><div class="formula">I = ε / R &nbsp; (회로가 닫혔을 때)</div><p>본 시뮬레이션은 순수 저항 회로를 가정하며 자체 인덕턴스와 과도응답은 생략합니다.</p></article>
+<article><h2>④ 근사 모형과 한계</h2><p>실험에서 두 버전의 계산식을 통일하기 위해 유한 길이 솔레노이드의 부드러운 축대칭 선속 연결 근사 함수를 사용합니다. 위치에 따른 선속은 중심에서 극값을 갖고 양 끝으로 갈수록 작아집니다.</p><div class="formula">Λ(x) = N B₀ πr² · S(x)<br>ε = −v · dΛ/dx</div><p>여기서 Λ=NΦ, S(x)는 코일 길이와 반지름에 의해 결정되는 대칭 함수입니다. 실제 자석의 자기장 분포, 자성체 및 코일 저항 이외의 회로 특성은 정밀하게 모사하지 않습니다.</p></article>
+<article><h2>⑤ 형성평가</h2><details><summary>문제 1. 자석을 코일 중앙에서 정지시키면 유도 전류는?</summary><p>정지하면 자속 연결의 시간 변화율이 0이므로 유도 기전력과 전류 모두 0입니다.</p></details><details><summary>문제 2. 감은 수를 두 배로 하면 기전력은?</summary><p>자석 운동과 자기장 조건이 같을 때 유도 기전력은 두 배입니다.</p></details><details><summary>문제 3. 회로를 열면 기전력도 없어지는가?</summary><p>아닙니다. 자속이 변하면 기전력은 생기지만 전류는 흐르지 않습니다.</p></details><details><summary>문제 4. 자석이 반대편으로 빠져나가면 자화 방향이 바뀌는가?</summary><p>아닙니다. 자석의 N·S 방향은 그대로이며, 선속 변화율의 부호가 바뀌어 유도 기전력 방향이 반전됩니다.</p></details></article>
+<article><h2>⑥ 수업 탐구 순서</h2><ol><li>기본 실험에서 자석의 코일 내부 통과와 기전력 변화를 확인합니다.</li><li>변수 실험에서 감은 수, 속력, 자기장 세기를 한 가지씩 바꿉니다.</li><li>그래프 분석에서 선속의 기울기와 기전력의 부호를 비교합니다.</li><li>렌츠 법칙 탭에서 유도 전류 방향을 설명합니다.</li><li>확장 실험에서 회로 개방과 저항 변화의 영향을 확인합니다.</li></ol></article>
+</div></section>
+<p class="footer">교육용 근사 시뮬레이션 · 실험 장면의 코일은 내부 공간이 보이도록 뒷면 권선 → 자석 → 앞면 권선 순서로 그렸습니다. 감은 수는 물리 계산에 사용하지만 실제로 그리는 권선 수는 가독성을 위한 표현입니다.</p>
+</div>
+<script>
+(function(){
+'use strict';
+const $=id=>document.getElementById(id);
+const TAU=2*Math.PI,L=.18,B0=.03,HALF=.42;
+const state={tab:'basic',x:-.36,v:0,dir:1,running:false,mode:'auto',pole:1,closed:true,speed:.20,N:200,strength:1,radius:.05,R:8,t:0,last:0,lastSample:-1,history:[],dragging:false,dragTime:0,dragId:null,showField:true,scenario:'기본 조건'};
+const drawCanvases={basic:'sceneBasic',variables:'sceneVariables',lenz:'sceneLenz',extra:'sceneExtra'};
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const f=(v,d=1)=>(v>=0?'+':'−')+Math.abs(v).toFixed(d);
+function shape(x){
+ const soft=Math.sqrt(state.radius*state.radius+.045*.045);
+ const a=x+L/2,b=x-L/2;
+ return .5*(a/Math.sqrt(a*a+soft*soft)-b/Math.sqrt(b*b+soft*soft));
+}
+function slope(x){
+ const sq=state.radius*state.radius+.045*.045,a=x+L/2,b=x-L/2;
+ return .5*(sq/Math.pow(a*a+sq,1.5)-sq/Math.pow(b*b+sq,1.5));
+}
+function measure(){
+ const factor=state.pole*state.N*B0*state.strength*Math.PI*state.radius*state.radius;
+ const flux=factor*shape(state.x),emf=-state.v*factor*slope(state.x);
+ const current=state.closed?emf/state.R:0;
+ return {flux,emf,current,Bind:Math.abs(current)<1e-10?0:Math.sign(current)};
+}
+function display(){
+ const m=measure();
+ $('position').textContent=f(state.x*100,1)+' cm';
+ $('velocity').textContent='v = '+f(state.v*100,1)+' cm/s';
+ $('flux').textContent=f(m.flux*1000,2)+' mWb';
+ $('emf').textContent=f(m.emf*1000,2)+' mV';
+ $('current').textContent=f(m.current*1000,2)+' mA';
+ $('currentDir').textContent=!state.closed?'회로 개방 · I = 0':m.Bind>0?'왼쪽에서 시계 방향':m.Bind<0?'왼쪽에서 반시계 방향':'전류 0';
+ $('speedOut').textContent=Math.round(state.speed*100)+' cm/s';
+ const where=state.x<-.13?'코일 왼쪽':state.x>.13?'코일 오른쪽':'코일 내부';
+ const movement=Math.abs(state.v)<.0001?'정지':state.v>0?'오른쪽 이동 →':'← 왼쪽 이동';
+ for(const id of ['stage','variableStage'])$(id).textContent=where+' · '+f(state.x*100,1)+' cm';
+ $('motion').textContent=movement;
+ const trend=-m.emf*(state.pole>0?1:-1);
+ let basic;
+ if(Math.abs(state.v)<.0001)basic='자석이 정지하여 자기 선속이 변하지 않습니다. 유도 기전력 ε=0, 전류 I=0.';
+ else if(Math.abs(m.emf)<.00005)basic='코일 중심의 대칭적인 위치에서 자속이 극값을 이루어 순간 유도 기전력이 거의 0입니다.';
+ else basic=where+'에서 '+movement+'. 자속 연결이 '+(trend>0?'증가':'감소')+'하여 유도 기전력이 '+(m.emf>0?'+':'−')+' 부호를 갖습니다.';
+ if(!state.closed)basic+=' 회로가 열려 있어 전류는 흐르지 않습니다.';
+ $('statusBasic').textContent=basic;
+ $('lenzState').textContent=m.Bind>0?'왼쪽 면 S극 / 오른쪽 면 N극':m.Bind<0?'왼쪽 면 N극 / 오른쪽 면 S극':'코일 유도 자극 없음';
+ $('fieldState').textContent=m.Bind>0?'유도 자기장 → +x':m.Bind<0?'유도 자기장 ← −x':'유도 자기장 0';
+ $('lenzExplain').textContent=(m.Bind===0?(!state.closed?'회로가 열려 전류에 의한 자기장이 생기지 않습니다. 자속 변화가 있으면 기전력은 여전히 발생합니다.':'순간 유도 전류가 0이므로 코일에 유도 자기장이 생기지 않습니다.'):('자석에 의한 선속 변화에 반대하도록 코일의 자기장이 '+(m.Bind>0?'오른쪽(+x)':'왼쪽(−x)')+'을 향합니다. 왼쪽에서 코일을 바라보면 '+(m.Bind>0?'시계':'반시계')+' 방향 전류이며 코일의 왼쪽 면은 '+(m.Bind>0?'S':'N')+'극입니다.'));
+ const needle=$('needle');needle.setAttribute('transform','rotate('+clamp(m.current*1000*10,-65,65)+' 110 87)');
+ return m;
+}
+function makeCanvas(c){
+ const d=Math.min(window.devicePixelRatio||1,2),rect=c.getBoundingClientRect(),w=Math.max(1,rect.width),h=Math.max(1,rect.height);
+ const iw=Math.round(w*d),ih=Math.round(h*d);if(c.width!==iw||c.height!==ih){c.width=iw;c.height=ih}
+ const ctx=c.getContext('2d');ctx.setTransform(d,0,0,d,0,0);return {ctx,w,h};
+}
+function drawScene(c){
+ const {ctx:g,w,h}=makeCanvas(c);
+ const cy=h*.50,area=Math.max(130,w-190),scale=area/(HALF*2),cx=w/2,px=x=>cx+x*scale;
+ const ax=px(state.x),mw=clamp(.125*scale,64,152),mh=clamp(.075*scale,52,86);
+ const cr=clamp(state.radius*scale*1.22,55,105),cw=clamp(L*scale,100,225),coilLeft=cx-cw/2,coilRight=cx+cw/2,turns=w<500?7:11;
+ const xs=Array.from({length:turns},(_,i)=>coilLeft+cw*i/(turns-1));
+ const bg=g.createLinearGradient(0,0,0,h);bg.addColorStop(0,'#0e2740');bg.addColorStop(1,'#071320');g.fillStyle=bg;g.fillRect(0,0,w,h);
+ g.save();g.strokeStyle='#213c54';g.lineWidth=1;for(let y=20;y<h;y+=45){g.beginPath();g.moveTo(0,y);g.lineTo(w,y);g.stroke()}g.restore();
+ g.save();g.strokeStyle='#3b5e7a';g.lineWidth=2;const axisY=cy+cr+42;g.beginPath();g.moveTo(18,axisY);g.lineTo(w-18,axisY);g.stroke();
+ g.fillStyle='#92afc7';g.font='12px system-ui';g.textAlign='center';g.textBaseline='middle';
+ for(let cm=-40;cm<=40;cm+=20){const x=px(cm/100);g.beginPath();g.moveTo(x,axisY-5);g.lineTo(x,axisY+5);g.stroke();g.fillText((cm>0?'+':'')+cm+'cm',x,axisY+20)}
+ g.setLineDash([4,6]);g.strokeStyle='#5e8eb5';g.beginPath();g.moveTo(cx,25);g.lineTo(cx,axisY-16);g.stroke();g.setLineDash([]);g.restore();
+ // Coil cavity behind the magnet; rear windings are drawn first.
+ g.fillStyle='rgba(85,160,221,.12)';g.fillRect(coilLeft,cy-cr,cw,2*cr);
+ for(let i=0;i<xs.length;i++){g.beginPath();g.ellipse(xs[i],cy,clamp(cr*.19,10,17),cr,0,Math.PI,2*Math.PI);g.lineWidth=5;g.strokeStyle='#ab782e';g.stroke()}
+ // Optional indicative field arrows; these are schematic, not computed field lines.
+ if(state.showField){const sg=state.pole;g.save();g.strokeStyle=sg>0?'#fa7483':'#63a9f7';g.fillStyle=g.strokeStyle;g.lineWidth=1.6;g.globalAlpha=.45;for(let k of [-1,1]){const fy=cy+k*(cr+27),x1=ax-60*sg,x2=ax+60*sg;g.beginPath();g.moveTo(x1,fy);g.lineTo(x2,fy);g.stroke();g.beginPath();g.moveTo(x2,fy);g.lineTo(x2-sg*9,fy-6);g.lineTo(x2-sg*9,fy+6);g.closePath();g.fill()}g.restore()}
+ // Magnet inside the hollow core.
+ g.save();g.shadowColor='#0009';g.shadowBlur=16;g.shadowOffsetY=5;
+ const left=state.pole===1?'#297dd0':'#e34855',right=state.pole===1?'#e34855':'#297dd0';
+ g.fillStyle=left;g.beginPath();g.roundRect(ax-mw/2,cy-mh/2,mw/2,mh,[8,0,0,8]);g.fill();
+ g.fillStyle=right;g.beginPath();g.roundRect(ax,cy-mh/2,mw/2,mh,[0,8,8,0]);g.fill();g.shadowColor='transparent';
+ g.strokeStyle='#ffffffa8';g.lineWidth=1.7;g.beginPath();g.roundRect(ax-mw/2,cy-mh/2,mw,mh,8);g.stroke();
+ g.fillStyle='white';g.font='bold '+clamp(mh*.38,20,30)+'px system-ui';g.textAlign='center';g.textBaseline='middle';
+ g.fillText(state.pole===1?'S':'N',ax-mw/4,cy);g.fillText(state.pole===1?'N':'S',ax+mw/4,cy);g.restore();
+ // Near, front halves MUST cover the magnet to show actual inside passage.
+ for(const x of xs){g.beginPath();g.ellipse(x,cy,clamp(cr*.19,10,17),cr,0,0,Math.PI);g.lineWidth=7;g.strokeStyle='#c0883e';g.stroke();
+ g.beginPath();g.ellipse(x-1,cy-1,clamp(cr*.19,10,17),cr-1,0,0,Math.PI);g.lineWidth=2.6;g.strokeStyle='#ffd57e';g.stroke()}
+ // Labels and movement overlay.
+ g.textAlign='center';g.textBaseline='alphabetic';g.font='bold '+(w<500?13:16)+'px system-ui';g.fillStyle='#c2e7fd';g.fillText('코일 속 자석 통로',cx,clamp(cy-cr-31,22,h-50));
+ g.font='bold '+(w<500?12:15)+'px system-ui';g.fillStyle='#67e6b5';const motion=Math.abs(state.v)<.001?'■ 정지':state.v>0?'이동 방향  →':'←  이동 방향';
+ g.fillText(motion,clamp(ax,65,w-65),clamp(cy-cr-12,34,h-38));
+ g.fillStyle='#a8c7df';g.font='12px system-ui';g.fillText('자석 중심 '+f(state.x*100,1)+' cm',clamp(ax,82,w-82),cy+cr+22);
+ g.textAlign='left';g.fillText('← 왼쪽',14,24);g.textAlign='right';g.fillText('오른쪽 →',w-14,24);
+ if(state.tab==='lenz'){const m=measure();g.font='bold 14px system-ui';g.textAlign='center';g.fillStyle='#68e8b5';g.fillText(m.Bind>0?'유도 자기장 →':m.Bind<0?'← 유도 자기장':'유도 자기장 0',cx,axisY+49)}
+}
+function drawGraph(c){
+ const {ctx:g,w,h}=makeCanvas(c);g.fillStyle='#071523';g.fillRect(0,0,w,h);
+ const vals=[{k:'flux',name:'총 자속 연결 NΦ',unit:'mWb',c:'#54c5ff',mult:1000},{k:'emf',name:'유도 기전력 ε',unit:'mV',c:'#ff728e',mult:1000},{k:'current',name:'유도 전류 I',unit:'mA',c:'#ffc765',mult:1000}];
+ const left=66,right=20,top=22,padBottom=32,gap=23;
+ const panelHeight=(h-top-padBottom-gap*2)/3;
+ for(let j=0;j<3;j++){const item=vals[j],y=top+j*(panelHeight+gap),bottom=y+panelHeight;
+  const rect={l:left,r:w-right,t:y+20,b:bottom-11};let peak=.01;
+  for(const p of state.history)peak=Math.max(peak,Math.abs(p[item.k]*item.mult));
+  const currentValue=measure()[item.k]*item.mult;peak=Math.max(peak,Math.abs(currentValue));
+  const scale=Math.pow(10,Math.floor(Math.log10(peak)))*Math.ceil(peak/Math.pow(10,Math.floor(Math.log10(peak)))*1.12);
+  const mid=(rect.t+rect.b)/2,amp=Math.max(10,(rect.b-rect.t)*.44);
+  g.font='bold 13px system-ui';g.fillStyle=item.c;g.textAlign='left';g.fillText(item.name+' ('+item.unit+')',left,y+12);
+  g.textAlign='right';g.fillStyle='#a9c1d5';g.font='11px system-ui';
+  g.fillText('+'+scale.toFixed(scale<1?2:scale<10?1:0),left-5,rect.t+7);
+  g.fillText('0',left-5,mid+4);g.fillText('−'+scale.toFixed(scale<1?2:scale<10?1:0),left-5,rect.b);
+  g.strokeStyle='#36506a';g.lineWidth=1;for(const yy of [rect.t,mid,rect.b]){g.beginPath();g.moveTo(left,yy);g.lineTo(w-right,yy);g.stroke()}
+  const tmax=Math.max(12,state.t),tmin=tmax-12;
+  g.strokeStyle=item.c;g.lineWidth=2.8;g.lineJoin='round';g.beginPath();let started=false;
+  for(const p of state.history){if(p.t<tmin)continue;const xx=left+(p.t-tmin)/12*(w-left-right),yy=mid-clamp(p[item.k]*item.mult/scale,-1,1)*amp;
+    if(!started){g.moveTo(xx,yy);started=true}else g.lineTo(xx,yy)}
+  if(started)g.stroke();
+  if(j===2){g.font='11px system-ui';g.fillStyle='#abc7db';g.textAlign='left';g.fillText('−12 s',left,bottom+11);g.textAlign='right';g.fillText('현재  t='+state.t.toFixed(1)+' s',w-right,bottom+11)}
+ }
+}
+function render(){
+ const m=display();
+ if(state.tab==='graphs')drawGraph($('timeGraph'));
+ else if(drawCanvases[state.tab])drawScene($(drawCanvases[state.tab]));
+}
+function record(force=false){
+ if(!force&&state.t-state.lastSample<.04)return;
+ const m=measure();state.lastSample=state.t;state.history.push({t:state.t,flux:m.flux,emf:m.emf,current:m.current});
+ while(state.history.length>0&&state.history[0].t<state.t-12.2)state.history.shift();
+}
+function step(now){
+ let dt=0;if(state.last)dt=clamp((now-state.last)/1000,0,.055);state.last=now;
+ if(state.running&&state.mode==='auto'&&!state.dragging){
+  let dx=state.speed*dt;while(dx>1e-10){const boundary=state.dir>0?HALF:-HALF,remaining=Math.abs(boundary-state.x),advance=Math.min(dx,remaining);
+   state.x+=advance*state.dir;dx-=advance;if(remaining<=advance+1e-10)state.dir*=-1;if(advance<=1e-12)break}
+  state.v=state.dir*state.speed;state.t+=dt;record();
+ }else if(state.dragging){state.t+=dt;if(performance.now()-state.dragTime>140){state.v=0}record()}
+ else{if(state.v!==0){state.v=0;state.t+=.001;record(true)}}
+ render();requestAnimationFrame(step);
+}
+function resetVars(){
+ state.N=200;state.strength=1;state.radius=.05;state.R=8;state.speed=.2;state.pole=1;state.closed=true;
+ $('turns').value='200';$('strength').value='1';$('radius').value='50';$('resistance').value='8';$('speed').value='20';$('pole').value='1';$('closed').checked=true;outputs();
+}
+function outputs(){for(const k of ['turns','strength','radius','resistance'])$(k+'Out').textContent=k==='turns'?state.N+'회':k==='strength'?state.strength.toFixed(1)+'배':k==='radius'?Math.round(state.radius*1000)+' mm':state.R+' Ω'}
+function resetMotion(){state.running=false;state.x=-.36;state.v=0;state.dir=1;state.t=0;state.history=[];state.lastSample=-1;state.last=0;updatePlay();record(true)}
+function updatePlay(){$('play').textContent=state.running?'❚❚ 재생 중':'▶ 재생';$('mode').value=state.mode}
+function setTab(tab){
+ state.tab=tab;document.querySelectorAll('[data-tab]').forEach(b=>{b.setAttribute('aria-selected',b.dataset.tab===tab?'true':'false')});
+ for(const p of document.querySelectorAll('.panel'))p.hidden=p.id!=='panel-'+tab;
+ requestAnimationFrame(render);
+}
+function coords(c){
+ const w=c.getBoundingClientRect().width;return {cx:w/2,scale:Math.max(130,w-190)/(.84)};
+}
+function pointerX(c,event){const r=c.getBoundingClientRect(),q=coords(c);return clamp((event.clientX-r.left-q.cx)/q.scale,-HALF,HALF)}
+function connectDrag(c){
+ c.addEventListener('pointerdown',e=>{if(state.mode!=='manual')return;
+  const q=coords(c),r=c.getBoundingClientRect(),px=q.cx+state.x*q.scale;
+  if(Math.abs(e.clientX-r.left-px)>Math.max(48,Math.min(90,q.scale*.1)))return;
+  state.dragging=true;state.dragId=e.pointerId;state.dragTime=performance.now();state.v=0;state.running=false;updatePlay();
+  c.setPointerCapture(e.pointerId);c.classList.add('dragging');e.preventDefault()});
+ c.addEventListener('pointermove',e=>{if(!state.dragging||state.dragId!==e.pointerId)return;
+  const now=performance.now(),newX=pointerX(c,e),dt=Math.max(.016,(now-state.dragTime)/1000);
+  state.v=clamp((newX-state.x)/dt,-1.5,1.5);state.x=newX;state.dragTime=now;record(true);e.preventDefault()});
+ const end=e=>{if(!state.dragging||state.dragId!==e.pointerId)return;state.dragging=false;state.dragId=null;state.v=0;c.classList.remove('dragging');record(true)};
+ c.addEventListener('pointerup',end);c.addEventListener('pointercancel',end);c.addEventListener('lostpointercapture',end);
+}
+$('play').onclick=()=>{if(state.mode==='manual'){state.mode='auto';$('mode').value='auto'}state.running=!state.running;updatePlay()};
+$('pause').onclick=()=>{state.running=false;state.v=0;updatePlay();record(true);render()};
+$('reset').onclick=()=>{resetVars();resetMotion();render()};
+$('reverse').onclick=()=>{state.dir*=-1;state.v=state.running?state.dir*state.speed:0;record(true);render()};
+$('mode').onchange=e=>{state.mode=e.target.value;state.running=false;state.v=0;updatePlay();render()};
+$('speed').oninput=e=>{state.speed=Number(e.target.value)/100;render()};
+$('pole').onchange=e=>{state.pole=Number(e.target.value);record(true);render()};
+$('closed').onchange=e=>{state.closed=e.target.checked;record(true);render()};
+$('turns').oninput=e=>{state.N=Number(e.target.value);outputs();record(true);render()};
+$('strength').oninput=e=>{state.strength=Number(e.target.value);outputs();record(true);render()};
+$('radius').oninput=e=>{state.radius=Number(e.target.value)/1000;outputs();record(true);render()};
+$('resistance').oninput=e=>{state.R=Number(e.target.value);outputs();record(true);render()};
+$('defaultVars').onclick=()=>{resetVars();record(true);render()};
+$('clearHistory').onclick=()=>{state.history=[];state.lastSample=-1;record(true);render()};
+const scenarios={
+ north:['N·S극 반전','자석의 자화 방향만 반대로 바꾸면 같은 운동에서 자속·기전력·전류의 부호가 반전됩니다.'],
+ fast:['속력 2배','동일 위치에서 선속 연결은 같지만 시간에 따른 변화율이 약 두 배가 되므로 기전력이 약 두 배입니다.'],
+ turns:['감은 수 2배','같은 운동·자석·반지름에서 총 자속 연결과 유도 기전력, 전류는 두 배입니다.'],
+ open:['회로 열기','자석이 움직여도 유도 기전력은 발생하지만 유도 전류는 0입니다.'],
+ resistance:['저항 2배','유도 기전력은 같고 유도 전류만 절반으로 줄어듭니다.'],
+ reset:['기본 조건','속력, 극성, 감은 수, 반지름, 저항, 회로 상태를 기본값으로 복구합니다.']
+};
+document.querySelectorAll('[data-case]').forEach(btn=>btn.onclick=()=>{
+ resetVars();const k=btn.dataset.case;
+ if(k==='north')state.pole=-1;
+ if(k==='fast')state.speed=.4;
+ if(k==='turns')state.N=400;
+ if(k==='open')state.closed=false;
+ if(k==='resistance')state.R=16;
+ $('pole').value=String(state.pole);$('speed').value=String(Math.round(state.speed*100));$('closed').checked=state.closed;
+ $('turns').value=String(state.N);$('resistance').value=String(state.R);outputs();
+ resetMotion();state.scenario=scenarios[k][0];$('scenarioName').textContent=state.scenario;$('scenarioExplain').textContent=scenarios[k][1];
+ state.mode='auto';state.running=true;updatePlay();render();
+});
+document.querySelectorAll('[data-tab]').forEach(btn=>btn.onclick=()=>setTab(btn.dataset.tab));
+Object.values(drawCanvases).forEach(id=>connectDrag($(id)));
+window.addEventListener('resize',render);
+if('ResizeObserver'in window){new ResizeObserver(()=>render()).observe(document.querySelector('.app'))}
+resetVars();resetMotion();setTab('basic');requestAnimationFrame(step);
+})();
+</script></body></html>
