@@ -76,3 +76,18 @@ body.e6-ready>.e6-shell{position:fixed!important;inset:0!important;z-index:21474
  .e6-concept-mode .e6-content{display:block!important}
  .e6-concept-mode .e6-scene,.e6-concept-mode .e6-controls{display:none!important}
 }
+
+
+/* V5.1: Fill available vertical stage space rather than leaving a blank lower half. */
+@media(min-width:901px){
+ .e6-scene>.e6-card{display:flex!important;flex-direction:column!important;justify-content:flex-start!important;min-height:0!important}
+ .e6-scene>.e6-card svg{height:auto!important;width:100%!important;flex:1 1 auto!important;min-height:100px!important;max-height:none!important;object-fit:contain!important}
+ .e6-scene>.e6-card canvas{width:100%!important;max-height:calc(100dvh - 205px)!important;object-fit:contain!important}
+ .e6-scene>.e6-card :is(.scene,.canvasbox,.diagramwrap,.visualization){flex:1 1 auto!important;min-height:0!important;display:flex!important;flex-direction:column!important}
+ .e6-scene>.e6-card .scene>svg,.e6-scene>.e6-card .canvasbox>svg,.e6-scene>.e6-card .diagramwrap>svg{flex:1 1 auto!important;min-height:100px!important;max-height:none!important}
+ .e6-scene>.e6-card .scene>canvas,.e6-scene>.e6-card .canvasbox>canvas{flex:1 1 auto!important;min-height:100px!important;max-height:calc(100dvh - 220px)!important}
+ .e6-scene>.e6-card:has(svg) :is(.readings,.results,.metrics,.meters){flex:0 0 auto!important}
+ .e6-scene>.e6-card :is(.legend,.note,.hint,.sub,.small){flex:0 0 auto!important}
+ .e6-scene .e6-card:only-child{height:100%!important}
+ .e6-light-art .e6-scene .e6-card svg{background:#f5f9ff!important}
+}
