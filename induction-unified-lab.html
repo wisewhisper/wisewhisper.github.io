@@ -145,8 +145,8 @@ function makeCanvas(c){
 function drawScene(c){
  const {ctx:g,w,h}=makeCanvas(c);
  const cy=h*.50,area=Math.max(130,w-190),scale=area/(HALF*2),cx=w/2,px=x=>cx+x*scale;
- const ax=px(state.x),mw=clamp(.125*scale,64,152),mh=clamp(.075*scale,52,86);
- const cr=clamp(state.radius*scale*1.22,55,105),cw=clamp(L*scale,100,225),coilLeft=cx-cw/2,coilRight=cx+cw/2,turns=w<500?7:11;
+ const ax=px(state.x),mw=clamp(.15*scale,80,190),mh=clamp(.09*scale,66,110);
+ const cr=clamp(state.radius*scale*1.5,72,136),cw=clamp(L*scale,140,260),coilLeft=cx-cw/2,coilRight=cx+cw/2,turns=w<500?7:11;
  const xs=Array.from({length:turns},(_,i)=>coilLeft+cw*i/(turns-1));
  const bg=g.createLinearGradient(0,0,0,h);bg.addColorStop(0,'#0e2740');bg.addColorStop(1,'#071320');g.fillStyle=bg;g.fillRect(0,0,w,h);
  g.save();g.strokeStyle='#213c54';g.lineWidth=1;for(let y=20;y<h;y+=45){g.beginPath();g.moveTo(0,y);g.lineTo(w,y);g.stroke()}g.restore();
