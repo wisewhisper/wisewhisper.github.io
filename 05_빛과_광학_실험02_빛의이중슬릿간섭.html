@@ -1,17 +1,362 @@
 <!doctype html>
-<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>빛의 무늬 연구실</title><style>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>빛의 이중 슬릿 간섭 · 회절 파면 실험실</title><style>
 :root{font-family:Pretendard,'Noto Sans KR',system-ui,sans-serif;color:#e7efff;background:#0b1120;font-size:15px}*{box-sizing:border-box}body{margin:0}button,input{font:inherit}header{height:65px;padding:0 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #27344b;background:#101a2d}h1{font-size:21px;margin:0;letter-spacing:-.03em}header p{font-size:12px;color:#92a3be;margin:3px 0 0}.tabs{display:flex;gap:6px}button{border:0;cursor:pointer}.tab{color:#a8b7cf;background:transparent;padding:10px 16px;border-radius:9px}.tab.active{background:#293d5c;color:white}.page{max-width:1600px;margin:auto;padding:14px 20px}.lab{display:grid;grid-template-columns:285px minmax(0,1fr);gap:14px}.panel{background:#141f32;border:1px solid #2b3a53;border-radius:15px}.controls{padding:19px}.eyebrow{color:#63d8cd;font-size:11px;letter-spacing:.12em;font-weight:800}.controls h2,.concept h2{font-size:20px;margin:6px 0 8px}.desc,.muted{color:#a5b5ce;line-height:1.55;font-size:13px}.control{margin-top:24px}.control label{display:flex;align-items:baseline;justify-content:space-between;font-weight:700}.control output{color:#78e1d6;font-size:18px}.control input{width:100%;accent-color:#63d8cd;margin:12px 0 2px}.ends{display:flex;justify-content:space-between;color:#8294b0;font-size:11px}.reset{width:100%;padding:10px;border-radius:8px;background:#273a56;color:#dce9fa;margin-top:24px}.assumption{border-top:1px solid #2b3a53;margin-top:20px;padding-top:15px;font-size:12px;color:#91a4bf;line-height:1.55}.content{display:grid;grid-template-rows:auto auto;gap:14px;min-width:0}.visual{padding:16px 18px}.titleline{display:flex;justify-content:space-between;align-items:center;gap:12px}.titleline h2{font-size:16px;margin:0}.tag{font-size:11px;color:#a6b9d4}.stage{height:220px;margin-top:10px;position:relative;background:#0c1525;border-radius:10px;overflow:hidden}canvas{display:block;width:100%;height:100%}.legend{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:9px;font-size:12px;color:#b9c8dc}.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}.bottom{display:grid;grid-template-columns:1.15fr .85fr;gap:14px}.graph,.result{padding:16px 18px}.graph h2,.result h2{font-size:15px;margin:0}.plot{height:175px;margin-top:8px}.equation{font-family:Georgia,serif;color:#7de2d8;font-size:23px;margin:13px 0 7px}.result p{font-size:13px;line-height:1.5;color:#b5c4d9;margin:6px 0}.metrics{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.metric{padding:10px;background:#0f192a;border-radius:8px;font-size:12px;color:#9db0ca}.metric strong{display:block;color:#fff;font-size:17px;margin-top:4px}.foot{font-size:11px;color:#869ab5;margin-top:7px}.concept{display:none;max-width:1150px;margin:auto}.concept-intro{margin-bottom:18px}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.card{padding:22px}.card .num{color:#67dfd0;font-weight:800;font-size:12px}.card h3{font-size:19px;margin:10px 0}.card p,.card li{color:#bfccde;font-size:14px;line-height:1.7}.card ul{padding-left:20px}.callout{background:#0e192a;border-radius:10px;padding:12px;color:#82e0d6;font-size:14px;line-height:1.5}.concept-cards svg{width:100%;height:130px;margin:8px 0;background:#0c1525;border-radius:9px}.concept-cards svg text{fill:#bdcce0;font:12px system-ui}.concept-cards small{font-size:12px}.concept-note{padding:17px 20px;margin-top:14px;color:#b8c8dd;line-height:1.6;font-size:13px}@media(max-width:800px){header{height:auto;min-height:70px;padding:12px 15px;gap:8px}header p{display:none}h1{font-size:18px}.tab{padding:9px}.page{padding:12px}.lab,.bottom,.cards{grid-template-columns:1fr}.controls{padding:16px}.control{margin-top:17px}.stage{height:215px}.plot{height:180px}.content{display:flex;flex-direction:column}.assumption{margin-top:14px}.reset{margin-top:15px}.card{padding:18px}}
-</style></head><body><header><div><h1>빛의 무늬 연구실</h1><p>빛의 간섭을 조작하고 관찰하는 실험</p></div><nav class="tabs" aria-label="화면 선택"><button class="tab active" id="labTab" aria-selected="true">이중 슬릿 실험</button><button class="tab" id="conceptTab" aria-selected="false">개념 연결</button></nav></header><main class="page"><section id="lab" class="lab"><aside class="panel controls"><span class="eyebrow">DOUBLE-SLIT LAB</span><h2>조건 바꾸기</h2><div class="desc">슬라이더를 움직이며 밝은 무늬의 간격을 비교해 보세요.</div><div class="control"><label for="wave">파장 λ <output id="waveOut"></output></label><input id="wave" type="range" min="400" max="700" step="5" value="550"><div class="ends"><span>400 nm</span><span>700 nm</span></div></div><div class="control"><label for="slit">슬릿 간격 d <output id="slitOut"></output></label><input id="slit" type="range" min="0.10" max="0.80" step="0.01" value="0.30"><div class="ends"><span>0.10 mm</span><span>0.80 mm</span></div></div><div class="control"><label for="distance">스크린 거리 L <output id="distanceOut"></output></label><input id="distance" type="range" min="0.5" max="3" step="0.1" value="1.5"><div class="ends"><span>0.5 m</span><span>3.0 m</span></div></div><button class="reset" id="reset">초기 조건으로 되돌리기</button><div class="assumption"><b>모형의 약속</b><br>단색의 결맞은 빛, 같은 세기의 매우 좁은 두 슬릿을 가정합니다. 회절 포락선과 주변 밝기는 고려하지 않습니다.</div></aside><div class="content"><section class="panel visual"><div class="titleline"><h2>스크린에 나타나는 간섭무늬</h2><span class="tag" id="rangeLabel">가운데가 y = 0</span></div><div class="stage"><canvas id="stage" aria-label="이중 슬릿과 스크린의 간섭무늬"></canvas></div><div class="legend"><span><i class="dot" style="background:#79e6d5"></i>두 슬릿에서 나온 빛</span><span><i class="dot" style="background:#fff"></i>스크린의 밝고 어두운 무늬</span><span>장치의 거리와 간격은 각각 보기 쉽게 조절한 것으로, 실제 비율과 다릅니다.</span></div></section><div class="bottom"><section class="panel graph"><div class="titleline"><h2>스크린 위치에 따른 상대 세기</h2><span class="tag">최대 세기 = 1</span></div><div class="plot"><canvas id="plot" aria-label="스크린 위치에 따른 상대 세기 그래프"></canvas></div><div class="foot">가로축: 중심으로부터의 위치 y (mm) · 세로축: 상대 세기</div></section><section class="panel result"><h2>왜 밝고 어두울까요?</h2><p>두 빛이 이동한 거리의 차이를 경로차 Δ라고 합니다.</p><div class="equation">Δ = r₂ − r₁</div><p><b>밝음</b> Δ = mλ &nbsp; · &nbsp; <b>어두움</b> |Δ| = (m + ½)λ<br><span class="muted">m은 0 이상의 정수이며, 밝은 무늬에는 음의 정수도 포함됩니다.</span></p><div class="metrics"><div class="metric">중앙에서 첫 밝은 무늬까지<strong id="spacing"></strong></div><div class="metric">중앙 최대의 상대 세기<strong>1.00</strong></div></div><div class="foot">무늬 간격은 작은 각도에서 Δy ≈ λL/d 입니다.</div></section></div></div></section><section class="concept" id="concept"><div class="concept-intro"><span class="eyebrow">LIGHT &amp; INTERFERENCE</span><h2>빛의 간섭, 그림으로 이해하기</h2><div class="desc">두 빛의 파동이 만날 때 마루와 골이 어떻게 겹치는지 살펴보세요.</div></div><div class="cards concept-cards">
+
+/* V3: physically fixed screen coordinates, responsive teacher-first scene */
+:root{font-size:14px}
+body{overflow:hidden}
+header{height:57px;min-height:57px;padding:0 15px}
+header h1{font-size:22px}
+.page{max-width:1900px;height:calc(100dvh - 57px);padding:9px 12px;overflow:hidden}
+#lab.lab{display:grid;grid-template-columns:minmax(0,4fr) minmax(247px,1fr);grid-template-rows:minmax(0,1fr);gap:9px;min-height:0;height:100%}
+#lab>.content{order:1;min-width:0;min-height:0;display:flex;flex-direction:column;gap:8px}
+#lab>.controls{order:2;min-width:0;min-height:0;overflow-y:auto;padding:11px 12px;scrollbar-width:thin}
+.controls h2{font-size:17px;margin:4px 0}
+.controls .desc{font-size:11px;line-height:1.4}
+.control{margin-top:10px}
+.control label{font-size:12px;gap:6px}
+.control output{font-size:13px}
+.control input{height:20px;margin:4px 0 0;accent-color:#66e2e4}
+.control select{width:100%;background:#19384b;color:#edfaff;border:1px solid #52768f;padding:7px;border-radius:8px;margin-top:3px}
+.ends{font-size:10px}
+.control-split{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.control-split button,.controls button{border:1px solid #4f758c;border-radius:8px;background:#20425a;color:#f3fbff;min-height:33px;font-size:12px;font-weight:700;padding:6px}
+.controls .primary,.visual .primary{background:#05798a;border:1px solid #84e9ee;color:#fff}
+.controls button:hover,.visual button:hover{filter:brightness(1.13)}
+.controls .assumption{margin-top:9px;padding-top:8px;font-size:11px}
+#lab .visual{display:flex;flex-direction:column;flex:1 1 auto;min-height:270px;padding:10px 12px}
+#lab .visual .titleline{flex:0 0 auto;flex-wrap:wrap}
+#lab .visual h2{font-size:16px}
+#lab .visual .stage{flex:1 1 auto;height:auto;min-height:190px;margin-top:6px}
+#lab .bottom{display:grid;grid-template-columns:minmax(0,1.22fr) minmax(290px,.78fr);gap:8px;flex:0 0 214px;min-height:0}
+#lab .graph,#lab .result{padding:9px 11px;min-width:0;overflow:hidden}
+#lab .plot{height:151px;margin-top:4px}
+#lab .result p{font-size:11px;line-height:1.42;margin:4px 0}
+#lab .equation{font-size:17px;margin:5px 0 3px}
+#lab .metrics{gap:6px;margin-top:5px}
+#lab .metric{padding:6px 7px;font-size:11px}
+#lab .metric strong{font-size:14px;margin-top:2px}
+#lab .foot{margin-top:3px}
+#lab .legend{margin-top:5px;font-size:11px;gap:5px 15px}
+#lab .titleline .tag{font-size:11px;color:#bcd3e6}
+#lab .bar-actions{display:flex;gap:5px;flex-wrap:wrap}
+#lab .bar-actions button{min-height:30px;padding:5px 8px;font-size:11px;border-radius:7px;background:#20425b;color:#f2fbff;border:1px solid #517990}
+#lab .bar-actions button.primary{background:#0b7b8f}
+#lab .info-note{font-size:11px;color:#b8d3e2;line-height:1.4}
+#lab .warn{color:#ffdb9a;font-weight:700}
+#lab .readout-inline{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;padding:5px 0 0}
+#lab .mini{padding:5px 7px;border-radius:7px;background:#0f2033;border:1px solid #2d526b;font-size:11px;color:#c3dce9}
+#lab .mini b{color:#8eece8;display:block;font-size:14px}
+#lab .sliderHint{color:#a6ebdb;font-size:11px;font-weight:700;line-height:1.4;margin:4px 0 0}
+#lab #rangeLabel{color:#92e9e6}
+#lab canvas{background:#0b1b2e}
+#concept.concept{overflow-y:auto;max-height:calc(100dvh - 92px)}
+#concept .card{padding:15px}
+#concept .cards{gap:9px}
+@media(min-width:901px) and (max-height:740px){#lab .bottom{flex-basis:190px}#lab .plot{height:128px}#lab .visual{min-height:240px}}
+@media(max-width:900px){
+ body{overflow:auto}
+ header{height:auto;min-height:65px;padding:8px 12px}
+ .page{height:auto;min-height:calc(100dvh - 65px);overflow:visible}
+ #lab.lab{display:flex;flex-direction:column;height:auto;gap:8px}
+ #lab>.content{order:2}
+ #lab>.controls{order:1;overflow:visible}
+ #lab .controls .control-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px 13px}
+ #lab .controls .control{margin:4px 0}
+ #lab .visual{min-height:375px}
+ #lab .visual .stage{height:300px;flex:none}
+ #lab .bottom{display:grid;grid-template-columns:1fr;flex:none}
+ #lab .plot{height:225px}
+ #concept.concept{max-height:none}
+}
+@media(max-width:520px){header h1{font-size:18px}.tab{padding:7px;font-size:12px}#lab .controls .control-grid{grid-template-columns:1fr 1fr}#lab .visual{min-height:330px}#lab .visual .stage{height:260px}#lab .readout-inline{grid-template-columns:1fr 1fr}#lab .bottom{grid-template-columns:1fr}}
+</style></head><body><header><div><h1>빛의 이중 슬릿 간섭 실험실</h1><p>빛의 간섭을 조작하고 관찰하는 실험</p></div><nav class="tabs" aria-label="화면 선택"><button class="tab active" id="labTab" aria-selected="true">이중 슬릿 실험</button><button class="tab" id="conceptTab" aria-selected="false">개념 연결</button></nav></header><main class="page"><section id="lab" class="lab">
+<div class="content">
+<section class="panel visual" aria-label="이중 슬릿과 간섭 무늬 실험">
+ <div class="titleline"><h2>두 슬릿의 회절 파면 → 중첩 → 스크린 간섭무늬</h2>
+ <div class="bar-actions"><button class="primary" type="button" id="start">▶ 파면 재생</button><button type="button" id="pause">Ⅱ 일시정지</button><button type="button" id="restart">↺ 처음부터</button></div></div>
+ <div class="stage"><canvas id="stage" tabindex="0" aria-label="두 슬릿에서 옅은 반원형 파면이 퍼져 나가고, 오른쪽 스크린에 간섭 및 회절 무늬가 표시됩니다. 스크린을 클릭하면 관측점을 선택합니다."></canvas></div>
+ <div class="legend"><span><i class="dot" style="background:#80cfff"></i>옅은 반원: 회절 파면(시각화)</span><span><i class="dot" style="background:#ffce81"></i>두 광로: 선택된 관측점</span><span><i class="dot" style="background:#fff"></i>스크린: 간섭 × 회절 포락선</span></div>
+ <div class="info-note" id="sceneNote">두 슬릿에서 퍼져 나오는 파면은 보기 쉽게 확대한 모형이며, 실제 빛의 파장·속도의 화면 축척이 아닙니다.</div>
+</section>
+<div class="bottom">
+ <section class="panel graph"><div class="titleline"><h2>스크린의 상대 세기와 회절 포락선</h2><span class="tag">가로축·스크린 모두 같은 고정 범위</span></div>
+ <div class="plot"><canvas id="plot" tabindex="0" aria-label="스크린 중심 위치에 따른 간섭 세기와 단일 슬릿 회절 포락선. 그래프를 클릭하면 관측점을 선택합니다."></canvas></div>
+ <div class="foot">청록: 실제 간섭 강도 · 황색 점선: 회절 포락선 · 주황 점: 선택 위치</div></section>
+ <section class="panel result"><div class="titleline"><h2>실시간 결과</h2><span class="tag" id="rangeLabel">고정 표시 범위 ±12 mm</span></div>
+ <div class="readout-inline">
+  <div class="mini">밝은 무늬 간격<strong id="spacing">2.75 mm</strong></div>
+  <div class="mini">첫 회절 최소(중앙부터)<b id="envelopeMin">13.75 mm</b></div>
+  <div class="mini">선택 위치 / 경로차<b id="pathDifference">0.0 mm / 0 nm</b></div>
+  <div class="mini">관측점 상대 세기<b id="pointIntensity">1.000</b></div>
+ </div>
+ <div class="equation">Δy ≈ λL/d</div>
+ <p id="resultExplanation">λ·L이 커지면 무늬가 넓어지고, d가 커지면 좁아집니다.</p>
+ <p class="warn" id="visibilityNote" role="status"></p></section>
+</div>
+</div>
+<aside class="panel controls" aria-label="이중 슬릿 실험 조건 조작">
+ <span class="eyebrow">DOUBLE-SLIT LAB</span><h2>실험 조건 조절</h2><div class="desc">슬릿 간격·스크린 거리·파장·슬릿 폭을 변경하면 무늬와 그래프가 즉시 바뀝니다.</div>
+ <div class="control-grid">
+  <div class="control"><label for="wave">파장 λ <output id="waveOut">550 nm</output></label><input id="wave" type="range" min="400" max="700" step="5" value="550"><div class="ends"><span>400 nm</span><span>700 nm</span></div></div>
+  <div class="control"><label for="slit">슬릿 간격 d <output id="slitOut">0.30 mm</output></label><input id="slit" type="range" min="0.10" max="0.80" step="0.01" value="0.30"><div class="ends"><span>0.10 mm</span><span>0.80 mm</span></div></div>
+  <div class="control"><label for="distance">스크린 거리 L <output id="distanceOut">1.5 m</output></label><input id="distance" type="range" min=".5" max="3" step=".1" value="1.5"><div class="ends"><span>0.5 m</span><span>3.0 m</span></div></div>
+  <div class="control"><label for="width">슬릿 하나의 폭 a <output id="widthOut">0.060 mm</output></label><input id="width" type="range" min=".02" max=".09" step=".005" value=".06"><div class="ends"><span>0.020 mm</span><span>0.090 mm</span></div></div>
+ </div>
+ <div class="control"><label for="scale">스크린·그래프 물리적 표시 범위</label>
+   <select id="scale"><option value="5">중앙 확대 · ±5 mm</option><option value="12" selected>기본 고정 · ±12 mm</option><option value="25">넓게 보기 · ±25 mm</option><option value="50">전체 보기 · ±50 mm</option></select></div>
+ <div class="control-split"><button type="button" id="fit">첫 밝은 무늬 포함 보기</button><button type="button" id="reset" class="reset">초기화</button></div>
+ <p class="sliderHint">기본은 고정 축척입니다. 슬라이더 변경에 따라 화면이 임의로 확대·축소되지 않습니다.</p>
+ <div class="assumption"><b>모형의 가정</b><p class="info-note">결맞은 단색광, 동일한 폭·세기의 두 슬릿, 원거리(프라운호퍼) 근사. 스크린의 빛 세기는 간섭항 × 단일 슬릿 회절 포락선으로 계산합니다.</p><p class="info-note">장치 그림의 슬릿 간격과 거리 배율은 실제 비율이 아니라 이해를 위한 도식입니다. 파면은 옅게 표시하며 실제 광속과 파면 간격은 재현하지 않습니다.</p></div>
+</aside>
+</section><section class="concept" id="concept"><div class="concept-intro"><span class="eyebrow">LIGHT &amp; INTERFERENCE</span><h2>빛의 간섭, 그림으로 이해하기</h2><div class="desc">두 빛의 파동이 만날 때 마루와 골이 어떻게 겹치는지 살펴보세요.</div></div><div class="cards concept-cards">
 <article class="panel card"><span class="num">01 / DOUBLE SLIT</span><h3>두 길의 차이가 만드는 무늬</h3><svg viewBox="0 0 300 130" role="img" aria-label="두 슬릿에서 스크린의 한 점까지 이동한 경로"><path d="M55 10 V46 M55 54 V76 M55 84 V120 M270 10 V120" stroke="#8294b0" stroke-width="5" fill="none"/><path d="M55 50 L270 35 M55 80 L270 35" stroke="#79e6d5" stroke-width="2" fill="none"/><circle cx="55" cy="50" r="4" fill="#fff"/><circle cx="55" cy="80" r="4" fill="#fff"/><circle cx="270" cy="35" r="4" fill="#fff"/><text x="132" y="34">r₁</text><text x="145" y="75">r₂</text><text x="12" y="20">슬릿</text><text x="244" y="122">스크린</text></svg><p>두 슬릿에서 출발한 빛이 스크린의 한 점에 도달할 때, 이동 거리의 차이 Δ = r₂ − r₁이 생깁니다. 이 경로차가 파장의 몇 배인지에 따라 두 파동이 겹치는 모습이 달라집니다.</p><div class="callout"><b>밝은 무늬</b> Δ = mλ<br><b>어두운 무늬</b> Δ = (m + ½)λ<br><small>m은 정수, λ는 파장입니다. 두 슬릿에서 출발하는 빛이 같은 위상일 때의 조건입니다.</small></div><p>중앙에서는 두 경로의 길이가 같아(Δ = 0) 밝습니다. 밝은 무늬 사이에는 어두운 무늬가 놓입니다.</p></article>
-<article class="panel card"><span class="num">02 / VARIABLES</span><h3>무늬 간격은 무엇이 바꿀까?</h3><svg viewBox="0 0 300 130" role="img" aria-label="슬릿 간격 d와 스크린 거리 L"><path d="M55 12 V42 M55 50 V80 M55 88 V118 M265 12 V118" stroke="#8294b0" stroke-width="5"/><path d="M55 46 L265 65 M55 84 L265 65" stroke="#79e6d5" stroke-width="2"/><path d="M38 46 V84 M33 46 H43 M33 84 H43 M55 108 H265 M55 103 V113 M265 103 V113" stroke="#f3c97a" fill="none"/><text x="17" y="70">d</text><text x="157" y="125">L</text></svg><p>스크린이 충분히 멀고 각도가 작으면 이웃한 밝은 무늬 사이 간격은 <b>Δy ≈ λL/d</b>입니다.</p><div class="callout">λ가 커지면 → 간격 넓어짐<br>L이 커지면 → 간격 넓어짐<br>d가 커지면 → 간격 좁아짐</div><p>한 번에 하나씩 바꿔 보세요. 실험 화면은 무늬의 표시 범위를 자동으로 조절하므로, 실제 간격은 수치와 그래프 축으로 비교합니다.</p></article>
+<article class="panel card"><span class="num">02 / VARIABLES</span><h3>무늬 간격은 무엇이 바꿀까?</h3><svg viewBox="0 0 300 130" role="img" aria-label="슬릿 간격 d와 스크린 거리 L"><path d="M55 12 V42 M55 50 V80 M55 88 V118 M265 12 V118" stroke="#8294b0" stroke-width="5"/><path d="M55 46 L265 65 M55 84 L265 65" stroke="#79e6d5" stroke-width="2"/><path d="M38 46 V84 M33 46 H43 M33 84 H43 M55 108 H265 M55 103 V113 M265 103 V113" stroke="#f3c97a" fill="none"/><text x="17" y="70">d</text><text x="157" y="125">L</text></svg><p>스크린이 충분히 멀고 각도가 작으면 이웃한 밝은 무늬 사이 간격은 <b>Δy ≈ λL/d</b>입니다.</p><div class="callout">λ가 커지면 → 간격 넓어짐<br>L이 커지면 → 간격 넓어짐<br>d가 커지면 → 간격 좁아짐</div><p>한 번에 하나씩 바꿔 보세요. 이제 스크린과 그래프의 물리적 범위는 기본 ±12 mm로 고정되어 슬라이더를 움직일 때 실제 간격 변화를 바로 비교할 수 있습니다. 필요할 때만 표시 범위를 직접 변경합니다.</p></article>
 <article class="panel card"><span class="num">03 / THIN FILM</span><h3>비눗방울의 색</h3><svg viewBox="0 0 300 130" role="img" aria-label="얇은 막의 앞면과 뒷면에서 반사된 두 빛"><path d="M20 45 H280 M20 84 H280" stroke="#91b4c6" stroke-width="2"/><path d="M65 5 L115 45 L155 8 M115 45 L155 84 L205 10" stroke="#79e6d5" stroke-width="3" fill="none"/><path d="M265 45 V84 M260 45 H270 M260 84 H270" stroke="#f3c97a"/><text x="20" y="68">얇은 비누막</text><text x="220" y="70">두께</text></svg><p>비누막의 앞면에서 반사된 빛과 막 안으로 들어갔다가 뒷면에서 반사된 빛이 만납니다. 두 빛의 경로와 반사 시 위상 변화 때문에 어떤 색은 강해지고 다른 색은 약해집니다.</p><div class="callout">막의 두께와 보는 각도가 달라지면 강조되는 파장도 달라져 여러 색이 보입니다.</div></article>
 <article class="panel card"><span class="num">04 / COATING</span><h3>반사 방지 코팅</h3><svg viewBox="0 0 300 130" role="img" aria-label="코팅의 두 경계면에서 반사된 빛"><rect x="20" y="55" width="260" height="30" fill="#2c696e"/><rect x="20" y="85" width="260" height="35" fill="#33445e"/><path d="M70 10 L115 55 L155 10 M115 55 L145 85 L205 10" stroke="#79e6d5" stroke-width="3" fill="none"/><text x="208" y="75">코팅</text><text x="208" y="108">렌즈</text></svg><p>렌즈에 얇은 막을 입혀 막의 앞면과 뒷면에서 반사된 빛이 서로 약해지도록 합니다. 그러면 설계한 파장과 입사각에서 반사가 줄어듭니다.</p><div class="callout">적절한 굴절률 조건과 수직 입사에서 광학 두께가 λ/4인 막을 쓸 수 있습니다.</div></article>
 <article class="panel card"><span class="num">05 / STRUCTURAL COLOR</span><h3>구조색</h3><svg viewBox="0 0 300 130" role="img" aria-label="미세한 반복 구조와 여러 방향으로 향하는 빛"><path d="M20 100 L40 75 L60 100 L80 75 L100 100 L120 75 L140 100 L160 75 L180 100 L200 75 L220 100 L240 75 L260 100 L280 75" stroke="#91b4c6" stroke-width="3" fill="none"/><path d="M90 10 L145 80 M145 80 L200 15 M145 80 L250 38" stroke="#79e6d5" stroke-width="3" fill="none"/><text x="65" y="125">빛의 파장 정도 크기의 구조</text></svg><p>나비 날개나 공작 깃털의 미세 구조는 파장에 따라 빛을 다르게 반사하거나 산란합니다. 그래서 보는 각도에 따라 색이 달라지기도 합니다.</p><div class="callout">구조색에는 간섭뿐 아니라 회절과 산란 등 여러 원리가 관여할 수 있습니다.</div></article></div><div class="panel concept-note"><b>기억할 점</b> &nbsp; 빛은 파동으로서 겹칠 수 있고, 경로와 위상의 차이는 관찰되는 밝기와 색에 영향을 줍니다.</div></section></main><script>
-const $=id=>document.getElementById(id), wave=$('wave'),slit=$('slit'),distance=$('distance');
-function rgb(w){let r=0,g=0,b=0;if(w<440){r=-(w-440)/40;b=1}else if(w<490){g=(w-440)/50;b=1}else if(w<510){g=1;b=-(w-510)/20}else if(w<580){r=(w-510)/70;g=1}else if(w<645){r=1;g=-(w-645)/65}else r=1;return [r,g,b].map(x=>Math.round(x*255))}
-function setup(c){let box=c.getBoundingClientRect(),q=window.devicePixelRatio||1;c.width=Math.round(box.width*q);c.height=Math.round(box.height*q);let x=c.getContext('2d');x.setTransform(q,0,0,q,0,0);return [x,box.width,box.height]}
-function draw(){let nm=+wave.value,d=+slit.value/1000,L=+distance.value,lambda=nm*1e-9; $('waveOut').textContent=nm+' nm';$('slitOut').textContent=(d*1000).toFixed(2)+' mm';$('distanceOut').textContent=L.toFixed(1)+' m';$('spacing').textContent=(lambda*L/d*1000).toFixed(2)+' mm';let halfRange=Math.min(.024,8*lambda*L/d); $('rangeLabel').textContent='가운데가 y = 0 · 표시 범위 ±'+(halfRange*1000).toFixed(halfRange<.01?1:0)+' mm (자동 조절)';let color=rgb(nm);function intensity(y){let r1=Math.hypot(L,y-d/2),r2=Math.hypot(L,y+d/2);let delta=2*y*d/(r1+r2);return Math.pow(Math.cos(Math.PI*delta/lambda),2)}
-let [c,w,h]=setup($('stage'));c.clearRect(0,0,w,h);let sy=h/2,sx=w*.18,screen=w*(.57+.26*(L-.5)/2.5),gap=10+30*((d*1000-.10)/.70),hole=4; c.strokeStyle='#30405a';c.lineWidth=3;c.beginPath();c.moveTo(sx,20);c.lineTo(sx,sy-gap-hole);c.moveTo(sx,sy-gap+hole);c.lineTo(sx,sy+gap-hole);c.moveTo(sx,sy+gap+hole);c.lineTo(sx,h-20);c.stroke(); c.fillStyle='#9fafc6';c.font='12px system-ui';c.fillText('광원',20,sy-12);c.fillText('두 슬릿',sx-20,h-9);c.fillText('스크린',screen-18,h-9);c.strokeStyle='rgba(110,225,211,.48)';c.lineWidth=1.2;for(let s of [-gap,gap]){c.beginPath();c.moveTo(20,sy);c.lineTo(sx,sy+s);c.lineTo(screen,sy-50);c.stroke();c.beginPath();c.moveTo(sx,sy+s);c.lineTo(screen,sy+50);c.stroke()}c.fillStyle='#a5f6e9';c.beginPath();c.arc(20,sy,4,0,7);c.fill();for(let s of [-gap,gap]){c.beginPath();c.arc(sx,sy+s,3,0,7);c.fill()}let top=14,hh=h-42;for(let j=0;j<hh;j++){let y=(j/hh-.5)*2*halfRange;let a=intensity(y);c.fillStyle=`rgb(${color.map(v=>Math.round(10+v*a*.95)).join(',')})`;c.fillRect(screen-8,top+j,24,1.2)}c.strokeStyle='#99acc6';c.strokeRect(screen-8,top,24,hh);
-let [g,gw,gh]=setup($('plot'));g.clearRect(0,0,gw,gh);let left=36,right=10,topg=10,bot=24,pw=gw-left-right,ph=gh-topg-bot;g.font='11px system-ui';g.fillStyle='#93a6c0';g.strokeStyle='#31425b';g.lineWidth=1;for(let i=0;i<=2;i++){let yy=topg+i*ph/2;g.beginPath();g.moveTo(left,yy);g.lineTo(gw-right,yy);g.stroke();g.fillText((1-i*.5).toFixed(1),3,yy+4)}for(let i=0;i<=4;i++){let xx=left+i*pw/4;g.fillText(((-1+i*.5)*halfRange*1000).toFixed(halfRange<.01?1:0),xx-10,gh-5)}g.strokeStyle=`rgb(${color.join(',')})`;g.lineWidth=2;g.beginPath();for(let x=0;x<=pw;x++){let y=(x/pw-.5)*2*halfRange,yy=topg+ph*(1-intensity(y));if(!x)g.moveTo(left+x,yy);else g.lineTo(left+x,yy)}g.stroke()}
-for(const input of [wave,slit,distance])input.addEventListener('input',draw);$('reset').onclick=()=>{wave.value=550;slit.value=.30;distance.value=1.5;draw()};function tab(which){let lab=which==='lab';$('lab').style.display=lab?'grid':'none';$('concept').style.display=lab?'none':'block';$('labTab').classList.toggle('active',lab);$('conceptTab').classList.toggle('active',!lab);$('labTab').setAttribute('aria-selected',lab);$('conceptTab').setAttribute('aria-selected',!lab);if(lab)draw()}$('labTab').onclick=()=>tab('lab');$('conceptTab').onclick=()=>tab('concept');window.addEventListener('resize',()=>{if($('lab').style.display!=='none')draw()});draw();
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+const wave=$("wave"),slit=$("slit"),distance=$("distance"),width=$("width");
+const defaults={nm:550,dmm:.30,L:1.5,amm:.06,range:12};
+const state={...defaults,chosenY:1.375,running:false,progress:1,last:null};
+const PI=Math.PI,clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const pxRange=()=>state.range;
+let lastSceneGeometry=null;
+function wavelengthColor(nm){
+ let r=0,g=0,b=0;
+ if(nm<440){r=(440-nm)/40;b=1}
+ else if(nm<490){g=(nm-440)/50;b=1}
+ else if(nm<510){g=1;b=(510-nm)/20}
+ else if(nm<580){r=(nm-510)/70;g=1}
+ else if(nm<645){r=1;g=(645-nm)/65}
+ else{r=1}
+ return [r,g,b].map(v=>Math.round(255*clamp(v,0,1)));
+}
+function getParams(){
+ return {lambda:state.nm*1e-9,d:state.dmm*1e-3,a:state.amm*1e-3,L:state.L};
+}
+function fringeMM(){return 1e3*(state.nm*1e-9)*state.L/(state.dmm*1e-3)}
+function firstMinimumMM(){return state.nm*1e-6*state.L/(state.amm*1e-3)}
+function physics(yMM){
+ const {lambda,d,a,L}=getParams(),y=yMM/1000;
+ const r1=Math.hypot(L,y-d/2),r2=Math.hypot(L,y+d/2);
+ const delta=r2-r1;
+ const sintheta=y/Math.hypot(L,y),beta=PI*a*sintheta/lambda;
+ const sinc=Math.abs(beta)<1e-8?1:Math.sin(beta)/beta;
+ const envelope=sinc*sinc,interference=Math.cos(PI*delta/lambda)**2;
+ return {delta,envelope,interference,intensity:clamp(envelope*interference,0,1)};
+}
+function setup(canvas){
+ const rect=canvas.getBoundingClientRect(),w=Math.floor(rect.width),h=Math.floor(rect.height);
+ if(w<95||h<85)return null;
+ const dpr=Math.min(devicePixelRatio||1,2),pixelW=Math.max(1,Math.round(w*dpr)),pixelH=Math.max(1,Math.round(h*dpr));
+ if(canvas.width!==pixelW||canvas.height!==pixelH){canvas.width=pixelW;canvas.height=pixelH;}
+ const c=canvas.getContext("2d");if(!c)return null;
+ c.setTransform(dpr,0,0,dpr,0,0);
+ c.clearRect(0,0,w,h);return {c,w,h};
+}
+function text(c,str,x,y,color="#dff2ff",fontSize=12,align="left",weight=650){
+ c.fillStyle=color;c.font=weight+" "+fontSize+"px system-ui,sans-serif";c.textAlign=align;c.fillText(str,x,y);
+}
+function line(c,x,y,X,Y,color,width=1,dash=[]){
+ c.beginPath();c.moveTo(x,y);c.lineTo(X,Y);c.lineWidth=width;c.strokeStyle=color;c.setLineDash(dash);c.stroke();c.setLineDash([]);
+}
+function circle(c,x,y,r,color){
+ c.beginPath();c.arc(x,y,r,0,PI*2);c.fillStyle=color;c.fill();
+}
+function renderScene(){
+ const out=setup($("stage"));if(!out)return;
+ const {c,w,h}=out,cy=h*.53,sx=w*.20;
+ const screenX=w*(.60+.22*(state.L-.5)/2.5);
+ const gap=18+48*(state.dmm-.10)/.70;
+ const slits=[cy-gap/2,cy+gap/2],hole=5;
+ const top=33,bottom=h-30,half=(bottom-top)/2,halfMM=pxRange();
+ const screenY=(yMM)=>cy-yMM/halfMM*half;
+ lastSceneGeometry={x:screenX,top,bottom,cy,half,halfMM,w,h};
+ const bg=c.createLinearGradient(0,0,w,h);bg.addColorStop(0,"#11273e");bg.addColorStop(1,"#071527");c.fillStyle=bg;c.fillRect(0,0,w,h);
+ for(let x=15;x<w;x+=38)line(c,x,0,x,h,"#24405729",.7);
+ for(let y=15;y<h;y+=38)line(c,0,y,w,y,"#24405729",.7);
+ // Light-source wavefronts are illustrative; the physical optical lambda is 400–700 nm.
+ const rgb=wavelengthColor(state.nm),light="rgb("+rgb.join(",")+")";
+ // Ray paths from the source to the two openings.
+ for(const sy of slits)line(c,18,cy,sx,sy,"#ffe3aa7a",2);
+ circle(c,23,cy,6,"#ffdf9d");
+ text(c,"단색광",14,cy-17,"#ffe2a4",12);
+ // Barrier with two openings, a schematic separation scaled non-physically.
+ c.strokeStyle="#a5bcd0";c.lineWidth=8;c.lineCap="butt";
+ let prev=12;
+ for(const yy of slits){c.beginPath();c.moveTo(sx,prev);c.lineTo(sx,yy-hole);c.stroke();prev=yy+hole;}
+ c.beginPath();c.moveTo(sx,prev);c.lineTo(sx,h-18);c.stroke();
+ c.lineWidth=2;c.strokeStyle="#d7ecf9";
+ for(const sy of slits){circle(c,sx,sy,3,"#dafff4");}
+ // Dynamic slit-spacing dimension indicator.
+ const bracketX=sx+17;
+ line(c,bracketX,slits[0],bracketX,slits[1],"#f9d596",1.3);
+ for(const yy of slits)line(c,bracketX-5,yy,bracketX+5,yy,"#f9d596",1.2);
+ text(c,"d = "+state.dmm.toFixed(2)+" mm",sx+25,slits[0]-13,"#ffe2a6",12);
+ // Faint expanding semicircular wavefronts from two coherent slits.
+ c.save();c.beginPath();c.rect(sx+5,12,Math.max(5,screenX-sx-16),h-26);c.clip();
+ const rMax=Math.hypot(screenX-sx+70,h/2+gap);
+ const separation=36;
+ const phase=state.progress*separation;
+ for(let i=0;i<Math.ceil(rMax/separation)+1;i++){
+  const r=20+i*separation+phase;
+  for(let k=0;k<2;k++){
+   c.beginPath();c.arc(sx,slits[k],r,-PI/2,PI/2);
+   c.lineWidth=1.35;c.strokeStyle=k===0?"#83e4eb":"#8bacf5";
+   c.globalAlpha=.17;c.stroke();
+  }
+ }
+ c.restore();
+ // Screen coordinate is fixed to a specified physical range.
+ c.fillStyle="#152d43";c.fillRect(screenX-10,top-8,36,bottom-top+16);
+ c.strokeStyle="#80a9c6";c.lineWidth=2;c.strokeRect(screenX-10,top-8,36,bottom-top+16);
+ const yHalf=Math.min(Math.abs(cy-top),Math.abs(bottom-cy));
+ for(let yp=Math.ceil(cy-yHalf);yp<cy+yHalf;yp++){
+   const yMM=(cy-yp)/yHalf*halfMM;
+   let total=0;
+   // Four-point subpixel integration suppresses misleading aliasing at small fringe spacing.
+   for(const j of [-.375,-.125,.125,.375]){
+    const dMM=(cy-(yp+j))/yHalf*halfMM;
+    total+=physics(dMM).intensity;
+   }
+   const I=total/4;
+   c.fillStyle="rgb("+rgb.map((v,i)=>Math.round((i===2?8:5)+v*.96*I)).join(",")+")";
+   c.fillRect(screenX-8,yp,32,1.15);
+ }
+ line(c,screenX-9,cy,screenX+25,cy,"#e2edff95",.9,[3,3]);
+ text(c,"스크린",screenX+9,top-15,"#d2eaff",12,"center");
+ text(c,"중앙 y=0",screenX-15,cy-9,"#e2eef8",11,"right");
+ // Selected observation point: two path lengths and relative intensity.
+ if(Math.abs(state.chosenY)<=halfMM){
+  const yPos=cy-state.chosenY/halfMM*yHalf;
+  const targetX=screenX-9;
+  for(const sy of slits)line(c,sx+5,sy,targetX,yPos,"#ffd080b2",1.6,[5,5]);
+  circle(c,screenX+8,yPos,5,"#ffe6a0");
+  line(c,screenX+25,yPos,screenX+36,yPos,"#ffdb97",1.5);
+  text(c,"P",Math.min(w-12,screenX+39),yPos+4,"#ffda92",12);
+ }
+ // Screen distance is depicted schematically and moves visibly with slider.
+ const rulerY=h-17;
+ line(c,sx,rulerY,screenX,rulerY,"#e6d596",1.2);
+ for(const x of [sx,screenX])line(c,x,rulerY-5,x,rulerY+3,"#e6d596",1);
+ text(c,"L = "+state.L.toFixed(1)+" m",(sx+screenX)/2,rulerY-7,"#ffdc9b",12,"center");
+ text(c,"회절 파면",sx+54,26,"#7fdde7",12);
+ text(c,"고정 세로 범위 ±"+halfMM+" mm",w-14,h-14,"#b4d5e6",11,"right");
+}
+function renderGraph(){
+ const out=setup($("plot"));if(!out)return;
+ const {c,w,h}=out,L=49,R=17,T=12,B=29,W=w-L-R,H=h-T-B,range=pxRange();
+ c.fillStyle="#0b1b2d";c.fillRect(0,0,w,h);
+ const X=y=>L+(y+range)/(2*range)*W,Y=i=>h-B-clamp(i,0,1)*H;
+ c.lineWidth=1;
+ for(let k=0;k<=4;k++){
+  const i=k/4,y=-range+2*range*k/4;
+  line(c,L,Y(i),w-R,Y(i),"#334c63",.8);
+  text(c,i.toFixed(2),L-8,Y(i)+3,"#b8cde0",10,"right");
+  line(c,X(y),T,X(y),h-B,"#273d52",.8);
+  text(c,y.toFixed(range>25?0:1),X(y),h-B+15,"#c2d6e5",10,"center");
+ }
+ line(c,L,T,L,h-B,"#a9c9dc",1.2);line(c,L,h-B,w-R,h-B,"#a9c9dc",1.2);
+ text(c,"I / I₀",4,10,"#e0f4ff",11);text(c,"y (mm)",w-R,h-3,"#e0f4ff",11,"right");
+ const n=Math.max(400,Math.floor(W*1.5));
+ for(const [prop,color,dashed] of [["envelope","#ffd18a",true],["intensity","#76efe5",false]]){
+  c.beginPath();
+  for(let i=0;i<=n;i++){
+   const y=-range+2*range*i/n,pt=physics(y);
+   if(!i)c.moveTo(X(y),Y(pt[prop]));else c.lineTo(X(y),Y(pt[prop]));
+  }
+  c.strokeStyle=color;c.lineWidth=dashed?1.4:2.4;c.setLineDash(dashed?[6,4]:[]);c.stroke();c.setLineDash([]);
+ }
+ if(Math.abs(state.chosenY)<=range){
+  const yy=physics(state.chosenY).intensity,px=X(state.chosenY),py=Y(yy);
+  line(c,px,T,px,h-B,"#ffde9a80",1,[4,4]);circle(c,px,py,4.8,"#ffe0a0");
+ }
+}
+function updateNumbers(){
+ const spacing=fringeMM(),min=firstMinimumMM(),at=physics(state.chosenY);
+ $("waveOut").textContent=state.nm+" nm";
+ $("slitOut").textContent=state.dmm.toFixed(2)+" mm";
+ $("distanceOut").textContent=state.L.toFixed(1)+" m";
+ $("widthOut").textContent=state.amm.toFixed(3)+" mm";
+ $("spacing").textContent=spacing.toFixed(3)+" mm";
+ $("envelopeMin").textContent=min.toFixed(2)+" mm";
+ $("rangeLabel").textContent="고정 ±"+state.range+" mm";
+ $("pathDifference").textContent=(state.chosenY>=0?"+":"")+state.chosenY.toFixed(2)+" mm / "+(at.delta*1e9).toFixed(1)+" nm";
+ $("pointIntensity").textContent=at.intensity.toFixed(3);
+ $("resultExplanation").textContent="무늬 간격 Δy ≈ "+spacing.toFixed(3)+" mm · 회절 포락선은 슬릿 폭 a에 따라 달라집니다.";
+ const graph=$("plot"),screen=$("stage");
+ const pixelsGraph=graph.getBoundingClientRect().width, pixelsScreen=screen.getBoundingClientRect().height-70;
+ const pp=Math.min(pixelsGraph*.78,pixelsScreen);
+ const pxPerFringe=spacing/(2*state.range)*pp;
+ let warning="";
+ if(spacing>state.range)warning="첫 번째 밝은 무늬가 화면 범위 밖입니다. '첫 밝은 무늬 포함 보기' 또는 넓은 표시 범위를 선택하세요.";
+ else if(pxPerFringe<2.5)warning="무늬 간격이 약 "+pxPerFringe.toFixed(1)+"px로 매우 작아 해상도에 따라 변화가 희미할 수 있습니다. ±5 mm 확대를 권장합니다.";
+ else warning="슬라이더를 바꿀 때 화면의 mm 범위는 고정되어 있어 무늬 간격 변화를 직접 비교할 수 있습니다.";
+ $("visibilityNote").textContent=warning;
+ const status=state.running?"파면 진행 중":"파면은 1회 재생 후 멈춥니다";
+ $("sceneNote").textContent=status+" · 원호는 회절을 나타내는 옅은 시각화, 스크린은 간섭×회절 포락선의 계산 결과입니다. 실제 파장·광속과 화면 배율은 다릅니다.";
+ $("start").disabled=state.running;
+ $("pause").disabled=!state.running;
+}
+function draw(){renderScene();renderGraph();updateNumbers();}
+function inputChanged(){
+ state.nm=Number(wave.value);state.dmm=Number(slit.value);state.L=Number(distance.value);state.amm=Number(width.value);
+ state.running=false;state.last=null;state.progress=1;draw();
+}
+function setScale(v){
+ state.range=Number(v);$("scale").value=String(state.range);draw();
+}
+for(const input of [wave,slit,distance,width])input.addEventListener("input",inputChanged);
+$("scale").onchange=e=>setScale(e.target.value);
+$("fit").onclick=()=>{
+ const desired=fringeMM()*2.6;
+ setScale([5,12,25,50].find(v=>v>=desired)||50);
+};
+$("reset").onclick=()=>{
+ Object.assign(state,defaults,{chosenY:fringeMM()/2,running:false,progress:1,last:null});
+ wave.value=defaults.nm;slit.value=defaults.dmm;distance.value=defaults.L;width.value=defaults.amm;
+ $("scale").value="12";state.chosenY=fringeMM()/2;draw();
+};
+$("start").onclick=()=>{state.progress=0;state.running=true;state.last=null;draw();};
+$("pause").onclick=()=>{state.running=false;state.last=null;draw();};
+$("restart").onclick=()=>{state.progress=0;state.running=true;state.last=null;draw();};
+function choosePoint(canvas,event,isStage){
+ const rect=canvas.getBoundingClientRect(),x=event.clientX-rect.left,y=event.clientY-rect.top;
+ if(isStage){
+  const g=lastSceneGeometry;if(!g||x<g.x-34||x>g.x+50)return;
+  const halfH=Math.min(Math.abs(g.cy-g.top),Math.abs(g.bottom-g.cy));
+  state.chosenY=clamp((g.cy-y)/halfH*g.halfMM,-state.range,state.range);
+ }else{
+  const plotLeft=49,plotRight=17,w=rect.width;
+  state.chosenY=clamp(((x-plotLeft)/(w-plotLeft-plotRight)*2-1)*state.range,-state.range,state.range);
+ }
+ draw();
+}
+for(const [canvas,id] of [[$("stage"),"stage"],[$("plot"),"plot"]]){
+ canvas.addEventListener("pointerdown",e=>{if(id==="stage"&&lastSceneGeometry&&e.clientX-canvas.getBoundingClientRect().left<lastSceneGeometry.x-34)return;canvas.setPointerCapture(e.pointerId);choosePoint(canvas,e,id==="stage");});
+ canvas.addEventListener("pointermove",e=>{if(e.buttons===1&&canvas.hasPointerCapture(e.pointerId))choosePoint(canvas,e,id==="stage");});
+}
+function selectTab(which){
+ const lab=which==="lab";$("lab").style.display=lab?"grid":"none";$("concept").style.display=lab?"none":"block";
+ $("labTab").classList.toggle("active",lab);$("conceptTab").classList.toggle("active",!lab);
+ $("labTab").setAttribute("aria-selected",String(lab));$("conceptTab").setAttribute("aria-selected",String(!lab));
+ if(!lab){state.running=false;state.last=null;}else requestAnimationFrame(draw);
+}
+$("labTab").onclick=()=>selectTab("lab");$("conceptTab").onclick=()=>selectTab("concept");
+window.addEventListener("resize",()=>{if($("lab").style.display!=="none")requestAnimationFrame(draw);});
+if(typeof ResizeObserver!=="undefined"){const r=new ResizeObserver(()=>{if($("lab").style.display!=="none")requestAnimationFrame(draw);});r.observe($("stage").parentElement);}
+function frame(t){
+ if(state.running){
+  if(state.last!==null){state.progress=Math.min(1,state.progress+clamp((t-state.last)/1000,0,.07)/6);if(state.progress===1){state.running=false;state.last=null;}}
+  if(state.running)state.last=t;
+  renderScene();updateNumbers();
+ }
+ requestAnimationFrame(frame);
+}
+state.chosenY=fringeMM()/2;
+draw();requestAnimationFrame(frame);
+})();
 </script></body></html>
