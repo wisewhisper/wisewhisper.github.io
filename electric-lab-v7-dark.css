@@ -55,3 +55,20 @@ body[data-electric-v6="1"] .e7-shell .e7-workspace{grid-template-columns:minmax(
 @media(max-width:900px){
  .e7-shell .e7-graphstage :is(svg,canvas){min-height:160px;max-height:50vh!important}
 }
+
+
+/* V7.1: Remove remaining legacy pale surfaces (not measurement colors). */
+.e7-shell :is(.e7-stage,.e7-graphstage) svg :is(rect,path,polygon)[fill="#fff6e9"],
+.e7-shell :is(.e7-stage,.e7-graphstage) svg :is(rect,path,polygon)[fill="#f3f8fc"],
+.e7-shell :is(.e7-stage,.e7-graphstage) svg :is(rect,path,polygon)[fill="#f4f9fb"],
+.e7-shell :is(.e7-stage,.e7-graphstage) svg :is(rect,path,polygon)[fill="#f5f8fd"],
+.e7-shell :is(.e7-stage,.e7-graphstage) svg :is(rect,path,polygon)[fill="#f7faff"],
+.e7-shell :is(.e7-stage,.e7-graphstage) svg :is(rect,path,polygon)[fill="#eef3fa"],
+.e7-shell :is(.e7-stage,.e7-graphstage) svg :is(rect,path,polygon)[fill="#e6f0ff"]{fill:#11283e!important}
+.e7-shell .e7-graphstage svg :is(path,line,polyline)[stroke="#245bd6"],
+.e7-shell .e7-graphstage svg :is(path,line,polyline)[stroke="#1565c0"],
+.e7-shell .e7-graphstage svg :is(path,line,polyline)[stroke="#2f66c6"]{stroke:#6bc5ff!important}
+.e7-shell .e7-graphstage svg :is(path,line,polyline)[stroke="#087968"]{stroke:#5ee8d2!important}
+.e7-shell .e7-graphstage svg :is(path,line,polyline)[stroke="#b83d49"]{stroke:#ff879c!important}
+.e7-shell .e7-graphstage svg :is(rect,path)[stroke="#b74c12"]{stroke:#ffbf80!important}
+.e7-shell .e7-stage .e7-panel:has(svg) :is(.math,.formula,.explain,.equation){color:#eff8ff!important}
