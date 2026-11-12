@@ -1,44 +1,453 @@
 <!doctype html>
-<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>28 · 쿨롱 힘 | 물리 공식 실험실</title><style>
-:root{font-family:system-ui,-apple-system,'맑은 고딕',sans-serif;color:#172743;background:#eef3fa;line-height:1.65}*{box-sizing:border-box}body{margin:0}main{max-width:1120px;margin:auto;padding:24px}header{background:#152743;color:white;border-radius:24px;padding:28px;margin-bottom:20px}h1{margin:6px 0;font-size:clamp(25px,5vw,38px)}h2{font-size:20px;margin:0 0 12px}p{margin:8px 0}.eyebrow{color:#b8d9ff;font-size:14px;letter-spacing:1px}.formula{font-size:26px;color:#b5f4eb}.grid{display:grid;grid-template-columns:1.35fr 1fr;gap:18px}.card{background:white;border:1px solid #dbe4f0;border-radius:20px;padding:20px;min-width:0;margin-bottom:18px}.badge{display:inline-block;padding:5px 13px;border-radius:30px;background:#e9f1ff;color:#1d4c91;font-weight:700}.muted,small{font-size:14px;color:#586981}.scene{width:100%;display:block;background:#f5f8fd;border-radius:12px}label{display:block;font-weight:700}input[type=range]{width:100%;height:38px;accent-color:#376bcb}input[type=number]{width:120px;padding:9px;border:1px solid #b9c9dd;border-radius:9px;font-size:16px;min-height:44px}.row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.control{padding:12px 0;border-bottom:1px solid #e4eaf2}button{font:inherit;padding:10px 15px;min-height:44px;background:#eaf0fa;color:#233f69;border:1px solid #bdcde3;border-radius:10px;cursor:pointer}button.primary{background:#265dc0;color:white;border-color:#265dc0}button:hover{filter:brightness(.95)}.buttons{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}.results{display:grid;grid-template-columns:1fr 1fr;gap:10px}.metric{background:#f0f6fe;border-radius:12px;padding:12px}.metric strong{display:block;font-size:23px;color:#194779}.math{background:#f5f7fc;padding:14px;border-radius:12px;overflow-wrap:anywhere}table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:9px 5px;text-align:center;border-bottom:1px solid #dde5ef}.scroll{overflow-x:auto}details{border-top:1px solid #dee6f0;padding:12px 0}summary{cursor:pointer;font-weight:700;min-height:36px}footer{text-align:center;font-size:13px;color:#5c6d84;padding:12px}svg text{font-family:system-ui,sans-serif}.note{border-left:4px solid #f0b951;padding-left:12px}@media(max-width:740px){main{padding:12px}.grid{grid-template-columns:1fr}header{padding:20px}.card{padding:16px}.metric strong{font-size:20px}}
-</style><link rel="stylesheet" href="electric-lab-v6.css?v=20261112-7"><link rel="stylesheet" href="electric-lab-v7-dark.css?v=20261112-11">
-<script src="electric-lab-v6.js?v=20261112-8" defer></script>
-</head><body><main>
-<header><div class="eyebrow">물리 공식 40 · INTERACTIVE LAB 28</div><h1>쿨롱 힘 실험실</h1><div class="formula">F = k<sub>e</sub> |q₁q₂| / r²</div><p>전하의 부호·크기와 거리를 바꾸면 전기력의 방향과 크기는 어떻게 변할까?</p></header>
-<div class="grid"><div><section class="card"><div class="row"><h2>① 두 점전하 사이의 힘</h2><span id="kind" class="badge"></span></div><svg id="scene" class="scene" viewBox="0 0 640 320" role="img" aria-label="두 전하와 각 전하에 작용하는 전기력의 방향"></svg><p id="directions"></p><p class="muted">전하를 고정해 힘만 관찰합니다. 중심 간 거리는 실제 r에 비례합니다(0.2~3 m). 전하 원은 확대된 기호이며, 힘 화살표 길이는 화면 가독성을 위한 로그 척도입니다.</p></section>
-<section class="card"><h2>③ 실시간 계산</h2><div class="results"><div class="metric">각 전하가 받는 힘의 크기<strong id="force"></strong></div><div class="metric">오른쪽을 +x로 정의<strong id="signed"></strong></div></div><div class="math" id="calculation" style="margin-top:12px"></div><p class="muted">q₁, q₂: 전하량 · r: 두 전하 중심 간 거리 · F: 힘의 크기<br>kₑ = 8.99 × 10⁹ N·m²/C², 1 μC = 10⁻⁶ C</p></section>
-</div><div><section class="card"><h2>② 예측하고 조작하기</h2><p class="note">먼저 예측: 거리만 2배가 되면 힘은 몇 배일까요?</p><div id="controls"></div><div class="buttons"><button id="flip">q₂ 부호 뒤집기</button><button id="double">거리 2배</button><button id="reset">전체 초기화</button></div><p id="inputNote" class="muted" aria-live="polite">전하량은 μC로 입력하며 내부 계산은 C로 환산합니다.</p></section>
-<section class="card"><h2>⑤ 조건 A·B 비교</h2><div class="buttons"><button class="primary" id="saveA">현재 조건 → A</button><button class="primary" id="saveB">현재 조건 → B</button></div><div class="scroll"><table><thead><tr><th>조건</th><th>q₁ / q₂<br>(μC)</th><th>r (m)</th><th>F (N)</th><th>방향</th></tr></thead><tbody id="comparison"></tbody></table></div><p id="ratio" class="muted">조건을 저장하면 같은 모형으로 비교할 수 있습니다.</p><div class="buttons"><button id="loadA">A 불러오기</button><button id="loadB">B 불러오기</button></div></section></div></div>
-<section class="card"><h2>④ 거리–힘 관계 그래프</h2><p id="graphCaption" class="muted"></p><svg id="graph" class="scene" viewBox="0 0 740 340" role="img" aria-label="거리에 따른 전기력의 크기 그래프, 현재 조건과 저장한 조건 표시"></svg><p class="muted">시간 변화 그래프가 아닙니다. 세로축은 현재 전하량에 맞춰 자동 조절됩니다. A·B는 각각 저장한 전하량과 거리에서의 측정점입니다.</p></section>
-<section class="card"><h2>⑥ 예측 → 조작 → 관찰 → 설명</h2><details><summary>기본 · 거리 0.5 m를 1.0 m로 바꾸면 힘은 어떻게 될까?</summary><p>전하량을 +2 μC, −3 μC로 고정하면 0.5 m에서 0.21576 N, 1.0 m에서 0.05394 N입니다. 거리가 2배이면 힘은 1/4배가 됩니다. 조건 A·B에 저장해 확인하세요.</p></details><details><summary>응용 · q₁의 크기만 2배로 바꾸고, 다음에는 두 전하 모두 2배로 바꾸자.</summary><p>한 전하만 2배이면 힘은 2배, 두 전하가 모두 2배이면 힘은 4배입니다. 부호를 유지하면 힘의 방향은 변하지 않습니다. F는 각 전하량의 절댓값에 비례합니다.</p></details><details><summary>도전 · q₂의 부호를 뒤집으면 힘은 바뀔까? q₁을 0으로 만들면?</summary><p>q₂의 절댓값이 같다면 힘의 크기는 그대로이고 인력과 척력이 서로 바뀝니다. q₁=0이면 이 점전하 모형에서 두 전하 사이 쿨롱 힘은 0입니다. 실제 중성 물체의 분극에 의한 상호작용은 포함하지 않습니다.</p></details></section>
-<section class="card"><h2>⑦ 오개념과 적용 조건</h2><details><summary>“전하가 큰 쪽이 더 큰 힘을 받는다”?</summary><p>두 힘은 작용·반작용 쌍으로 항상 크기가 같고 방향이 반대입니다. q₁=1 μC, q₂=10 μC로 바꿔 양쪽 화살표와 수치를 확인하세요. 가속도는 질량에 따라 다를 수 있지만 이 실험은 운동을 계산하지 않습니다.</p></details><details><summary>“거리 2배이면 힘은 절반”?</summary><p>힘은 거리가 아니라 거리의 제곱에 반비례합니다. 두 조건을 저장해 힘의 비가 1/4인지 확인하세요.</p></details><details open><summary>모형의 조건과 한계</summary><p>진공 속 고정된 두 점전하를 가정합니다. 구형 전하의 크기가 거리보다 충분히 작은 경우에 근사적으로 활용할 수 있습니다. 매질의 유전율, 전하 재분포, 다른 전하, 중력과 운동은 포함하지 않습니다. 거리는 표면 간격이 아닌 중심 간 거리입니다.</p><p>r=0에서는 공식이 발산하므로 입력 범위를 0.2~3 m로 제한합니다. 전하량은 −10~+10 μC입니다. 그림의 원 크기와 힘 화살표 길이를 실제 물체 크기나 선형적인 힘의 척도로 해석하지 마세요.</p></details></section><footer>28 · 쿨롱 힘 | 외부 연결 없이 실행되는 단일 HTML 실험실</footer>
-</main><script>
-'use strict';
-const KE=8.99e9,defaults={q1:2,q2:-3,r:.5};let state={...defaults},saved={A:null,B:null};const $=id=>document.getElementById(id);
-const magnitude=s=>KE*Math.abs(s.q1*1e-6*s.q2*1e-6)/(s.r*s.r);
-const kind=s=>s.q1*s.q2===0?'힘 없음':s.q1*s.q2>0?'척력':'인력';
-const fmt=n=>Math.abs(n)<1e-12?'0':Math.abs(n)<.001?n.toExponential(3):Number(n.toPrecision(5)).toString();
-function forces(s){const f=magnitude(s),sign=Math.sign(s.q1*s.q2);return {f,F1:-sign*f,F2:sign*f};}
-for(const [id,label,min,max,step] of [['q1','전하 q₁ (μC)',-10,10,.1],['q2','전하 q₂ (μC)',-10,10,.1],['r','중심 간 거리 r (m)',.2,3,.01]]){
- const box=document.createElement('div');box.className='control';box.innerHTML=`<div class="row"><label for="${id}Range">${label}</label><input id="${id}Num" type="number" min="${min}" max="${max}" step="${step}" aria-label="${label} 숫자 입력"></div><input id="${id}Range" type="range" min="${min}" max="${max}" step="${step}">`;$('controls').append(box);
- $(id+'Range').addEventListener('input',e=>{state[id]=Number(e.target.value);$('inputNote').textContent='입력값이 즉시 그림·계산·그래프에 반영됩니다.';render();});
- $(id+'Num').addEventListener('input',e=>{if(e.target.value==='')return;const v=Number(e.target.value);if(!Number.isFinite(v))return;state[id]=Math.min(max,Math.max(min,v));$('inputNote').textContent=v!==state[id]?`입력 범위를 벗어나 ${state[id]}로 보정했습니다.`:'입력값이 즉시 반영됩니다.';render(false,id);});
- $(id+'Num').addEventListener('change',()=>render());
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>28번 쿨롱 힘 실험실 | 인력·척력·거리 역제곱 법칙</title>
+<style>
+:root{color-scheme:dark;--bg:#07111e;--panel:#102338;--panel2:#17334b;--border:#385a73;--ink:#eff9ff;--muted:#b6d1e1;--cyan:#69e8df;--amber:#ffd18b;--red:#ff8ea0;--blue:#8dc8ff}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font:14px/1.48 system-ui,-apple-system,"Malgun Gothic",sans-serif}
+button,input,select{font:inherit}
+button{cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #a6ecfa;outline-offset:2px}
+button:disabled{cursor:default;opacity:.45}
+button{min-height:35px;padding:6px 10px;color:#f0faff;font-weight:700;background:#23435d;border:1px solid #527a91;border-radius:8px}
+button:hover:not(:disabled){background:#315b79}
+button.primary{background:#0a788b;border-color:#7be5ed;color:#fff}
+.app{height:100dvh;min-height:590px;display:flex;flex-direction:column;gap:7px;padding:9px 11px;overflow:hidden}
+header{display:flex;align-items:center;gap:14px;flex:0 0 auto;min-height:35px}
+header h1{font-size:clamp(19px,1.8vw,26px);line-height:1.18;margin:0;white-space:nowrap}
+header .sub{font-size:12px;color:var(--muted)}
+header #full{margin-left:auto}
+.tabs{display:flex;align-items:center;gap:6px;flex:0 0 auto;min-height:39px;overflow-x:auto;padding-bottom:3px}
+.tabs button{white-space:nowrap}
+.tabs button[aria-selected="true"]{background:#0c798b;border-color:#85f0f3;box-shadow:inset 0 -2px #baffff}
+.workspace{display:grid;grid-template-columns:minmax(0,4fr) minmax(250px,1fr);gap:9px;flex:1 1 auto;min-height:0;min-width:0}
+.stage,.plots,.controls,.concepts{min-width:0;min-height:0}
+.stage{display:flex;flex-direction:column;gap:7px}
+.stage-card{display:flex;flex-direction:column;gap:7px;padding:10px 12px;background:var(--panel);border:1px solid var(--border);border-radius:12px;flex:1;min-height:0;overflow:hidden}
+.stage-top{display:flex;align-items:center;flex-wrap:wrap;gap:6px;flex:0 0 auto}
+.stage-top h2{font-size:16px;margin:0 10px 0 0;line-height:1.2}
+.stage-top button{font-size:12px;padding:5px 9px}
+.stage-top .run{display:flex;flex-wrap:wrap;gap:5px}
+.stage-top .run[hidden]{display:none}
+.scene-wrap{flex:1 1 auto;min-height:0;display:flex}
+#scene{width:100%;height:100%;min-height:190px;display:block;background:#081b2b;border-radius:10px;border:1px solid #315169;touch-action:none;user-select:none}
+.hint{font-size:12px;line-height:1.5;color:#b8d3e4;margin:0;flex:0 0 auto}
+.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;flex:0 0 auto}
+.metric{background:#183249;border:1px solid #3b5d76;border-radius:9px;padding:8px;min-width:0}
+.metric small{display:block;font-size:11px;color:#bad1e2;white-space:nowrap}
+.metric strong{display:block;color:#f6fbff;font-size:clamp(14px,1.45vw,19px);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.metric strong.accent{color:var(--cyan)}
+.metric strong.warm{color:var(--amber)}
+.status{font-size:12px;color:#a8f1e6;line-height:1.42;min-height:17px;font-weight:650;flex:0 0 auto}
+.controls{display:flex;flex-direction:column;gap:7px;overflow-y:auto;scrollbar-width:thin;padding-right:2px}
+.card{background:var(--panel);border:1px solid var(--border);padding:10px 11px;border-radius:11px}
+.card h2{font-size:15px;color:#effbff;margin:0 0 8px}
+.field{margin-bottom:10px}
+.field label{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12px;font-weight:700;margin-bottom:3px}
+.field output{color:#87eef1;font-variant-numeric:tabular-nums}
+.field input[type=range]{display:block;width:100%;height:25px;accent-color:#6ddde9;margin:0}
+.buttons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}
+.buttons button{font-size:12px;padding:6px 5px}
+.equation{background:#1a354e;border:1px solid #456781;border-radius:8px;padding:9px;color:#f1faff;line-height:1.65;font-size:12px;margin:6px 0}
+.equation b{color:#91f0ee}
+.tiny{font-size:11px!important;line-height:1.5!important;color:#bed3e3!important;margin:5px 0!important}
+#resultNote{font-size:12px;line-height:1.5;color:#b9f1e5;margin:6px 0 0}
+#progress{height:7px;width:100%;background:#203c53;border:1px solid #375970;border-radius:9px;overflow:hidden;margin-top:6px}
+#progress>i{display:block;width:0;height:100%;background:linear-gradient(90deg,#087b90,#7eebdc)}
+.plots{display:none;flex-direction:column;gap:7px;overflow-y:auto}
+.plot-head{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+.plot-head h2{font-size:16px;margin:0}
+.plot-head p{font-size:11px;color:#b9d3e4;margin:0}
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:12px;color:#c9e0ed}
+.legend span:before{content:"";display:inline-block;width:14px;height:3px;background:currentColor;vertical-align:middle;margin-right:4px}
+.legend .current{color:#73eae0}.legend .saved-a{color:#ffa3b4}.legend .saved-b{color:#bba8ff}.legend .point{color:#ffd38b}
+.plot-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;flex:1 1 auto;min-height:0}
+.plot-card{display:flex;flex-direction:column;gap:6px;min-width:0;min-height:0;background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:9px}
+.plot-card h3{font-size:14px;margin:0}
+.plot-card canvas{display:block;flex:1 1 auto;width:100%;min-height:185px;background:#0b1e30;border:1px solid #33566e;border-radius:8px}
+.plot-card p{font-size:12px;line-height:1.48;color:#bad5e5;margin:0}
+.compare{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:7px 9px;overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:12px;text-align:center;white-space:nowrap}
+td,th{padding:5px 7px;border-bottom:1px solid #33536d}
+th{color:#e1f1f9}
+.compare .bottom{font-size:12px;color:#b9f3e7;margin:5px 0 0}
+.concepts{display:none;overflow-y:auto}
+.lessons{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.lesson{padding:17px;background:var(--panel);border:1px solid var(--border);border-radius:11px}
+.lesson h2{font-size:17px;color:#8de9f2;margin:0 0 9px}
+.lesson p{line-height:1.75;margin:7px 0}
+.lesson .formula{background:#1c3a53;border:1px solid #456b83;padding:11px;border-radius:9px;font-size:18px;color:#f5fbff}
+.lesson.wide{grid-column:1/-1}
+.lesson details{border-top:1px solid #37536b;padding:9px 0}
+.lesson summary{cursor:pointer;font-weight:750}
+.workspace[data-view="graphs"] .stage{display:none}
+.workspace[data-view="graphs"] .plots{display:flex}
+.workspace[data-view="concepts"]{display:block}
+.workspace[data-view="concepts"] .stage,.workspace[data-view="concepts"] .controls,.workspace[data-view="concepts"] .plots{display:none}
+.workspace[data-view="concepts"] .concepts{display:block}
+@media(min-width:901px) and (max-height:750px){.app{padding:7px 9px;gap:5px}.stage-card{padding:7px 9px;gap:5px}.metric{padding:6px}.card{padding:8px}.field{margin-bottom:6px}.buttons button{min-height:31px}}
+@media(max-width:900px){.app{height:auto;min-height:100dvh;overflow:visible}.workspace{display:flex;flex-direction:column}.stage{min-height:550px}.stage-card{min-height:530px}.controls{overflow:visible}.plots{overflow:visible}.plot-grid,.lessons{grid-template-columns:1fr}.plot-card{min-height:310px}.plot-card canvas{height:260px;flex:none}.concepts{overflow:visible}.tabs{position:sticky;top:0;z-index:6;padding:4px 0;background:#07111e}.lesson.wide{grid-column:auto}}
+@media(max-width:430px){header h1{font-size:18px}header .sub,header #full{display:none}.tabs button{font-size:12px;padding:6px 8px}.stage-top h2{width:100%}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.stage{min-height:590px}.stage-card{min-height:570px}}
+</style>
+</head>
+<body>
+<div class="app">
+ <header><h1>⚡ 28번 · 쿨롱 힘 실험실</h1><span class="sub">전하의 부호·크기·거리와 인력·척력</span><button type="button" id="full">⛶ 전체화면</button></header>
+ <nav class="tabs" role="tablist" aria-label="쿨롱 힘 실험 종류">
+  <button class="tab" data-tab="interaction" aria-selected="true" role="tab" type="button">① 인력·척력 실험</button>
+  <button class="tab" data-tab="distance" aria-selected="false" role="tab" type="button">② 거리 변화 실험</button>
+  <button class="tab" data-tab="graphs" aria-selected="false" role="tab" type="button">③ 그래프·비교</button>
+  <button class="tab" data-tab="concepts" aria-selected="false" role="tab" type="button">④ 개념 설명</button>
+ </nav>
+ <div class="workspace" id="workspace" data-view="interaction">
+  <section class="stage" aria-label="두 점전하 사이의 쿨롱 힘 실험">
+   <div class="stage-card">
+    <div class="stage-top">
+     <h2 id="stageTitle">두 전하가 서로 당길까, 밀어낼까?</h2>
+     <button id="attractPreset" type="button">서로 다른 부호 · 인력</button>
+     <button id="repelPreset" type="button">같은 부호 · 척력</button>
+     <div class="run" id="runbar" hidden>
+      <button id="start" class="primary" type="button">▶ 거리 변경 시작</button>
+      <button id="pause" type="button">Ⅱ 일시정지</button>
+      <button id="again" type="button">↺ 처음부터</button>
+     </div>
+    </div>
+    <div class="scene-wrap">
+     <svg id="scene" viewBox="0 0 920 480" aria-label="왼쪽에 고정된 전하 q1과 드래그 가능한 오른쪽 전하 q2, 각 전하가 받는 크기가 같고 방향이 반대인 쿨롱 힘 화살표" role="img"></svg>
+    </div>
+    <p class="hint" id="sceneHint">오른쪽 전하 q₂를 좌우로 드래그하거나 전하 부호를 바꾸어 보세요. 전하의 위치는 사용자가 조절하며, 자유운동은 계산하지 않습니다.</p>
+    <div class="metrics">
+     <div class="metric"><small>힘의 종류</small><strong id="typeValue">인력</strong></div>
+     <div class="metric"><small>양쪽 힘의 크기</small><strong class="accent" id="forceValue">0.21576 N</strong></div>
+     <div class="metric"><small>두 전하 사이 거리</small><strong id="distanceValue">0.50 m</strong></div>
+     <div class="metric"><small>초기 힘 대비</small><strong class="warm" id="relativeValue">1.00배</strong></div>
+    </div>
+    <div class="status" id="status" role="status">서로 다른 부호인 두 전하는 같은 크기의 힘으로 끌어당깁니다.</div>
+   </div>
+  </section>
+  <section class="plots" aria-label="쿨롱 힘 그래프와 조건 비교">
+   <div class="plot-head"><h2>거리와 전기력의 관계</h2><p>세로축은 필요할 때만 확장되며 조작할 때 자동으로 축소되지 않습니다.</p></div>
+   <div class="legend"><span class="current">현재 조건 곡선</span><span class="saved-a">조건 A</span><span class="saved-b">조건 B</span><span class="point">현재 측정점</span></div>
+   <div class="plot-grid">
+    <div class="plot-card"><h3>거리 r – 힘의 크기 |F|</h3><canvas id="distanceGraph" aria-label="두 점전하 사이 거리에 따른 힘의 크기 그래프"></canvas><p>전하량을 고정하면 거리가 2배일 때 힘의 크기는 1/4배가 됩니다.</p></div>
+    <div class="plot-card"><h3>1/r² – 힘의 크기 |F|</h3><canvas id="inverseGraph" aria-label="거리 제곱의 역수와 힘의 크기의 관계를 나타내는 그래프"></canvas><p>가로축을 1/r²로 바꾸면 원점을 지나는 직선이 됩니다. 기울기 = k|q₁q₂|.</p></div>
+   </div>
+   <div class="compare"><table><thead><tr><th>조건</th><th>q₁ (μC)</th><th>q₂ (μC)</th><th>r (m)</th><th>|F| (N)</th><th>종류</th></tr></thead><tbody id="comparison"></tbody></table><p class="bottom" id="ratioNote">A·B 조건을 저장하면 전기력의 비와 거리의 비를 비교할 수 있습니다.</p></div>
+  </section>
+  <aside class="controls" aria-label="실험 변수 조작부">
+   <div class="card">
+    <h2>전하·거리 조절</h2>
+    <div class="field"><label for="q1">왼쪽 전하 q₁ <output id="q1Out">+2.0 μC</output></label><input type="range" id="q1" min="-10" max="10" step="0.1" value="2"></div>
+    <div class="field"><label for="q2">오른쪽 전하 q₂ <output id="q2Out">−3.0 μC</output></label><input type="range" id="q2" min="-10" max="10" step="0.1" value="-3"></div>
+    <div class="field"><label for="distance">중심 사이 거리 r <output id="distanceOut">0.50 m</output></label><input type="range" id="distance" min="0.2" max="3" step="0.01" value="0.5"></div>
+    <div class="field"><label for="speed">거리 변화 재생 속도 <output id="speedOut">1배</output></label><input type="range" id="speed" min="0.5" max="2" step="0.5" value="1"></div>
+    <div class="buttons">
+     <button id="flip" type="button">q₂ 부호 반전</button>
+     <button id="doubleDistance" type="button">거리 ×2</button>
+     <button id="doubleCharge" type="button">q₁ 크기 ×2</button>
+     <button id="reset" type="button">전체 초기화</button>
+    </div>
+    <p class="tiny">드래그와 재생은 오른쪽 전하의 위치를 <b>외부에서 조절하는 것</b>입니다. 실제 전기력에 의한 가속 운동이 아닙니다.</p>
+   </div>
+   <div class="card">
+    <h2>계산·측정 비교</h2>
+    <div class="equation" id="equation"></div>
+    <div class="buttons">
+     <button id="saveA" type="button">조건 A 저장</button>
+     <button id="saveB" type="button">조건 B 저장</button>
+     <button id="loadA" type="button">A 불러오기</button>
+     <button id="loadB" type="button">B 불러오기</button>
+     <button id="axisReset" type="button">그래프 축 초기화</button>
+     <button id="goGraph" type="button">그래프 보기</button>
+    </div>
+    <div id="progress" aria-label="거리 변화 실험 진행도"><i id="progressFill"></i></div>
+    <p id="resultNote">초기 조건: +2 μC, −3 μC, 0.50 m → 0.21576 N</p>
+    <p class="tiny">진공 속 정지한 두 점전하를 가정합니다. 전하 기호의 크기와 화살표 길이는 실물 축척이 아닙니다.</p>
+   </div>
+  </aside>
+  <section class="concepts" aria-label="쿨롱 법칙 개념 설명">
+   <div class="lessons">
+    <article class="lesson"><h2>① 쿨롱 힘이란?</h2><p>전하를 띤 두 물체 사이에는 전기력이 작용합니다. 같은 부호의 전하는 서로 밀어내고(척력), 다른 부호의 전하는 서로 당깁니다(인력).</p><div class="formula">|F| = k |q₁q₂| / r²<br>k ≈ 8.99 × 10⁹ N·m²/C²</div><p>r은 두 점전하 사이의 거리입니다. 두 힘은 항상 크기가 같고 방향이 반대입니다.</p></article>
+    <article class="lesson"><h2>② 무엇이 힘을 바꿀까?</h2><p>한 전하의 크기를 2배로 하면 힘은 2배, 두 전하를 각각 2배로 하면 4배입니다. 거리를 2배로 하면 힘은 1/4배, 거리를 3배로 하면 1/9배가 됩니다.</p><p>전하의 부호를 바꾸면 인력·척력이 바뀌지만 <b>전하의 절댓값이 같다면 힘의 크기는 같습니다.</b></p></article>
+    <article class="lesson"><h2>③ 화살표의 의미</h2><p>청록색 화살표 F₁은 q₁이 받는 힘, 노란색 화살표 F₂는 q₂가 받는 힘입니다. 화살표는 각 전하 가까이에서 방향을 표시합니다.</p><p>두 화살표의 길이는 동일하며, 힘이 커질수록 길어지지만 화면 가독성을 위해 비선형으로 조절합니다. <b>정확한 힘의 크기는 N 단위 수치와 그래프</b>를 확인하세요.</p></article>
+    <article class="lesson"><h2>④ 거리 조작과 실제 운동의 차이</h2><p>거리 변화 실험의 '시작' 버튼을 누르면 오른쪽 전하를 일정한 화면 속도로 이동시키며 각 거리의 전기력을 다시 계산합니다. 이는 <b>외부에서 위치를 조절하는 준정적 실험</b>입니다.</p><p>실제로 두 전하를 놓아 움직이게 하면 가속도가 질량에 따라 달라집니다. 이 실험실은 중력·가속 운동·충돌을 계산하지 않습니다.</p></article>
+    <article class="lesson wide"><h2>⑤ 탐구 활동과 오개념 확인</h2>
+      <details><summary>예측 · 다른 부호인 q₁과 q₂를 같은 부호로 바꾸면?</summary><p>인력에서 척력으로 바뀝니다. 전하의 크기와 거리를 그대로 유지하면 각 전하가 받는 힘의 크기는 변하지 않습니다.</p></details>
+      <details><summary>실험 · 거리 0.5 m에서 1.0 m로 바꾸면?</summary><p>기본 조건에서는 0.21576 N이 0.05394 N으로 줄어듭니다. 정확히 1/4배입니다. 비교 조건 A·B에 각각 저장해 확인할 수 있습니다.</p></details>
+      <details><summary>오개념 · 전하량이 큰 쪽은 더 큰 힘을 받나요?</summary><p>그렇지 않습니다. 두 전하가 주고받는 힘은 뉴턴의 작용·반작용 법칙에 따라 크기가 같고 방향이 반대입니다. 각 전하의 질량이 다르면 가속도는 달라질 수 있습니다.</p></details>
+      <details><summary>오개념 · 거리 2배이면 힘도 절반이 되나요?</summary><p>아닙니다. 전기력의 크기는 거리의 제곱에 반비례합니다. 힘은 1/4배가 됩니다. 1/r²–F 그래프의 직선 관계를 확인하세요.</p></details>
+      <details><summary>모형의 적용 조건과 제한은?</summary><p>진공 속에 고정된 두 점전하, 또는 크기를 무시할 수 있는 구대칭 대전체를 가정합니다. 전하량은 ±10 μC 이내, 중심 간 거리는 0.20~3.00 m입니다. 전하 사이의 유전체·도체 분극·다른 전하·중력·전자기파는 다루지 않습니다. r=0일 때는 점전하 법칙의 수학적 발산을 피하기 위해 포함하지 않습니다. 화면의 위치 간격은 전체 범위를 보기 쉽게 압축한 표시용 배율이며 물리적 거리는 숫자가 기준입니다.</p></details>
+    </article>
+   </div>
+  </section>
+ </div>
+</div>
+<script>
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+const K=8.99e9,defaults={q1:2,q2:-3,r:.5,speed:1};
+const model={...defaults,tab:"interaction",playing:false,savedA:null,savedB:null,drag:false,origin:.5,finished:false,last:null};
+const originalF=K*2e-6*3e-6/(.5*.5);
+const graphRange={force:0};
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const fmt=(x,d=4)=>Number(x.toFixed(d)).toLocaleString("ko-KR",{maximumFractionDigits:d});
+const signed=(x,d=1)=>(x>0?"+":"")+x.toFixed(d);
+const physics=(m=model)=>{
+ const f=K*Math.abs(m.q1*m.q2)*1e-12/(m.r*m.r);
+ const sign=Math.sign(m.q1*m.q2);
+ return {f,f1:-sign*f,f2:sign*f,kind:f===0?"힘 없음":sign>0?"척력":"인력"};
+};
+const snapshot=()=>({q1:model.q1,q2:model.q2,r:model.r});
+function getElementXY(event,svg){
+ const p=svg.createSVGPoint();p.x=event.clientX;p.y=event.clientY;
+ const matrix=svg.getScreenCTM();return matrix?p.matrixTransform(matrix.inverse()):{x:0,y:0};
 }
-function arrow(x,y,dir,len,color,label){if(!dir)return '';const end=x+dir*len;return `<line x1="${x}" y1="${y}" x2="${end}" y2="${y}" stroke="${color}" stroke-width="5"/><path d="M ${end-dir*11} ${y-7} L ${end} ${y} L ${end-dir*11} ${y+7}" fill="none" stroke="${color}" stroke-width="5"/><text x="${x}" y="${y-14}" text-anchor="middle" fill="${color}" font-size="18">${label}</text>`;}
-function renderScene(){const {f,F1,F2}=forces(state),d=state.r*140,x1=320-d/2,x2=320+d/2,len=f?Math.min(110,28+24*Math.log10(1+f/.005)):0;const circle=(x,q,label)=>`<circle cx="${x}" cy="180" r="24" fill="${q>0?'#fcdae1':q<0?'#d6e7ff':'#e2e6ed'}" stroke="${q>0?'#b63253':q<0?'#245eae':'#657384'}" stroke-width="3"/><text x="${x}" y="187" text-anchor="middle" font-size="24" fill="#162b48">${q>0?'+':q<0?'−':'0'}</text><text x="${x}" y="228" text-anchor="middle" font-size="17">${label}: ${q} μC</text>`;
- $('scene').innerHTML=`<text x="20" y="28" font-size="15">왼쪽 q₁ · 오른쪽 q₂</text><text x="610" y="28" text-anchor="end" font-size="15">+x →</text><line x1="${x1}" y1="72" x2="${x2}" y2="72" stroke="#69809d" stroke-width="2"/><path d="M ${x1} 66 V 78 M ${x2} 66 V 78" stroke="#69809d"/><text x="320" y="59" text-anchor="middle" font-size="18">r = ${state.r} m</text>${arrow(x1,120,Math.sign(F1),len,'#8d3c63','F₁')}${arrow(x2,270,Math.sign(F2),len,'#17647b','F₂')}${circle(x1,state.q1,'q₁')}${circle(x2,state.q2,'q₂')}`;
- $('directions').textContent=f?`${kind(state)} · q₁이 받는 힘 ${F1>0?'→ 오른쪽':'← 왼쪽'} / q₂가 받는 힘 ${F2>0?'→ 오른쪽':'← 왼쪽'} · 두 힘의 크기는 같습니다.`:'전하량이 0인 전하가 있어 이 모형의 쿨롱 힘은 0입니다.';
+function svgArrow(x,y,dir,length,color,label,value){
+ if(!dir||length<=0)return "";
+ const x0=x+dir*36,x1=x0+dir*length;
+ return '<g><line x1="'+x0+'" y1="'+y+'" x2="'+x1+'" y2="'+y+'" stroke="'+color+'" stroke-width="5" stroke-linecap="round"/>'+
+ '<path d="M '+(x1-dir*13)+' '+(y-9)+' L '+x1+' '+y+' L '+(x1-dir*13)+' '+(y+9)+'" fill="none" stroke="'+color+'" stroke-width="4" stroke-linejoin="round"/>'+
+ '<text x="'+(x0+dir*length/2)+'" y="'+(y-17)+'" fill="'+color+'" font-size="20" font-weight="800" text-anchor="middle">'+label+'</text>'+
+ '<text x="'+(x0+dir*length/2)+'" y="'+(y+29)+'" fill="#ecf8ff" font-size="14" text-anchor="middle">'+value+'</text></g>';
 }
-let graphAxis28=0;function renderGraph(){const g=$('graph'),x0=76,xw=635,y0=282,yh=222;let ymax=magnitude({...state,r:.2});for(const s of Object.values(saved))if(s)ymax=Math.max(ymax,magnitude(s));ymax=(graphAxis28=Math.max(graphAxis28,ymax?ymax*1.1:1));const X=r=>x0+(r-.2)/2.8*xw,Y=f=>y0-f/ymax*yh;let out='';for(let i=0;i<=4;i++){const v=ymax*i/4,y=Y(v);out+=`<line x1="${x0}" y1="${y}" x2="711" y2="${y}" stroke="#d9e2ef"/><text x="67" y="${y+5}" text-anchor="end" font-size="13">${fmt(v)}</text>`;}
- for(const r of [.2,.5,1,1.5,2,2.5,3])out+=`<text x="${X(r)}" y="305" text-anchor="middle" font-size="13">${r}</text>`;
- out+='<path d="M 76 60 V 282 H 711" fill="none" stroke="#627791" stroke-width="2"/><text x="15" y="29" font-size="15">F (N)</text><text x="620" y="331" font-size="15">距離 r (m)</text>'.replace('距離','거리');
- let path='';for(let i=0;i<=280;i++){const r=.2+i*.01;path+=`${i?'L':'M'}${X(r)},${Y(magnitude({...state,r}))} `;}out+=`<path d="${path}" fill="none" stroke="#2f66c6" stroke-width="3"/><circle cx="${X(state.r)}" cy="${Y(magnitude(state))}" r="6" fill="#e6502f" stroke="white" stroke-width="2"/><text x="330" y="28" text-anchor="middle" font-size="14">● 현재 · □ A · △ B</text>`;
- for(const k of ['A','B']){const s=saved[k];if(!s)continue;const x=X(s.r),y=Y(magnitude(s));out+=k==='A'?`<rect x="${x-5}" y="${y-5}" width="10" height="10" fill="#743cae"/>`:`<path d="M ${x} ${y-7} L ${x+6} ${y+5} L ${x-6} ${y+5} Z" fill="#08745c"/>`;out+=`<text x="${x+9}" y="${y-8}" font-size="14">${k}</text>`;}g.innerHTML=out;
- $('graphCaption').textContent=`변화 변수: r (0.2~3 m) · 고정 변수: q₁=${state.q1} μC, q₂=${state.q2} μC · 파란 곡선: 현재 전하량에서 F ∝ 1/r²`;
+function sphere(x,y,q,which,draggable){
+ const col=q>0?"#ff8498":q<0?"#8dc5ff":"#a8b6c4";
+ const edge=q>0?"#ffd1d9":q<0?"#d6ecff":"#d9e2ea";
+ const label=q>0?"+":q<0?"−":"0";
+ const key=q>0?"posGradient":q<0?"negGradient":"neutralGradient";
+ const dragAttr=draggable?' data-drag="right" style="cursor:ew-resize"':'';
+ return '<g'+dragAttr+'><circle cx="'+x+'" cy="'+y+'" r="38" fill="'+key.replace("Gradient","Grad")+' " opacity="0"/>'+
+ '<circle cx="'+x+'" cy="'+y+'" r="31" fill="url(#'+key+')" stroke="'+edge+'" stroke-width="2.2" filter="url(#chargeShadow)"/>'+
+ '<text x="'+x+'" y="'+(y+10)+'" fill="#0a283d" text-anchor="middle" font-size="33" font-weight="900" pointer-events="none">'+label+'</text>'+
+ '<circle cx="'+x+'" cy="'+y+'" r="42" fill="transparent"/>'+
+ '<text x="'+x+'" y="'+(y+73)+'" fill="'+col+'" font-size="21" font-weight="800" text-anchor="middle" pointer-events="none">'+which+' = '+signed(q,1)+' μC</text></g>';
 }
-function render(sync=true,editing=''){for(const id of ['q1','q2','r']){$(id+'Range').value=state[id];if(sync||editing!==id)$(id+'Num').value=state[id];}const {f,F1,F2}=forces(state);$('kind').textContent=kind(state);$('force').textContent=fmt(f)+' N';$('signed').innerHTML=`F₁ = ${fmt(F1)} N<br>F₂ = ${fmt(F2)} N`;$('calculation').innerHTML=`F = kₑ |q₁q₂| / r²<br>= (8.99 × 10⁹) × |(${state.q1} × 10⁻⁶) × (${state.q2} × 10⁻⁶)| / ${state.r}²<br>= <b>${fmt(f)} N</b>`;renderScene();renderGraph();
- $('comparison').innerHTML=['A','B'].map(k=>{const s=saved[k];return s?`<tr><th>${k}</th><td>${s.q1} / ${s.q2}</td><td>${s.r}</td><td>${fmt(magnitude(s))}</td><td>${kind(s)}</td></tr>`:`<tr><th>${k}</th><td colspan="4">아직 저장하지 않음</td></tr>`;}).join('');
- $('ratio').textContent=saved.A&&saved.B?(magnitude(saved.A)?`힘의 비 F_B/F_A = ${fmt(magnitude(saved.B)/magnitude(saved.A))} · 거리의 비 r_B/r_A = ${fmt(saved.B.r/saved.A.r)}`:'A의 힘이 0이므로 F_B/F_A는 정의할 수 없습니다.'):'조건을 저장하면 같은 모형으로 비교할 수 있습니다.';for(const k of ['A','B'])$('load'+k).disabled=!saved[k];}
-$('flip').onclick=()=>{state.q2=-state.q2;render();};$('double').onclick=()=>{const old=state.r;state.r=Math.min(3,state.r*2);$('inputNote').textContent=old*2>3?'최대 거리 3 m까지만 변경했습니다.':'거리만 2배로 변경했습니다. 힘을 비교하세요.';render();};$('reset').onclick=()=>{state={...defaults};saved={A:null,B:null};$('inputNote').textContent='초기 조건과 비교 기록을 모두 초기화했습니다.';render();};for(const k of ['A','B']){$('save'+k).onclick=()=>{saved[k]={...state};render();};$('load'+k).onclick=()=>{if(saved[k]){state={...saved[k]};render();}};}render();
-</script></body></html>
+function drawScene(){
+ const svg=$("scene"),p=physics(),r=model.r,x1=170,x2=170+130+(r-.2)*205,y=244;
+ const maxArrow=118;
+ const forceArrow=p.f?Math.min(maxArrow,29+83*Math.sqrt(p.f/(p.f+.23))):0;
+ const ratio=originalF>0?p.f/originalF:0;
+ const fText=fmt(p.f,5)+" N";
+ const arrow1=svgArrow(x1,y-82,Math.sign(p.f1),forceArrow,"#70eadc","F₁",fText);
+ const arrow2=svgArrow(x2,y+84,Math.sign(p.f2),forceArrow,"#ffd087","F₂",fText);
+ let grid='';
+ for(let x=30;x<920;x+=35)grid+='<path d="M'+x+' 0V480" stroke="#193a50" stroke-width=".65"/>';
+ for(let yy=25;yy<480;yy+=35)grid+='<path d="M0 '+yy+'H920" stroke="#193a50" stroke-width=".65"/>';
+ const typeColor=p.kind==="인력"?"#ffc985":p.kind==="척력"?"#8ce3e3":"#c1d2e2";
+ const symbol=p.kind==="인력"?"⇥ 서로 당김 ⇤":p.kind==="척력"?"⇤ 서로 밀어냄 ⇥":"전기력이 작용하지 않음";
+ const barWidth=Math.min(300,Math.max(0,ratio*115));
+ const q2Hint=model.tab==="distance"?"오른쪽 전하를 드래그하거나 시작을 누르세요":"오른쪽 전하를 좌우로 드래그할 수 있습니다";
+ svg.innerHTML=
+ '<defs><radialGradient id="posGradient" cx="30%" cy="25%" r="85%"><stop stop-color="#fff1f3"/><stop offset=".45" stop-color="#ff92a8"/><stop offset="1" stop-color="#b93f60"/></radialGradient>'+
+ '<radialGradient id="negGradient" cx="30%" cy="25%" r="85%"><stop stop-color="#edf9ff"/><stop offset=".5" stop-color="#92caff"/><stop offset="1" stop-color="#3e6db9"/></radialGradient>'+
+ '<radialGradient id="neutralGradient"><stop stop-color="#f2f8ff"/><stop offset="1" stop-color="#687e95"/></radialGradient>'+
+ '<filter id="chargeShadow"><feDropShadow dx="2" dy="4" stdDeviation="5" flood-opacity=".44"/></filter></defs>'+
+ '<rect width="920" height="480" rx="15" fill="#0b1c2c"/>'+grid+
+ '<rect x="18" y="16" width="285" height="44" rx="10" fill="#18344a" stroke="#42677e"/>'+
+ '<text x="33" y="43" fill="'+typeColor+'" font-size="21" font-weight="850">'+symbol+'</text>'+
+ '<text x="902" y="29" text-anchor="end" fill="#c0d6e5" font-size="14">q₁ 고정 · q₂ 위치 조절</text>'+
+ '<path d="M'+x1+' 116V141 M'+x2+' 116V141" stroke="#a9ccdd" stroke-width="2" stroke-dasharray="4 4"/>'+
+ '<line x1="'+x1+'" y1="127" x2="'+x2+'" y2="127" stroke="#c7e4f2" stroke-width="2.2"/>'+
+ '<path d="M'+(x1+8)+' 120L'+x1+' 127L'+(x1+8)+' 134 M'+(x2-8)+' 120L'+x2+' 127L'+(x2-8)+' 134" fill="none" stroke="#c7e4f2" stroke-width="2"/>'+
+ '<rect x="'+((x1+x2)/2-73)+'" y="105" width="146" height="29" rx="9" fill="#17354a" stroke="#4a6b7c"/>'+
+ '<text x="'+((x1+x2)/2)+'" y="125" fill="#f1fbff" text-anchor="middle" font-size="17" font-weight="750">r = '+r.toFixed(2)+' m</text>'+
+ '<path d="M37 '+y+'H889" stroke="#29536b" stroke-width="2" stroke-dasharray="6 8"/>'+
+ arrow1+arrow2+
+ sphere(x1,y,model.q1,"q₁",false)+sphere(x2,y,model.q2,"q₂",true)+
+ '<rect x="27" y="382" width="416" height="69" rx="11" fill="#142f45" stroke="#345973"/>'+
+ '<text x="44" y="404" fill="#c8e1f1" font-size="14">정확한 힘의 크기 (두 전하 동일)</text>'+
+ '<text x="44" y="432" fill="#8cf1e6" font-weight="800" font-size="25">'+fText+'</text>'+
+ '<text x="229" y="430" fill="#fbd089" font-weight="750" font-size="16">초기 대비 '+fmt(ratio,2)+'배</text>'+
+ '<rect x="463" y="382" width="427" height="69" rx="11" fill="#142f45" stroke="#345973"/>'+
+ '<text x="480" y="403" fill="#c9dfec" font-size="13">힘의 상대 변화 막대 · 초기 힘을 1배로 표시</text>'+
+ '<rect x="480" y="416" width="370" height="15" rx="7" fill="#253e51"/>'+
+ '<rect x="480" y="416" width="'+Math.min(370,barWidth)+'" height="15" rx="7" fill="#74e3da"/>'+
+ '<text x="854" y="441" text-anchor="end" fill="#b1cddd" font-size="12">막대는 3.2배에서 표시 상한</text>'+
+ '<text x="890" y="468" text-anchor="end" fill="#a5c8da" font-size="13">'+q2Hint+'</text>';
+}
+function syncUi(){
+ const p=physics(),ratio=originalF?p.f/originalF:0;
+ for(const id of ["q1","q2"]){$(id).value=model[id];$(id+"Out").textContent=signed(model[id],1)+" μC";}
+ $("distance").value=model.r;$("distanceOut").textContent=model.r.toFixed(2)+" m";
+ $("speed").value=model.speed;$("speedOut").textContent=fmt(model.speed,1)+"배";
+ $("typeValue").textContent=p.kind;
+ $("forceValue").textContent=fmt(p.f,5)+" N";
+ $("distanceValue").textContent=model.r.toFixed(2)+" m";
+ $("relativeValue").textContent=fmt(ratio,2)+"배";
+ $("equation").innerHTML=
+ 'F = k |q₁q₂| / r²<br>= 8.99×10⁹ × |('+signed(model.q1,1)+'×10⁻⁶)('+signed(model.q2,1)+'×10⁻⁶)| / ('+model.r.toFixed(2)+')²<br>'+
+ '<b>F₁ = '+signed(p.f1,5)+' N · F₂ = '+signed(p.f2,5)+' N</b><br>'+
+ '크기 |F₁| = |F₂| = '+fmt(p.f,5)+' N';
+ $("start").disabled=model.playing;
+ $("pause").disabled=!model.playing;
+ $("loadA").disabled=!model.savedA;$("loadB").disabled=!model.savedB;
+ $("progressFill").style.width=(clamp((model.r-model.origin)/(3-model.origin||1),0,1)*100).toFixed(1)+"%";
+ $("resultNote").textContent="r="+model.r.toFixed(2)+" m · 힘의 크기 "+fmt(p.f,5)+" N · "+p.kind;
+ const signCase=p.kind==="인력"?"서로 다른 부호: q₁은 오른쪽, q₂는 왼쪽 방향으로 힘을 받습니다.":p.kind==="척력"?"같은 부호: q₁은 왼쪽, q₂는 오른쪽 방향으로 힘을 받습니다.":"전하 중 하나가 0 μC라서 서로 작용하는 쿨롱 힘은 0입니다.";
+ const status=model.tab==="distance"?(model.playing?"위치를 바깥쪽으로 이동 중입니다. 이는 외부 조작이며 전기력에 의한 자유운동이 아닙니다.":model.finished?"3.00 m까지 거리 변경을 마쳤습니다. 처음부터 버튼으로 다시 관찰할 수 있습니다.":"거리 조작을 시작하거나 오른쪽 전하 q₂를 드래그하세요."):signCase;
+ $("status").textContent=status;
+}
+function saveSnapshot(){return {q1:model.q1,q2:model.q2,r:model.r};}
+function updateGraphRange(){
+ const samples=[saveSnapshot(),model.savedA,model.savedB].filter(Boolean);
+ graphRange.force=Math.max(graphRange.force,.3,...samples.map(m=>physics({...m,r:.2}).f*1.15));
+}
+function canvasContext(canvas){
+ const bounds=canvas.getBoundingClientRect(),w=Math.floor(bounds.width),h=Math.floor(bounds.height);
+ if(w<90||h<90)return null;
+ const dpr=Math.min(window.devicePixelRatio||1,2),pw=Math.round(w*dpr),ph=Math.round(h*dpr);
+ if(canvas.width!==pw||canvas.height!==ph){canvas.width=pw;canvas.height=ph;}
+ const c=canvas.getContext("2d");if(!c)return null;c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,w,h);
+ c.fillStyle="#0b1f32";c.fillRect(0,0,w,h);
+ return {c,w,h};
+}
+function label(c,s,x,y,size=12,color="#d7eaf6",align="center",weight=500){
+ c.fillStyle=color;c.font=weight+" "+size+"px system-ui,sans-serif";c.textAlign=align;c.fillText(s,x,y);
+}
+function chartGrid(o,xmin,xmax,ymax,xTitle,yTitle){
+ const {c,w,h}=o,L=60,R=14,T=28,B=45,W=w-L-R,H=h-T-B;
+ const X=x=>L+(x-xmin)/(xmax-xmin)*W,Y=y=>h-B-y/ymax*H;
+ c.lineWidth=1;
+ for(let k=0;k<=4;k++){
+  const x=xmin+(xmax-xmin)*k/4,y=ymax*k/4;
+  c.strokeStyle="#34536b";c.beginPath();c.moveTo(X(x),T);c.lineTo(X(x),h-B);c.moveTo(L,Y(y));c.lineTo(w-R,Y(y));c.stroke();
+  label(c,fmt(x,xmax>10?1:2),X(x),h-B+18,11,"#bad2e2");
+  label(c,fmt(y,ymax>10?1:3),L-8,Y(y)+4,11,"#bad2e2","right");
+ }
+ c.strokeStyle="#a3c8d9";c.lineWidth=1.4;c.beginPath();c.moveTo(L,T);c.lineTo(L,h-B);c.lineTo(w-R,h-B);c.stroke();
+ label(c,yTitle,9,15,12,"#eaf7ff","left",750);
+ label(c,xTitle,w-R,h-7,12,"#eaf7ff","right",750);
+ return {X,Y,c};
+}
+function linePlot(g,f,min,max,color,width=3,dash=[]){
+ const {X,Y,c}=g;c.save();c.beginPath();c.strokeStyle=color;c.lineWidth=width;c.setLineDash(dash);
+ for(let i=0;i<=220;i++){const x=min+(max-min)*i/220,y=f(x);
+  if(i===0)c.moveTo(X(x),Y(y));else c.lineTo(X(x),Y(y));
+ }
+ c.stroke();c.restore();
+}
+function dot(g,x,y,color,r=5.5){
+ const {c,X,Y}=g;c.beginPath();c.arc(X(x),Y(y),r,0,Math.PI*2);c.fillStyle=color;c.fill();c.lineWidth=2;c.strokeStyle="#0b1e31";c.stroke();
+}
+function drawGraphs(){
+ if(model.tab!=="graphs")return;
+ updateGraphRange();
+ for(const cfg of [
+  {id:"distanceGraph",min:.2,max:3,xTitle:"거리 r (m)",xval:r=>r,rval:x=>x},
+  {id:"inverseGraph",min:1/9,max:25,xTitle:"1/r² (m⁻²)",xval:r=>1/(r*r),rval:x=>1/Math.sqrt(x)}
+ ]){
+  const o=canvasContext($(cfg.id));if(!o)continue;
+  const g=chartGrid(o,cfg.min,cfg.max,graphRange.force,cfg.xTitle,"힘의 크기 |F| (N)");
+  const views=[["A",model.savedA,"#ff9fae",[9,5]],["B",model.savedB,"#b5a5ff",[3,5]],["현재",saveSnapshot(),"#65eadc",[]]];
+  for(const [name,v,color,dash] of views){
+   if(!v)continue;
+   linePlot(g,x=>physics({...v,r:cfg.rval(x)}).f,cfg.min,cfg.max,color,name==="현재"?3.3:2.2,dash);
+   dot(g,cfg.xval(v.r),physics(v).f,color,name==="현재"?6.2:4.6);
+  }
+ }
+}
+function makeCompare(){
+ const table=$("comparison");table.replaceChildren();
+ for(const [name,s] of [["현재",saveSnapshot()],["A",model.savedA],["B",model.savedB]]){
+  const tr=document.createElement("tr");
+  const values=s?[name,signed(s.q1),signed(s.q2),s.r.toFixed(2),fmt(physics(s).f,5),physics(s).kind]:[name,"—","—","—","—","미저장"];
+  values.forEach(value=>{const td=document.createElement("td");td.textContent=value;tr.append(td);});table.append(tr);
+ }
+ const A=model.savedA,B=model.savedB;
+ const note=A&&B?(physics(A).f===0?"조건 A의 힘이 0이므로 힘의 비 Fᴮ/Fᴬ는 정의되지 않습니다.":"B/A 힘의 비: "+fmt(physics(B).f/physics(A).f,4)+"배 · 거리 비 rᴮ/rᴬ = "+fmt(B.r/A.r,3)+"배"+(A.q1===B.q1&&A.q2===B.q2?" · 전하량이 같으면 힘의 비는 거리 비의 제곱에 반비례합니다.":" · 전하량도 변했다면 거리만의 효과는 따로 비교하세요.")):"조건 A·B를 저장하면 힘의 비와 거리의 비를 확인할 수 있습니다.";
+ $("ratioNote").textContent=note;
+}
+function render(){
+ syncUi();if(model.tab==="interaction"||model.tab==="distance")drawScene();
+ if(model.tab==="graphs")drawGraphs();makeCompare();
+}
+function stopSweep(){
+ model.playing=false;model.last=null;model.finished=false;model.origin=model.r;
+}
+function setCurrent(values){
+ Object.assign(model,values);stopSweep();render();
+}
+function switchTab(tab){
+ if(model.tab==="distance"&&tab!=="distance")stopSweep();
+ model.tab=tab;$("workspace").dataset.view=tab;
+ document.querySelectorAll(".tabs .tab").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.tab===tab)));
+ const distance=tab==="distance";
+ $("runbar").hidden=!distance;
+ $("attractPreset").hidden=distance;$("repelPreset").hidden=distance;
+ $("stageTitle").textContent=distance?"거리 변화에 따라 쿨롱 힘은 얼마나 줄어들까?":"두 전하가 서로 당길까, 밀어낼까?";
+ $("sceneHint").textContent=distance?"오른쪽 q₂를 좌우로 드래그하거나 ▶ 버튼을 누르세요. 3.00 m까지 한 번 이동한 뒤 자동으로 멈춥니다.":"전하 부호를 바꾸어 인력·척력을 비교하세요. q₂를 좌우로 드래그해 거리도 조절할 수 있습니다.";
+ if(distance)model.origin=model.r;
+ requestAnimationFrame(render);
+}
+function startSweep(){
+ if(model.r>=3){model.r=model.origin<3?model.origin:.2;}
+ if(!model.playing){if(model.finished){model.r=model.origin<3?model.origin:.2;model.finished=false;}model.playing=true;model.last=null;}
+ render();
+}
+function restartSweep(){model.r=model.origin<3?model.origin:.2;model.playing=true;model.last=null;model.finished=false;render();}
+function bind(){
+ document.querySelectorAll(".tabs .tab").forEach(b=>b.addEventListener("click",()=>switchTab(b.dataset.tab)));
+ for(const [id,key] of [["q1","q1"],["q2","q2"],["distance","r"],["speed","speed"]]){
+  $(id).addEventListener("input",event=>{
+   model[key]=Number(event.target.value);
+   if(key!=="speed")stopSweep();
+   else model.last=null;
+   render();
+  });
+ }
+ $("attractPreset").addEventListener("click",()=>setCurrent({q1:2,q2:-3}));
+ $("repelPreset").addEventListener("click",()=>setCurrent({q1:2,q2:3}));
+ $("flip").addEventListener("click",()=>setCurrent({q2:-model.q2}));
+ $("doubleCharge").addEventListener("click",()=>setCurrent({q1:clamp(model.q1*2,-10,10)}));
+ $("doubleDistance").addEventListener("click",()=>setCurrent({r:Math.min(3,Number((model.r*2).toFixed(2)))}));
+ $("saveA").addEventListener("click",()=>{model.savedA=saveSnapshot();render();});
+ $("saveB").addEventListener("click",()=>{model.savedB=saveSnapshot();render();});
+ $("loadA").addEventListener("click",()=>{if(model.savedA)setCurrent(model.savedA);});
+ $("loadB").addEventListener("click",()=>{if(model.savedB)setCurrent(model.savedB);});
+ $("axisReset").addEventListener("click",()=>{graphRange.force=0;render();});
+ $("goGraph").addEventListener("click",()=>switchTab("graphs"));
+ $("reset").addEventListener("click",()=>{Object.assign(model,defaults,{playing:false,finished:false,last:null,origin:defaults.r,savedA:null,savedB:null,drag:false});graphRange.force=0;render();});
+ $("start").addEventListener("click",startSweep);
+ $("pause").addEventListener("click",()=>{model.playing=false;model.last=null;render();});
+ $("again").addEventListener("click",restartSweep);
+ $("full").addEventListener("click",()=>{const p=document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();if(p&&p.catch)p.catch(()=>{});});
+ document.addEventListener("fullscreenchange",()=>$("full").textContent=document.fullscreenElement?"⛶ 전체화면 종료":"⛶ 전체화면");
+ const svg=$("scene");
+ svg.addEventListener("pointerdown",event=>{
+  if(!(event.target.closest&&event.target.closest('[data-drag="right"]')))return;
+  model.drag=true;model.playing=false;model.last=null;svg.setPointerCapture(event.pointerId);
+ });
+ svg.addEventListener("pointermove",event=>{
+  if(!model.drag)return;
+  const pos=getElementXY(event,svg);
+  model.r=Number(clamp(.2+(pos.x-170-130)/205,.2,3).toFixed(2));
+  model.origin=model.r;model.finished=false;render();
+ });
+ const endDrag=()=>{model.drag=false;};svg.addEventListener("pointerup",endDrag);svg.addEventListener("pointercancel",endDrag);
+ document.addEventListener("visibilitychange",()=>{if(document.hidden){model.playing=false;model.last=null;render();}});
+ window.addEventListener("resize",()=>requestAnimationFrame(render));
+ if(typeof ResizeObserver!=="undefined"){
+  const obs=new ResizeObserver(()=>{if(model.tab==="graphs")requestAnimationFrame(drawGraphs);});
+  obs.observe($("workspace"));
+ }
+}
+function tick(now){
+ if(model.playing&&model.tab==="distance"&&!document.hidden){
+  if(model.last!==null){const dt=clamp((now-model.last)/1000,0,.075);
+   model.r=Math.min(3,model.r+dt*.42*model.speed);
+   if(model.r>=3){model.r=3;model.playing=false;model.finished=true;model.last=null;}
+  }
+  if(model.playing)model.last=now;
+  render();
+ }
+ requestAnimationFrame(tick);
+}
+bind();render();requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>
