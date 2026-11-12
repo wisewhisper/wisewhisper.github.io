@@ -26,7 +26,7 @@ header button{margin-left:auto}
 .stage-head h2{font-size:16px;margin:0 12px 0 0}
 .stage-head button{font-size:12px}
 .stage-head .minor{font-size:11px;color:var(--muted)}
-#scene{display:block;width:100%;flex:1 1 auto;height:100%;min-height:180px;max-height:none;background:#0b1c2f;border:1px solid #35546b;border-radius:10px;touch-action:none}
+#scene{display:block;width:100%;flex:1 1 0;height:auto;min-height:180px;max-height:none;background:#0b1c2f;border:1px solid #35546b;border-radius:10px;touch-action:none}
 .metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;flex:0 0 auto}
 .metric{background:#19334a;border:1px solid #37596f;border-radius:9px;padding:7px 9px;min-width:0}
 .metric small{display:block;font-size:11px;color:#bfd6e5}
@@ -262,7 +262,7 @@ function drawRef(){
  $("visualNote").textContent="노랑: 입사광 · 분홍: 반사광 · 청록: 굴절광 · 점선: 법선. 발광점은 화면용 진행 표시이며 실제 빛의 이동 속도는 아닙니다.";
 }
 function candle(c,x,axis,top,color,alpha=1,caption="물체"){
- const height=Math.abs(top-axis);if(height<2)return;
+ const height=Math.abs(top-axis);if(height<2){dot(c,x,top,color,4,8);text(c,caption||"작은 상",x,clamp(top-12,16,c.canvas.height-14),color,12,"center",700);return;}
  const up=top<axis?1:-1,bodyH=Math.max(6,height*.74),width=clamp(height*.21,8,36);
  c.save();c.globalAlpha=alpha;c.translate(x,axis);c.scale(1,up);
  c.shadowColor=color;c.shadowBlur=6;
@@ -350,7 +350,7 @@ function drawLens(){
   }else{
    const bx=w-173,by=h-116;
    c.fillStyle="#152c43";c.strokeStyle="#54758b";c.lineWidth=1;c.fillRect(bx,by,158,102);c.strokeRect(bx,by,158,102);
-   text(c,"화면 밖의 상 · 미리보기",bx+79,by+15,"#e6c8ff",11,"center");
+   text(c,"화면 밖의 상 · 축척 다름",bx+79,by+15,"#e6c8ff",11,"center");
    const top=by+68-(hi>=0?1:-1)*clamp(Math.abs(mag)*25,12,32);
    candle(c,bx+47,by+68,top,"#dca0fd",.9,"");
    text(c,real?"실상 · 도립":"허상 · 정립",bx+99,by+43,"#e2b4ff",11,"center");
@@ -366,7 +366,7 @@ function drawLens(){
  metrics([["초점거리 f",fixed(f,0)+" cm"],["상 거리 dᵢ",infinite?"∞":fixed(v,2)+" cm","accent"],["배율 m",infinite?"정의 안 됨":fixed(mag,2)+"배","warm"],["상의 성질",kind]]);
  $("calculation").innerHTML="1/f = 1/dₒ + 1/dᵢ<br>f="+fixed(f,0)+" cm · dₒ="+fixed(u,0)+" cm · hₒ="+fixed(s.H,0)+" cm<br>"+
  (infinite?"<b>출사광 평행 · 유한한 상 없음</b>":"<b>dᵢ="+fixed(v,2)+" cm · m="+fixed(mag,3)+"</b><br>상 높이 hᵢ="+fixed(hi,2)+" cm");
- $("interpret").textContent="파랑·보라: 실제 광선 경로 · 점선: 허상을 찾는 역방향 연장선. 고정 배율에서 화면 밖의 상은 미리보기로 표시합니다.";
+ $("interpret").textContent="파랑·보라: 실제 광선 경로 · 점선: 허상을 찾는 역방향 연장선. 고정 배율에서 화면 밖의 상은 크기 축척을 달리한 미리보기로 표시합니다.";
  $("status").textContent=infinite?"물체가 볼록 렌즈의 초점에 있습니다. 출사광이 평행하며 유한한 상은 없습니다.":real?"실제 광선이 렌즈 반대쪽에서 만나는 도립 실상입니다.":"출사광을 뒤로 연장하면 물체 쪽에 정립 허상이 형성됩니다.";
  $("visualNote").textContent="실물형 촛불 모형: 주황=물체 · 보라=상. 렌즈는 제자리에 고정. 움직이는 점은 진행 방향 표시이며 실제 광속·실물 사진은 아닙니다.";
 }
