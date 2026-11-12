@@ -42,6 +42,7 @@ flex:0 0 210px!important;min-height:0!important;overflow-y:auto!important;
 body[data-electric-v6="1"] .e7-shell[data-lab="실험04_평행판축전기"] .e7-graphstage .capacitor-chart-wrap canvas{
 flex:1 1 auto!important;min-height:155px!important;max-height:none!important;
 }
+body[data-electric-v6="1"] .e7-shell[data-lab="실험04_평행판축전기"] .e7-graphstage[hidden]{display:none!important}
 @media(min-width:901px) and (max-height:780px){
  body[data-electric-v6="1"] .e7-shell[data-lab="실험04_평행판축전기"] .e7-graphstage>.e7-panel:nth-child(2){flex-basis:168px!important}
  .capacitor-chart-wrap{padding:5px}
@@ -97,7 +98,7 @@ flex:1 1 auto!important;min-height:155px!important;max-height:none!important;
     <p class="graphkey">두 그래프의 세로축을 <b>각각 독립적으로</b> 표시합니다. 조작 중 축이 자동 축소되지 않으며, 비교 범위를 다시 맞출 때만 '축 초기화'를 누르세요.</p>
   </section>
   <section class="panel capacitor-records-panel" aria-labelledby="dataTitle">
-    <h2>조건 A·B 비교 · 공식 31 통합</h2>
+    <h2>측정 기록 · 조건 A·B 비교</h2>
     <div class="cap-save-actions">
       <button id="saveConditionA" type="button">현재 조건 A 저장</button>
       <button id="saveConditionB" type="button">현재 조건 B 저장</button>
