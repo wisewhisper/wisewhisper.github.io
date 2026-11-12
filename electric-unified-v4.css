@@ -1,0 +1,33 @@
+/* Electrical lab independent dark tabs v4 */
+html,body{background:#060b13!important;color:#eaf3ff!important}
+body.e6-ready{margin:0!important;overflow:hidden!important}
+body.e6-ready .e6-shell{position:fixed;inset:0;z-index:1000;background:#060b13;color:#eaf3ff;display:flex;flex-direction:column;padding:10px 14px;box-sizing:border-box;font-family:system-ui,"Malgun Gothic",sans-serif}
+.e6-shell *{box-sizing:border-box}
+.e6-header{display:flex;align-items:center;gap:12px;min-height:42px}
+.e6-header h1{font-size:clamp(18px,2vw,25px);margin:0;color:#fff}
+.e6-header button{margin-left:auto}
+.e6-tabs{display:flex;gap:6px;overflow-x:auto;flex-shrink:0;padding:5px 0 10px}
+.e6-tabs button,.e6-header button{background:#15283e;color:#e7f5ff;border:1px solid #34546e;border-radius:8px;padding:9px 13px;white-space:nowrap;cursor:pointer;font-size:13px}
+.e6-tabs button[aria-selected=true]{background:#086e82;border-color:#8be9f3}
+.e6-content{display:grid;grid-template-columns:minmax(0,7fr) minmax(275px,3fr);gap:10px;flex:1;min-height:0}
+.e6-scene,.e6-controls,.e6-concepts{min-height:0;overflow:auto;scrollbar-width:thin}
+.e6-scene{display:flex;flex-direction:column;gap:9px}
+.e6-controls{display:flex;flex-direction:column;gap:9px}
+.e6-card{background:#101e30!important;color:#e6f1ff!important;border:1px solid #304c64!important;border-radius:12px!important;padding:12px!important;margin:0!important;width:100%!important;max-width:none!important;min-width:0!important;float:none!important;box-shadow:none!important}
+.e6-card h2,.e6-card h3{color:#eaf8ff!important}
+.e6-card p,.e6-card label,.e6-card span,.e6-card li{color:#d4e6f5}
+.e6-card canvas,.e6-card svg{max-width:100%!important;object-fit:contain}
+.e6-scene>.e6-card{flex:1 1 auto;overflow:auto}
+.e6-controls>.e6-card{flex:0 0 auto}
+.e6-concepts{display:none;grid-column:1/-1}
+.e6-concepts-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.e6-concept{background:#101e30;border:1px solid #31516a;border-radius:12px;padding:18px}
+.e6-concept h2{font-size:18px;color:#87e7f1;margin:0 0 9px}
+.e6-concept p{font-size:15px;line-height:1.75;margin:7px 0}
+.e6-formula{background:#14344b;color:#fff;padding:12px;border-radius:8px;font-size:18px;line-height:1.6;overflow-wrap:anywhere}
+.e6-original{grid-column:1/-1}
+.e6-original .e6-card{margin-bottom:9px!important}
+body.e6-concept-mode .e6-content{display:block}
+body.e6-concept-mode .e6-scene,body.e6-concept-mode .e6-controls{display:none}
+body.e6-concept-mode .e6-concepts{display:block}
+@media(max-width:850px){body.e6-ready{overflow:auto!important}body.e6-ready .e6-shell{position:relative;min-height:100dvh;height:auto}.e6-content{display:flex;flex-direction:column}.e6-scene,.e6-controls,.e6-concepts{overflow:visible}.e6-concepts-grid{grid-template-columns:1fr}.e6-scene>.e6-card{flex:auto}.e6-card canvas,.e6-card svg{max-height:55vh}}
