@@ -118,6 +118,25 @@ html,body{background:#050910!important;color:#eef6ff!important}
 .app .electric-tabs button{background:#14283b!important;color:#eaf6ff!important}
 .app .electric-tabs button[aria-selected=true]{background:#086f82!important}
 .app .electric-concepts .concept-card,.app .electric-concepts #electric-prompt-panel{background:#101d2c!important}
+</style><style id="electric-screen-fit-v5">
+@media(min-width:901px){
+ .app{width:100%!important;max-width:none!important;height:100dvh!important;min-height:0!important;margin:0!important;padding:7px 10px!important}
+ body:has(#lab-viewbar) .app{height:calc(100dvh - var(--electric-bar-height,52px))!important}
+ .app .layout{grid-template-columns:minmax(0,4fr) minmax(235px,1fr)!important;gap:8px!important;height:100%!important;min-height:0!important}
+ body[data-electric-tab="graph"] .app .layout{grid-template-columns:minmax(0,4fr) minmax(235px,1fr)!important}
+ .app .layout>main{min-height:0!important;max-height:100%!important;padding:0!important}
+ .app .scene{flex:1 1 auto!important;height:auto!important;min-height:0!important;max-height:none!important;overflow:hidden!important}
+ .app #field{width:100%!important;height:100%!important}
+ .app .side{min-width:0!important;overflow-y:auto!important;gap:7px!important}
+ .app .section{padding:8px 10px!important}
+ .app .section h2{margin-bottom:5px!important}
+ .app .group button{padding:5px 7px!important}
+ .app .toolbar{padding:6px!important;gap:5px!important}
+ .app .toolbar button{padding:5px 7px!important}
+}
+.app :is(.metric,.card,.section,.small,.labelrow,.hint,.explain,.electric-concepts){color:#e6f3ff!important}
+.app :is(.metric,.small,.hint,.explain) :is(span,strong,b){color:#eaf6ff!important}
+.app :is(.section,.card) :is(input,select){accent-color:#4fe1ef}
 </style></head>
 <body>
 <div class="app"><header class="top"><div><h1>⚡ 전기장과 전위 실험실</h1><p class="subtitle">전하를 끌어 옮기고 탐침으로 전기장의 방향과 전위를 관찰해 보세요.</p></div><span class="badge">고등학교 물리 · 점전하 모형</span></header>
