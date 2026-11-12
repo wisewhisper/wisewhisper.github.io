@@ -91,3 +91,18 @@ body.e6-ready>.e6-shell{position:fixed!important;inset:0!important;z-index:21474
  .e6-scene .e6-card:only-child{height:100%!important}
  .e6-light-art .e6-scene .e6-card svg{background:#f5f9ff!important}
 }
+
+
+/* Make labels legible against both dark controls and rendered light SVG canvases. */
+.e6-card :is(.badge,.pill,.tag){background:#21425a!important;color:#f4fbff!important;border-color:#5b86a0!important}
+.e6-card :is(.metric,.meter,.step,.note,.notice,.hint,.formula,.calc,.math,.status,.tablewrap){color:#ebf5ff!important}
+.e6-card :is(.metric,.meter,.step,.note,.notice,.hint,.formula,.calc,.math,.status,.tablewrap) :is(span,strong,b,em,small,output){color:#eff9ff!important}
+.e6-light-art .e6-scene :is(.legend,.note,.hint,.sub,.small){background:#182d43!important;color:#eaf6ff!important}
+.e6-scene>.e6-card svg:only-of-type{align-self:stretch!important}
+.e6-card :is(.statusline,.sectionHead,.heading,.charthead){background:transparent!important}
+.e6-card input[type="number"]{width:min(100%,130px)!important}
+@media(min-width:901px){
+.e6-scene>.e6-card:has(svg){gap:3px!important}
+.e6-scene>.e6-card svg{min-height:0!important;align-self:stretch!important}
+.e6-scene>.e6-card .scene:has(svg),.e6-scene>.e6-card .diagramwrap:has(svg){min-height:0!important}
+}
