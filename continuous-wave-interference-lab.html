@@ -216,14 +216,17 @@ function markNodes(ctx,r,xi,xa,yi,ya,delta=0,fullLabels=true){
 }
 function plotSpaceTriple(){
  const xi=FROM,xa=TO,l=48,right=15,top=19,bottom=47;
- const width=W-l-right,available=H-top-bottom;\n const fractions=[.19,.19,.62];\n const panelTops=[top,top+available*.19,top+available*.38];
+ const width=W-l-right,available=H-top-bottom;
+ const fractions=[.19,.19,.62];
+ const panelTops=[top,top+available*.19,top+available*.38];
  const specs=[
   {fn:x=>wave(x,state.t,0,0),color:C.a,label:'A → 오른쪽',range:1.22,which:0},
   {fn:x=>wave(x,state.t,1,state.delta),color:C.b,label:'B ← 왼쪽',range:1.22,which:1},
   {fn:x=>sum(x,state.t,state.delta),color:C.s,label:'합성파 A+B',range:2.25,which:2}
  ];
  specs.forEach((s,i)=>{
-  const panelH=available*fractions[i];\n  const r={x:l,y:panelTops[i]+24,w:width,h:Math.max(30,panelH-43)};
+  const panelH=available*fractions[i];
+  const r={x:l,y:panelTops[i]+24,w:width,h:Math.max(30,panelH-43)};
   overlapShading(g,r,xi,xa);
   axes(g,r,xi,xa,-s.range,s.range,ticks(-5,5,1),i===2?[-2,-1,0,1,2]:[-1,0,1],{xLabels:i===2,xTitle:i===2?'위치 x (λ 단위)':undefined,yLabels:true});
   if(i===2){
@@ -325,7 +328,8 @@ function stage(){if(state.t<FRONT_MEET-1e-5)return '서로 접근';if(state.t<FR
 function updateMessage(){
  const t=state.t,tab=state.tab,probe=state.probe;
  let s='';
- if(tab==='approach'){\n  const deg=Math.round(state.delta*180/Math.PI);
+ if(tab==='approach'){
+  const deg=Math.round(state.delta*180/Math.PI);
   if(t<3)s=`A와 B는 아직 만나지 않았습니다. 각 파원이 계속 정현파를 내보내고 있으며, 가운데 빈 구간의 폭은 약 ${fmt(Math.max(0,6-2*t))}λ입니다.`;
   else if(t<8)s=`중앙에서 만나 파동의 중첩 구간이 넓어지고 있습니다. B의 위상차는 ${deg}°입니다. 0°일 때 t=3.25T에서 중앙 합성 변위가 +2A입니다.`;
   else s=`양쪽 파동이 전체 영역에 도달했습니다. B의 위상차 ${deg}°에 따라 마디와 배의 위치가 이동합니다. 배의 진폭은 2A, 마디는 0입니다.`;
