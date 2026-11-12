@@ -122,3 +122,25 @@ body.lab-compact[data-lab-page*="기주공명"] #lab-focus .top-actions{justify-
 @media(min-width:1200px){#lab-focus .lab-expanded-scene canvas,#lab-focus .lab-expanded-scene svg{max-height:38vh!important}}
 
 
+
+
+/* The electric field/potential lab now owns its four-tab layout. Hide the redundant
+   compact/original switch and exempt its canvas from legacy generic height caps. */
+body[data-lab-page*="전기장과전위"] #lab-compact-toggle{display:none!important}
+body.lab-compact[data-lab-page*="전기장과전위"] .app{
+ display:flex!important;flex-direction:column!important;max-width:1800px!important;
+ height:calc(100dvh - var(--electric-bar-height,52px))!important;
+ min-height:0!important;padding:7px 11px 10px!important;margin:auto!important
+}
+body.lab-compact[data-lab-page*="전기장과전위"] .app .scene canvas{
+ width:100%!important;height:100%!important;max-height:none!important;object-fit:fill!important
+}
+body.lab-compact[data-lab-page*="전기장과전위"] .app .chart{
+ max-height:none!important;height:150px!important;object-fit:fill!important
+}
+body.lab-compact[data-lab-page*="전기장과전위"][data-electric-tab="graph"] .app .chart{
+ height:clamp(190px,31vh,265px)!important
+}
+@media(max-width:850px){
+ body.lab-compact[data-lab-page*="전기장과전위"] .app{height:auto!important;min-height:100dvh!important;overflow:visible!important}
+}
