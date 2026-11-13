@@ -231,6 +231,14 @@ body .thermal-cycle>.otto-problem h3{margin:0 0 6px!important;font-size:clamp(14
 body .thermal-cycle>.otto-problem>p{margin:4px 0 7px!important;line-height:1.45!important;font-size:clamp(12px,.9vw,14px)!important}
 body .thermal-cycle>.otto-problem details{margin-top:5px!important}
 body .thermal-cycle>.otto-head{margin:0 0 9px!important}
+</style><style id="otto-question-before-tabs-v7">
+body .wrap>.otto-question-above-tabs{display:block!important;position:relative!important;width:100%!important;max-width:none!important;box-sizing:border-box!important;margin:8px 0 10px!important;padding:12px 16px!important;border:1px solid #4a7885!important;border-radius:11px!important;background:#102c37!important;color:#eaf7ff!important}
+body .wrap>.otto-question-above-tabs[hidden]{display:none!important}
+body .wrap>.otto-question-above-tabs h3{font-size:clamp(15px,1.15vw,19px)!important;color:#a6f3de!important;margin:0 0 5px!important}
+body .wrap>.otto-question-above-tabs>p{font-size:clamp(12px,.95vw,14px)!important;line-height:1.5!important;margin:5px 0!important;color:#d9eaf2!important}
+body .wrap>.otto-question-above-tabs details{font-size:12px;margin-top:7px!important}
+body .wrap>.otto-question-above-tabs summary{color:#8de9cf!important;cursor:pointer;font-weight:750}
+body .wrap>.otto-question-above-tabs details:not([open]){max-height:30px;overflow:hidden}
 </style></head>
 <body>
 <div class="wrap">
@@ -594,7 +602,13 @@ return '<tr'+(focus===mode.id?' class="comp-highlight"':'')+'><th style="color:'
 }).join('');
 }
 function tab(name){
-desc.textContent=notes[name];layout.hidden=name==='concept'||name==='cycle';lesson.classList.toggle('active',name==='concept');cyclePanel.classList.toggle('active',name==='cycle');if(window.thermalCycleVisibility)window.thermalCycleVisibility(name==='cycle');
+desc.textContent=notes[name];
+const cycleQuestion=document.querySelector('.otto-problem');
+if(cycleQuestion){
+  if(name==='cycle'){wrap.insertBefore(cycleQuestion,nav);cycleQuestion.hidden=false;cycleQuestion.classList.add('otto-question-above-tabs');}
+  else{cycleQuestion.hidden=true;cycleQuestion.classList.remove('otto-question-above-tabs');if(cycleQuestion.parentNode!==cyclePanel)cyclePanel.insertBefore(cycleQuestion,cyclePanel.firstChild);}
+}
+layout.hidden=name==='concept'||name==='cycle';lesson.classList.toggle('active',name==='concept');cyclePanel.classList.toggle('active',name==='cycle');if(window.thermalCycleVisibility)window.thermalCycleVisibility(name==='cycle');
 const cmp=name==='compare';compare.classList.toggle('active',cmp);layout.classList.toggle('thermal-compare-mode',cmp);
 if(cmp){visualRow.hidden=true;left.append(compare);drawComparison();}
 else if(name!=='concept'&&name!=='cycle'){const b=mid.querySelector('[data-process="'+name+'"]');if(b)b.click();visualRow.hidden=false;compare.remove();}
