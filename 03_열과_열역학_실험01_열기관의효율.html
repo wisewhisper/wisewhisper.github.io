@@ -128,7 +128,27 @@ body .tl-concept .panel{padding:15px}
 body .tl-concept .footerNote{font-size:13px}
 @media(max-width:1080px){.tl-work{grid-template-columns:minmax(0,1fr) 260px}.tl-results{grid-column:1/-1}}
 @media(max-width:690px){.tl-work{grid-template-columns:1fr}.tl-results{grid-column:auto}body .tl-concept.tl-open{grid-template-columns:1fr} .tl-nav button{flex:1 1 42%}body .tl-column #sim{height:350px}}
-</style><style id="thermal-fluid-fullscreen-v3">@media(min-width:711px){body header,body main,body .tl-nav,body .tl-desc{max-width:none;width:100%}body header{padding:10px clamp(12px,1.25vw,30px) 4px}body main{padding:0 clamp(12px,1.25vw,30px) 16px}body .tl-nav,body .tl-desc{padding-left:clamp(12px,1.25vw,30px);padding-right:clamp(12px,1.25vw,30px)}body .tl-work{grid-template-columns:minmax(0,1fr) minmax(255px,18vw) minmax(225px,17vw);align-items:start}body .tl-column #sim{height:clamp(360px,calc(100dvh - 235px),1000px)!important}body .tl-column #graph{height:clamp(360px,calc(100dvh - 255px),1000px)!important}@media(max-width:1080px){body .tl-work{grid-template-columns:minmax(0,1fr) 270px}body .tl-results{grid-column:1/-1}}@media(max-width:690px){body .tl-work{grid-template-columns:1fr}body .tl-results{grid-column:auto}body .tl-column #sim,body .tl-column #graph{height:330px!important}}}</style></head>
+</style><style id="thermal-fluid-fullscreen-v3">@media(min-width:711px){body header,body main,body .tl-nav,body .tl-desc{max-width:none;width:100%}body header{padding:10px clamp(12px,1.25vw,30px) 4px}body main{padding:0 clamp(12px,1.25vw,30px) 16px}body .tl-nav,body .tl-desc{padding-left:clamp(12px,1.25vw,30px);padding-right:clamp(12px,1.25vw,30px)}body .tl-work{grid-template-columns:minmax(0,1fr) minmax(255px,18vw) minmax(225px,17vw);align-items:start}body .tl-column #sim{height:clamp(360px,calc(100dvh - 235px),1000px)!important}body .tl-column #graph{height:clamp(360px,calc(100dvh - 255px),1000px)!important}@media(max-width:1080px){body .tl-work{grid-template-columns:minmax(0,1fr) 270px}body .tl-results{grid-column:1/-1}}@media(max-width:690px){body .tl-work{grid-template-columns:1fr}body .tl-results{grid-column:auto}body .tl-column #sim,body .tl-column #graph{height:330px!important}}}</style><style id="thermal-engine-viewport-v4">
+@media(min-width:900px){
+body header{padding:5px 12px 2px!important}
+body header h1{font-size:20px!important}
+body header .subtitle{font-size:11px!important;margin:1px 0!important}
+body main{padding:0 12px 8px!important}
+body .tl-nav{margin:3px auto!important;gap:5px!important;padding:0 12px!important}
+body .tl-nav button{min-height:31px!important;padding:4px 9px!important}
+body .tl-desc{margin:0 auto 4px!important;padding:0 12px!important}
+body .tl-work{grid-template-columns:minmax(0,1fr) minmax(240px,21vw) minmax(210px,19vw)!important;gap:7px!important}
+body .tl-column{gap:6px!important}
+body .tl-column .panel{padding:7px!important}
+body .tl-column #sim,body .tl-column #graph{height:clamp(225px,calc(100dvh - 355px),570px)!important;max-height:calc(100dvh - 220px)!important}
+body .tl-column .control{margin:4px 0!important}
+body .tl-column .buttons{margin:4px 0!important}
+body .tl-column .controls button{min-height:31px!important}
+body .tl-column .metrics .metric{padding:5px!important}
+body .tl-column .insight{font-size:11px!important;padding:5px!important}
+}
+@media(min-width:681px) and (max-width:899px){body .tl-work{grid-template-columns:minmax(0,1fr) minmax(220px,.75fr)!important}body .tl-results{grid-column:1/-1}body .tl-column #sim,body .tl-column #graph{height:300px!important}}
+</style></head>
 <body>
 <header>
   <h1>🔥 열기관 효율 실험실</h1>
@@ -452,6 +472,9 @@ const workspace=document.createElement('div');workspace.className='tl-work';
 const left=document.createElement('div'),center=document.createElement('div'),right=document.createElement('div');
 for(const c of [left,center,right])c.className='tl-column';right.classList.add('tl-results');workspace.append(left,center,right);main.append(workspace);
 center.append(aside);
+const runButtons=aside.querySelector('.buttons');
+const modeButtons=aside.querySelector('.mode');
+if(runButtons&&modeButtons)modeButtons.after(runButtons);
 const wrap=stage.querySelector('.canvasWrap'),metrics=stage.querySelector('.metrics'),rows=[...stage.querySelectorAll('.grid2')],record=[...stage.querySelectorAll('.panel.section')].find(el=>el.querySelector('#records'));
 const energy=[...stage.querySelectorAll('.panel.section')].find(el=>el.querySelector('#barQh'));
 const relation=[...stage.querySelectorAll('.panel.section')].find(el=>el.querySelector('.eq'));
