@@ -262,7 +262,7 @@ body .layout .thermal-progress{padding:9px;background:#111f34;border:1px solid #
     c.strokeStyle='#9bb1c9';c.lineWidth=2;c.beginPath();c.moveTo(ml,mt);c.lineTo(ml,mt+ph);c.lineTo(ml+pw,mt+ph);c.stroke();
     c.fillStyle='#b7cae0';c.textAlign='center';c.fillText('부피 V (L)',ml+pw/2,h-3);c.save();c.translate(13,mt+ph/2);c.rotate(-Math.PI/2);c.fillText('압력 P (kPa)',0,0);c.restore();
     c.strokeStyle='#ffac5b';c.lineWidth=3;c.beginPath();path.forEach((s,i)=>i?c.lineTo(X(s.V),Y(s.P)):c.moveTo(X(s.V),Y(s.P)));c.stroke();
-    const done=getPath(Math.max(2,Math.round(90*progress)),progress);c.strokeStyle='#57d6ff';c.lineWidth=4;c.beginPath();done.forEach((s,i)=>i?c.lineTo(X(s.V),Y(s.P)):c.moveTo(X(s.V),Y(s.P)));c.stroke();
+    const done=getPath(Math.max(2,Math.round(90*progress)),progress);c.fillStyle=state.W<0?'rgba(247,121,132,.19)':'rgba(112,227,174,.16)';c.beginPath();c.moveTo(X(initial.V),Y(0));done.forEach((pt,i)=>{if(i===0)c.lineTo(X(pt.V),Y(pt.P));else c.lineTo(X(pt.V),Y(pt.P))});c.lineTo(X(state.V),Y(0));c.closePath();c.fill();c.strokeStyle='#57d6ff';c.lineWidth=4;c.beginPath();done.forEach((s,i)=>i?c.lineTo(X(s.V),Y(s.P)):c.moveTo(X(s.V),Y(s.P)));c.stroke();
     c.fillStyle='#57d6ff';c.beginPath();c.arc(X(state.V),Y(state.P),6,0,Math.PI*2);c.fill();c.strokeStyle='#fff';c.lineWidth=2;c.stroke();
     c.fillStyle='#dbeafe';c.font='700 11px system-ui';c.textAlign='left';c.fillText('A',X(initial.V)+8,Y(initial.P)-8);c.fillText('B',X(path[path.length-1].V)+8,Y(path[path.length-1].P)-8);
   }
@@ -276,6 +276,8 @@ body .layout .thermal-progress{padding:9px;background:#111f34;border:1px solid #
   $('checkQuiz').addEventListener('click',()=>{$('feedback').textContent=$('quizSelect').value==='isochoric'?'정답! 부피 변화가 없어 W = ∫P dV = 0입니다.':'다시 생각해 보세요. P–V 그래프에서 가로 방향 변화가 없는 과정입니다.';});
   let resizeTimer;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(render,80);});
   document.addEventListener('visibilitychange',()=>{if(document.hidden&&running)pause();});
+  window.thermoProcessSeek=(x)=>{if(running)pause();progress=Math.max(0,Math.min(1,Number(x)));render();};
+  window.thermoProcessState=()=>({progress,process,state});
   $('description').innerHTML=meta[process].desc;configureTarget();reset();
 })();
 </script>
@@ -290,6 +292,7 @@ const nav=document.createElement('nav'),desc=document.createElement('p');nav.cla
 const left=document.createElement('div'),mid=document.createElement('div'),right=document.createElement('div');
 left.className='thermal-left';mid.className='thermal-middle';right.className='thermal-right';
 layout.replaceChildren(left,mid,right);left.append(stage,chart);mid.append(controls);right.append(stats,prog);prog.classList.add('thermal-progress');
+const seekBox=document.createElement('section');seekBox.className='panel thermal-progress';seekBox.innerHTML='<label for="thermalSeek" style="font-size:12px;color:#eaf6ff">과정 진행률 선택 <output id="thermalSeekOut">0%</output></label><input id="thermalSeek" aria-label="과정 진행률" type="range" min="0" max="100" step="25" value="0"><div class="thermal-caption">0% · 25% · 50% · 75% · 100%</div>';right.append(seekBox);const seek=document.getElementById('thermalSeek');seek.addEventListener('input',()=>{window.thermoProcessSeek(Number(seek.value)/100);document.getElementById('thermalSeekOut').textContent=seek.value+'%'});const syncSeek=()=>{const now=window.thermoProcessState().progress;seek.value=Math.round(now*4)*25;document.getElementById('thermalSeekOut').textContent=Math.round(now*100)+'%'};setInterval(syncSeek,220);
 lesson.classList.add('thermal-concept');
 const compare=document.createElement('section');compare.className='panel thermal-compare';
 compare.innerHTML='<h2>같은 초기 상태의 네 과정 비교</h2><p class="thermal-caption">1 mol 이상 이원자 기체, 초기 300 K·100 kPa·24.94 L. 팽창 부피비 1.6(등온·정압·가역 단열), 정적 과정은 초기 부피 고정</p><canvas id="pvCompare" width="800" height="350"></canvas><div style="overflow-x:auto"><table><thead><tr><th>과정</th><th>T (K)</th><th>P (kPa)</th><th>W (J)</th><th>Q (J)</th></tr></thead><tbody id="pvCompareRows"></tbody></table></div>';
