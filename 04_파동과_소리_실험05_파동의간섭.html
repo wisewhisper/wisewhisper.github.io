@@ -56,6 +56,77 @@ body.interference-v2 .lower.concept-shown{grid-template-columns:1fr}
 body.interference-v2 #field{aspect-ratio:1.75}
 }
 </style>
+
+<style id="wave-viewport-fit-v3">
+/* 1366×768 교실 전자칠판: 파동 / 조작 / 측정 결과를 한 줄에 놓는다. */
+@media (min-width:1024px) and (min-height:600px) {
+ body.interference-v2 header{
+   padding-top:8px;
+   padding-bottom:3px;
+ }
+ body.interference-v2 header .eyebrow{font-size:.69rem;line-height:1.2}
+ body.interference-v2 header h1{font-size:clamp(1.48rem,2vw,1.84rem);line-height:1.13;margin:1px 0 2px}
+ body.interference-v2 header .lead{font-size:.79rem;line-height:1.3;margin:0}
+ body.interference-v2 .wave-nav{padding-top:3px;padding-bottom:4px;gap:6px}
+ body.interference-v2 .wave-nav button{min-height:34px;font-size:.84rem;padding:5px 12px}
+ body.interference-v2 .wave-tab-desc{margin-bottom:5px;font-size:.8rem;line-height:1.25}
+ body.interference-v2 main{padding-bottom:5px}
+ body.interference-v2 .wave-workspace{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) clamp(216px,18.4vw,252px) clamp(183px,15.5vw,213px);
+    align-items:start;
+    column-gap:9px;
+    row-gap:0;
+ }
+ body.interference-v2 .wave-workspace > .wave-side{display:contents}
+ body.interference-v2 .wave-workspace > .wave-primary{min-width:0}
+ body.interference-v2 .wave-workspace > .wave-side > .card{min-width:0}
+ body.interference-v2 .simulation{min-width:0}
+ body.interference-v2 .card{padding:9px;border-radius:11px}
+ body.interference-v2 .card h2{font-size:.9rem;margin-bottom:4px;line-height:1.25}
+ body.interference-v2 .simulation .heading{min-height:25px}
+ body.interference-v2 #field{width:100%;height:auto;aspect-ratio:1.75}
+ body.interference-v2 .canvaswrap{border-radius:9px}
+ body.interference-v2 .legend{padding-top:4px;font-size:.75rem;line-height:1.25}
+ body.interference-v2 .simulation .buttons{gap:6px;margin-top:6px;align-items:center}
+ body.interference-v2 .simulation .buttons button{min-height:32px;padding:5px 9px;font-size:.78rem}
+ body.interference-v2 .wave-extras{margin-top:0;gap:4px}
+ body.interference-v2 .wave-extras button{min-height:30px;padding:3px 7px}
+ body.interference-v2 .wave-check{font-size:.75rem;gap:3px}
+ body.interference-v2 .controls{gap:4px}
+ body.interference-v2 .control{padding:3px 6px;border-radius:7px}
+ body.interference-v2 .control label{font-size:.75rem;line-height:1.3}
+ body.interference-v2 input[type=range]{margin:2px 0 0;min-height:17px}
+ body.interference-v2 select{min-height:30px;font-size:.79rem;padding:4px}
+ body.interference-v2 .controls small{font-size:.71rem;line-height:1.35}
+ body.interference-v2 .wave-side .wave-extras .tiny{display:none}
+ body.interference-v2 .readouts{gap:5px;grid-template-columns:1fr}
+ body.interference-v2 .readout{padding:6px 7px}
+ body.interference-v2 .readout .label{font-size:.71rem;line-height:1.25}
+ body.interference-v2 .readout strong{font-size:.89rem;line-height:1.2;margin-top:3px}
+ body.interference-v2 .status{padding:7px;margin-top:7px;font-size:.75rem;line-height:1.42}
+ body.interference-v2 .wave-workspace[data-tab=probe] .wave-primary{
+   grid-template-columns:minmax(0,1fr);
+ }
+ body.interference-v2 .wave-workspace[data-tab=probe] #graph{height:154px}
+ body.interference-v2:not([data-active-tab="concept"]) footer{display:none}
+}
+/* 짧은 전자칠판에서는 파동 영역만 비례 축소하여 컨트롤이 잘리지 않게 한다. */
+@media (min-width:1024px) and (min-height:600px) and (max-height:730px) {
+ body.interference-v2 .wave-workspace{grid-template-columns:minmax(0,1fr) clamp(215px,19vw,252px) clamp(180px,16vw,213px)}
+ body.interference-v2 .simulation .buttons{margin-top:3px}
+ body.interference-v2 header{padding-top:3px}
+}
+/* 태블릿·모바일은 무리한 3열 배치 대신 읽을 수 있는 세로 화면을 유지한다. */
+@media (max-width:1023px) {
+ body.interference-v2 .wave-workspace{grid-template-columns:1fr}
+ body.interference-v2 .wave-primary{min-width:0}
+ body.interference-v2 .wave-side{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}
+}
+@media (max-width:680px){
+ body.interference-v2 .wave-side{grid-template-columns:1fr}
+}
+</style>
 </head>
 <body>
 <header><div class="eyebrow">INTERACTIVE PHYSICS LAB</div><h1>파동의 간섭 실험실</h1><p class="lead">두 점파원이 만드는 파동을 겹쳐 보고, 관측점을 움직이며 보강·상쇄 간섭을 찾아보세요.</p></header>
@@ -64,7 +135,7 @@ body.interference-v2 #field{aspect-ratio:1.75}
 <section class="card"><h2>실험 조건</h2><div class="controls"><div class="control"><label for="wavelength">파장 λ <span class="value" id="lambdaVal"></span></label><input id="wavelength" type="range" min="0.5" max="2.5" value="1.2" step="0.01"></div><div class="control"><label for="frequency">진동수 f <span class="value" id="freqVal"></span></label><input id="frequency" type="range" min="0.384" max="1.92" value="0.8" step="0.001"></div><div class="control"><label for="separation">파원 사이 거리 d <span class="value" id="sepVal"></span></label><input id="separation" type="range" min="0.5" max="4.5" value="2.4" step="0.1"></div><div class="control"><label for="phase">파원 S₂의 초기 위상 φ₂ <span class="value" id="phaseVal"></span></label><input id="phase" type="range" min="0" max="360" value="0" step="15"></div><div class="control"><label for="amplitude">파원별 진폭 A <span class="value" id="ampVal"></span></label><input id="amplitude" type="range" min="0.2" max="2" value="1" step="0.1"></div><div class="control"><label for="display">화면 표시</label><select id="display"><option value="displacement">순간 변위 (움직이는 파동)</option><option value="intensity">시간 평균 세기 (간섭 무늬)</option></select></div><small>초기 위상 0°에서는 두 파원이 같은 위상으로 진동합니다. 파동 속력은 0.96 m/s로 고정되며 진동수와 파장은 v = fλ에 맞춰 함께 조절됩니다.</small></div></section>
 <section class="card"><h2>관측점 분석</h2><div class="readouts"><div class="readout"><span class="label">파동의 속력 v</span><strong id="speedVal"></strong></div><div class="readout"><span class="label">시간 t</span><strong id="timeVal"></strong></div><div class="readout"><span class="label">거리 r₁ / r₂</span><strong id="distVal"></strong></div><div class="readout"><span class="label">경로차 Δr = r₂ − r₁</span><strong id="diffVal"></strong></div></div><div id="status" class="status" aria-live="polite"></div></section>
 <section class="card chartcard"><h2>관측점에서의 변위와 중첩</h2><canvas id="graph" aria-label="관측점의 두 파동 변위와 합성 파동 변위를 시간에 따라 그린 그래프"></canvas><div class="key"><span style="--c:#63b7ff">S₁ 파동</span><span style="--c:#ffad74">S₂ 파동</span><span style="--c:#8af0cf">합성 파동</span></div><small>가로축: 시간(현재 시각을 중심으로 약 2주기) · 세로축: 변위. 세로 눈금은 현재 진폭에 맞춰 조정됩니다.</small></section>
-<div class="lower"><section class="card"><h2>핵심 개념</h2><p>관측점에서 두 파동의 변위를 더하면 간섭이 일어납니다. 두 파원이 같은 위상(φ₂ = 0°)으로 출발할 때, 경로차가 다음 조건을 만족하면:</p><div class="formula"><b>보강 간섭</b>　|Δr| = mλ　(m = 0, 1, 2, …)</div><div class="formula"><b>상쇄 간섭</b>　|Δr| = (m + ½)λ　(m = 0, 1, 2, …)</div><p class="note">초기 위상차가 있으면 두 파동의 도착 위상차 δ = φ₂ − 2πΔr/λ를 사용합니다. δ가 2mπ이면 보강, (2m+1)π이면 상쇄입니다. 그 밖의 위치에서도 간섭 정도가 연속적으로 달라집니다. 화면의 파원은 진폭이 거리와 무관한 이상화된 파동입니다.</p></section><section class="card"><h2>학생 탐구 활동</h2><ol class="activity"><li>파원의 수직이등분선 위에 관측점을 놓고 r₁, r₂, Δr을 비교하세요.</li><li>관측점을 옮겨 |Δr|/λ가 ½에 가까운 점을 찾으세요. 합성 파형과 간섭 무늬를 확인하세요.</li><li>파장과 파원 간격을 각각 바꾼 뒤, 상쇄 간섭이 나타나는 위치가 어떻게 달라지는지 설명하세요.</li><li>S₂의 초기 위상을 180°로 바꾸면 수직이등분선에서 무엇이 나타날지 예측하고 확인하세요.</li></ol><p class="note"><b>생각해 보기:</b> 진동수를 바꾸면 간섭 무늬의 위치도 바뀔까요? 이 실험에서는 파장을 독립적으로 고정하고 속력 v=fλ가 달라집니다.</p></section></div>
+<div class="lower"><section class="card"><h2>핵심 개념</h2><p>관측점에서 두 파동의 변위를 더하면 간섭이 일어납니다. 두 파원이 같은 위상(φ₂ = 0°)으로 출발할 때, 경로차가 다음 조건을 만족하면:</p><div class="formula"><b>보강 간섭</b>　|Δr| = mλ　(m = 0, 1, 2, …)</div><div class="formula"><b>상쇄 간섭</b>　|Δr| = (m + ½)λ　(m = 0, 1, 2, …)</div><p class="note">초기 위상차가 있으면 두 파동의 도착 위상차 δ = φ₂ − 2πΔr/λ를 사용합니다. δ가 2mπ이면 보강, (2m+1)π이면 상쇄입니다. 그 밖의 위치에서도 간섭 정도가 연속적으로 달라집니다. 화면의 파원은 진폭이 거리와 무관한 이상화된 파동입니다.</p></section><section class="card"><h2>학생 탐구 활동</h2><ol class="activity"><li>파원의 수직이등분선 위에 관측점을 놓고 r₁, r₂, Δr을 비교하세요.</li><li>관측점을 옮겨 |Δr|/λ가 ½에 가까운 점을 찾으세요. 합성 파형과 간섭 무늬를 확인하세요.</li><li>파장과 파원 간격을 각각 바꾼 뒤, 상쇄 간섭이 나타나는 위치가 어떻게 달라지는지 설명하세요.</li><li>S₂의 초기 위상을 180°로 바꾸면 수직이등분선에서 무엇이 나타날지 예측하고 확인하세요.</li></ol><p class="note"><b>생각해 보기:</b> 진동수를 바꾸면 간섭 무늬의 위치도 바뀔까요? 같은 매질에서는 속력이 일정하므로 진동수가 증가하면 파장이 짧아집니다.</p></section></div>
 </main><footer>모형: uᵢ(r,t) = A sin(2π(ft − r/λ)); 시간 평균 세기 표시는 (합성 진폭/2A)² = cos²(δ/2), δ = φ₂ − 2πΔr/λ. 파원은 점으로, 매질은 균일한 평면으로 가정합니다.</footer>
 <script>
 (()=>{'use strict';
@@ -118,7 +189,7 @@ phase:'경로차와 초기 위상차를 바꾸며 보강선·상쇄선의 위치
 concept:'중첩 원리, 경로차·위상차, 보강·상쇄 간섭 조건을 개념과 탐구 질문으로 정리했습니다.'
 };
 const tabs=[['wave','① 두 점파원'],['probe','② 관측점 중첩'],['phase','③ 경로차·위상차'],['concept','④ 개념 설명']];
-function select(name){layout.dataset.tab=name;desc.textContent=infos[name];lower.classList.toggle('concept-shown',name==='concept');window.interferenceShowPaths=(name==='probe'||name==='phase')&&guide.querySelector('input').checked;mode.value=name==='phase'?'intensity':'displacement';mode.dispatchEvent(new Event('input',{bubbles:true}));for(const b of nav.children)b.setAttribute('aria-selected',String(b.dataset.tab===name));requestAnimationFrame(()=>{window.dispatchEvent(new Event('resize'));window.__interferenceApi.render()})}
+function select(name){layout.dataset.tab=name;document.body.dataset.activeTab=name;desc.textContent=infos[name];lower.classList.toggle('concept-shown',name==='concept');window.interferenceShowPaths=(name==='probe'||name==='phase')&&guide.querySelector('input').checked;mode.value=name==='phase'?'intensity':'displacement';mode.dispatchEvent(new Event('input',{bubbles:true}));for(const b of nav.children)b.setAttribute('aria-selected',String(b.dataset.tab===name));requestAnimationFrame(()=>{window.dispatchEvent(new Event('resize'));window.__interferenceApi.render()})}
 for(const [name,label] of tabs){const b=document.createElement('button');b.type='button';b.dataset.tab=name;b.textContent=label;b.setAttribute('aria-selected','false');b.onclick=()=>select(name);nav.append(b)}
 guide.querySelector('input').addEventListener('change',()=>{window.interferenceShowPaths=guide.querySelector('input').checked&&layout.dataset.tab!=='wave';window.__interferenceApi.render()});
 const original=lower.querySelector('.card');if(original){const p=document.createElement('p');p.className='note';p.textContent='이 실험은 선형 매질의 이상적인 2차원 점파원을 사용하며, 시간에 따른 파동의 도달 과정을 근사적으로 표시합니다. 순간 변위의 색은 화면용 정규화된 값이며 실제 상대 세기와는 다릅니다.';original.append(p)}
