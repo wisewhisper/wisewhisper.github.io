@@ -286,6 +286,41 @@ body .thermal-cycle.active>.otto-grid>.otto-card .otto-desc{display:none!importa
 @media(min-width:900px) and (max-width:1200px){
 body .thermal-cycle.active>.otto-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(220px,.8fr)!important}
 }
+</style><style id="otto-tab-order-fit-v12">
+/* All seven tabs always precede the sixth tab's example problem. */
+body .wrap>.thermal-nav{position:relative!important;z-index:2!important}
+body .wrap>.otto-question-above-tabs{order:initial!important}
+@media(min-width:900px){
+body .wrap:has(>.thermal-cycle.active){padding:5px 12px 7px!important}
+body .wrap:has(>.thermal-cycle.active)>header{margin:0 0 2px!important;padding:0!important}
+body .wrap:has(>.thermal-cycle.active)>header h1{font-size:20px!important;line-height:1.2!important}
+body .wrap:has(>.thermal-cycle.active)>header .sub,body .wrap:has(>.thermal-cycle.active)>header .law{display:none!important}
+body .wrap:has(>.thermal-cycle.active)>.thermal-nav{display:flex!important;flex-wrap:wrap!important;gap:5px!important;margin:3px 0 5px!important}
+body .wrap:has(>.thermal-cycle.active)>.thermal-nav button{font-size:12px!important;min-height:30px!important;padding:4px 9px!important}
+body .wrap:has(>.thermal-cycle.active)>.thermal-desc{display:none!important}
+body .wrap:has(>.thermal-cycle.active)>.otto-question-above-tabs{margin:0 0 6px!important;padding:6px 10px!important;min-height:0!important}
+body .wrap:has(>.thermal-cycle.active)>.otto-question-above-tabs h3{font-size:13px!important;margin:0 0 2px!important}
+body .wrap:has(>.thermal-cycle.active)>.otto-question-above-tabs>p{font-size:11px!important;line-height:1.3!important;margin:2px 0!important}
+body .wrap:has(>.thermal-cycle.active)>.otto-question-above-tabs details{margin:2px 0 0!important}
+body .thermal-cycle.active>.otto-head{display:none!important}
+body .thermal-cycle.active>.otto-grid{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1.12fr) minmax(235px,.8fr)!important;gap:7px!important;align-items:start!important}
+body .thermal-cycle.active>.otto-grid>.otto-card{padding:7px!important;min-height:0!important}
+body .thermal-cycle.active>.otto-grid>.otto-card h3{font-size:12px!important;margin:0 0 4px!important}
+body .thermal-cycle.active>.otto-grid>.otto-card canvas{height:clamp(230px,calc(100dvh - 215px),680px)!important;max-height:calc(100dvh - 215px)!important}
+body .thermal-cycle.active>.otto-grid>.otto-card .otto-desc{display:none!important}
+body .thermal-cycle.active>.otto-grid>.otto-card .otto-step{font-size:11px!important;margin:3px 0 0!important}
+body .thermal-cycle.active>.otto-grid>.otto-controls .otto-buttons button{min-height:30px!important;padding:4px!important;font-size:11px!important}
+body .thermal-cycle.active>.otto-grid>.otto-controls label{margin:7px 0 2px!important;font-size:11px!important}
+body .thermal-cycle.active>.otto-grid>.otto-controls .otto-stats{margin-top:7px!important;gap:4px!important}
+body .thermal-cycle.active>.otto-grid>.otto-controls .otto-stats div{padding:5px!important}
+body .thermal-cycle.active>.otto-grid>.otto-controls .otto-result{margin-top:7px!important;padding:6px!important}
+body .thermal-cycle.active>.otto-grid>.otto-controls .otto-result strong{font-size:17px!important}
+body .thermal-cycle.active>.otto-grid>.otto-controls .otto-result span{font-size:10px!important}
+}
+@media(min-width:900px) and (max-height:800px){
+body .thermal-cycle.active>.otto-grid>.otto-card canvas{height:clamp(220px,calc(100dvh - 230px),540px)!important}
+}
+@media(min-width:900px) and (max-width:1200px){body .thermal-cycle.active>.otto-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(215px,.8fr)!important}}
 </style></head>
 <body>
 <div class="wrap">
@@ -652,7 +687,7 @@ function tab(name){
 desc.textContent=notes[name];
 const cycleQuestion=document.querySelector('.otto-problem');
 if(cycleQuestion){
-  if(name==='cycle'){wrap.insertBefore(cycleQuestion,nav);cycleQuestion.hidden=false;cycleQuestion.classList.add('otto-question-above-tabs');}
+  if(name==='cycle'){nav.after(cycleQuestion);cycleQuestion.hidden=false;cycleQuestion.classList.add('otto-question-above-tabs');}
   else{cycleQuestion.hidden=true;cycleQuestion.classList.remove('otto-question-above-tabs');if(cycleQuestion.parentNode!==cyclePanel)cyclePanel.insertBefore(cycleQuestion,cyclePanel.firstChild);}
 }
 const standalone=name==='concept'||name==='cycle';
