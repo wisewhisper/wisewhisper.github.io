@@ -113,6 +113,43 @@ main>header p,main>header .lead{display:block!important}
 .ww-page .readout{grid-template-columns:repeat(2,minmax(0,1fr))!important}
 .ww-page .stage .metrics{grid-template-columns:repeat(2,minmax(0,1fr))!important}
 }
+</style><style id="ww-spring-3d-v1">
+body{background:#050a13!important;color:#eaf5ff!important}
+main{max-width:1690px!important;padding:7px 13px!important}
+main>header{margin:0 0 4px!important;padding:2px!important}
+main>header h1{font-size:21px!important;margin:0!important}
+main>header p,main>header .tag{display:none!important}
+.ww-tabs{display:none!important}
+.s-nav{display:flex;gap:7px;flex-wrap:wrap;margin:3px 0 7px}
+.s-nav button{background:#152a41!important;color:#dcefff!important;border:1px solid #456b8b!important;border-radius:9px;padding:5px 10px!important;min-height:36px!important}
+.s-nav button[aria-selected=true]{background:#136a9d!important;border-color:#88d6ff!important;color:#fff!important}
+.ww-page.ww-active{grid-template-columns:minmax(0,1.7fr) minmax(315px,.9fr)!important;gap:9px!important}
+.ww-page.ww-active>:nth-child(1){grid-column:1!important;grid-row:1!important}
+.ww-page.ww-active>:nth-child(2){grid-column:2!important;grid-row:1!important}
+#ww-panel-0>.card:first-child{display:flex!important;flex-direction:column!important;max-height:calc(100dvh - 113px)!important;overflow:hidden!important}
+#ww-panel-0>.card:first-child>p.small{font-size:12px!important;line-height:1.3!important}
+#ww-panel-0>.card:first-child #scene{display:block!important;background:#06111d!important;width:100%!important;height:clamp(250px,43vh,420px)!important;max-height:none!important;min-height:210px!important;touch-action:none!important;cursor:grab!important;flex:1}
+#ww-panel-0>.card:nth-child(2){max-height:calc(100dvh - 113px)!important;overflow-y:auto!important;scrollbar-width:thin}
+#ww-panel-0 .control{margin:4px 0!important}
+#ww-panel-0 .control input[type=range]{height:24px!important}
+#ww-panel-0>.card:nth-child(2)>h2:nth-of-type(2),#ww-panel-0>.card:nth-child(2)>textarea,#ww-panel-0>.card:nth-child(2)>details{display:none!important}
+.s-actions{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;gap:5px;margin:5px 0}
+.s-actions button{font-size:12px!important;min-height:34px!important;padding:4px!important}
+.s-actions .primary{background:#126ea8!important;color:white!important;border-color:#8edaff!important}
+.s-status{background:#0e293e;color:#b4e1fa;border:1px solid #305775;padding:5px 8px;border-radius:8px;font-size:12px;margin:4px 0}
+.s-ticker{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;margin:4px 0}
+.s-ticker>div{min-width:0;background:#152b41;border:1px solid #345671;border-radius:8px;padding:6px;color:#b6d3e5;font-size:11px}
+.s-ticker b{display:block;font-size:clamp(13px,1.1vw,18px);color:#fff;white-space:nowrap}
+.s-strip{display:flex;background:#1c354e;height:8px;overflow:hidden;border-radius:8px;margin:5px 0}
+.s-strip span{display:block;height:100%}
+.s-extra{border:1px solid #315673;background:#0f283c;border-radius:9px;padding:7px 9px;margin:4px 0}
+.s-extra label{display:flex;justify-content:space-between;color:#c9e7ff;font-size:12px}
+.s-extra output{color:#ffe09a}.s-extra input{width:100%!important;height:22px!important}
+.s-chart{width:100%;height:clamp(250px,43vh,420px);background:#081521;border:1px solid #31536e;border-radius:9px}
+#ww-panel-1>.card{max-height:calc(100dvh - 117px);overflow:auto;scrollbar-width:thin}
+#ww-panel-1 #graph{height:clamp(230px,42vh,385px)!important;max-height:none!important}
+@media(max-width:950px){.ww-page.ww-active{display:flex!important;flex-direction:column!important}.ww-page.ww-active>*{width:100%!important;max-height:none!important;overflow:visible!important}#ww-panel-0>.card:first-child,#ww-panel-0>.card:nth-child(2){max-height:none!important;overflow:visible!important}#ww-panel-0>.card:first-child #scene{height:330px!important;flex:none!important}.s-ticker{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:500px){main>header h1{font-size:19px!important}.s-nav button{font-size:12px!important;padding:5px 7px!important}#ww-panel-0>.card:first-child #scene{height:255px!important}}
 </style></head><body><main>
 <header><div class="tag">물리 공식 40｜인터랙티브 실험실</div><h1>14번 · 탄성 위치 에너지</h1><div class="formula">U<sub>s</sub> = ½kx²</div><p>용수철 상수와 변형량을 바꾸면 저장되는 에너지가 어떻게 달라질까?</p></header>
 <div class="grid"><section class="card"><h2>① 조작 · 용수철 변형</h2><svg id="scene" viewBox="0 0 600 270" role="img" aria-label="자연 길이를 기준으로 용수철 변형과 복원력 방향 표시"></svg><p id="state" class="small" aria-live="polite"></p><div class="control"><label for="k">용수철 상수 k (N/m)<input id="kn" aria-label="용수철 상수 숫자 입력" type="number" min="10" max="500" step="10" value="100"></label><input id="k" type="range" min="10" max="500" step="10" value="100"></div><div class="control"><label for="x">변형량 x (m)<input id="xn" aria-label="변형량 숫자 입력" type="number" min="-0.3" max="0.3" step="0.01" value="0.1"></label><input id="x" type="range" min="-0.3" max="0.3" step="0.01" value="0.1"></div><div class="buttons"><button id="opposite">같은 크기로 압축 ↔ 늘림</button><button id="zero">자연 길이 x = 0</button><button id="reset">전체 초기화</button></div><p class="small">오른쪽이 +방향. x는 자연 길이에서의 변형량입니다. 슬라이더는 외부에서 위치를 조절하는 정적 실험이며 자유 진동을 나타내지 않습니다.</p></section>
@@ -133,4 +170,84 @@ function graph(){const sets=[{...model,color:'#7fb8ff',dash:'',label:'현재'},.
 function comparison(){$('comparison').innerHTML=['A','B'].map(key=>{let s=saved[key];return '<tr><th>'+key+'</th>'+(s?'<td>'+num(s.k,1)+'</td><td>'+num(s.x,3)+'</td><td>'+num(energy(s.k,s.x),3)+'</td><td><button data-load="'+key+'">불러오기</button></td>':'<td colspan="4">아직 저장하지 않았습니다.</td>')+'</tr>';}).join('');for(const el of document.querySelectorAll('[data-load]'))el.onclick=()=>{model={...saved[el.dataset.load]};sync();};let a=saved.A,b=saved.B;$('ratio').textContent=a&&b?(energy(a.k,a.x)>0?'B/A 에너지 비 = '+num(energy(b.k,b.x)/energy(a.k,a.x),3)+'배':'A의 에너지가 0 J이므로 B/A 비율은 정의되지 않습니다.'):'현재 조건을 저장하고 한 변수씩 바꿔 비교하세요.';}
 function render(){let {k,x}=model;$('u').textContent=num(energy(k,x))+' J';$('f').textContent=num(-k*x,2)+' N';$('calc').innerHTML='Uₛ = ½kx²<br>= ½ × '+num(k,1)+' N/m × ('+num(x,3)+' m)²<br><b>= '+num(energy(k,x))+' J</b><br>Fₛ = −kx = '+num(-k*x,2)+' N';scene();graph();comparison();}
 $('saveA').onclick=()=>{saved.A={...model};render();};$('saveB').onclick=()=>{saved.B={...model};render();};$('zero').onclick=()=>{model.x=0;sync();};$('opposite').onclick=()=>{model.x=-model.x;sync();};$('reset').onclick=()=>{model={...defaults};saved.A=saved.B=null;document.querySelector('textarea').value='';document.querySelectorAll('details').forEach(e=>e.open=false);sync();};sync();
-</script><script id="ww-native-tabs-script">(()=>{'use strict';const root=document.querySelector('main'),old=root?.querySelector(':scope > .grid');if(!old)return;const items=Array.from(old.children).filter(n=>n.matches('section,.card,.panel'));if(items.length!==5){console.warn('Tab structure mismatch',items.length);return;}const tabbar=document.createElement('nav');tabbar.className='ww-tabs';tabbar.setAttribute('role','tablist');tabbar.setAttribute('aria-label','실험 기능');const pages=document.createElement('div');pages.className='ww-pages';const groups=[[0,1],[2],[3,4]],labels=['실험 · 조작','그래프 · 비교','개념 설명'];const panels=[];groups.forEach((indices,i)=>{const b=document.createElement('button');b.type='button';b.className='ww-tab';b.id='ww-tab-'+i;b.setAttribute('role','tab');b.setAttribute('aria-controls','ww-panel-'+i);b.textContent=labels[i];tabbar.append(b);const page=document.createElement('section');page.className='ww-page'+(i===2?' ww-concepts':'');page.id='ww-panel-'+i;page.setAttribute('role','tabpanel');page.setAttribute('aria-labelledby',b.id);indices.forEach(j=>page.append(items[j]));panels.push(page);pages.append(page);b.onclick=()=>select(i);});function select(i){panels.forEach((p,j)=>{p.classList.toggle('ww-active',j===i);p.hidden=j!==i;tabbar.children[j].setAttribute('aria-selected',String(j===i));tabbar.children[j].tabIndex=j===i?0:-1;});requestAnimationFrame(()=>{window.dispatchEvent(new Event('resize'));});}old.replaceWith(tabbar,pages);select(0);})();</script></body></html>
+</script><script id="ww-native-tabs-script">(()=>{'use strict';const root=document.querySelector('main'),old=root?.querySelector(':scope > .grid');if(!old)return;const items=Array.from(old.children).filter(n=>n.matches('section,.card,.panel'));if(items.length!==5){console.warn('Tab structure mismatch',items.length);return;}const tabbar=document.createElement('nav');tabbar.className='ww-tabs';tabbar.setAttribute('role','tablist');tabbar.setAttribute('aria-label','실험 기능');const pages=document.createElement('div');pages.className='ww-pages';const groups=[[0,1],[2],[3,4]],labels=['실험 · 조작','그래프 · 비교','개념 설명'];const panels=[];groups.forEach((indices,i)=>{const b=document.createElement('button');b.type='button';b.className='ww-tab';b.id='ww-tab-'+i;b.setAttribute('role','tab');b.setAttribute('aria-controls','ww-panel-'+i);b.textContent=labels[i];tabbar.append(b);const page=document.createElement('section');page.className='ww-page'+(i===2?' ww-concepts':'');page.id='ww-panel-'+i;page.setAttribute('role','tabpanel');page.setAttribute('aria-labelledby',b.id);indices.forEach(j=>page.append(items[j]));panels.push(page);pages.append(page);b.onclick=()=>select(i);});function select(i){panels.forEach((p,j)=>{p.classList.toggle('ww-active',j===i);p.hidden=j!==i;tabbar.children[j].setAttribute('aria-selected',String(j===i));tabbar.children[j].tabIndex=j===i?0:-1;});requestAnimationFrame(()=>{window.dispatchEvent(new Event('resize'));});}old.replaceWith(tabbar,pages);select(0);})();</script><script id="ww-spring-3d-script">(function(){
+'use strict';
+const el=id=>document.getElementById(id),panels=[el('ww-panel-0'),el('ww-panel-1'),el('ww-panel-2')];if(panels.some(x=>!x))return;
+const sceneCard=panels[0].children[0],sideCard=panels[0].children[1];
+const nav=document.createElement('nav');nav.className='s-nav';nav.setAttribute('role','tablist');
+nav.innerHTML='<button data-s-mode="static">① 용수철 변형</button><button data-s-mode="oscillate">② 입체 자유 진동</button><button data-s-mode="graphs">③ 에너지·힘 그래프</button><button data-s-mode="lesson">④ 개념 설명</button>';
+document.querySelector('.ww-tabs').before(nav);
+const actions=document.createElement('div');actions.className='s-actions';
+actions.innerHTML='<button id="s-play" class="primary">▶ 시작</button><button id="s-pause">Ⅱ 일시정지</button><button id="s-step">▷ 한 단계</button><button id="s-reset">↻ 다시 시작</button>';
+const status=document.createElement('p');status.className='s-status';status.id='s-status';status.textContent='변형량을 조절한 뒤 시작하거나 수레를 직접 드래그하세요.';
+sceneCard.querySelector('h2').after(actions,status);
+const bars=document.createElement('div');bars.className='s-strip';bars.innerHTML='<span id="s-u-bar" style="width:100%;background:#ffd16b"></span><span id="s-k-bar" style="width:0%;background:#6dc6ff"></span>';
+const ticker=document.createElement('div');ticker.className='s-ticker';ticker.innerHTML='<div>현재 변형량 x<b id="s-x">0 m</b></div><div>현재 속도 v<b id="s-v">0 m/s</b></div><div>운동 에너지 K<b id="s-k">0 J</b></div><div>총 역학 에너지<b id="s-e">0 J</b></div>';
+sceneCard.querySelector('#scene').after(bars,ticker);
+const extra=document.createElement('div');extra.className='s-extra';
+extra.innerHTML='<label for="s-mass">수레 질량 <output id="s-mass-out">2.0 kg</output></label><input id="s-mass" type="range" min=".5" max="10" step=".5" value="2"><label for="s-rate">재생 속도 <output id="s-rate-out">1.00배</output></label><input id="s-rate" type="range" min=".25" max="2" step=".25" value="1"><label for="s-camera">입체 시점 회전 <output id="s-camera-out">35°</output></label><input id="s-camera" type="range" min="-25" max="25" step="5" value="0">';
+sideCard.querySelector('h2').after(extra);
+const forceGraph=el('graph'),chart=document.createElement('canvas');chart.id='s-energy-chart';chart.className='s-chart';chart.setAttribute('aria-label','시간에 따른 탄성 위치 에너지 및 운동 에너지 그래프');
+panels[1].children[0].querySelector('h2').textContent='용수철 진동의 에너지–시간 그래프';
+panels[1].children[0].querySelector('h2').after(chart);
+const relation=document.createElement('div');relation.className='s-extra';relation.innerHTML='<strong style="color:#9ad9ff">변형량과 힘·에너지 관계</strong><p style="font-size:12px;margin:5px 0">아래 포물선 그래프는 Uₛ = ½kx²이며 현재 진동 궤적을 구별해 표시합니다.</p>';
+panels[1].children[0].append(relation);relation.after(forceGraph);
+let mode='static',time=0,running=false,raf=0,last=0,mass=2,rate=1,angle=0,grab=null,amplitude=model.x;
+const fmt=(n,d=3)=>(Math.abs(n)<1e-9?0:n).toFixed(d);
+const omega=()=>Math.sqrt(model.k/mass),period=()=>2*Math.PI/omega();
+function physics(t){const w=omega(),A=amplitude,x=mode==='oscillate'?A*Math.cos(w*t):model.x,v=mode==='oscillate'?-A*w*Math.sin(w*t):0,U=.5*model.k*x*x,K=.5*mass*v*v;return {x,v,U,K,E:U+K,F:-model.k*x,w,A};}
+function render3D(){
+ const s=physics(time),x=s.x,end=298+480*x,theta=(35+angle)*Math.PI/180,yTop=94;
+ const dx=23*Math.cos(theta),dy=-17,wall='<path d="M 58 69 L 89 52 L 89 187 L 58 203 Z" fill="#29435d" stroke="#759abb"/><path d="M 58 69 L 89 52 L 118 65 L 88 84 Z" fill="#638bac"/><path d="M 58 69 L 88 84 L 88 220 L 58 203 Z" fill="#42617e"/>';
+ let grid='<path d="M 38 199 L 541 199 L 576 174 L 75 174Z" fill="#1b3449" stroke="#66819e"/><path d="M38 199 L541 199 L541 217 L38 217Z" fill="#122638"/>';
+ for(let i=0;i<12;i++){const gx=62+i*40;grid+='<path d="M '+gx+' 198 L '+(gx+34)+' 175" stroke="#345671" stroke-width="1"/>';}
+ const springEnd=end-19,span=Math.max(40,springEnd-109),turns=13,pts=[];
+ for(let i=0;i<=turns*24;i++){const q=i/(turns*24),px=111+span*q,phase=q*turns*2*Math.PI,py=132+17*Math.sin(phase),depth=11*Math.cos(phase);pts.push([px,py-depth*.4]);}
+ const path=pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');
+ const cart='<ellipse cx="'+(end+4)+'" cy="202" rx="38" ry="10" fill="#03080f" opacity=".5"/><path d="M '+(end-21)+' 115 L '+(end+24)+' 115 L '+(end+24+dx)+' '+(115+dy)+' L '+(end-21+dx)+' '+(115+dy)+'Z" fill="#aadfff" stroke="#dcf1ff"/><rect x="'+(end-21)+'" y="115" width="45" height="52" rx="4" fill="#268bd0" stroke="#8fd2ff" stroke-width="2"/><path d="M '+(end+24)+' 115 L '+(end+24+dx)+' '+(115+dy)+' L '+(end+24+dx)+' '+(167+dy)+' L '+(end+24)+' 167Z" fill="#135480" stroke="#70b4df"/><circle cx="'+(end-9)+'" cy="179" r="10" fill="#203d55" stroke="#a9d8f7" stroke-width="2"/><circle cx="'+(end+17)+'" cy="179" r="10" fill="#203d55" stroke="#a9d8f7" stroke-width="2"/>';
+ const natural='<path d="M 300 70 V 213" stroke="#82c7ff" stroke-dasharray="6 6" opacity=".7"/><text x="303" y="62" fill="#b0ddff" font-size="14" text-anchor="middle">x = 0</text>';
+ const forceLen=Math.min(83,15+Math.abs(s.F)*1.2),sign=s.F>0?1:-1,head=end+sign*forceLen;
+ const arrow=Math.abs(s.F)<.03?'':'<path d="M '+end+' 80 H '+head+' M '+(head-sign*12)+' 73 L '+head+' 80 L '+(head-sign*12)+' 87" fill="none" stroke="#ffb46e" stroke-width="3.5"/>';
+ const positions='<text x="295" y="238" fill="#eff6ff" font-size="15" text-anchor="middle">x = '+fmt(x,3)+' m · F = '+fmt(s.F,2)+' N</text>';
+ el('scene').innerHTML='<defs><linearGradient id="bgSp" x2="0" y2="1"><stop stop-color="#091c30"/><stop offset="1" stop-color="#040d16"/></linearGradient><filter id="glowSp"><feGaussianBlur stdDeviation="1.7"/></filter></defs><rect width="600" height="270" rx="8" fill="url(#bgSp)"/>'+grid+wall+natural+'<path d="M111 132 L'+springEnd+' 132" stroke="#1c4767" stroke-width="8" opacity=".5"/><path d="'+path+'" fill="none" stroke="#c4edff" stroke-width="5" stroke-linecap="round" opacity=".48" filter="url(#glowSp)"/><path d="'+path+'" fill="none" stroke="#74c9ff" stroke-width="3" stroke-linejoin="round"/>'+cart+arrow+positions+'<text x="565" y="255" text-anchor="end" font-size="13" fill="#9fc3dd">오른쪽 + · 입체 투영 '+(35+angle)+'°</text>';
+ el('state').textContent=mode==='oscillate'?'이상적 자유 진동: 마찰 없음, 진폭 '+fmt(Math.abs(amplitude),2)+' m · 주기 '+fmt(period(),2)+' s':'용수철 양 끝을 천천히 변형시킨 정적인 상태입니다. 수레를 드래그해 보세요.';
+}
+function energyChart(){const r=chart.getBoundingClientRect();if(r.width<20)return;const d=Math.min(devicePixelRatio||1,2),c=chart.getContext('2d');chart.width=Math.round(r.width*d);chart.height=Math.round(r.height*d);c.setTransform(chart.width/720,0,0,chart.height/360,0,0);c.fillStyle='#071320';c.fillRect(0,0,720,360);
+ const T=period(),maxT=Math.max(T,4),N=140,arr=Array.from({length:N+1},(_,i)=>{const tt=maxT*i/N,v=amplitude*Math.cos(omega()*tt),vel=-amplitude*omega()*Math.sin(omega()*tt);return {U:.5*model.k*v*v,K:.5*mass*vel*vel,E:.5*model.k*amplitude*amplitude};}),max=Math.max(1,.5*model.k*amplitude*amplitude)*1.1,X=x=>70+624*x/maxT,Y=y=>288-y/max*242;
+ for(let j=0;j<=4;j++){const val=max*j/4,y=Y(val);c.strokeStyle='#304c63';c.beginPath();c.moveTo(70,y);c.lineTo(694,y);c.stroke();c.fillStyle='#b7d4e7';c.font='12px system-ui';c.textAlign='right';c.fillText(fmt(val,2),62,y+4);}
+ for(const [key,col] of [['U','#ffd16b'],['K','#6ec7ff'],['E','#68e0b8']]){c.beginPath();arr.forEach((s,i)=>{const x=X(maxT*i/N),y=Y(s[key]);i?c.lineTo(x,y):c.moveTo(x,y);});c.strokeStyle=col;c.lineWidth=key==='E'?2:3;c.stroke();}
+ c.strokeStyle='#fff';c.setLineDash([4,4]);c.beginPath();c.moveTo(X(time%maxT),46);c.lineTo(X(time%maxT),288);c.stroke();c.setLineDash([]);c.textAlign='left';c.fillStyle='#ffd16b';c.fillText('U 탄성 위치 에너지',80,23);c.fillStyle='#6ec7ff';c.fillText('K 운동 에너지',295,23);c.fillStyle='#68e0b8';c.fillText('U+K 일정',515,23);c.fillStyle='#bed3e4';c.textAlign='center';c.fillText('시간 t (s) · 주기 '+fmt(T,2)+' s',375,340);
+}
+const oldScene=scene,oldRender=render;
+scene=render3D;
+render=function(){oldRender();refresh();};
+function refresh(){const s=physics(time);el('s-x').textContent=fmt(s.x)+' m';el('s-v').textContent=fmt(s.v)+' m/s';el('s-k').textContent=fmt(s.K)+' J';el('s-e').textContent=fmt(s.E)+' J';
+ el('u').textContent=fmt(s.U)+' J';el('f').textContent=fmt(s.F,2)+' N';el('calc').innerHTML='Uₛ = ½kx² = <b>'+fmt(s.U)+' J</b><br>Fₛ = −kx = <b>'+fmt(s.F,2)+' N</b><br>운동 에너지 K = <b>'+fmt(s.K)+' J</b><br>Uₛ + K = <b>'+fmt(s.E)+' J</b><br>T = 2π√(m/k) = '+fmt(period(),2)+' s';
+ const f=s.E>1e-10?Math.max(0,Math.min(1,s.U/s.E)):1;el('s-u-bar').style.width=(f*100)+'%';el('s-k-bar').style.width=((1-f)*100)+'%';
+ el('s-pause').disabled=!running;render3D();if(panels[1].classList.contains('ww-active'))energyChart();}
+function stop(){running=false;cancelAnimationFrame(raf);raf=0;last=0;}
+function resetTime(){stop();time=0;amplitude=model.x;el('s-play').textContent='▶ 시작';el('s-status').textContent='조건 변경 · 시작 버튼을 눌러 관찰하세요.';refresh();}
+function start(){if(mode==='static')mode='oscillate';if(Math.abs(amplitude)<1e-8){el('s-status').textContent='변형량 x를 0이 아닌 값으로 조절한 뒤 시작하세요.';return;}if(running)return;running=true;last=0;el('s-play').textContent='▶ 진행 중';el('s-status').textContent='이상적인 단진동 중 · 위치에너지와 운동에너지가 교환됩니다.';raf=requestAnimationFrame(frame);}
+function frame(now){if(!running)return;if(!last)last=now;time+=Math.min(.05,(now-last)/1000)*rate;last=now;if(time>=period()*3){time=period()*3;stop();el('s-play').textContent='▶ 다시 시작';el('s-status').textContent='3주기 관찰 완료 · 시작 버튼으로 재생할 수 있습니다.';}refresh();if(running)raf=requestAnimationFrame(frame);}
+function switchMode(m){stop();mode=m;time=0;amplitude=model.x;const index=m==='graphs'?1:m==='lesson'?2:0;panels.forEach((p,i)=>{p.hidden=i!==index;p.classList.toggle('ww-active',i===index);});
+ nav.querySelectorAll('button').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.sMode===m)));
+ sceneCard.querySelector('h2').textContent=m==='oscillate'?'입체 용수철 수레 · 자유 진동':'입체 용수철 압축·늘림';el('s-play').textContent='▶ 시작';
+ el('s-status').textContent=m==='static'?'변형량을 슬라이더 또는 드래그로 변경하세요.':m==='oscillate'?'▶ 시작을 누르면 놓인 물체가 진동합니다.':'그래프에서 U, K, U+K를 비교하세요.';
+ requestAnimationFrame(()=>{if(index===0)render();else if(index===1){graph();energyChart();}});}
+nav.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>switchMode(b.dataset.sMode)));
+el('s-play').onclick=()=>{if(time>=3*period())time=0;start();};
+el('s-pause').onclick=()=>{stop();el('s-play').textContent='▶ 이어서';el('s-status').textContent='일시정지 · 시작으로 이어서';refresh();};
+el('s-step').onclick=()=>{stop();mode='oscillate';time=Math.min(period()*3,time+period()/24);el('s-status').textContent='한 단계 진행 · t='+fmt(time,2)+' s';refresh();};
+el('s-reset').onclick=()=>{stop();time=0;amplitude=model.x;el('s-play').textContent='▶ 시작';el('s-status').textContent='초기 위치로 되돌렸습니다.';refresh();};
+el('s-mass').oninput=e=>{mass=Number(e.target.value);el('s-mass-out').textContent=fmt(mass,1)+' kg';resetTime();};
+el('s-rate').oninput=e=>{rate=Number(e.target.value);el('s-rate-out').textContent=fmt(rate,2)+'배';};
+el('s-camera').oninput=e=>{angle=Number(e.target.value);el('s-camera-out').textContent=(35+angle)+'°';refresh();};
+['k','x','kn','xn'].forEach(id=>el(id).addEventListener('input',()=>setTimeout(resetTime,0)));
+sceneCard.querySelectorAll('button:not([id^="s-"])').forEach(b=>b.addEventListener('click',()=>setTimeout(resetTime,0)));
+const stage=el('scene');stage.addEventListener('pointerdown',e=>{stop();const r=stage.getBoundingClientRect();grab={x:(e.clientX-r.left)*600/r.width,start:model.x};stage.setPointerCapture(e.pointerId);});
+stage.addEventListener('pointermove',e=>{if(!grab)return;const r=stage.getBoundingClientRect(),now=(e.clientX-r.left)*600/r.width,v=Math.max(-.3,Math.min(.3,grab.start+(now-grab.x)/480));model.x=Math.round(v*100)/100;amplitude=model.x;time=0;el('x').value=model.x;el('xn').value=model.x;render();});
+stage.addEventListener('pointerup',()=>{grab=null;el('s-status').textContent='드래그 완료 · 시작 버튼으로 자유 진동';});
+stage.addEventListener('pointercancel',()=>{grab=null;});
+window.addEventListener('resize',()=>{if(panels[0].classList.contains('ww-active'))render3D();if(panels[1].classList.contains('ww-active'))energyChart();});
+switchMode('static');
+})();</script></body></html>
