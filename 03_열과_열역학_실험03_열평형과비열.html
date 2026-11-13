@@ -60,7 +60,30 @@ body .thermal-col .note{font-size:12px}
 .thermal-col .sample.cold{border-color:#366a91}
 @media(max-width:1080px){body .thermal-work{grid-template-columns:1fr minmax(250px,.55fr)}.thermal-results{grid-column:1/-1}}
 @media(max-width:680px){body .thermal-work{grid-template-columns:1fr}.thermal-results{grid-column:auto}.thermal-concept.open{grid-template-columns:1fr}.thermal-nav button{flex:1 1 42%}}
-</style><style id="thermal-fluid-fullscreen-v3">@media(min-width:711px){body main{max-width:none;width:100%;padding:10px clamp(12px,1.25vw,30px) 16px}body .thermal-work{grid-template-columns:minmax(0,1fr) minmax(265px,20vw) minmax(220px,17vw);align-items:start}body .thermal-col .visual{min-height:clamp(370px,calc(100dvh - 235px),980px);display:flex;flex-direction:column;justify-content:center}body .thermal-col #chart{height:clamp(370px,calc(100dvh - 240px),980px)}body .thermal-col .object{width:clamp(110px,11vw,205px)}body .thermal-col .object b{font-size:clamp(20px,2vw,38px)}@media(max-width:1080px){body .thermal-work{grid-template-columns:minmax(0,1fr) minmax(260px,.6fr)}body .thermal-results{grid-column:1/-1}}@media(max-width:680px){body .thermal-work{grid-template-columns:1fr}body .thermal-results{grid-column:auto}body .thermal-col .visual{min-height:320px}body .thermal-col #chart{height:310px}}}</style></head>
+</style><style id="thermal-fluid-fullscreen-v3">@media(min-width:711px){body main{max-width:none;width:100%;padding:10px clamp(12px,1.25vw,30px) 16px}body .thermal-work{grid-template-columns:minmax(0,1fr) minmax(265px,20vw) minmax(220px,17vw);align-items:start}body .thermal-col .visual{min-height:clamp(370px,calc(100dvh - 235px),980px);display:flex;flex-direction:column;justify-content:center}body .thermal-col #chart{height:clamp(370px,calc(100dvh - 240px),980px)}body .thermal-col .object{width:clamp(110px,11vw,205px)}body .thermal-col .object b{font-size:clamp(20px,2vw,38px)}@media(max-width:1080px){body .thermal-work{grid-template-columns:minmax(0,1fr) minmax(260px,.6fr)}body .thermal-results{grid-column:1/-1}}@media(max-width:680px){body .thermal-work{grid-template-columns:1fr}body .thermal-results{grid-column:auto}body .thermal-col .visual{min-height:320px}body .thermal-col #chart{height:310px}}}</style><style id="thermal-equilibrium-viewport-v4">
+@media(min-width:900px){
+body main{padding:7px 12px 8px!important}
+body header{margin:0 0 2px!important}
+body header h1{font-size:20px!important}
+body .thermal-nav{margin:4px 0!important;gap:5px!important}
+body .thermal-nav button{min-height:31px!important;padding:4px 9px!important}
+body .thermal-desc{margin:0 0 4px!important}
+body .thermal-work{grid-template-columns:minmax(0,1fr) minmax(245px,22vw) minmax(210px,19vw)!important;gap:7px!important}
+body .thermal-col{gap:6px!important}
+body .thermal-col .panel{padding:8px!important}
+body .thermal-col .panel h2{margin:0 0 4px!important;font-size:14px!important}
+body .thermal-col .visual{min-height:clamp(215px,calc(100dvh - 365px),570px)!important;padding:7px!important}
+body .thermal-col #chart{height:clamp(220px,calc(100dvh - 360px),570px)!important}
+body .thermal-col .controls{gap:4px!important}
+body .thermal-col .sample{padding:5px!important}
+body .thermal-col .sample label{margin:3px 0!important}
+body .thermal-col .buttons{margin:4px 0!important}
+body .thermal-col button{min-height:31px!important}
+body .thermal-col .readout{min-height:0!important;padding:5px!important}
+body .thermal-col .readouts{gap:4px!important}
+}
+@media(min-width:681px) and (max-width:899px){body .thermal-work{grid-template-columns:minmax(0,1fr) minmax(220px,.75fr)!important}body .thermal-results{grid-column:1/-1}body .thermal-col .visual{min-height:300px!important}body .thermal-col #chart{height:300px!important}}
+</style></head>
 <body><main>
 <header><div class="eyebrow">PHYSICS LAB / 08</div><h1>열평형과 비열 실험실</h1><p class="lead">두 시료의 질량·물질·처음 온도를 바꿔 열이 이동하는 방향과 최종 온도를 관찰하세요.</p></header>
 <div class="grid">
@@ -107,6 +130,8 @@ const layout=document.createElement('div');layout.className='thermal-work';
 const left=document.createElement('div'),center=document.createElement('div'),right=document.createElement('div');
 for(const x of [left,center,right])x.className='thermal-col';right.classList.add('thermal-results');layout.append(left,center,right);
 grid.replaceWith(layout);left.append(stage);center.append(setup);
+const runButtons=setup.querySelector('.buttons'),settings=setup.querySelector('.controls');
+if(runButtons&&settings)settings.before(runButtons);
 const read=stage.querySelector('.readouts'),graph=stage.querySelector('.graph-wrap'),eq=stage.querySelector('.equation');
 const values=document.createElement('section');values.className='panel';values.innerHTML='<h2>실시간 측정 결과</h2>';values.append(read);right.append(values);
 const quiz=[...aside.children][0],notes=[...aside.children][1];quiz.classList.add('thermal-quiz');right.append(quiz);
