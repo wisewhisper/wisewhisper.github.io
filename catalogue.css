@@ -85,3 +85,18 @@ main{max-width:1280px;padding:28px 24px 65px}
  .filter-list .unit-filter.category-motion-ready .category-topics{font-size:10px}
  .filter-list .unit-filter.category-motion-ready .category-count{font-size:10px}}
 @media(prefers-reduced-motion:reduce){.filter-list .unit-filter.category-motion-ready{transition:none}}
+
+
+/* Realtime 3D category speed selector. */
+.category-speed-control{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;
+ gap:10px 24px;margin:17px 0 -6px;padding:11px 15px;border-radius:12px;
+ background:#101b2b;color:#e7f1ff;border:1px solid #314761}
+.category-speed-control label{font-size:13px;font-weight:800;color:#eef5ff}
+.category-speed-adjust{display:flex;align-items:center;gap:10px;flex:1 1 320px;max-width:480px}
+.category-speed-adjust span{font-size:11px;color:#a9c1d7;white-space:nowrap}
+.category-speed-adjust input[type=range]{flex:1;min-width:75px;accent-color:#74c9ff;cursor:pointer}
+.category-speed-adjust output{font-variant-numeric:tabular-nums;white-space:nowrap;min-width:76px;text-align:right;
+ color:#96ddfc;font-size:12px;font-weight:750}
+@media(max-width:580px){.category-speed-control{padding:10px 12px;margin:12px 0 -3px}
+ .category-speed-adjust{gap:7px}.category-speed-adjust span{font-size:10px}
+ .category-speed-adjust output{font-size:11px;min-width:70px}}
