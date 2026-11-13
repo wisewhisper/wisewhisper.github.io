@@ -1,48 +1,439 @@
 <!doctype html>
-<html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>25 · 주기와 진동수 | 물리 공식 실험실</title>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#081623">
+<title>25번 주기와 진동수 | 통합 진동 실험실</title>
 <style>
-:root{--bg:#0b1223;--panel:#141f34;--ink:#edf3ff;--muted:#b5c3db;--line:#34435d;--cyan:#5ee7dc;--gold:#ffd37b;--pink:#ffa2d0}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,'Malgun Gothic',sans-serif;line-height:1.6}main{max-width:1160px;margin:auto;padding:26px 20px 50px}h1{font-size:clamp(26px,5vw,38px);line-height:1.3;margin:8px 0}h2{font-size:20px;margin:0 0 14px}h3{font-size:16px;margin:0 0 8px}p{margin:8px 0}.eyebrow{color:var(--cyan);font-size:13px;letter-spacing:2px}.lead{color:var(--muted)}.formula{font-size:32px;color:var(--cyan);font-weight:750}.grid{display:grid;grid-template-columns:1.35fr 1fr;gap:18px;margin-top:20px}.card{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:22px;min-width:0}.wide{grid-column:1/-1}.row{display:flex;flex-wrap:wrap;align-items:center;gap:10px}.row>*{min-width:0}.controls{display:grid;gap:17px}.field{display:grid;gap:8px}.inputs{display:grid;grid-template-columns:1fr 100px;gap:12px;align-items:center}input,select,button{font:inherit;color:var(--ink)}input[type=range]{width:100%;accent-color:var(--cyan);min-height:44px}input[type=number],select{width:100%;background:#0d172a;border:1px solid #6d819e;border-radius:10px;padding:9px;min-height:44px}button{background:#243852;border:1px solid #627897;border-radius:10px;padding:10px 15px;min-height:46px;cursor:pointer;font-weight:650}button:hover{background:#35516e}button.primary{background:var(--cyan);color:#0b2130;border-color:var(--cyan)}button:disabled{opacity:.5;cursor:default}:focus-visible{outline:3px solid var(--gold);outline-offset:3px}.small{font-size:13px;color:var(--muted)}.note{border-left:3px solid var(--gold);padding-left:12px;color:var(--muted)}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0}.stat{background:#0d172a;border-radius:12px;padding:12px}.stat b{display:block;font-size:21px;color:var(--cyan)}.stat span{font-size:12px;color:var(--muted)}.math{background:#0d172a;padding:14px;border-radius:12px;overflow-wrap:anywhere}.svg{display:block;width:100%;height:auto;background:#0d172a;border-radius:12px}.graphgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.graphwrap{min-width:0}details{border-top:1px solid var(--line);padding:13px 0}summary{cursor:pointer;font-weight:650;min-height:40px;align-content:center}details p{color:var(--muted)}.scroll{overflow:auto}table{border-collapse:collapse;width:100%;min-width:410px}th,td{text-align:left;padding:11px;border-bottom:1px solid var(--line);white-space:nowrap}caption{text-align:left;color:var(--muted);margin:12px 0;font-size:13px}.badge{background:#2d3f56;color:var(--gold);padding:4px 9px;border-radius:6px}.prediction{background:#0d172a;padding:14px;border-radius:12px;margin-bottom:15px}.measure{border:1px solid #4c7180;border-radius:12px;padding:14px;margin-top:14px}.question{border:1px solid var(--line);border-radius:12px;padding:15px;margin:12px 0}.question details{padding-bottom:0}.foot{color:var(--muted);font-size:12px;margin-top:20px}@media(max-width:760px){main{padding:18px 12px 32px}.grid,.graphgrid{grid-template-columns:1fr}.card{padding:17px}.wide{grid-column:auto}.stats{gap:6px}.stat{padding:10px 7px}.stat b{font-size:17px}.inputs{grid-template-columns:1fr 90px}}
-</style></head><body><main>
-<header><div class="eyebrow">PHYSICS LAB / 25</div><h1>주기와 진동수</h1><div class="formula">T = 1/f</div><p class="lead">진동수를 바꾸면 한 번 진동하는 데 걸리는 시간은 어떻게 달라질까?</p></header>
-<div class="grid"><section class="card"><h2>① 예측 → 진동 관찰</h2><div class="prediction">진동수를 2배로 높이면 주기는 어떻게 될까? 먼저 예측한 뒤 오른쪽 조작부에서 확인하세요.</div>
-<svg id="scene" class="svg" viewBox="0 0 640 290" role="img" aria-label="왕복 진동과 위상 원을 연결한 실험 장면"><text x="22" y="30" fill="#b5c3db" font-size="16">한 주기 = 같은 위치·같은 운동 방향으로 되돌아오기</text><line x1="68" y1="115" x2="385" y2="115" stroke="#6d819e" stroke-width="3"/><line x1="225" y1="60" x2="225" y2="160" stroke="#6d819e" stroke-dasharray="5 6"/><text x="67" y="180" fill="#b5c3db" font-size="15">−A</text><text x="208" y="180" fill="#b5c3db" font-size="15">평형</text><text x="365" y="180" fill="#b5c3db" font-size="15">+A</text><circle id="particle" cx="375" cy="115" r="16" fill="#5ee7dc"/><path id="velocityArrow" stroke="#ffd37b" stroke-width="4" fill="none"/><text id="direction" x="110" y="215" fill="#ffd37b" font-size="16"></text><circle cx="510" cy="115" r="65" stroke="#6d819e" fill="none" stroke-width="2"/><path d="M500 44 L518 46 L510 59" stroke="#ffd37b" stroke-width="3" fill="none"/><line id="phaseRay" x1="510" y1="115" x2="575" y2="115" stroke="#5ee7dc" stroke-width="3"/><circle id="phaseDot" cx="575" cy="115" r="7" fill="#5ee7dc"/><text x="469" y="213" fill="#b5c3db" font-size="15">위상 원</text><text id="phaseText" x="22" y="265" fill="#edf3ff" font-size="16"></text></svg>
-<p class="small">위상 원 1회전과 왕복 진동 1회가 대응합니다. 실제 물체가 원을 따라 이동한다는 뜻은 아닙니다.</p>
-<div class="row"><button id="play" class="primary">시작</button><button id="restart">시간 재시작</button><button id="reset">전체 초기화</button></div>
-<div class="stats"><div class="stat"><span>실험 시간 t</span><b id="time"></b></div><div class="stat"><span>완료한 진동 수</span><b id="cycles"></b></div><div class="stat"><span>현재 변위 x</span><b id="position"></b></div></div>
-<div class="field"><label for="speed">재생 속도 (실험 시간의 흐름)</label><select id="speed"><option value="0.25">0.25배</option><option value="0.5">0.5배</option><option value="1" selected>1배</option><option value="2">2배</option></select></div><p class="small">재생 속도는 화면의 시간 흐름만 바꿉니다. 계산한 f와 T는 바뀌지 않습니다.</p>
-</section><section class="card"><h2>② 조작과 실시간 계산</h2><div class="controls"><div class="field"><label for="mode">독립적으로 조작할 물리량</label><select id="mode"><option value="f">진동수 f 조절 → 주기 T 계산</option><option value="T">주기 T 조절 → 진동수 f 계산</option></select></div>
-<div class="field"><label id="variableLabel" for="value">진동수 f (Hz)</label><div class="inputs"><input id="slider" aria-label="물리량 슬라이더" type="range" min="0.2" max="4" step="0.01" value="1"><input id="value" aria-label="물리량 숫자 입력" type="number" min="0.2" max="4" step="0.01" value="1"></div><span id="limits" class="small">범위: 0.20~4.00 Hz</span></div>
-<div class="field"><label for="amplitude">진폭 A (m)</label><div class="inputs"><input id="ampSlider" aria-label="진폭 슬라이더" type="range" min="0.1" max="1" step="0.05" value="0.5"><input id="amplitude" type="number" min="0.1" max="1" step="0.05" value="0.5"></div></div>
-<div class="math" id="calculation" aria-live="polite"></div><p class="small">T: 1회 진동에 걸리는 시간(s)<br>f: 1초당 진동 횟수(Hz = s⁻¹)<br>A: 최대 변위(m), N: 진동 횟수(무차원)</p><p id="notice" class="note" role="status">진동수·주기·진폭을 변경하면 시간을 0으로 되돌리고 일시정지합니다.</p></div>
-<div class="measure"><h3>여러 번 진동해 주기 측정하기</h3><label for="target">측정할 진동 횟수 N (1~10회)</label><input id="target" type="number" min="1" max="10" step="1" value="5"><div class="row" style="margin-top:10px"><button id="measureBtn">N회 자동 측정</button></div><p id="measurement">측정 전 · T = Δt/N, f = N/Δt</p><p class="small">0초에서 시작해 N회 진동 후 자동 정지합니다. 일시정지·재생은 측정 구간을 유지합니다.</p></div>
+:root{color-scheme:dark;--bg:#081623;--panel:#12293e;--surface:#1a374d;--line:#3d6078;--ink:#f0faff;--sub:#bbd4e5;--cyan:#70e9e1;--gold:#ffd189;--pink:#edacdf;--blue:#8fcaff}
+*{box-sizing:border-box}
+html,body{min-height:100%;margin:0;background:var(--bg);color:var(--ink);font:14px/1.49 system-ui,-apple-system,"Malgun Gothic",sans-serif}
+button,input,select{font:inherit}button{cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #b1f3ff;outline-offset:2px}
+button:disabled{cursor:default;opacity:.48}
+button{color:#f3fbff;background:#254860;border:1px solid #547d96;min-height:34px;padding:6px 10px;border-radius:8px;font-weight:700}
+button:hover:not(:disabled){background:#316078}button.primary{background:#087e8a;border-color:#7aeded}
+[hidden]{display:none!important}
+.app{height:100dvh;min-height:585px;overflow:hidden;padding:9px 11px;display:flex;flex-direction:column;gap:7px}
+header{display:flex;align-items:center;gap:12px;min-height:35px;flex:0 0 auto}
+header h1{font-size:clamp(19px,1.85vw,25px);line-height:1.2;margin:0;white-space:nowrap}
+header .sub{font-size:12px;color:var(--sub)}
+header #full{margin-left:auto}
+.tabs{display:flex;gap:6px;align-items:center;overflow-x:auto;min-height:37px;flex:0 0 auto;padding-bottom:3px}
+.tabs button{white-space:nowrap}.tabs button[aria-selected=true]{background:#087b8b;border-color:#95f1f1;box-shadow:inset 0 -2px #adfefc}
+.workspace{flex:1 1 auto;min-height:0;min-width:0;display:grid;grid-template-columns:minmax(0,4fr) minmax(250px,1fr);gap:9px}
+.left{min-height:0;min-width:0;display:flex;flex-direction:column;gap:7px}
+.sim,.plots{min-height:0;min-width:0;display:flex;flex-direction:column;gap:7px;flex:1 1 auto;background:var(--panel);border:1px solid var(--line);padding:10px 12px;border-radius:11px;overflow:hidden}
+.plots{display:none}
+.bar{display:flex;align-items:center;flex-wrap:wrap;gap:6px;flex:0 0 auto}
+.bar h2{font-size:16px;margin:0 10px 0 0}
+.bar button{font-size:12px;min-height:32px;padding:5px 9px}
+.bar .state{margin-left:auto;font-size:12px;color:#b8f1e5}
+.sceneBox{flex:1 1 auto;min-height:170px;display:flex}
+#scene{display:block;width:100%;height:100%;min-height:170px;background:#0b1d30;border:1px solid #365c73;border-radius:9px}
+#scene text,.chart text{font-family:system-ui,-apple-system,"Malgun Gothic",sans-serif}
+.measureFocus{flex:0 0 auto;background:#15374b;border:1px solid #3f6b7c;border-radius:9px;padding:7px 10px;display:none}
+.measureFocus .headline{display:flex;align-items:center;justify-content:space-between;gap:5px;flex-wrap:wrap;color:#f8da98;font-weight:750;font-size:12px}
+.measureFocus .row{display:flex;gap:8px;align-items:center;margin-top:5px}
+.measureFocus .row span{font-size:12px;color:#e5f5ff}
+.progress{height:9px;background:#1f5060;border:1px solid #396c7f;border-radius:9px;overflow:hidden;flex:1 1 auto}
+.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,#15a2ad,#83f0d9)}
+#measurementExplanation{color:#b8efdf;font-size:11px;margin:4px 0 0;line-height:1.4}
+#workspace[data-tab=measure] .measureFocus{display:block}
+#workspace[data-tab=measure] .sceneBox{min-height:155px}
+.caption{flex:0 0 auto;color:#b6d2e2;font-size:12px;line-height:1.45;margin:0}
+.liveNotice{flex:0 0 auto;color:#b2f2e2;font-size:12px;font-weight:700;line-height:1.44;min-height:18px}
+.resultStrip{flex:0 0 auto;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.meter{min-width:0;min-height:58px;background:#19374d;border:1px solid #426780;border-radius:9px;padding:7px 5px;text-align:center}
+.meter small{font-size:11px;white-space:nowrap;color:#b7d5e7;display:block}
+.meter strong{font-size:clamp(14px,1.4vw,20px);display:block;font-variant-numeric:tabular-nums;line-height:1.35;white-space:nowrap}
+.meter:first-child strong,.meter:nth-child(2) strong{color:var(--cyan)}.meter:nth-child(5) strong{color:var(--gold)}
+.meterFoot{margin:0;color:#bbd5e5;font-size:11px;flex:0 0 auto}
+.side{min-width:0;min-height:0;overflow-y:auto;scrollbar-width:thin;display:flex;flex-direction:column;gap:7px;padding-right:2px}
+.card{background:var(--panel);border:1px solid var(--line);padding:10px 11px;border-radius:11px}
+.card h2{font-size:15px;margin:0 0 9px}
+.field{margin:0 0 10px}
+.field label{font-size:12px;font-weight:750;display:flex;justify-content:space-between;align-items:center;gap:6px}
+.field output{color:#83eeee;font-variant-numeric:tabular-nums}
+.field input[type=range]{height:24px;display:block;width:100%;accent-color:#68e8e1;margin:1px 0}
+.field select,.field input[type=number]{width:100%;margin-top:4px;min-height:34px;border:1px solid #527d95;background:#1c3b52;color:#f3fbff;border-radius:8px;padding:6px 8px}
+.ends{display:flex;justify-content:space-between;font-size:10px;color:#9ebacd}
+.buttons{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.buttons button{font-size:12px;padding:5px;min-height:33px}
+.modehint{border:1px solid #386e7e;background:#183c50;border-radius:8px;font-size:11px;font-weight:650;color:#b9f4e3;padding:7px;line-height:1.5;margin:5px 0}
+.calc{padding:8px;border:1px solid #466d80;border-radius:8px;background:#19384d;line-height:1.68;font-size:12px}
+.calc b{color:#8cece5}
+.note{font-size:11px;color:#b7d2e3;line-height:1.55;margin:6px 0}
+.compare{min-width:0;flex:0 0 auto;overflow-x:auto;border-radius:9px;background:#0f2336;border:1px solid #37566e;padding:7px}
+table{font-size:12px;white-space:nowrap;border-collapse:collapse;width:100%;text-align:center}
+th,td{padding:5px 7px;border-bottom:1px solid #35536a}th{color:#dceef7}
+.graphgrid{min-height:0;min-width:0;display:grid;grid-template-columns:1fr 1fr;gap:8px;flex:1 1 auto}
+.graphbox{min-height:0;min-width:0;display:flex;flex-direction:column;gap:5px;background:#0c2033;border:1px solid #35566e;border-radius:9px;padding:8px}
+.graphbox h3{font-size:14px;margin:0}
+.chart{min-height:175px;width:100%;height:100%;flex:1 1 auto;border:1px solid #37576d;border-radius:8px;background:#0b1c30}
+.graphbox p{font-size:11px;color:#bed5e6;line-height:1.45;margin:0}
+.legend{display:flex;flex:0 0 auto;gap:12px;flex-wrap:wrap;color:#bcd6e6;font-size:11px}
+.legend span:before{content:"";display:inline-block;width:12px;height:3px;vertical-align:middle;margin-right:4px;background:currentColor}
+.legend .now{color:#70e9e1}.legend .a{color:#ffd187}.legend .b{color:#efa7dc}.legend .point{color:#f6ffff}
+.concepts{display:none;min-width:0;min-height:0;overflow-y:auto}
+.lessons{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.lesson{border:1px solid var(--line);background:var(--panel);border-radius:11px;padding:16px}
+.lesson h2{color:#8be8eb;font-size:17px;margin:0 0 9px}
+.lesson p{margin:7px 0;line-height:1.75}
+.lesson .formula{background:#1b3a50;border:1px solid #4a7087;padding:11px;border-radius:9px;font-size:18px}
+.lesson.wide{grid-column:1/-1}
+.lesson details{border-top:1px solid #37566d;padding:8px 0}
+.lesson summary{cursor:pointer;font-weight:700}
+#workspace[data-tab=graphs] .sim{display:none}
+#workspace[data-tab=graphs] .plots{display:flex}
+#workspace[data-tab=concept]{display:block}
+#workspace[data-tab=concept] .left,#workspace[data-tab=concept] .side{display:none}
+#workspace[data-tab=concept] .concepts{display:block}
+@media(min-width:901px) and (max-height:750px){.app{padding:7px 9px;gap:5px}.sim,.plots{padding:7px 9px;gap:5px}.meter{min-height:50px;padding:4px}.card{padding:8px}.field{margin-bottom:6px}}
+@media(max-width:900px){.app{height:auto;min-height:100dvh;overflow:visible}.workspace{display:flex;flex-direction:column}.left{min-height:565px}.sim{min-height:510px}.sceneBox{min-height:345px}.plots{min-height:760px}.side{overflow:visible}.graphgrid{grid-template-columns:1fr}.graphbox{min-height:320px}.chart{height:240px;flex:none}.lessons{grid-template-columns:1fr}.lesson.wide{grid-column:auto}.concepts{overflow:visible}.tabs{position:sticky;top:0;z-index:5;background:var(--bg);padding-top:4px}}
+@media(max-width:460px){.app{padding:7px;gap:5px}header h1{font-size:18px}header .sub,header #full{display:none}.tabs button{font-size:12px;padding:6px 8px}.bar h2{width:100%}.left{min-height:690px}.sceneBox{min-height:340px}.resultStrip{gap:3px}.meter{min-height:53px;padding:5px 1px}.meter small{font-size:9px;letter-spacing:-.04em}.meter strong{font-size:10px;letter-spacing:-.04em}.card{padding:9px}}
+</style></head>
+<body>
+<div class="app">
+<header><h1>〰️ 25번 · 주기와 진동수 실험실</h1><span class="sub">왕복 운동 · 한 주기 · N회 측정 · 반비례 그래프</span><button type="button" id="full">⛶ 전체화면</button></header>
+<nav class="tabs" role="tablist" aria-label="주기와 진동수 실험">
+<button type="button" class="tab" data-tab="osc" role="tab" aria-selected="true">① 왕복 진동·위상</button>
+<button type="button" class="tab" data-tab="measure" role="tab" aria-selected="false">② 주기 직접 측정</button>
+<button type="button" class="tab" data-tab="inverse" role="tab" aria-selected="false">③ 진동수·주기 관계</button>
+<button type="button" class="tab" data-tab="graphs" role="tab" aria-selected="false">④ 그래프·비교</button>
+<button type="button" class="tab" data-tab="concept" role="tab" aria-selected="false">⑤ 개념 설명</button>
+</nav>
+<div class="workspace" id="workspace" data-tab="osc">
+<section class="left">
+ <section class="sim">
+  <div class="bar"><h2 id="simTitle">위상 원 1회전 = 왕복 진동 1회</h2>
+   <button id="start" class="primary" type="button">▶ 시작</button><button id="pause" type="button">Ⅱ 일시정지</button><button id="restart" type="button">↺ 처음부터</button>
+   <span class="state" id="state">○ 대기 중</span>
+  </div>
+  <div class="sceneBox"><svg id="scene" viewBox="0 0 980 440" role="img" aria-label="실제 왕복 진동을 하는 점과 동일한 위상을 나타내는 원운동 개념도 및 진행률 시각화"></svg></div>
+  <div class="measureFocus" aria-label="N회 진동 측정 진행 상황">
+   <div class="headline"><span id="measureTitle">진동 5회 측정 준비</span><span id="measureTime">목표 시간: 5.00 s</span></div>
+   <div class="row"><div class="progress" id="progress" role="progressbar" aria-label="N회 진동 측정 진행도" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="progressFill"></i></div><span id="progressText">0.0%</span></div>
+   <p id="measurementExplanation">▶ 측정 시작을 누르면 5회 진동 후 자동으로 멈추며 주기를 계산합니다.</p>
+  </div>
+  <div class="resultStrip" aria-label="실시간 진동 결과" aria-live="polite">
+   <div class="meter"><small>진동수 f</small><strong id="fValue">1.000 Hz</strong></div>
+   <div class="meter"><small>주기 T</small><strong id="periodValue">1.000 s</strong></div>
+   <div class="meter"><small>진폭 A</small><strong id="ampValue">0.50 m</strong></div>
+   <div class="meter"><small>경과 시간 t</small><strong id="timeValue">0.00 s</strong></div>
+   <div class="meter"><small>완료 진동 N</small><strong id="cyclesValue">0회</strong></div>
+  </div>
+  <p class="liveNotice" id="notice">시작 버튼으로 왕복 진동을 관찰하세요.</p>
+  <p class="meterFoot" id="footerHint">위상 원은 진동을 설명하는 개념도이며, 물체가 실제로 원형 경로를 이동하는 것은 아닙니다.</p>
+ </section>
+ <section class="plots">
+  <div class="bar"><h2>변위–시간과 주기–진동수의 관계</h2>
+   <span class="state">공통 물리 축척 · 조건 A/B 비교</span></div>
+  <div class="legend"><span class="now">현재 조건</span><span class="a">조건 A</span><span class="b">조건 B</span><span class="point">실시간 측정점</span></div>
+  <div class="graphgrid">
+   <section class="graphbox"><h3>진동수 f – 주기 T (반비례)</h3><svg class="chart" id="relationGraph" viewBox="0 0 510 290" role="img" aria-label="진동수 증가에 따라 주기가 작아지는 반비례 곡선, 현재 조건 및 A B 점"></svg><p>고정 축: f=0.20~4.00 Hz, T=0~5.00 s</p></section>
+   <section class="graphbox"><h3>변위 x – 시간 t (진동 비교)</h3><svg class="chart" id="motionGraph" viewBox="0 0 510 290" role="img" aria-label="변위 시간 그래프, 현재 조건과 조건 A B 파형을 같은 축척에서 비교"></svg><p>세로축 고정 ±1.0 m · 가로축 5초 구간</p></section>
+  </div>
+  <div class="compare"><table aria-label="저장한 조건 A B와 현재 값 비교"><thead><tr><th>조건</th><th>f (Hz)</th><th>T (s)</th><th>A (m)</th><th>5초 진동 수</th><th>10회 시간 (s)</th></tr></thead><tbody id="comparison"></tbody></table></div>
+  <p class="caption" id="compareNote">조건 A·B를 저장하면 같은 시간 축과 변위 축에서 진동을 비교합니다.</p>
+ </section>
 </section>
-<section class="card wide"><h2>③ 그래프로 관계 읽기</h2><div class="graphgrid"><div class="graphwrap"><h3>변수 관계 · 진동수와 주기</h3><p class="small">가로축 f를 변화시켜 T = 1/f를 계산합니다. 진폭과 무관합니다.</p><svg id="relation" class="svg" viewBox="0 0 540 320" role="img" aria-label="진동수 주기 반비례 그래프"></svg></div><div class="graphwrap"><h3>시간 변화 · 변위</h3><p class="small">현재 조건에서 x(t) = A cos(2πft). 최근 5초를 표시하며, 처음에는 0~5초를 표시합니다. 흰 점은 현재 상태입니다.</p><svg id="wave" class="svg" viewBox="0 0 540 320" role="img" aria-label="시간에 따른 변위 그래프"></svg><p class="small">시간이 5초를 넘으면 그래프 구간이 함께 이동합니다. 현재 조건과 저장 조건을 같은 시간축에서 비교합니다.</p></div></div></section>
-<section class="card wide"><h2>④ 조건 A·B 비교</h2><div class="row"><button id="saveA">현재 조건 → A 저장</button><button id="saveB">현재 조건 → B 저장</button><button id="clear">비교 지우기</button></div><p class="small">두 조건 모두 x(0) = +A, 왼쪽으로 진동을 시작합니다. 그래프에서 A는 노란 파선, B는 분홍 점선입니다.</p><div class="scroll"><table><caption>동일한 5초 구간에서 비교 · N₅ = 5f (정수가 아닐 수 있는 진동 수)</caption><thead><tr><th>조건</th><th>f (Hz)</th><th>T (s)</th><th>A (m)</th><th>N₅</th></tr></thead><tbody id="compare"></tbody></table></div><p id="comparison" class="small"></p></section>
-<section class="card wide"><h2>⑤ 예측 → 조작 → 관찰 → 설명</h2><div class="question"><span class="badge">기본</span><p>f = 1 Hz를 A에 저장하고 f = 2 Hz를 B에 저장해 보세요. 5초 동안의 진동 수와 주기는 각각 어떻게 달라지나요?</p><details><summary>해설 펼치기</summary><p>A: T = 1 s, 5초에 5회. B: T = 0.5 s, 5초에 10회. 진동수는 2배, 주기는 절반이 됩니다.</p></details></div><div class="question"><span class="badge">응용</span><p>f = 0.8 Hz로 8회 자동 측정하세요. 측정 시간이 얼마인가요? T = Δt/N으로 다시 확인하세요.</p><details><summary>해설 펼치기</summary><p>Δt = N/f = 8/0.8 = 10 s, T = 10/8 = 1.25 s입니다. 한 번보다 여러 번의 진동 시간을 측정하면 실제 실험에서 시간 측정의 상대 오차를 줄이는 데 도움이 됩니다.</p></details></div><div class="question"><span class="badge">도전</span><p>f를 고정하고 A를 0.25 m에서 0.50 m로 바꿔 보세요. 그래프와 주기는 어떻게 변하나요? +A에서 −A까지 이동하는 시간은 한 주기인가요?</p><details><summary>해설 펼치기</summary><p>이 모형에서 진폭이 2배가 되면 변위 그래프의 높이는 2배가 되지만 T는 같습니다. +A에서 −A까지는 T/2입니다. 한 주기를 세려면 위치와 운동 방향이 함께 반복되어야 합니다. 실제 진동계에서는 진폭에 따라 주기가 달라질 수도 있습니다.</p></details></div></section>
-<section class="card wide"><h2>⑥ 오개념과 적용 조건</h2><details><summary>“주기가 클수록 진동수도 크다?”</summary><p>반비례 관계입니다. 주기 조절 모드에서 T를 1 s → 2 s로 바꾸면 f는 1 Hz → 0.5 Hz가 됩니다. 항상 fT = 1입니다.</p></details><details><summary>“평형점을 한 번 지날 때마다 진동 1회?”</summary><p>한 주기에 평형점을 두 번 지납니다. +A에서 출발해 평형점, −A, 평형점, +A로 되돌아오는 전체 과정이 1회 진동입니다.</p></details><details open><summary>적용 조건·모형의 한계</summary><p>T = 1/f는 일정하게 반복되는 주기 운동에 적용합니다. 장면은 진폭과 진동수가 일정한 이상적인 사인파 진동이며 감쇠와 외력을 별도로 계산하지 않습니다. 특정 용수철·진자의 질량이나 길이로 진동수를 결정하는 모형은 아닙니다. 진폭 변화가 주기에 영향을 주지 않는 것은 이 실험의 설정입니다.</p><p>장면의 수평 축은 ±1 m에 해당하는 고정 축척으로 그리며 원은 위상을 설명하는 개념도입니다. 그래프의 물리량·시간은 SI 단위로 표시합니다. f = 0은 주기적인 진동이 없고 유한한 T를 정의할 수 없어 입력 범위에서 제외했습니다. 두 독립 모드 모두 f 0.2~4 Hz, T 0.25~5 s 범위입니다.</p></details></section></div><p class="foot">물리 공식 40 · 단일 HTML · 외부 연결 없이 실행 · 25 주기와 진동수</p>
-</main><script>
-'use strict';
-const $=id=>document.getElementById(id), state={f:1,A:.5,t:0,running:false,speed:1,measure:null,result:null,Acase:null,Bcase:null};
-const fmt=(n,d=3)=>n.toFixed(d), period=f=>1/f, motion=(f,A,t)=>({x:A*Math.cos(2*Math.PI*f*t),v:-2*Math.PI*f*A*Math.sin(2*Math.PI*f*t)});
-function stop(){state.running=false;$('play').textContent='시작';}
-function resetTime(message){stop();state.t=0;state.measure=null;state.result=null;$('notice').textContent=message;update();}
-function setVariable(raw){const mode=$('mode').value,min=mode==='f'?.2:.25,max=mode==='f'?4:5;let n=Number(raw);if(!Number.isFinite(n)||raw===''){syncInputs();$('notice').textContent='유효한 양수를 입력하세요. 이전 조건을 유지했습니다.';return}n=Math.max(min,Math.min(max,n));state.f=mode==='f'?n:1/n;syncInputs();resetTime('조건 변경: 0초로 되돌리고 일시정지했습니다. 측정 결과도 초기화했습니다.');}
-function setAmplitude(raw){let n=Number(raw);if(!Number.isFinite(n)||raw===''){syncInputs();return}state.A=Math.max(.1,Math.min(1,n));syncInputs();resetTime('진폭 변경: 0초로 되돌리고 일시정지했습니다. f와 T는 그대로입니다.');}
-function syncInputs(){const m=$('mode').value;let n=m==='f'?state.f:period(state.f);for(const id of ['slider','value']){$(id).min=m==='f'?.2:.25;$(id).max=m==='f'?4:5;$(id).value=Number(n.toFixed(6))}$('variableLabel').textContent=m==='f'?'진동수 f (Hz)':'주기 T (s)';$('limits').textContent=m==='f'?'범위: 0.20~4.00 Hz':'범위: 0.25~5.00 s';$('ampSlider').value=$('amplitude').value=state.A;}
-function update(){const s=state, T=period(s.f), m=motion(s.f,s.A,s.t),phase=((s.f*s.t)%1+1)%1; $('time').textContent=fmt(s.t)+' s';$('cycles').textContent=Math.floor(s.f*s.t+1e-9)+' 회';$('position').textContent=fmt(m.x)+' m';$('calculation').innerHTML='<b>T = 1/f</b><br>T = 1/('+fmt(s.f)+' Hz) = <b>'+fmt(T)+' s</b><br>f = 1/T = '+fmt(s.f)+' Hz<br>fT = 1 · 진폭 A = '+fmt(s.A,2)+' m';
-$('particle').setAttribute('cx',225+150*m.x);let x=225+150*m.x,dir=Math.abs(m.v)<1e-7?0:Math.sign(m.v),end=x+dir*42;$('velocityArrow').setAttribute('d',dir?`M ${x} 145 L ${end} 145 M ${end-dir*10} 139 L ${end} 145 L ${end-dir*10} 151`:'');$('direction').textContent=dir===0?'끝점 · 순간 속도 0':dir>0?'운동 방향 → (양의 방향)':'운동 방향 ← (음의 방향)';let angle=2*Math.PI*phase,cx=510+65*Math.cos(angle),cy=115-65*Math.sin(angle);$('phaseRay').setAttribute('x2',cx);$('phaseRay').setAttribute('y2',cy);$('phaseDot').setAttribute('cx',cx);$('phaseDot').setAttribute('cy',cy);$('phaseText').textContent='현재 주기의 진행: '+fmt(phase*100,1)+'% · T = '+fmt(T)+' s';
-if(s.measure){const n=s.measure.N;$('measurement').textContent='측정 중 · 시작 0 s · 경과 '+fmt(s.t)+' s / '+n+'회 · 목표 '+fmt(n/s.f)+' s';}else if(s.result){const r=s.result;$('measurement').textContent='측정 완료 · Δt = '+fmt(r.dt)+' s, N = '+r.N+'회 → T = '+fmt(r.dt/r.N)+' s, f = '+fmt(r.N/r.dt)+' Hz';}else $('measurement').textContent='측정 전 · T = Δt/N, f = N/Δt';drawRelation();drawWave();}
-function axes(xlabel,ylabel,ymin,ymax,xticks,yticks){let out=`<g font-family="system-ui,sans-serif" font-size="13" fill="#b5c3db"><text x="18" y="22">${ylabel}</text><text x="435" y="308">${xlabel}</text>`;for(const v of yticks){let y=270-(v-ymin)/(ymax-ymin)*225;out+=`<line x1="60" y1="${y}" x2="500" y2="${y}" stroke="#2b3d56"/><text x="50" y="${y+5}" text-anchor="end">${v}</text>`}for(const [x,label] of xticks)out+=`<text x="${x}" y="289" text-anchor="middle">${label}</text>`;return out+`<path d="M60 40V270H505" stroke="#9eafc9" fill="none"/></g>`;}
-function path(points,color,dash=''){return `<polyline points="${points}" fill="none" stroke="${color}" stroke-width="2.5" ${dash?`stroke-dasharray="${dash}"`:''}/>`}
-function drawRelation(){const X=f=>60+(f-.2)/3.8*440,Y=T=>270-T/5*225;let out=axes('f (Hz)','T (s)',0,5,[.2,1,2,3,4].map(f=>[X(f),f]),[0,1,2,3,4,5]);let pts=[];for(let i=0;i<=400;i++){let f=.2+3.8*i/400;pts.push(X(f)+','+Y(1/f))}out+=path(pts.join(' '),'#5ee7dc');for(const [name,c,color] of [['A',state.Acase,'#ffd37b'],['B',state.Bcase,'#ffa2d0'],['현재',state,'#5ee7dc']]){if(c)out+=`<circle cx="${X(c.f)}" cy="${Y(1/c.f)}" r="6" fill="${color}" stroke="#0d172a" stroke-width="2"/><text x="${Math.min(458,X(c.f)+10)}" y="${Math.max(40,Y(1/c.f)-10)}" font-size="13" fill="${color}">${name}</text>`}$('relation').innerHTML=out;}
-function drawWave(){const begin=Math.max(0,state.t-5),X=t=>60+(t-begin)/5*440,Y=x=>157.5-x/1.1*112.5;let out=axes('t (s)','x (m)',-1.1,1.1,[0,1,2,3,4,5].map(t=>[X(begin+t),fmt(begin+t,1)]),[-1,-.5,0,.5,1]);for(const [c,color,dash] of [[state.Acase,'#ffd37b','8 5'],[state.Bcase,'#ffa2d0','2 5'],[state,'#5ee7dc','']]){if(!c)continue;let pts=[];for(let i=0;i<=800;i++){let t=begin+5*i/800;pts.push(X(t)+','+Y(motion(c.f,c.A,t).x))}out+=path(pts.join(' '),color,dash)}out+=`<circle cx="${X(state.t)}" cy="${Y(motion(state.f,state.A,state.t).x)}" r="6" fill="#edf3ff"/><text x="75" y="37" fill="#edf3ff" font-size="13">현재 t = ${fmt(state.t,2)} s</text>`;$('wave').innerHTML=out;}
-function compare(){let rows='';for(const [name,c]of[['A',state.Acase],['B',state.Bcase]])rows+=c?`<tr><th>${name}</th><td>${fmt(c.f)}</td><td>${fmt(1/c.f)}</td><td>${fmt(c.A,2)}</td><td>${fmt(5*c.f,2)}</td></tr>`:`<tr><th>${name}</th><td colspan="4">저장된 조건 없음</td></tr>`;$('compare').innerHTML=rows;const a=state.Acase,b=state.Bcase;$('comparison').textContent=a&&b?'B/A: 진동수 비 = '+fmt(b.f/a.f,2)+', 주기 비 = '+fmt(a.f/b.f,2)+' · 두 비의 곱 = 1':'조건을 저장하면 두 조건의 진동수 비와 주기 비를 표시합니다.';drawRelation();drawWave();}
-function advance(dt){if(!state.running)return;state.t+=dt*state.speed;if(state.measure&&state.t>=state.measure.N/state.f){const N=state.measure.N;state.t=N/state.f;state.result={N,dt:state.t};state.measure=null;stop();$('notice').textContent='N회 측정 완료: 같은 위치와 위상으로 돌아온 시점에 자동 정지했습니다.';}update();}
-$('slider').oninput=e=>setVariable(e.target.value);$('value').onchange=e=>setVariable(e.target.value);$('ampSlider').oninput=e=>setAmplitude(e.target.value);$('amplitude').onchange=e=>setAmplitude(e.target.value);$('mode').onchange=()=>{syncInputs();$('notice').textContent='조작 모드만 전환했습니다. 현재 물리 조건과 시간은 유지됩니다.';};$('speed').onchange=e=>state.speed=Number(e.target.value);
-$('play').onclick=()=>{if(state.running)stop();else{state.running=true;$('play').textContent='일시정지'} };$('restart').onclick=()=>resetTime('시간 재시작: 조건과 비교 기록은 유지하고 0초에서 일시정지했습니다.');$('reset').onclick=()=>{Object.assign(state,{f:1,A:.5,t:0,running:false,speed:1,measure:null,result:null,Acase:null,Bcase:null});$('mode').value='f';$('speed').value='1';$('target').value='5';syncInputs();resetTime('전체 초기화: f = 1 Hz, A = 0.50 m, t = 0 s. 비교 기록을 지웠습니다.');compare();};
-$('measureBtn').onclick=()=>{let n=Number($('target').value);if(!Number.isFinite(n)||$('target').value===''){n=5}n=Math.round(Math.max(1,Math.min(10,n)));$('target').value=n;state.t=0;state.result=null;state.measure={N:n};state.running=true;$('play').textContent='일시정지';$('notice').textContent='N회 측정을 시작했습니다. 입력 조건을 변경하면 측정이 취소됩니다.';update();};
-for(const name of ['A','B'])$('save'+name).onclick=()=>{state[name+'case']={f:state.f,A:state.A};compare();};$('clear').onclick=()=>{state.Acase=state.Bcase=null;compare();};
-let previous=null;function frame(now){if(previous!==null&&!document.hidden)advance((now-previous)/1000);previous=now;requestAnimationFrame(frame);}document.addEventListener('visibilitychange',()=>{previous=null;});
-// 명시적인 검증용 인터페이스: 화면과 동일한 계산·상태 갱신 사용.
-window.lab={state,period,motion,advance,setVariable,setAmplitude};syncInputs();update();compare();requestAnimationFrame(frame);
-</script></body></html>
+<aside class="side" aria-label="실험 조작 패널">
+ <section class="card">
+  <h2>진동 조건 조작</h2>
+  <div class="field"><label for="controlMode">독립적으로 조절할 물리량</label><select id="controlMode">
+   <option value="f">진동수 f 조절 → 주기 계산</option><option value="T">주기 T 조절 → 진동수 계산</option>
+  </select></div>
+  <div class="field" id="fField"><label for="fSlider">진동수 f <output id="fOut">1.00 Hz</output></label>
+   <input id="fSlider" type="range" min=".2" max="4" step=".01" value="1"><div class="ends"><span>0.20 Hz</span><span>4.00 Hz</span></div></div>
+  <div class="field" id="TField" hidden><label for="TSlider">주기 T <output id="TOut">1.00 s</output></label>
+   <input id="TSlider" type="range" min=".25" max="5" step=".01" value="1"><div class="ends"><span>0.25 s</span><span>5.00 s</span></div></div>
+  <div class="field"><label for="amplitude">진폭 A <output id="ampOut">0.50 m</output></label>
+   <input id="amplitude" type="range" min=".1" max="1" step=".05" value=".5"><div class="ends"><span>0.10 m</span><span>1.00 m</span></div></div>
+  <div class="field"><label for="rate">화면 재생 배율</label><select id="rate">
+   <option value=".25">0.25배 · 느리게</option><option value=".5">0.5배</option><option value="1" selected>1배 · 기준</option><option value="2">2배 · 빠르게</option>
+  </select></div>
+  <div class="field" id="targetField" hidden><label for="targetN">측정할 진동 횟수 N</label>
+   <input id="targetN" type="range" min="1" max="10" step="1" value="5"><div class="ends"><span>1회</span><output id="NOut">5회</output><span>10회</span></div></div>
+  <div class="buttons" id="stepButtons">
+   <button id="quarter" type="button">¼ 주기</button><button id="half" type="button">½ 주기</button>
+   <button id="threeQuarter" type="button">¾ 주기</button><button id="fullPeriod" type="button">1주기</button>
+  </div>
+  <div class="buttons" id="measureButtons" hidden>
+   <button id="measureStart" class="primary" type="button">▶ N회 측정 시작</button>
+   <button id="measureStop" type="button">측정 취소</button>
+  </div>
+  <p class="modehint" id="modeHint">주기 T는 같은 위치·같은 운동 방향으로 돌아오는 데 걸리는 시간입니다.</p>
+  <div class="buttons"><button id="doubleF" type="button">진동수 2배</button><button id="halfF" type="button">진동수 ½배</button><button id="reset" type="button">전체 초기화</button><button id="toGraphs" type="button">그래프 보기</button></div>
+ </section>
+ <section class="card">
+  <h2>계산 및 조건 비교</h2><div class="calc" id="equation">T=1/f</div>
+  <div class="buttons" style="margin-top:7px"><button id="saveA" type="button">조건 A 저장</button><button id="saveB" type="button">조건 B 저장</button><button id="loadA" type="button">A 불러오기</button><button id="loadB" type="button">B 불러오기</button></div>
+  <p class="note" id="savedText">진동수만 바꾼 조건을 A·B로 저장하면 주기의 차이를 쉽게 비교할 수 있습니다.</p>
+  <p class="note">배속은 재생 시간을 조절하는 기능입니다. 진동수와 주기의 물리적 계산값은 바뀌지 않습니다.</p>
+ </section>
+</aside>
+<section class="concepts" aria-label="주기와 진동수 개념 설명">
+ <div class="lessons">
+  <article class="lesson"><h2>① 한 번의 진동과 주기</h2>
+   <div class="formula">T = 1/f</div><p>주기 T는 같은 운동 상태가 반복될 때까지 걸리는 시간입니다. +A에서 출발하면 평형점 → −A → 평형점 → +A로 돌아오며, 이때 <b>위치와 운동 방향</b>이 처음과 같아져야 한 주기입니다.</p><p>주기 T는 초(s)로 표시합니다. 주기가 길수록 천천히 반복됩니다.</p></article>
+  <article class="lesson"><h2>② 진동수와 여러 번 진동 측정</h2>
+   <div class="formula">f = 1/T = N/Δt<br>T = Δt/N</div><p>진동수 f는 1초 동안 반복되는 진동 횟수입니다. 단위 Hz(헤르츠)는 s⁻¹입니다. 진동 횟수가 N이고 걸린 시간이 Δt이면, 평균 주기는 Δt/N으로 계산합니다.</p><p>실제 실험에서 여러 주기를 측정하면 시작·종료 시각의 측정 오차를 줄이는 데 도움이 됩니다.</p></article>
+  <article class="lesson"><h2>③ 왕복 진동과 위상 원의 관계</h2><p>실험 화면 오른쪽의 위상 원은 원운동을 <b>수평축에 투영한 개념도</b>입니다. 물체는 왼쪽 왕복 직선 위에서만 움직이며, 진동할 때마다 위상은 2π씩 증가합니다.</p><div class="formula">x(t) = A cos(2πft)<br>v(t) = −2πfA sin(2πft)</div><p>t=0에서 x=+A이고 속도는 0입니다. T/4일 때 x=0이며 음의 방향으로 가장 빠르게 지나갑니다.</p></article>
+  <article class="lesson"><h2>④ 진폭과 주기의 차이</h2><p>진폭 A는 평형 위치에서 가장 먼 거리입니다. 이 실험실은 이상적인 등주기 진동을 가정하므로 A만 바꾸어도 주기 T는 변하지 않습니다. 하지만 최대 진동 속력 2πfA는 진폭에 따라 달라집니다.</p><p>실제 비선형 진자 등에서는 진폭이 커질 때 주기가 달라질 수 있으므로 모든 진동에 무조건 적용할 수는 없습니다.</p></article>
+  <article class="lesson"><h2>⑤ 그래프 해석법</h2><p>진동수–주기 그래프는 반비례 곡선입니다. 진동수가 2배이면 주기는 1/2배입니다. 시간–변위 그래프에서는 마루와 다음 마루 사이의 시간이 주기 T, 중심에서 가장 멀리 떨어진 변위의 크기가 진폭 A입니다.</p><p>두 그래프는 고정된 축척으로 그려져 슬라이더를 움직일 때 값의 변화를 직접 비교할 수 있습니다.</p></article>
+  <article class="lesson"><h2>⑥ 적용 범위와 화면 재생</h2><p>이 프로그램은 일정한 진폭 A와 진동수 f를 가진 이상적인 1차원 정현 진동을 나타냅니다. 감쇠·외력·질량·용수철 상수·중력의 영향을 별도로 계산하지 않습니다. 위상 원과 빛나는 물체는 개념을 이해하기 위한 표현입니다.</p><p>재생 배율은 표시용 시간만 바꾸며 주기·진동수 수치에는 영향을 주지 않습니다. 실제 0.2~4 Hz의 진동을 계산하고, 화면 주사율에 따라 높은 배속에서 움직임이 부드럽지 않을 수 있으므로 ¼ 주기 단계 버튼을 활용하세요.</p></article>
+  <article class="lesson wide"><h2>⑦ 예측·관찰·설명 탐구</h2>
+   <details><summary>진동수가 1 Hz에서 2 Hz로 바뀌면?</summary><p>T=1/f이므로 주기는 1초에서 0.5초로 줄어듭니다. 5초 동안의 진동 횟수는 5회에서 10회로 늘어납니다. ③ 탭에서 확인하고 ④ 탭에 두 조건을 저장하세요.</p></details>
+   <details><summary>f=0.8 Hz에서 8회 자동 측정한다면?</summary><p>예상 경과 시간은 Δt=8/0.8=10초입니다. 따라서 T=10/8=1.25초입니다. ② 탭에서 실제로 N회 재생 후 자동 정지하는지 확인하세요.</p></details>
+   <details><summary>+A에서 −A까지 이동한 시간은 한 주기일까요?</summary><p>아닙니다. 반대쪽 끝점까지 이동하면 반 주기 T/2입니다. 원래 끝점으로 돌아와 같은 운동 상태가 되어야 한 주기입니다.</p></details>
+   <details><summary>평형점을 지날 때마다 진동 1회일까요?</summary><p>그렇지 않습니다. 한 주기 동안 평형점을 두 번 지나므로 평형점을 지나는 횟수만으로 진동 횟수를 세면 안 됩니다.</p></details>
+   <details><summary>주기 조절 모드에서 T=2 s로 설정하면?</summary><p>f=1/T=0.5 Hz입니다. 이는 진동수가 절반이 되었다는 뜻입니다. 진동의 크기(진폭)는 영향을 받지 않습니다.</p></details>
+  </article>
+ </div>
+</section>
+</div>
+</div>
+<script>
+(function(){
+"use strict";
+const $=id=>document.getElementById(id),TAU=Math.PI*2;
+const defaults={f:1,A:.5,rate:1,targetN:5,mode:"f"};
+const s={...defaults,tab:"osc",t:0,running:false,last:null,measurement:null,completed:null,saves:{A:null,B:null}};
+const clamp=(x,a,b)=>Math.max(a,Math.min(x,b)),fmt=(n,d=2)=>Number(n).toFixed(d);
+const T=(o=s)=>1/o.f;
+const xAt=(time,o=s)=>o.A*Math.cos(TAU*o.f*time);
+const vAt=(time,o=s)=>-TAU*o.f*o.A*Math.sin(TAU*o.f*time);
+const copy=()=>({f:s.f,A:s.A});
+const svgText=(x,y,z,color="#d7edfc",size=14,anchor="middle",weight=650)=>'<text x="'+x+'" y="'+y+'" fill="'+color+'" font-size="'+size+'" font-weight="'+weight+'" text-anchor="'+anchor+'">'+z+'</text>';
+function plotAxes(w,h,xmin,xmax,ymin,ymax,xlabel,ylabel){
+ const L=58,R=w-16,top=28,bottom=h-42, X=x=>L+(x-xmin)/(xmax-xmin)*(R-L),Y=y=>bottom-(y-ymin)/(ymax-ymin)*(bottom-top);
+ let out='<rect width="'+w+'" height="'+h+'" fill="#0a2034" rx="9"/>';
+ for(let k=0;k<=4;k++){
+  const xx=xmin+(xmax-xmin)*k/4,yy=ymin+(ymax-ymin)*k/4;
+  out+='<path d="M'+L+' '+fmt(Y(yy),2)+'H'+R+' M'+fmt(X(xx),2)+' '+top+'V'+bottom+'" stroke="#324f65" fill="none" stroke-width="1"/>';
+  out+=svgText(L-8,fmt(Y(yy)+4,1),fmt(yy,Math.abs(ymax-ymin)>15?0:2),"#b1cadb",10,"end");
+  out+=svgText(fmt(X(xx),1),bottom+17,fmt(xx,xmax>15?0:2),"#b1cadb",10);
+ }
+ out+='<path d="M'+L+' '+top+'V'+bottom+'H'+R+'" stroke="#b2d0e0" fill="none" stroke-width="1.4"/>';
+ out+=svgText(7,17,ylabel,"#e0f1ff",12,"start",750)+svgText(R,h-8,xlabel,"#e0f1ff",12,"end",750);
+ return {X,Y,html:out};
+}
+function plotLine(g,fun,xmin,xmax,color,dash="",weight=2.8){
+ let path="";for(let i=0;i<=520;i++){const xx=xmin+(xmax-xmin)*i/520;path+=(i?"L":"M")+fmt(g.X(xx),2)+","+fmt(g.Y(fun(xx)),2);}
+ return '<path d="'+path+'" stroke="'+color+'" stroke-width="'+weight+'" stroke-dasharray="'+dash+'" fill="none"/>';
+}
+function point(g,x,y,color,size=5.8){
+ return '<circle cx="'+fmt(g.X(x),2)+'" cy="'+fmt(g.Y(y),2)+'" r="'+size+'" fill="'+color+'" stroke="#0b1d30" stroke-width="1.8"/>';
+}
+function drawScene(){
+ if(s.tab==="graphs"||s.tab==="concept")return;
+ const x=xAt(s.t),v=vAt(s.t),theta=TAU*s.f*s.t,phase=(((s.f*s.t)%1)+1)%1;
+ const center=315,axisY=200,px=center+x*202,r=111,cx=765,cy=200;
+ const dotX=cx+r*Math.cos(theta),dotY=cy-r*Math.sin(theta);
+ const xLeft=center-s.A*202,xRight=center+s.A*202;
+ const axis="<path d=\"M85 200H548\" stroke=\"#83a9bf\" stroke-width=\"3\"/>"+
+ '<path d="M315 109V302" stroke="#b9d4e8" stroke-width="1.2" stroke-dasharray="7 5"/>';
+ let grid="";for(let j=0;j<5;j++){const gx=95+j*105;grid+='<path d="M'+gx+' 73V342" stroke="#2d4c63" stroke-width=".8"/>';}
+ let html='<defs><radialGradient id="dotgrad"><stop stop-color="#e8fcff"/><stop offset=".55" stop-color="#6de7dd"/><stop offset="1" stop-color="#187988"/></radialGradient>'+
+ '<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#102d45"/><stop offset="1" stop-color="#081a2d"/></linearGradient>'+
+ '<filter id="glow"><feDropShadow dx="1" dy="2" stdDeviation="5" flood-opacity=".45"/></filter></defs>'+
+ '<rect width="980" height="440" fill="url(#bg)" rx="13"/>'+grid+axis;
+ html+='<rect x="90" y="16" width="345" height="42" rx="9" fill="#183b50" stroke="#436d83"/>';
+ html+=svgText(110,44,"x(t)=A cos(2πft)"," #a5f6e9",18,"start",800);
+ html+=svgText(521,44,"t = "+fmt(s.t,2)+" s","#d8effe",15,"end",750);
+ html+=svgText(316,90,"왕복 진동 · 평형 위치는 고정","#c8e2f2",15,"middle",700);
+ html+='<path d="M'+fmt(xLeft,1)+' 145V258 M'+fmt(xRight,1)+' 145V258" stroke="#ffd18f" stroke-dasharray="5 5" stroke-width="1.6"/>';
+ html+=svgText(fmt(xLeft,1),273,"−A","#ffe0a9",14)+svgText(fmt(xRight,1),273,"+A","#ffe0a9",14);
+ html+=svgText(center,293,"평형점 (x=0)","#c6e3f0",13);
+ html+='<path d="M315 200H'+fmt(px,1)+'" stroke="#66d9d4" stroke-width="6" stroke-linecap="round" opacity=".65"/>';
+ html+='<circle cx="'+fmt(px,2)+'" cy="200" r="23" fill="url(#dotgrad)" stroke="#b5fbf6" stroke-width="2" filter="url(#glow)"/>';
+ html+=svgText(fmt(px,1),244,"x = "+(x>=0?"+":"")+fmt(x,3)+" m","#a7f3e8",14);
+ if(Math.abs(v)>1e-7){
+  const dir=Math.sign(v),a=px+dir*61;
+  html+='<path d="M'+fmt(px+dir*28,2)+' 165H'+fmt(a,2)+'" stroke="#ffd28b" stroke-width="4"/>';
+  html+='<path d="M'+fmt(a-dir*12,2)+' 157L'+fmt(a,2)+' 165L'+fmt(a-dir*12,2)+' 173" fill="none" stroke="#ffd28b" stroke-width="3"/>';
+ }
+ html+=svgText(315,340,"물체의 운동: "+(Math.abs(v)<1e-7?"순간 정지":v>0?"오른쪽 →":"← 왼쪽"),"#ffd596",16);
+ // Phase-circle horizontal projection equals the displacement x(t)/A.
+ html+='<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" stroke="#83b4cb" stroke-width="3" fill="#12344b"/>';
+ html+='<path d="M'+(cx-r-12)+' '+cy+'H'+(cx+r+12)+' M'+cx+' '+(cy-r-15)+'V'+(cy+r+14)+'" stroke="#52788d" stroke-width="1.5" stroke-dasharray="6 5"/>';
+ html+='<path d="M'+cx+' '+cy+'L'+fmt(dotX,2)+' '+fmt(dotY,2)+'" stroke="#74f0df" stroke-width="4"/>';
+ html+='<path d="M'+fmt(dotX,2)+' '+fmt(dotY,2)+'V'+cy+'" stroke="#ffd28e" stroke-width="2" stroke-dasharray="5 4"/>';
+ html+='<circle cx="'+fmt(dotX,2)+'" cy="'+fmt(dotY,2)+'" r="11" fill="#7ff0e1" stroke="#d6fff5" stroke-width="2"/>';
+ html+='<circle cx="'+fmt(dotX,2)+'" cy="'+cy+'" r="5" fill="#ffd28b"/>';
+ html+=svgText(cx,42,"위상 원 (수평 투영)","#c8e3f4",17);
+ html+=svgText(cx,354,"위상 진행: "+fmt(phase*100,1)+"%","#9ff4e9",16);
+ html+=svgText(cx,380,"위상 θ = 2πft","#bdd8e8",13);
+ html+=svgText(97,404,"완료한 진동: "+Math.floor(s.f*s.t+1e-8)+"회  ·  f = "+fmt(s.f,2)+" Hz  ·  T = "+fmt(T(),3)+" s","#ddf3ff",15,"start");
+ html+=svgText(967,424,"진폭만 바꾸면 T는 그대로","#c5e0ef",12,"end");
+ $("scene").innerHTML=html;
+}
+function updateMeasure(){
+ const N=s.measurement?.N||s.completed?.N||s.targetN;
+ const targetTime=N/s.f,frac=clamp(s.t/targetTime,0,1);
+ $("measureTitle").textContent=s.completed?"측정 완료 · "+N+"회":s.measurement?(s.running?"N회 진동 측정 중":"N회 측정 일시정지"):"진동 "+N+"회 측정 준비";
+ $("measureTime").textContent="목표 경과: "+fmt(targetTime,2)+" s";
+ $("progressFill").style.width=fmt(frac*100,1)+"%";
+ $("progressText").textContent=fmt(frac*100,1)+"%";
+ $("progress").setAttribute("aria-valuenow",fmt(frac*100,1));
+ const result=s.completed;
+ $("measurementExplanation").textContent=result?
+  "측정 결과: Δt="+fmt(result.dt,3)+" s · N="+result.N+"회 → T="+fmt(result.dt/result.N,3)+" s · f="+fmt(result.N/result.dt,3)+" Hz":
+  s.measurement?"측정 진행: "+Math.floor(s.f*s.t+1e-8)+" / "+N+"회 · 중지해도 ▶ 시작으로 이어서 진행할 수 있습니다.":
+  "N="+N+"회를 관찰하면 Δt=N/f="+fmt(targetTime,3)+" s 후 자동 정지합니다.";
+}
+function readouts(){
+ $("fValue").textContent=fmt(s.f,3)+" Hz";
+ $("periodValue").textContent=fmt(T(),3)+" s";
+ $("ampValue").textContent=fmt(s.A,2)+" m";
+ $("timeValue").textContent=fmt(s.t,2)+" s";
+ $("cyclesValue").textContent=Math.floor(s.f*s.t+1e-8)+"회";
+ $("fOut").textContent=fmt(s.f,2)+" Hz";
+ $("TOut").textContent=fmt(T(),2)+" s";
+ $("ampOut").textContent=fmt(s.A,2)+" m";
+ $("NOut").textContent=s.targetN+"회";
+ $("fSlider").value=fmt(s.f,2);
+ $("TSlider").value=fmt(T(),2);
+ $("amplitude").value=fmt(s.A,2);
+ $("targetN").value=s.targetN;
+ $("rate").value=String(s.rate);
+ $("controlMode").value=s.mode;
+ $("fField").hidden=s.mode!=="f";$("TField").hidden=s.mode!=="T";
+ $("pause").disabled=!s.running;
+ $("start").disabled=s.running;
+ $("loadA").disabled=!s.saves.A;$("loadB").disabled=!s.saves.B;
+ $("state").textContent=s.running?"● 진동 중":s.completed?"■ 측정 완료":s.t>0?"Ⅱ 일시정지":"○ 대기 중";
+ const v=vAt(s.t),x=xAt(s.t);
+ $("equation").innerHTML=s.mode==="f"?
+  "T = 1/f = 1/"+fmt(s.f,3)+" = <b>"+fmt(T(),3)+" s</b><br>f × T = <b>1.000</b><br>x = "+fmt(x,3)+" m · 순간 속도 "+fmt(v,3)+" m/s":
+  "f = 1/T = 1/"+fmt(T(),3)+" = <b>"+fmt(s.f,3)+" Hz</b><br>f × T = <b>1.000</b><br>x = "+fmt(x,3)+" m · 순간 속도 "+fmt(v,3)+" m/s";
+ const hints={
+  osc:"단계 버튼으로 ¼·½·¾·1주기의 위치를 확인해 보세요. 원 위상과 왕복 위치가 대응합니다.",
+  measure:"② 탭에서 N회 측정 시작을 누르세요. 종료 시 Δt/N과 N/Δt를 함께 계산합니다.",
+  inverse:"f를 2배로 올리면 T는 절반이 됩니다. 진폭 A만 바꿀 때 주기는 일정합니다.",
+  graphs:"조건을 A와 B에 저장한 다음 관계 그래프와 변위–시간 그래프를 비교하세요."
+ };
+ $("modeHint").textContent=hints[s.tab]||"진동수 f와 주기 T는 서로 역수 관계입니다.";
+ $("footerHint").textContent="진동의 위치 x=A cos(2πft) · 물리적 시계 t를 기준으로 계산합니다. 재생 배율은 표시 속도만 바꿉니다.";
+ updateMeasure();
+}
+function drawGraphs(){
+ if(s.tab!=="graphs")return;
+ const g=plotAxes(510,290,.2,4,0,5,"진동수 f (Hz)","주기 T (s)");
+ let relation=g.html+plotLine(g,f=>1/f,.2,4,"#71eae1","",3.2);
+ for(const [c,color]of[[s.saves.A,"#ffd18e"],[s.saves.B,"#edabe4"],[{f:s.f,A:s.A},"#f4fcff"]]){
+  if(c)relation+=point(g,c.f,1/c.f,color);
+ }
+ $("relationGraph").innerHTML=relation;
+ // A common absolute-time interval is used for current and saved cases.
+ const t0=Math.max(0,s.t-5),e=t0+5;
+ const o=plotAxes(510,290,t0,e,-1,1,"시간 t (s)","변위 x (m)");
+ let motion=o.html;
+ for(const [c,color,dash,stroke]of[[s.saves.A,"#ffd18e","8 5",2.1],[s.saves.B,"#eda8dd","3 5",2.1],[{f:s.f,A:s.A},"#6eece2","",3.3]]){
+  if(c)motion+=plotLine(o,tt=>xAt(tt,c),t0,e,color,dash,stroke);
+ }
+ motion+=point(o,s.t,xAt(s.t),"#f3faff",5.8);
+ $("motionGraph").innerHTML=motion;
+ const body=$("comparison");body.replaceChildren();
+ for(const [name,c]of[["현재",{f:s.f,A:s.A}],["A",s.saves.A],["B",s.saves.B]]){
+  const tr=document.createElement("tr");
+  const arr=c?[name,fmt(c.f,3),fmt(1/c.f,3),fmt(c.A,2),fmt(5*c.f,2),fmt(10/c.f,2)]:[name,"—","—","—","—","—"];
+  for(const value of arr){const td=document.createElement("td");td.textContent=value;tr.append(td);}
+  body.append(tr);
+ }
+ if(s.saves.A&&s.saves.B)$("compareNote").textContent="조건 B/A: 진동수 "+fmt(s.saves.B.f/s.saves.A.f,2)+"배 · 주기 "+fmt(s.saves.A.f/s.saves.B.f,2)+"배. 두 비의 곱은 1입니다.";
+ else $("compareNote").textContent="조건 A·B를 저장하면 서로 다른 진동수와 진폭의 운동을 같은 축에서 비교합니다.";
+}
+function render(){
+ readouts();
+ if(s.tab==="graphs")drawGraphs();
+ else if(s.tab!=="concept")drawScene();
+}
+function stopAndReset(message){
+ s.running=false;s.t=0;s.measurement=null;s.completed=null;s.last=null;
+ $("notice").textContent=message||"실험 조건을 변경했습니다. 시간과 측정 결과가 0으로 초기화되었습니다.";
+ render();
+}
+function setF(f){
+ s.f=clamp(f,.2,4);stopAndReset("진동 조건 변경 · 시간을 0으로 되돌렸습니다. ▶ 시작으로 관찰하세요.");
+}
+function changeTab(tab){
+ s.tab=tab;
+ s.running=false;s.last=null;s.measurement=null;s.completed=null;s.t=0;
+ $("workspace").dataset.tab=tab;
+ document.querySelectorAll(".tab").forEach(el=>el.setAttribute("aria-selected",String(el.dataset.tab===tab)));
+ $("targetField").hidden=tab!=="measure";
+ $("stepButtons").hidden=tab!=="osc";
+ $("measureButtons").hidden=tab!=="measure";
+ $("simTitle").textContent=tab==="measure"?"N회 진동으로 주기 직접 측정":tab==="inverse"?"진동수와 주기는 어떻게 변할까?":"위상 원 1회전 = 왕복 진동 1회";
+ $("notice").textContent=tab==="measure"?"측정 횟수 N을 설정한 후 ▶ N회 측정 시작을 누르세요.":"진동수·주기 또는 진폭을 조절해 관찰할 수 있습니다.";
+ requestAnimationFrame(render);
+}
+function start(){
+ if(s.tab==="measure"){
+  if(s.completed){s.completed=null;s.t=0;}
+  if(!s.measurement){s.t=0;s.measurement={N:s.targetN};}
+ }
+ s.running=true;s.last=null;render();
+}
+function pause(){s.running=false;s.last=null;render();}
+function restart(){s.running=false;s.t=0;s.last=null;s.measurement=null;s.completed=null;render();}
+function startMeasurement(){
+ s.t=0;s.last=null;s.completed=null;s.measurement={N:s.targetN};s.running=true;
+ render();
+}
+function choosePhase(fraction){
+ s.running=false;s.measurement=null;s.completed=null;s.last=null;s.t=fraction*T();
+ $("notice").textContent="한 주기의 "+fmt(fraction*100,0)+"% 지점입니다. 위치와 운동 방향을 함께 확인하세요.";
+ render();
+}
+function bind(){
+ document.querySelectorAll(".tab").forEach(el=>el.onclick=()=>changeTab(el.dataset.tab));
+ $("controlMode").onchange=e=>{s.mode=e.target.value;render();};
+ $("fSlider").oninput=e=>setF(Number(e.target.value));
+ $("TSlider").oninput=e=>setF(1/Number(e.target.value));
+ $("amplitude").oninput=e=>{s.A=Number(e.target.value);stopAndReset("진폭 변경 · 주기와 진동수는 그대로입니다.");};
+ $("rate").onchange=e=>{s.rate=Number(e.target.value);s.last=null;render();};
+ $("targetN").oninput=e=>{s.targetN=Number(e.target.value);stopAndReset("측정할 횟수 N이 변경되었습니다.");};
+ $("start").onclick=start;$("pause").onclick=pause;$("restart").onclick=restart;
+ $("measureStart").onclick=startMeasurement;$("measureStop").onclick=()=>{s.running=false;s.measurement=null;s.completed=null;s.t=0;render();};
+ for(const [id,frac]of[["quarter",.25],["half",.5],["threeQuarter",.75],["fullPeriod",1]])$(id).onclick=()=>choosePhase(frac);
+ $("doubleF").onclick=()=>setF(clamp(Number(fmt(s.f*2,2)),.2,4));
+ $("halfF").onclick=()=>setF(clamp(Number(fmt(s.f/2,2)),.2,4));
+ $("reset").onclick=()=>{
+  Object.assign(s,defaults,{tab:s.tab,t:0,running:false,last:null,measurement:null,completed:null,saves:{A:null,B:null}});
+  $("savedText").textContent="전체 초기화 · 조건 A·B 기록을 지웠습니다.";
+  render();
+ };
+ $("toGraphs").onclick=()=>changeTab("graphs");
+ for(const key of ["A","B"])$("save"+key).onclick=()=>{s.saves[key]=copy();$("savedText").textContent="조건 "+key+" 저장 · 그래프·비교 탭에서 동일 축으로 비교할 수 있습니다.";render();};
+ for(const key of ["A","B"])$("load"+key).onclick=()=>{if(!s.saves[key])return;Object.assign(s,s.saves[key]);stopAndReset("조건 "+key+"을 불러왔습니다.");};
+ $("full").onclick=()=>{const p=document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();if(p&&p.catch)p.catch(()=>{});};
+ document.addEventListener("fullscreenchange",()=>$("full").textContent=document.fullscreenElement?"⛶ 전체화면 종료":"⛶ 전체화면");
+ document.addEventListener("visibilitychange",()=>{if(document.hidden){s.running=false;s.last=null;render();}});
+ window.addEventListener("resize",()=>requestAnimationFrame(render));
+}
+function tick(now){
+ if(s.running&&!document.hidden){
+  const dt=s.last===null?0:clamp((now-s.last)/1000,0,.075);
+  s.last=now;
+  s.t+=dt*s.rate;
+  if(s.measurement){
+   const N=s.measurement.N,limit=N/s.f;
+   if(s.t>=limit){
+    s.t=limit;s.completed={N,dt:limit};s.measurement=null;s.running=false;s.last=null;
+    $("notice").textContent="N회 측정 완료 · 주기는 Δt/N이며 진동수는 N/Δt입니다.";
+   }
+  }
+  // Throttled DOM painting: phase and elapsed time still come from the exact model.
+  if(!tick.lastPaint||now-tick.lastPaint>45||!s.running){
+   tick.lastPaint=now;render();
+  }
+ }
+ requestAnimationFrame(tick);
+}
+bind();changeTab("osc");requestAnimationFrame(tick);
+})();
+</script>
+</body></html>
