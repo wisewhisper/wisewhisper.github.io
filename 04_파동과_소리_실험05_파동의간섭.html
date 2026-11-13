@@ -127,6 +127,85 @@ body.interference-v2 #field{aspect-ratio:1.75}
  body.interference-v2 .wave-side{grid-template-columns:1fr}
 }
 </style>
+
+<style id="wave-probe-one-screen-v4">
+/* 관측점 중첩 탭: 전체 폭의 파동 화면과 오른쪽 결과+그래프를 같은 높이에 배치 */
+@media (min-width:1024px) and (min-height:600px){
+ body.interference-v2 .wave-workspace[data-tab="probe"]{
+   grid-template-columns:minmax(0,1fr) clamp(205px,16.4vw,230px) clamp(290px,23.4vw,320px);
+   gap:9px;
+   align-items:start;
+ }
+ body.interference-v2 .wave-workspace[data-tab="probe"] .wave-primary{
+   display:grid;
+   grid-template-columns:minmax(0,1fr) !important;
+   gap:0;
+ }
+ body.interference-v2 .wave-workspace[data-tab="probe"] .wave-readout-panel{
+   padding:8px;
+   min-width:0;
+ }
+ body.interference-v2 .wave-workspace[data-tab="probe"] .readouts{
+   grid-template-columns:repeat(2,minmax(0,1fr));
+   gap:5px;
+ }
+ body.interference-v2 .wave-workspace[data-tab="probe"] .readout{
+   padding:6px 5px;
+ }
+ body.interference-v2 .wave-workspace[data-tab="probe"] .readout .label{
+   font-size:.69rem;
+ }
+ body.interference-v2 .wave-workspace[data-tab="probe"] .readout strong{
+   font-size:.86rem;
+   white-space:normal;
+   overflow-wrap:anywhere;
+ }
+ body.interference-v2 .wave-workspace[data-tab="probe"] .status{
+   margin-top:6px;
+   padding:6px;
+   font-size:.73rem;
+ }
+ body.interference-v2 .wave-workspace[data-tab="probe"] .wave-readout-panel > .chartcard{
+   display:block;
+   margin-top:8px;
+   padding:6px;
+   border:1px solid #30526e;
+   background:#0a1d30;
+ }
+ body.interference-v2 .wave-workspace[data-tab="probe"] .chartcard h2{
+   font-size:.84rem;
+   line-height:1.25;
+   margin:0 0 5px;
+ }
+ body.interference-v2 .wave-workspace[data-tab="probe"] #graph{
+   display:block;
+   width:100%;
+   height:185px !important;
+   aspect-ratio:auto;
+   border-radius:8px;
+ }
+ body.interference-v2 .wave-workspace[data-tab="probe"] .chartcard .key{
+   gap:5px 9px;
+   margin:6px 0 2px;
+   font-size:.67rem;
+ }
+ body.interference-v2 .wave-workspace[data-tab="probe"] .chartcard .key span:before{
+   width:10px;
+   margin:0 3px 2px 0;
+ }
+ body.interference-v2 .wave-workspace[data-tab="probe"] .chartcard small{
+   display:block;
+   font-size:.65rem;
+   line-height:1.3;
+   margin:4px 0 0;
+ }
+}
+/* 1024px 이하에서는 기존 적응형 1열 화면으로 돌아간다 */
+@media (max-width:1023px){
+ body.interference-v2 .wave-workspace[data-tab="probe"] .wave-primary{grid-template-columns:1fr}
+ body.interference-v2 .wave-workspace[data-tab="probe"] #graph{height:175px}
+}
+</style>
 </head>
 <body>
 <header><div class="eyebrow">INTERACTIVE PHYSICS LAB</div><h1>파동의 간섭 실험실</h1><p class="lead">두 점파원이 만드는 파동을 겹쳐 보고, 관측점을 움직이며 보강·상쇄 간섭을 찾아보세요.</p></header>
@@ -172,7 +251,7 @@ document.body.classList.add('interference-v2');
 const nav=document.createElement('nav');nav.className='wave-nav';nav.setAttribute('aria-label','파동의 간섭 실험 탭');
 const desc=document.createElement('p');desc.className='wave-tab-desc';
 document.querySelector('header').after(nav,desc);
-const layout=document.createElement('div');layout.className='wave-workspace';const primary=document.createElement('div'),side=document.createElement('div');primary.className='wave-primary';side.className='wave-side';main.prepend(layout);layout.append(primary,side);primary.append(sim,graph);side.append(conditions,results);
+const layout=document.createElement('div');layout.className='wave-workspace';const primary=document.createElement('div'),side=document.createElement('div');primary.className='wave-primary';side.className='wave-side';main.prepend(layout);layout.append(primary,side);primary.append(sim,graph);side.append(conditions,results);results.classList.add('wave-readout-panel');
 const extra=document.createElement('div');extra.className='wave-extras';
 sim.querySelector('.buttons').append(extra);
 const guide=document.createElement('label');guide.className='wave-check';guide.innerHTML='<input type="checkbox" id="showPaths" checked> 두 파원의 경로';
@@ -189,7 +268,7 @@ phase:'경로차와 초기 위상차를 바꾸며 보강선·상쇄선의 위치
 concept:'중첩 원리, 경로차·위상차, 보강·상쇄 간섭 조건을 개념과 탐구 질문으로 정리했습니다.'
 };
 const tabs=[['wave','① 두 점파원'],['probe','② 관측점 중첩'],['phase','③ 경로차·위상차'],['concept','④ 개념 설명']];
-function select(name){layout.dataset.tab=name;document.body.dataset.activeTab=name;desc.textContent=infos[name];lower.classList.toggle('concept-shown',name==='concept');window.interferenceShowPaths=(name==='probe'||name==='phase')&&guide.querySelector('input').checked;mode.value=name==='phase'?'intensity':'displacement';mode.dispatchEvent(new Event('input',{bubbles:true}));for(const b of nav.children)b.setAttribute('aria-selected',String(b.dataset.tab===name));requestAnimationFrame(()=>{window.dispatchEvent(new Event('resize'));window.__interferenceApi.render()})}
+function select(name){if(name==='probe'){results.append(graph)}else{primary.append(graph)}layout.dataset.tab=name;document.body.dataset.activeTab=name;desc.textContent=infos[name];lower.classList.toggle('concept-shown',name==='concept');window.interferenceShowPaths=(name==='probe'||name==='phase')&&guide.querySelector('input').checked;mode.value=name==='phase'?'intensity':'displacement';mode.dispatchEvent(new Event('input',{bubbles:true}));for(const b of nav.children)b.setAttribute('aria-selected',String(b.dataset.tab===name));requestAnimationFrame(()=>{window.dispatchEvent(new Event('resize'));window.__interferenceApi.render()})}
 for(const [name,label] of tabs){const b=document.createElement('button');b.type='button';b.dataset.tab=name;b.textContent=label;b.setAttribute('aria-selected','false');b.onclick=()=>select(name);nav.append(b)}
 guide.querySelector('input').addEventListener('change',()=>{window.interferenceShowPaths=guide.querySelector('input').checked&&layout.dataset.tab!=='wave';window.__interferenceApi.render()});
 const original=lower.querySelector('.card');if(original){const p=document.createElement('p');p.className='note';p.textContent='이 실험은 선형 매질의 이상적인 2차원 점파원을 사용하며, 시간에 따른 파동의 도달 과정을 근사적으로 표시합니다. 순간 변위의 색은 화면용 정규화된 값이며 실제 상대 세기와는 다릅니다.';original.append(p)}
