@@ -97,7 +97,7 @@ if(ID==="실험01_옴의법칙과저항연결"){
  const table=stage.querySelector("table.detail");
  if(table){const panel=document.createElement("section");panel.className="e7-panel e7-detailcard";const title=document.createElement("h2");title.textContent="소자별 전압·전류 상세값";panel.append(title,table);graphstage.append(panel);}
 }
-if(ID==="실험04_평행판축전기"||ID==="실험05_NPN트랜지스터스위치"||ID==="실험06_NPN트랜지스터증폭"){
+if(ID==="실험05_NPN트랜지스터스위치"||ID==="실험06_NPN트랜지스터증폭"){
  const metrics=stage.querySelector(".meters,.readings,.readouts");
  if(metrics){metrics.classList.add("e7-meterstrip");side.append(metrics);}
 }
