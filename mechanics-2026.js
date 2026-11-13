@@ -128,7 +128,7 @@ const startButton=el('button',null,'▶ 시작'),pauseButton=el('button',null,'�
 startButton.id='ml-start';controlsRow.append(startButton,pauseButton,resetButton);
 function playingText(b){return b&&/일시정지|⏸|Ⅱ/.test(normalized(b));}
 function setStatus(t){status.textContent=t;}
-let inferredRunning=false;
+let inferredRunning=false;\nlet demoHandle=0,demoStarted=0,demoSlider=null;\nfunction stopDemo(){if(demoHandle)cancelAnimationFrame(demoHandle);demoHandle=0;}\nfunction runDemo(){const sliders=[...settingsScroll.querySelectorAll('input[type=range]'),...visual.querySelectorAll('input[type=range]')];demoSlider=sliders.find(x=>+x.max>+x.min);if(!demoSlider){setStatus('설정을 바꾸어 결과를 확인하세요.');return;}stopDemo();demoStarted=0;const min=+demoSlider.min,max=+demoSlider.max;function tick(now){if(!demoStarted)demoStarted=now;const fraction=(1-Math.cos((now-demoStarted)*.0015))/2;demoSlider.value=String(min+(max-min)*fraction);demoSlider.dispatchEvent(new Event('input',{bubbles:true}));if(now-demoStarted>4200){stopDemo();inferredRunning=false;setStatus('● 조건 변화 관찰 완료');return;}demoHandle=requestAnimationFrame(tick)}inferredRunning=true;setStatus('● 변수를 자동 변경하며 결과 관찰 중');demoHandle=requestAnimationFrame(tick)}
 const naturalAutoplay=toggle&&playingText(toggle)&&!all.some(b=>b!==toggle&&isStart(b));
 if(naturalAutoplay){try{toggle.click();}catch(e){}}
 function clickFirst(btn){if(btn&&!btn.disabled){btn.click();return true;}return false;}
@@ -137,21 +137,21 @@ startButton.addEventListener('click',()=>{
  if(candidate&&(!inferredRunning||!playingText(candidate))){
   if(!clickFirst(candidate)){setStatus('시작 제어를 확인해 주세요.');return;}
   inferredRunning=true;setStatus('● 실험 진행 중');
- }else if(!candidate){setStatus('이 자료는 변수 변경으로 결과가 갱신되는 정적 실험입니다.');}
+ }else if(!candidate){runDemo();}
 });
-pauseButton.addEventListener('click',()=>{
+pauseButton.addEventListener('click',()=>{if(demoHandle){stopDemo();inferredRunning=false;setStatus('Ⅱ 일시정지');return;}
  let candidate=all.find(isPause)||pause;
  if(!candidate&&toggle&&playingText(toggle))candidate=toggle;
  if(clickFirst(candidate)){inferredRunning=false;setStatus('Ⅱ 일시정지');}
  else setStatus('현재 실험에는 별도 일시정지 기능이 없습니다.');
 });
-resetButton.addEventListener('click',()=>{
+resetButton.addEventListener('click',()=>{stopDemo();
  if(clickFirst(reset)){inferredRunning=false;setStatus('↺ 처음 상태로 돌아왔습니다.');}
  else {const inputs=Array.from(document.querySelectorAll('input[type=range]'));inputs.forEach(n=>{if(n.defaultValue){n.value=n.defaultValue;n.dispatchEvent(new Event('input',{bubbles:true}));}});setStatus('설정값을 초기화했습니다.');}
 });
 const haveActions=!!(start||pause||reset||toggle);
-if(!haveActions){startButton.textContent='↻ 결과 확인';pauseButton.disabled=true;startButton.addEventListener('click',()=>window.dispatchEvent(new Event('resize')));}
-if(!pause&&!toggle)pauseButton.disabled=true;
+if(!haveActions){startButton.textContent='▶ 변화 관찰';pauseButton.disabled=false;}
+if(!pause&&!toggle&&haveActions)pauseButton.disabled=true;
 if(!reset&&!document.querySelector('input[type=range]'))resetButton.disabled=true;
 // Expose one-click native controls in first tab without duplicating original buttons visually.
 for(const b of all.filter(b=>b===start||b===pause||b===reset||b===toggle))b.classList.add('ml-native-action');
