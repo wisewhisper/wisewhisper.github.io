@@ -129,12 +129,12 @@ startButton.id='ml-start';controlsRow.append(startButton,pauseButton,resetButton
 function playingText(b){return b&&/일시정지|⏸|Ⅱ/.test(normalized(b));}
 function setStatus(t){status.textContent=t;}
 let inferredRunning=false;
-const naturalAutoplay=toggle&&playingText(toggle)&&!start;
+const naturalAutoplay=toggle&&playingText(toggle)&&!all.some(b=>b!==toggle&&isStart(b));
 if(naturalAutoplay){try{toggle.click();}catch(e){}}
 function clickFirst(btn){if(btn&&!btn.disabled){btn.click();return true;}return false;}
 startButton.addEventListener('click',()=>{
  const candidate=all.find(isStart)||start||toggle;
- if(candidate&&(candidate!==toggle||!playingText(candidate)||!inferredRunning)){
+ if(candidate&&(!inferredRunning||!playingText(candidate))){
   if(!clickFirst(candidate)){setStatus('시작 제어를 확인해 주세요.');return;}
   inferredRunning=true;setStatus('● 실험 진행 중');
  }else if(!candidate){setStatus('이 자료는 변수 변경으로 결과가 갱신되는 정적 실험입니다.');}
