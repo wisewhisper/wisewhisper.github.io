@@ -16,7 +16,79 @@
 .chartBox{padding:14px 12px 10px}.legend{display:flex;gap:14px;flex-wrap:wrap;margin:2px 0 2px;font-size:12px;color:#c2dded}.swatch{display:inline-block;width:10px;height:10px;border-radius:100%;margin-right:6px}.chartCanvas{width:100%;height:295px;display:block}.chartExplain{font-size:12px;color:#abc6d9;margin:4px 4px 0}.equation{margin:16px 0 0;border:1px solid #2d5974;border-radius:13px;padding:13px 16px;background:#0d2a42;color:#e1f2ff;font-size:14px;overflow-wrap:anywhere}.equation b{color:#88ebdb}.bottom{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}.copy{margin:0;color:#bcd7e6;font-size:13px}.steps{margin:0;padding-left:21px;color:#c8ddeb;font-size:14px}.steps li+li{margin-top:7px}.em{font-weight:800;color:#ffcf8c}.foot{margin-top:19px;color:#8cabbe;font-size:11px}.foot a{color:#8fe6d7}.tag{font-size:12px;color:#76edca;background:#123b45;border:1px solid #2e8279;border-radius:40px;padding:4px 9px}
 @media(max-width:890px){.top,.visuals,.bottom{grid-template-columns:1fr}.meters{grid-template-columns:repeat(3,1fr)}}@media(max-width:530px){.wrap{padding:17px 10px 40px}.boxpad{padding:14px}.controlGrid{grid-template-columns:1fr 1fr;gap:10px}.meters{grid-template-columns:repeat(2,1fr);gap:7px}.meter{padding:10px}.meter .val{font-size:20px}.controlsBtns{display:grid;grid-template-columns:1fr 1fr}.action{width:100%;padding:9px 10px}.chartCanvas{height:250px}}
 </style>
-<link rel="stylesheet" href="electric-lab-v6.css?v=20261112-7"><link rel="stylesheet" href="electric-lab-v7-dark.css?v=20261112-11"><script src="electric-lab-v6.js?v=20261112-8" defer></script></head>
+<link rel="stylesheet" href="electric-lab-v6.css?v=20261112-7"><link rel="stylesheet" href="electric-lab-v7-dark.css?v=20261112-11"><script src="electric-lab-v6.js?v=20261113-rc-inline-v2" defer></script><style id="rc-inline-results-v2">
+/* RC live results sit in a compact five-column strip immediately below the circuit. */
+.rc-live-results{
+ display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;
+ flex:0 0 auto!important;gap:6px!important;width:100%!important;
+ min-width:0!important;margin:5px 0!important;padding:0!important;
+}
+.rc-live-results .meter{
+ display:flex!important;flex-direction:column!important;justify-content:center!important;
+ align-items:center!important;min-width:0!important;min-height:58px!important;
+ padding:6px 4px!important;margin:0!important;border-radius:9px!important;
+ border:1px solid #3e617a!important;background:#132b41!important;
+ text-align:center!important;overflow:hidden!important;
+}
+.rc-live-results .meter .lab{
+ font-size:clamp(9px,.85vw,12px)!important;line-height:1.35!important;
+ white-space:nowrap!important;letter-spacing:-.02em!important;color:#bdd7e7!important;
+}
+.rc-live-results .meter .val{
+ font-size:clamp(12px,1.25vw,19px)!important;line-height:1.4!important;
+ white-space:nowrap!important;letter-spacing:-.025em!important;
+ margin:1px 0 0!important;color:#effaff!important;
+}
+.rc-live-results .meter .val.blue{color:#80cfff!important}
+.rc-live-results .meter .val.coral{color:#ff98ac!important}
+.rc-live-results .meter .val.tur{color:#6cecdf!important}
+.rc-live-results .meter .val.amber{color:#ffd18c!important}
+body[data-electric-v6="1"] .e7-shell[data-lab="실험03_RC회로의충전과방전"] .e7-stage{
+ overflow:hidden!important;
+}
+body[data-electric-v6="1"] .e7-shell[data-lab="실험03_RC회로의충전과방전"] .e7-stage>.e7-panel:has(#circuit){
+ display:flex!important;flex-direction:column!important;
+ height:100%!important;min-height:0!important;overflow:hidden!important;
+ padding:8px 10px!important;gap:5px!important;
+}
+body[data-electric-v6="1"] .e7-shell[data-lab="실험03_RC회로의충전과방전"] .e7-stage>.e7-panel .diagramwrap{
+ flex:1 1 0!important;min-height:95px!important;overflow:hidden!important;
+ padding:5px!important;
+}
+body[data-electric-v6="1"] .e7-shell[data-lab="실험03_RC회로의충전과방전"] .e7-stage>.e7-panel .diagramwrap #circuit{
+ display:block!important;max-height:100%!important;height:100%!important;
+ flex:1 1 auto!important;object-fit:contain!important;
+}
+body[data-electric-v6="1"] .e7-shell[data-lab="실험03_RC회로의충전과방전"] .e7-stage>.e7-panel .fillTrack{
+ flex:0 0 auto!important;height:8px!important;margin:2px 0 0!important;
+}
+body[data-electric-v6="1"] .e7-shell[data-lab="실험03_RC회로의충전과방전"] .e7-stage>.e7-panel .progressMeta{
+ flex:0 0 auto!important;font-size:11px!important;margin:0!important;
+}
+@media(min-width:901px) and (max-height:680px){
+ body[data-electric-v6="1"] .e7-shell[data-lab="실험03_RC회로의충전과방전"] .rc-live-results .meter{
+  min-height:47px!important;padding:3px!important;
+ }
+}
+@media(max-width:900px){
+ body[data-electric-v6="1"] .e7-shell[data-lab="실험03_RC회로의충전과방전"] .e7-stage,
+ body[data-electric-v6="1"] .e7-shell[data-lab="실험03_RC회로의충전과방전"] .e7-stage>.e7-panel:has(#circuit){
+  overflow:visible!important;height:auto!important;
+ }
+ body[data-electric-v6="1"] .e7-shell[data-lab="실험03_RC회로의충전과방전"] .e7-stage>.e7-panel .diagramwrap{
+  min-height:250px!important;flex:0 0 auto!important;
+ }
+ body[data-electric-v6="1"] .e7-shell[data-lab="실험03_RC회로의충전과방전"] .e7-stage>.e7-panel .diagramwrap #circuit{
+  height:auto!important;max-height:55vh!important;
+ }
+}
+@media(max-width:560px){
+ .rc-live-results{gap:3px!important;}
+ .rc-live-results .meter{padding:4px 1px!important;min-height:51px!important;}
+ .rc-live-results .meter .lab{font-size:9px!important;letter-spacing:-.045em!important;}
+ .rc-live-results .meter .val{font-size:10px!important;letter-spacing:-.045em!important;}
+}
+</style></head>
 <body>
 <main class="wrap">
   <div class="over"><b>PHYSICS LAB</b> 전기와 자기 · 인터랙티브 실험</div>
@@ -47,13 +119,6 @@
       <label style="display:block;margin-top:8px"><span class="controlHead">시뮬레이션 시간 <output id="scrubOut">0.00 s</output></span><input id="scrub" type="range" min="0" max="1000" value="0" step="1" /></label>
     </section>
   </div>
-  <section class="meters" aria-label="실시간 측정값">
-    <div class="meter"><div class="lab">경과 시간 t</div><div id="tMeter" class="val">0.00 s</div></div>
-    <div class="meter"><div class="lab">시간상수 τ = RC</div><div id="tauMeter" class="val amber">2.20 s</div></div>
-    <div class="meter"><div class="lab">축전기 전압 V꜀</div><div id="vcMeter" class="val coral">0.00 V</div></div>
-    <div class="meter"><div class="lab">전류 크기 |I|</div><div id="iMeter" class="val blue">0.900 mA</div></div>
-    <div class="meter"><div class="lab">극판 전하량 |Q|</div><div id="qMeter" class="val tur">0.000 mC</div></div>
-  </section>
   <div class="visuals">
     <section class="card boxpad">
       <div class="sectionHead"><h2>③ 전하 이동 관찰</h2><span class="hint">파란 점 = 전자 이동 모식도</span></div>
@@ -76,6 +141,13 @@
           <text x="381" y="300" text-anchor="middle" font-size="14" fill="#c0dcea" id="directionText">전자: 위쪽 ← / 아래쪽 → (전류와 반대)</text>
         </svg>
       </div>
+      <section class="meters rc-live-results" aria-label="실시간 측정값">
+    <div class="meter"><div class="lab">경과 시간 t</div><div id="tMeter" class="val">0.00 s</div></div>
+    <div class="meter"><div class="lab">시간상수 τ = RC</div><div id="tauMeter" class="val amber">2.20 s</div></div>
+    <div class="meter"><div class="lab">축전기 전압 V꜀</div><div id="vcMeter" class="val coral">0.00 V</div></div>
+    <div class="meter"><div class="lab">전류 크기 |I|</div><div id="iMeter" class="val blue">0.900 mA</div></div>
+    <div class="meter"><div class="lab">극판 전하량 |Q|</div><div id="qMeter" class="val tur">0.000 mC</div></div>
+  </section>
       <div class="fillTrack" aria-hidden="true"><div id="fill" class="fill"></div></div>
       <div class="progressMeta"><span id="progressCaption">최종 전하량 대비 충전율</span><b id="progressText">0.0%</b></div>
     </section>
