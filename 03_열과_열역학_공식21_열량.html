@@ -68,9 +68,26 @@ body .tl-col button{min-height:31px!important;padding:4px 7px!important}
 </style><style id="thermal-calorimetry-intro-and-render-fix-v5">
 body #heatExperimentIntro{font-size:13px;line-height:1.45;margin:4px 0 8px;padding:7px 9px;color:#ebfaf5;background:#11392f;border:1px solid #398874;border-radius:8px;font-weight:600}
 @media(min-width:900px){body #heatExperimentIntro{font-size:12px;margin:2px 0 5px;padding:5px 8px}body .tl-col .row button{min-height:32px}}
+</style><style id="thermal-quantity-readable-simulation-v6">
+body,body main{color:#edf6ff}
+body .tl-col section{background:#101e31!important;color:#e7f4ff!important;border:1px solid #38526a!important}
+body #scene{background:#071522!important;border:1px solid #406684!important;border-radius:10px!important;display:block!important}
+body .tl-col section h2,body .tl-col section p,body .tl-col .small{color:#e3effa}
+body #heatExperimentIntro{color:#fff6df!important;background:#243a3f!important;border-color:#769b8c!important}
+body .tl-col #status{font-size:13px!important;color:#b4f5d4!important;font-weight:700}
+body .tl-col button.primary{background:#098576!important;border-color:#70f4ce!important;color:#fff!important}
+body .tl-col #progress{height:13px!important;accent-color:#ffad63!important}
+@media(min-width:900px){
+body #scene{height:clamp(300px,calc(100dvh - 315px),610px)!important;max-height:calc(100dvh - 240px)!important}
+body .tl-col .row button{min-height:34px!important}
+}
+@media(max-width:680px){
+body #scene{height:340px!important;max-height:none!important}
+body .tl-col #heatExperimentIntro{font-size:12px!important}
+}
 </style></head><body><main>
 <header><div class="tag">물리 공식 40 · 인터랙티브 실험실 · 고2</div><h1>21번 · 열량</h1><div class="formula">Q = mcΔT</div><p>질량과 비열, 온도 변화를 바꾸면 필요한 열량은 어떻게 달라질까?</p></header>
-<div class="grid"><section><h2>실험 장면 · 에너지의 출입</h2><canvas id="scene" role="img" aria-label="시료와 온도계, 열의 이동 방향"></canvas><div id="status" class="status" aria-live="polite"></div><progress id="progress" max="1" value="0" aria-label="목표 온도까지 진행률"></progress><div class="row"><button id="start" class="primary">시작</button><button id="pause">일시정지</button><button id="restart">다시 실험</button><button id="reset">전체 초기화</button></div><label class="row small">재생 속도 <select id="speed" style="width:auto"><option value="1">1배</option><option value="10" selected>10배</option><option value="50">50배</option><option value="100">100배</option></select></label><p class="small">실제 모형 시간에 따라 T(t) = T₀ + Pₛt/(mc)로 변합니다. 아래 조작을 바꾸면 시간 0부터 다시 준비합니다.</p></section>
+<div class="grid"><section><h2>실험 장면 · 에너지의 출입</h2><canvas id="scene" role="img" aria-label="시료와 온도계, 열의 이동 방향"></canvas><div id="status" class="status" aria-live="polite"></div><progress id="progress" max="1" value="0" aria-label="목표 온도까지 진행률"></progress><div class="row"><button id="start" class="primary">시작</button><button id="pause">일시정지</button><button id="restart">다시 실험</button><button id="reset">전체 초기화</button></div><label class="row small">재생 속도 <select id="speed" style="width:auto"><option value="1">1배</option><option value="5" selected>5배</option><option value="10">10배</option><option value="30">30배</option></select></label><p class="small">실제 모형 시간에 따라 T(t) = T₀ + Pₛt/(mc)로 변합니다. 아래 조작을 바꾸면 시간 0부터 다시 준비합니다.</p></section>
 <section><h2>예측하고 조작하기</h2><p class="small">먼저 예측해 보세요. 같은 온도 변화에서 질량이 두 배면 열량은?</p><div class="controls"><label>시료의 비열 예시<select id="material"><option value="4200">물 · 4,200 J/(kg·K)</option><option value="900">알루미늄 · 900 J/(kg·K)</option><option value="450">철 · 450 J/(kg·K)</option><option value="385">구리 · 385 J/(kg·K)</option><option value="custom">직접 지정</option></select></label><div id="fields"></div></div><p class="note small">온도는 10~90℃에서 조절합니다. 비열 값은 수업용 근삿값입니다. 냉각에서는 같은 크기의 일정한 열 제거율을 가정합니다.</p></section></div>
 <section><h2>실시간 계산</h2><div class="metrics"><div class="metric"><span>현재 온도 T</span><strong id="temperature"></strong></div><div class="metric"><span>누적 열량 Q · 시료 기준</span><strong id="heat"></strong></div><div class="metric"><span>실험 경과 시간 t</span><strong id="time"></strong></div></div><p id="substitution" class="equation"></p><p id="target"></p><p class="small">m: 질량(kg) · c: 비열[J/(kg·K)] · ΔT = T − T₀(K) · Q: 시료가 받은 열량(J). 온도 차이 1℃ = 1 K. 측정 시작은 t=0이며 누적 열량의 구간은 [0,t]입니다.</p></section>
 <section><h2>관계 그래프 · Q–ΔT</h2><p class="small">가로축: 온도 변화 ΔT(K) · 세로축: 열량 Q(kJ). 현재 조건의 m, c를 고정하고 ΔT를 변화시킨 직선입니다. 시간 변화 그래프가 아닙니다.</p><canvas id="graph" role="img" aria-label="온도 변화와 열량의 비례 관계 그래프"></canvas><p class="small">실선: 현재 조건 · ●: 현재 진행 상태 · ◇: 목표 상태 · 파선 A / 점선 B: 저장 조건. 기울기 mc는 열용량입니다.</p><div class="row"><button id="saveA">조건 A 저장</button><button id="saveB">조건 B 저장</button><button id="clear">비교 지우기</button></div><div class="scroll"><table><thead><tr><th>조건</th><th>m (kg)<br>c (J/kg·K)</th><th>T₀→T목표 (℃)</th><th>목표 Q (kJ)<br>소요 t (s)</th></tr></thead><tbody id="comparison"></tbody></table></div><p id="compareNote" class="small" aria-live="polite"></p></section>
@@ -86,12 +103,100 @@ function prepare(){running=false;elapsed=0;last=null;render();}
 function sync(){for(const [id] of specs){$(id+'s').value=state[id];$(id+'n').value=state[id];}}
 for(const [id,,min,max] of specs){for(const suffix of ['s','n'])$(id+suffix).addEventListener('input',e=>{if(e.target.value===''||!Number.isFinite(Number(e.target.value)))return;state[id]=Math.min(max,Math.max(min,Number(e.target.value)));sync();if(id==='c')$('material').value='custom';prepare();});for(const suffix of ['s','n'])$(id+suffix).addEventListener('change',sync);}
 $('material').onchange=e=>{if(e.target.value!=='custom'){state.c=+e.target.value;sync();prepare();}};
-$('start').onclick=()=>{const d=model(state,elapsed);if(d.duration===0)return;if(elapsed>=d.duration)elapsed=0;running=true;last=null;render();};$('pause').onclick=()=>{running=false;last=null;render();};$('restart').onclick=prepare;$('reset').onclick=()=>{state={...defaults};A=B=null;$('speed').value='10';$('material').value='4200';sync();prepare();};
+$('start').onclick=()=>{const d=model(state,elapsed);if(d.duration===0)return;if(elapsed>=d.duration)elapsed=0;running=true;last=null;render();};$('pause').onclick=()=>{running=false;last=null;render();};$('restart').onclick=prepare;$('reset').onclick=()=>{state={...defaults};A=B=null;$('speed').value='5';$('material').value='4200';sync();prepare();};
 $('saveA').onclick=()=>{A={...state};render();};$('saveB').onclick=()=>{B={...state};render();};$('clear').onclick=()=>{A=B=null;render();};document.addEventListener('visibilitychange',()=>{last=null;});
 function canvas(id){const el=$(id),w=el.clientWidth,h=el.clientHeight,dpr=window.devicePixelRatio||1;if(el.width!==Math.round(w*dpr)||el.height!==Math.round(h*dpr)){el.width=Math.round(w*dpr);el.height=Math.round(h*dpr);}const x=el.getContext('2d');x.setTransform(dpr,0,0,dpr,0,0);x.clearRect(0,0,w,h);return{x,w,h};}
-function scene(d){const {x,w,h}=canvas('scene');const cx=w*.38,cy=125,bw=Math.min(150,w*.4);x.fillStyle=d.ps<0?'#dbeefb':'#ffead3';x.fillRect(cx-bw/2,70,bw,130);x.strokeStyle='#42677e';x.lineWidth=3;x.strokeRect(cx-bw/2,70,bw,130);x.fillStyle='#e8f6ff';x.font='16px system-ui';x.textAlign='center';x.fillText(state.c===4200?'물':state.c===900?'알루미늄':'시료',cx,112);x.fillText(number(state.m)+' kg',cx,140);x.fillText(number(d.temp,1)+' ℃',cx,171);const tx=w*.79;x.strokeStyle='#526b7b';x.lineWidth=12;x.beginPath();x.moveTo(tx,55);x.lineTo(tx,198);x.stroke();x.strokeStyle='#dc6b38';x.lineWidth=6;x.beginPath();x.moveTo(tx,198);x.lineTo(tx,198-(d.temp-10)/80*143);x.stroke();x.fillStyle='#e8f6ff';x.font='13px system-ui';x.fillText('90℃',tx,35);x.fillText('10℃',tx,222);if(d.ps!==0){const y=238;let from=d.ps>0?cx-bw*.65:cx,to=d.ps>0?cx:cx-bw*.65;x.strokeStyle=d.ps>0?'#c65a2b':'#1676ad';x.lineWidth=3;x.beginPath();x.moveTo(from,y);x.lineTo(to,y);x.stroke();const sign=Math.sign(to-from);x.beginPath();x.moveTo(to-sign*9,y-5);x.lineTo(to,y);x.lineTo(to-sign*9,y+5);x.stroke();x.textAlign='left';x.fillStyle='#e8f6ff';x.font='13px system-ui';x.fillText((d.ps>0?'가열기 → 시료 +':'시료 → 냉각기 −')+number(state.p)+' W',Math.max(8,cx-bw/2),y+26);}x.textAlign='left';}
+function scene(d){
+  const {x,w,h}=canvas('scene');
+  if(w<20||h<20)return;
+  const heating=d.ps>=0,progress=Math.max(0,Math.min(1,d.fraction));
+  const material=state.c===4200?'물':state.c===900?'알루미늄':state.c===450?'철':state.c===385?'구리':'시료';
+  const compact=w<540,fs=compact?12:15,pad=compact?9:18;
+  const top=compact?51:59,bottom=h-(compact?67:70);
+  const cx=w*(compact?.42:.43),bw=Math.min(compact?w*.31:w*.32,compact?135:210);
+  const left=cx-bw/2,containerTop=top+9,containerBottom=bottom-25;
+  const vesselHeight=Math.max(82,containerBottom-containerTop);
+  const tempRatio=Math.max(0,Math.min(1,(d.temp-10)/80));
+  function label(txt,tx,ty,size,color,align='left',weight='600'){
+    x.textAlign=align;x.textBaseline='middle';x.font=weight+' '+size+'px system-ui,sans-serif';x.fillStyle=color;x.fillText(txt,tx,ty);
+  }
+  function pill(px,py,pw,ph,fill,radius=8){
+    x.fillStyle=fill;x.beginPath();x.roundRect(px,py,pw,ph,radius);x.fill();
+  }
+  x.fillStyle='#071522';x.fillRect(0,0,w,h);
+  const background=x.createLinearGradient(0,0,w,h);
+  background.addColorStop(0,'#102a43');background.addColorStop(1,'#071522');
+  x.fillStyle=background;x.fillRect(0,0,w,h);
+  // Header tells students what is changing, without hiding the graphic.
+  label(heating?'가열: 열원 → 시료':'냉각: 시료 → 냉각기',pad,22,compact?14:17,heating?'#ffc782':'#8bd7ff','left','750');
+  label('온도 '+number(d.temp,1)+' ℃',w-pad,22,compact?13:17,'#edf9ff','right','750');
+  x.strokeStyle='#35546e';x.lineWidth=1;x.beginPath();x.moveTo(pad,39);x.lineTo(w-pad,39);x.stroke();
+  // Heater/chiller at left, physical vessel in the center.
+  const deviceW=Math.max(48,Math.min(104,w*.145)),deviceX=Math.max(pad,left-deviceW-22);
+  const deviceY=bottom-77;
+  pill(deviceX,deviceY,deviceW,52,heating?'#6e311f':'#173d65');
+  x.strokeStyle=heating?'#ff9a50':'#5bbafa';x.lineWidth=2;x.strokeRect(deviceX+5,deviceY+5,deviceW-10,42);
+  label(heating?'가열기':'냉각기',deviceX+deviceW/2,deviceY+25,compact?11:13,'#fff6e9','center','750');
+  label(heating?'열 공급':'열 방출',deviceX+deviceW/2,deviceY-13,compact?10:12,heating?'#ffbd83':'#9edcff','center');
+  // Moving heat-transfer arrow and energy direction.
+  const arrowY=deviceY+26,arrowFrom=heating?deviceX+deviceW+3:left-5;
+  const arrowTo=heating?left-6:deviceX+deviceW+3,phase=running?(.25+.75*Math.abs(Math.sin(elapsed*.45))):.55;
+  x.strokeStyle=heating?'#ffbb67':'#68c7ff';x.lineWidth=4+(running?phase*3:0);
+  x.beginPath();x.moveTo(arrowFrom,arrowY);x.lineTo(arrowTo,arrowY);x.stroke();
+  const sign=Math.sign(arrowTo-arrowFrom);
+  x.beginPath();x.moveTo(arrowTo,arrowY);x.lineTo(arrowTo-sign*11,arrowY-8);x.lineTo(arrowTo-sign*11,arrowY+8);x.closePath();x.fillStyle=x.strokeStyle;x.fill();
+  // Dark vessel with colored liquid: labels stay bright and readable.
+  pill(left-7,containerTop-8,bw+14,vesselHeight+15,'#b9d5e8',10);
+  pill(left,containerTop,bw,vesselHeight,heating?'#174b64':'#174865',7);
+  const water=x.createLinearGradient(left,containerTop,left,containerBottom);
+  water.addColorStop(0,heating?'#1e6783':'#226e9b');
+  water.addColorStop(1,heating?'#145079':'#1b467f');
+  x.fillStyle=water;x.fillRect(left+5,containerTop+6,bw-10,vesselHeight-12);
+  // Rising bubbles make heating visibly animated; cooling has slower, smaller motion.
+  x.save();x.beginPath();x.rect(left+7,containerTop+7,bw-14,vesselHeight-16);x.clip();
+  for(let i=0;i<19;i++){
+    const seed=(i*41+13)%103/103;
+    const speed=(heating?3.5:1.2)*(running?1:0);
+    const travel=(seed*vesselHeight+elapsed*speed*(1+i%4))%vesselHeight;
+    const py=containerBottom-9-travel;
+    const px=left+11+((i*37+11)%100)/100*(bw-22);
+    const rad=(i%4===0?3:2.2)*(running?1.1:.85);
+    x.fillStyle=heating?'rgba(255,205,150,.84)':'rgba(157,226,255,.65)';
+    x.beginPath();x.arc(px,py,rad,0,Math.PI*2);x.fill();
+  }
+  x.restore();
+  pill(cx-(compact?48:65),containerTop+vesselHeight*.39,compact?96:130,compact?47:56,'rgba(2,18,35,.83)');
+  label(material,cx,containerTop+vesselHeight*.39+(compact?14:17),compact?12:15,'#e6f7ff','center','750');
+  label(number(state.m)+' kg',cx,containerTop+vesselHeight*.39+(compact?32:38),compact?12:14,'#bce5f9','center');
+  // Heat plate below sample; visibility is tied to the running state.
+  pill(left-10,containerBottom+9,bw+20,12,heating?(running?'#ff883f':'#a85635'):'#4c9ce7',5);
+  if(running&&heating){for(let j=0;j<3;j++){
+    const hx=left+(j+1)*bw/4,hy=containerBottom+4-7*Math.sin(elapsed*.35+j);
+    label('⌁',hx,hy,23,'#ffb777','center','700');
+  }}
+  // Large readable thermometer at the right.
+  const tx=Math.max(cx+bw/2+32,w*.81),thermTop=containerTop+7,thermBottom=containerBottom-8;
+  const tw=compact?15:18;
+  pill(tx-tw/2-3,thermTop-4,tw+6,thermBottom-thermTop+12,'#c2d7e6',9);
+  pill(tx-tw/2,thermTop,tw,thermBottom-thermTop+4,'#17334d',8);
+  const liquidHeight=Math.max(3,(thermBottom-thermTop)*tempRatio);
+  x.fillStyle=heating?'#ff8067':'#57c8f5';
+  pill(tx-tw/2+3,thermBottom-liquidHeight,tw-6,liquidHeight+4,x.fillStyle,4);
+  x.beginPath();x.arc(tx,thermBottom+8,tw*.75,0,Math.PI*2);x.fill();
+  label('90℃',tx+tw/2+6,thermTop,compact?10:12,'#d0e9f7');
+  label('10℃',tx+tw/2+6,thermBottom,compact?10:12,'#d0e9f7');
+  label('온도계',tx,thermBottom+33,compact?11:13,'#d6edfb','center');
+  // Every frame also gives unambiguous numerical progress.
+  const baseY=h-44;
+  label(running?'● '+(heating?'가열 중':'냉각 중'):d.fraction>=1?'✓ 목표 온도 도달':'▶ 시작 버튼을 누르세요',pad,baseY-7,compact?11:13,running?'#8ef3c7':'#e2ecf8');
+  label(number(d.temp-state.t0,1)+' ℃ 변화',w-pad,baseY-7,compact?11:12,'#a5d9f5','right');
+  pill(pad,h-31,w-pad*2,12,'#19364a',6);
+  if(progress>0)pill(pad,h-31,Math.max(1,(w-pad*2)*progress),12,heating?'#ff9b51':'#4abdea',6);
+  label('목표 '+number(state.tf)+' ℃  ·  진행 '+number(progress*100,0)+'%  ·  Q '+number(d.q/1000,2)+' kJ',
+        w/2,h-8,compact?10:13,'#e3f3ff','center','700');
+}
 function graph(d){const {x,w,h}=canvas('graph');const left=68,right=w-15,top=28,bottom=h-49;const records=[state,A,B].filter(Boolean),maxY=Math.max(...records.map(s=>s.m*s.c*80/1000),1)*1.08;const xx=v=>left+(v+80)/160*(right-left),yy=v=>bottom-(v+maxY)/(2*maxY)*(bottom-top);x.font='12px system-ui';x.textAlign='right';for(let i=0;i<5;i++){const val=-maxY+i*maxY/2,y=yy(val);x.strokeStyle='#304b63';x.beginPath();x.moveTo(left,y);x.lineTo(right,y);x.stroke();x.fillStyle='#a9c7de';x.fillText(number(val,0),left-6,y+4);}x.strokeStyle='#577489';x.strokeRect(left,top,right-left,bottom-top);for(const v of [-80,-40,0,40,80]){x.textAlign=v===-80?'left':v===80?'right':'center';x.fillStyle='#a9c7de';x.fillText(v,xx(v),bottom+18);}x.textAlign='left';x.fillStyle='#e8f6ff';x.fillText('Q (kJ)',4,17);x.textAlign='right';x.fillText('ΔT (K)',right,h-5);x.strokeStyle='#577489';x.beginPath();x.moveTo(xx(0),top);x.lineTo(xx(0),bottom);x.moveTo(left,yy(0));x.lineTo(right,yy(0));x.stroke();[[state,'#147c9a',[]],[A,'#9867ba',[7,5]],[B,'#a05c29',[2,4]]].forEach(([s,col,dash])=>{if(!s)return;x.setLineDash(dash);x.strokeStyle=col;x.lineWidth=2;x.beginPath();x.moveTo(xx(-80),yy(-80*s.m*s.c/1000));x.lineTo(xx(80),yy(80*s.m*s.c/1000));x.stroke();});x.setLineDash([]);x.fillStyle='#147c9a';x.beginPath();x.arc(xx(d.delta),yy(d.q/1000),5,0,Math.PI*2);x.fill();const px=xx(state.tf-state.t0),py=yy(d.qt/1000);x.strokeStyle='#147c9a';x.beginPath();x.moveTo(px,py-7);x.lineTo(px+7,py);x.lineTo(px,py+7);x.lineTo(px-7,py);x.closePath();x.stroke();}
-function render(){const d=model(state,elapsed);const intro=$('heatExperimentIntro');if(intro){const material=state.c===4200?'물':state.c===900?'알루미늄':state.c===450?'철':state.c===385?'구리':'시료';intro.textContent=material+' '+number(state.m)+' kg · '+number(state.t0)+'℃ → '+number(state.tf)+'℃ '+(state.tf>state.t0?'가열':state.tf<state.t0?'냉각':'열출입 없음')+' | 온도계와 누적 열량 Q를 관찰하세요.';}$('temperature').textContent=number(d.temp,2)+' ℃';$('heat').textContent=number(d.q,1)+' J';$('time').textContent=number(d.t,1)+' s';$('substitution').textContent=`Q = mc(T − T₀) = ${number(state.m)} × ${number(state.c)} × (${number(d.temp,3)} − ${number(state.t0)}) ≈ ${number(d.q,1)} J`;$('target').textContent=`목표: ΔT = ${number(state.tf-state.t0)} K → Q = ${number(d.qt)} J (${number(d.qt/1000)} kJ) · 소요 시간 ${number(d.duration,1)} s · 열용량 mc = ${number(state.m*state.c)} J/K`;$('status').textContent=d.duration===0?'온도 변화 0 K · 열의 출입 없음':running?'실험 진행 중 · '+(d.ps>0?'가열':'냉각'):elapsed>=d.duration?'목표 도달 · 열의 출입 종료':elapsed>0?'일시정지 · 이어서 시작 가능':'준비 · 시작을 눌러 관찰하세요';$('progress').value=d.fraction;$('pause').disabled=!running;$('start').disabled=running||d.duration===0;$('comparison').innerHTML=[['현재',state],['A',A],['B',B]].map(([label,s])=>{if(!s)return`<tr><td>${label}</td><td colspan="3">저장되지 않음</td></tr>`;const v=model(s,0);return`<tr><td>${label}</td><td>${number(s.m)}<br>${number(s.c)}</td><td>${s.t0}→${s.tf}</td><td>${number(v.qt/1000)}<br>${number(v.duration,1)}</td></tr>`;}).join('');$('compareNote').textContent=A&&B?`목표 열량 B/A = ${model(A,0).qt!==0?number(model(B,0).qt/model(A,0).qt,3):'정의되지 않음 (A=0 J)'}. 비교는 각 조건의 목표 온도 도달 기준입니다.`:'질량·비열·목표 온도를 바꾸기 전후에 A와 B를 저장해 비교하세요.';scene(d);graph(d);}
+function render(){const d=model(state,elapsed);const intro=$('heatExperimentIntro');if(intro){const material=state.c===4200?'물':state.c===900?'알루미늄':state.c===450?'철':state.c===385?'구리':'시료';intro.textContent=material+' '+number(state.m)+' kg · '+number(state.t0)+'℃ → '+number(state.tf)+'℃ '+(state.tf>state.t0?'가열':state.tf<state.t0?'냉각':'열출입 없음')+' | 온도계와 누적 열량 Q를 관찰하세요.';}$('temperature').textContent=number(d.temp,2)+' ℃';$('heat').textContent=number(d.q/1000,2)+' kJ';$('time').textContent=number(d.t,1)+' s';$('substitution').textContent=`Q = mc(T − T₀) = ${number(state.m)} × ${number(state.c)} × (${number(d.temp,3)} − ${number(state.t0)}) ≈ ${number(d.q,1)} J`;$('target').textContent=`목표: ΔT = ${number(state.tf-state.t0)} K → Q = ${number(d.qt)} J (${number(d.qt/1000)} kJ) · 소요 시간 ${number(d.duration,1)} s · 열용량 mc = ${number(state.m*state.c)} J/K`;$('status').textContent=d.duration===0?'온도 변화 0 K · 열의 출입 없음':running?'실험 진행 중 · '+(d.ps>0?'가열':'냉각'):elapsed>=d.duration?'목표 도달 · 열의 출입 종료':elapsed>0?'일시정지 · 이어서 시작 가능':'준비 · 시작을 눌러 관찰하세요';$('progress').value=d.fraction;$('pause').disabled=!running;$('start').disabled=running||d.duration===0;$('comparison').innerHTML=[['현재',state],['A',A],['B',B]].map(([label,s])=>{if(!s)return`<tr><td>${label}</td><td colspan="3">저장되지 않음</td></tr>`;const v=model(s,0);return`<tr><td>${label}</td><td>${number(s.m)}<br>${number(s.c)}</td><td>${s.t0}→${s.tf}</td><td>${number(v.qt/1000)}<br>${number(v.duration,1)}</td></tr>`;}).join('');$('compareNote').textContent=A&&B?`목표 열량 B/A = ${model(A,0).qt!==0?number(model(B,0).qt/model(A,0).qt,3):'정의되지 않음 (A=0 J)'}. 비교는 각 조건의 목표 온도 도달 기준입니다.`:'질량·비열·목표 온도를 바꾸기 전후에 A와 B를 저장해 비교하세요.';scene(d);graph(d);}
 function frame(now){if(running&&!document.hidden){if(last!==null){elapsed=Math.min(model(state,0).duration,elapsed+(now-last)/1000*+$('speed').value);if(elapsed>=model(state,0).duration)running=false;}last=now;render();}else last=null;requestAnimationFrame(frame);}window.addEventListener('resize',()=>render());window.heatQuantityApi={finish:()=>{running=false;elapsed=model(state,0).duration;render()},render:()=>render(),get:()=>({...state,elapsed})};render();requestAnimationFrame(frame);
 </script><script>
 (()=>{'use strict';
