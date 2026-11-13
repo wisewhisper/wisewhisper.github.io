@@ -1,28 +1,436 @@
 <!doctype html>
-<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>24번 파동 속력 실험실</title><style>
-:root{color-scheme:light;--ink:#17233e;--muted:#52617a;--line:#d8e1ef;--blue:#1768bb;--orange:#a9450d;--bg:#f2f6fc}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,sans-serif}main{max-width:1120px;margin:auto;padding:24px 16px 48px}h1{font-size:clamp(25px,5vw,38px);margin:4px 0}h2{font-size:20px;margin:0 0 12px}p{margin:8px 0}.kicker{color:var(--blue);font-weight:700}.formula{font-size:30px;font-weight:700}.muted{color:var(--muted);font-size:14px}.grid{display:grid;grid-template-columns:1.35fr 1fr;gap:16px}.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;margin-top:16px;min-width:0}.badge{display:inline-block;padding:4px 10px;background:#e9f2ff;border-radius:8px}.scene{width:100%;height:auto;display:block;background:#f8fbff;border-radius:12px}button,select,input{font:inherit}button,select{min-height:44px;border:1px solid #bdcde2;border-radius:10px;background:#fff;color:var(--ink);padding:8px 12px}button{cursor:pointer}button.primary{background:var(--blue);color:#fff;border-color:var(--blue)}.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.control{margin:16px 0}.control label{display:flex;justify-content:space-between;gap:8px;font-weight:600}.inputs{display:flex;gap:10px;align-items:center}input[type=range]{width:100%;min-width:0;min-height:44px;accent-color:var(--blue)}input[type=number]{width:95px;border:1px solid #bdcde2;border-radius:8px;padding:8px;min-height:44px}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}.metric{padding:10px;background:#eef4fc;border-radius:10px}.metric strong{display:block;font-size:21px}.metric span{font-size:13px}.calc{padding:14px;background:#eef4fc;border-radius:10px;overflow-wrap:anywhere}.graph{width:100%;height:290px;display:block}details{border-top:1px solid var(--line);padding:12px 0}summary{cursor:pointer;min-height:44px;font-weight:600}table{border-collapse:collapse;width:100%;font-size:14px}td,th{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line)}.scroll{overflow:auto}.hint{padding:10px 12px;background:#fff5e9;border-radius:10px}svg text{font:14px system-ui,sans-serif;fill:var(--ink)}@media(max-width:720px){.grid{grid-template-columns:1fr}main{padding:16px 12px}.card{padding:16px}.metrics strong{font-size:18px}#wave text{font-size:22px}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
-</style></head><body><main>
-<header><div class="kicker">물리 공식 40 · 인터랙티브 실험실</div><h1>24번 · 파동 속력</h1><div class="formula">v = fλ</div><p>진동수와 파장을 바꾸면 파동의 전달 속력은 어떻게 변할까요?</p><p class="muted">예측 → 조작 → 관찰 → 설명 · 고등학교 2학년</p></header>
-<div class="grid"><section class="card"><h2>파동은 이동하고, 매질은 진동합니다</h2><div class="row"><span class="badge" id="clock">t = 0.00 s</span><span id="direction">전달 방향: 오른쪽 →</span></div>
-<svg id="wave" class="scene" viewBox="0 0 640 310" role="img" aria-label="위치에 따른 횡파와 제자리에서 진동하는 매질 점"><defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto-start-reverse"><path d="M0,0 L6,3 L0,6" fill="#a9450d"/></marker></defs><g id="wavecontent"></g></svg>
-<p class="muted">파란 선: 파형 · 주황 점: x = 6 m의 매질 · 검은 ◇: 이동하는 마루<br>가로축은 0~24 m, 세로축은 변위 −1~1 m입니다. 표시 비율은 축마다 다릅니다.</p>
-<div class="row"><button id="play" class="primary">시작</button><button id="restart">재시작</button><button id="reset">전체 초기화</button><label for="rate">재생 속도</label><select id="rate"><option value="0.1">0.1배</option><option value="0.25">0.25배</option><option value="0.5" selected>0.5배</option><option value="1">1배</option></select></div><p class="muted">재생 배율은 화면 시간만 조절하며 물리적 속력에는 영향을 주지 않습니다.</p>
-</section><section class="card"><h2>변수 조작과 실시간 계산</h2><label for="mode">탐구 모드</label><select id="mode" style="width:100%"><option value="free">관계 탐구: f·λ 지정 → v 계산</option><option value="fixed">같은 매질: v 고정 → λ 계산</option></select><p id="modenote" class="hint"></p>
-<div id="controls"></div><label for="dir">전달 방향</label><select id="dir"><option value="1">오른쪽 →</option><option value="-1">← 왼쪽</option></select>
-<p class="muted">물리 조건을 바꾸면 t = 0으로 재시작합니다. 실행·정지 상태는 유지됩니다.</p><div class="metrics"><div class="metric"><span>속력 v (m/s)</span><strong id="vout"></strong></div><div class="metric"><span>파장 λ (m)</span><strong id="lout"></strong></div><div class="metric"><span>주기 T (s)</span><strong id="tout"></strong></div></div><div id="calc" class="calc" aria-live="polite"></div><p class="muted">v: 파형의 전달 속력 · f: 1초당 진동 횟수(Hz) · λ: 같은 위상 사이 거리(m) · T = 1/f</p>
-</section></div>
-<section class="card"><h2>변수 관계 그래프</h2><p id="graphnote"></p><svg id="graph" class="graph" role="img" aria-label="진동수에 따른 속력 또는 파장 관계 그래프"></svg><p class="muted">실선: 관계 곡선 · ●: 현재 조건 · □: 조건 A · △: 조건 B. 시간 변화 그래프가 아닙니다. 다른 모드의 저장 조건은 표에서 비교합니다.</p><div class="row"><button id="saveA">조건 A 저장</button><button id="saveB">조건 B 저장</button><button id="clear">비교 지우기</button></div><div class="scroll"><table><thead><tr><th>조건</th><th>모드</th><th>f (Hz)</th><th>λ (m)</th><th>v (m/s)</th><th>진폭 (m)</th><th>방향</th></tr></thead><tbody id="compare"></tbody></table></div><p id="compareNote" class="muted"></p></section>
-<section class="card"><h2>예측하고 설명하기</h2><details><summary>기본 · 파장이 같을 때 진동수를 2배로 바꾸면?</summary><p>관계 탐구 모드에서 f = 1 Hz, λ = 2 m를 A에 저장하고 f = 2 Hz를 B에 저장하세요. v는 2 m/s에서 4 m/s로 2배가 됩니다. 1초에 통과하는 파장 수가 2배가 되기 때문입니다.</p></details><details><summary>응용 · 같은 매질에서 진동수가 2배가 되면?</summary><p>같은 매질 모드에서 v = 2 m/s를 고정하고 f를 1 Hz에서 2 Hz로 바꾸세요. 파장은 2 m에서 1 m로 줄어듭니다. 비분산 매질에서는 속력이 일정하므로 λ = v/f입니다.</p></details><details><summary>도전 · 진폭을 2배로 키우면 파동 속력도 2배가 될까?</summary><p>진폭을 0.3 m에서 0.6 m로 바꿔 비교하세요. 이 선형 파동 모형에서는 f와 λ가 같으면 속력은 변하지 않습니다. 주황 매질 점의 최대 진동 속력은 2πfA이므로 진폭에 비례합니다. 매질 점의 진동 속력과 파형의 전달 속력은 서로 다른 양입니다.</p></details><details><summary>오개념 · 파동이 이동하면 매질도 함께 이동한다?</summary><p>시작한 뒤 주황 점을 관찰하세요. 점의 x 좌표는 6 m로 고정되어 위아래로만 진동합니다. 반면 마루 ◇는 옆으로 이동합니다. 파동은 에너지를 전달하며 매질의 지속적인 수평 이동을 뜻하지 않습니다. 전달 방향을 바꾸어도 v의 크기는 양수입니다.</p></details><details><summary>적용 조건과 모형의 한계</summary><p>균일한 1차원 매질에서 진행하는 단일 진동수의 정현 횡파를 사용합니다. y(x,t) = A sin[2π(x/λ − sf t)], s = +1(오른쪽), −1(왼쪽)입니다. 반사·감쇠·비선형 효과는 생략했습니다.</p><p>관계 탐구 모드는 파형 조합을 비교합니다. λ를 고정한 채 f를 바꾸면 계산된 v가 달라지므로 같은 비분산 매질의 실험으로 해석하면 안 됩니다. 같은 매질 모드에서는 비분산·선형 매질의 속력을 고정합니다. 분산이 있는 매질에서는 진동수에 따라 위상 속력이 달라질 수 있습니다. 여기의 v는 위상 속력이며 군속력은 다루지 않습니다.</p><p>파동은 이미 공간 전체에 형성된 것으로 가정합니다. 마루 표식은 화면 끝에서 이어지는 다른 마루에 다시 붙습니다. 매질 점이 수평으로 되돌아가는 표현이 아닙니다. 입력 범위는 f = 0.5~3 Hz, λ = 0.5~6 m, 고정 v = 2~6 m/s, A = 0.1~0.8 m입니다.</p></details></section>
-</main><script>
-'use strict';
-const $=id=>document.getElementById(id),defaults={mode:'free',f:1,l:2,v:2,a:.4,dir:1},state={...defaults},saved={A:null,B:null};let t=0,running=false,last=null;
-const fmt=x=>Number(x).toFixed(2);function physics(s=state){const l=s.mode==='fixed'?s.v/s.f:s.l;return {l,v:s.f*l,T:1/s.f};}function displacement(x,time,s=state){let p=physics(s);return s.a*Math.sin(2*Math.PI*(x/p.l-s.dir*s.f*time));}
-function control(key,title,min,max,step){return `<div class="control"><label for="${key}n">${title}</label><div class="inputs"><input aria-label="${title} 슬라이더" id="${key}r" type="range" min="${min}" max="${max}" step="${step}" value="${state[key]}"><input id="${key}n" type="number" min="${min}" max="${max}" step="${step}" value="${state[key]}"></div></div>`;}
-function build(){ $('controls').innerHTML=control('f','진동수 f (Hz)',.5,3,.1)+(state.mode==='free'?control('l','파장 λ (m)',.5,6,.1):control('v','고정 속력 v (m/s)',2,6,.1))+control('a','진폭 A (m)',.1,.8,.05);for(const key of ['f',state.mode==='free'?'l':'v','a'])for(const suffix of ['r','n'])$(key+suffix).addEventListener('input',e=>{if(e.target.value==='')return;const val=Number(e.target.value);if(!Number.isFinite(val))return;state[key]=Math.min(Number(e.target.max),Math.max(Number(e.target.min),val));$(key+'r').value=state[key];$(key+'n').value=state[key];restart();update();});$('modenote').textContent=state.mode==='free'?'f와 λ를 지정합니다. v가 바뀌면 매질 조건도 달라질 수 있습니다.':'균일한 비분산 매질의 v를 고정합니다. f가 변하면 λ가 자동으로 바뀝니다.';}
-function restart(){t=0;last=null;drawWave();}function drawWave(){const p=physics(),left=48,right=618,mid=156,sx=x=>left+x/24*(right-left),sy=y=>mid-y*90;let z='';for(let x=0;x<=24;x+=6)z+=`<line x1="${sx(x)}" y1="55" x2="${sx(x)}" y2="247" stroke="#d8e1ef"/><text x="${sx(x)}" y="273" text-anchor="middle">${x}</text>`;z+=`<line x1="48" y1="156" x2="618" y2="156" stroke="#9aaac1"/><text x="20" y="70">+1</text><text x="25" y="160">0</text><text x="20" y="247">−1</text><text x="48" y="30">변위 y (m)</text><text x="540" y="298">위치 x (m)</text>`;let path='';for(let i=0;i<=960;i++){let x=24*i/960;path+=(i?'L':'M')+sx(x).toFixed(2)+','+sy(displacement(x,t)).toFixed(2);}z+=`<path d="${path}" fill="none" stroke="#1768bb" stroke-width="3"/>`;for(let x=0;x<=24;x+=.5)z+=`<circle cx="${sx(x)}" cy="${sy(displacement(x,t))}" r="2.4" fill="#1768bb"/>`;let cx=((p.l/4+state.dir*p.v*t)%p.l+p.l)%p.l;let px=sx(cx),py=sy(state.a);z+=`<path d="M${px},${py-7} l7,7 l-7,7 l-7,-7 Z" fill="#17233e"/><circle cx="${sx(6)}" cy="${sy(displacement(6,t))}" r="7" fill="#a9450d" stroke="#fff" stroke-width="2"/>`;let x0=sx(cx),x1=sx(cx+p.l);z+=`<line x1="${x0}" y1="47" x2="${x1}" y2="47" stroke="#a9450d" marker-start="url(#arrow)" marker-end="url(#arrow)"/><text x="400" y="30" text-anchor="middle">λ = ${fmt(p.l)} m</text>`;$('wavecontent').innerHTML=z;$('clock').textContent='t = '+fmt(t)+' s';}
-function drawGraph(){const p=physics(),w=Math.max(300,$('graph').clientWidth),h=290,L=62,R=w-20,top=35,bottom=239,x=f=>L+(f-.5)/2.5*(R-L),value=(f,s=state)=>s.mode==='free'?f*s.l:s.v/f,ymax=state.mode==='free'?3*state.l:state.v/.5,y=val=>bottom-val/(ymax*1.1)*(bottom-top);$('graph').setAttribute('viewBox',`0 0 ${w} ${h}`);let z=`<text x="${L}" y="20">${state.mode==='free'?'속력 v (m/s)':'파장 λ (m)'}</text>`;for(let i=0;i<=4;i++){let val=ymax*i/4;z+=`<line x1="${L}" y1="${y(val)}" x2="${R}" y2="${y(val)}" stroke="#d8e1ef"/><text x="${L-8}" y="${y(val)+5}" text-anchor="end">${fmt(val)}</text>`;}for(let f of [.5,1.5,2.5,3])z+=`<text x="${x(f)}" y="260" text-anchor="middle">${f}</text>`;z+=`<path d="M${L},${top}V${bottom}H${R}" stroke="#52617a" fill="none"/><text x="${R}" y="283" text-anchor="end">진동수 f (Hz)</text>`;let d='';for(let i=0;i<=160;i++){let f=.5+i/160*2.5;d+=(i?'L':'M')+x(f)+','+y(value(f));}z+=`<path d="${d}" stroke="#1768bb" stroke-width="3" fill="none"/>`;for(let key of ['A','B']){let s=saved[key];if(!s||s.mode!==state.mode)continue;let v=state.mode==='free'?physics(s).v:physics(s).l;if(v>ymax*1.1)continue;let xx=x(s.f),yy=y(v);z+=key==='A'?`<rect x="${xx-6}" y="${yy-6}" width="12" height="12" fill="none" stroke="#a9450d" stroke-width="2"/>`:`<path d="M${xx},${yy-7}l7,14h-14Z" fill="none" stroke="#a9450d" stroke-width="2"/>`;}z+=`<circle cx="${x(state.f)}" cy="${y(value(state.f))}" r="5" fill="#1768bb"/>`;$('graph').innerHTML=z;$('graphnote').textContent=state.mode==='free'?`λ = ${fmt(p.l)} m 고정, f 변화 → v는 f에 비례합니다.`:`v = ${fmt(p.v)} m/s 고정, f 변화 → λ는 f에 반비례합니다.`;}
-function compare(){let z='';for(let key of ['A','B']){let s=saved[key];if(s){let p=physics(s);z+=`<tr><th>${key==='A'?'□':'△'} ${key}</th><td>${s.mode==='free'?'관계 탐구':'같은 매질'}</td><td>${fmt(s.f)}</td><td>${fmt(p.l)}</td><td>${fmt(p.v)}</td><td>${fmt(s.a)}</td><td>${s.dir===1?'→':'←'}</td></tr>`;}}$('compare').innerHTML=z||'<tr><td colspan="7">현재 조건을 A와 B에 저장하세요.</td></tr>';$('compareNote').textContent=saved.A&&saved.B?`B/A 비율: 진동수 ${fmt(saved.B.f/saved.A.f)}배 · 파장 ${fmt(physics(saved.B).l/physics(saved.A).l)}배 · 속력 ${fmt(physics(saved.B).v/physics(saved.A).v)}배. 그래프 범위 밖의 저장값은 표에서 확인하세요.`:'';}
-function update(){const p=physics();$('vout').textContent=fmt(p.v);$('lout').textContent=fmt(p.l);$('tout').textContent=fmt(p.T);$('calc').textContent=`v = fλ = ${fmt(state.f)} Hz × ${fmt(p.l)} m = ${fmt(p.v)} m/s`+(state.mode==='fixed'?` · λ = v/f = ${fmt(state.v)}/${fmt(state.f)} = ${fmt(p.l)} m`:'');$('direction').textContent=state.dir===1?'전달 방향: 오른쪽 →':'전달 방향: ← 왼쪽';drawWave();drawGraph();compare();}
-$('mode').onchange=e=>{state.mode=e.target.value;restart();build();update();};$('dir').onchange=e=>{state.dir=Number(e.target.value);restart();update();};$('play').onclick=()=>{running=!running;last=null;$('play').textContent=running?'일시정지':'시작';};$('restart').onclick=restart;$('reset').onclick=()=>{Object.assign(state,defaults);saved.A=saved.B=null;running=false;$('play').textContent='시작';$('mode').value='free';$('dir').value='1';$('rate').value='0.5';restart();build();update();};for(let key of ['A','B'])$('save'+key).onclick=()=>{saved[key]={...state};update();};$('clear').onclick=()=>{saved.A=saved.B=null;update();};document.addEventListener('visibilitychange',()=>{last=null;});window.addEventListener('resize',drawGraph);
-function frame(now){if(running&&!document.hidden){if(last!==null)t+=Math.min((now-last)/1000,.1)*Number($('rate').value);drawWave();}last=now;requestAnimationFrame(frame);}build();update();requestAnimationFrame(frame);
-</script></body></html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#081725">
+<title>24번 파동 속력 | 통합 파동 실험실</title>
+<style>
+:root{color-scheme:dark;--bg:#081725;--panel:#11283e;--panel2:#18354d;--line:#3a5d75;--ink:#effaff;--muted:#b6d4e5;--aqua:#6de9e3;--gold:#ffd187;--orange:#ffa77c;--blue:#91bbff;--pink:#e4a0f7}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font:14px/1.48 system-ui,-apple-system,"Malgun Gothic",sans-serif}
+button,input,select{font:inherit}button{cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #a3f9ff;outline-offset:2px}
+button:disabled{opacity:.44;cursor:default}
+button{border-radius:8px;background:#244961;border:1px solid #567e97;color:#eaf9ff;min-height:34px;padding:6px 10px;font-weight:750}
+button:hover:not(:disabled){background:#31627d}
+button.primary{background:#07798a;border-color:#74e8ee;color:#fff}
+[hidden]{display:none!important}
+.app{height:100dvh;min-height:605px;padding:9px 11px;display:flex;flex-direction:column;gap:7px;overflow:hidden}
+.header{display:flex;align-items:center;gap:11px;min-height:34px;flex:0 0 auto}
+.header h1{font-size:clamp(19px,1.85vw,26px);line-height:1.18;margin:0;white-space:nowrap}
+.header .sub{font-size:12px;color:var(--muted)}
+.header .full{margin-left:auto}
+.nav{display:flex;flex:0 0 auto;align-items:center;gap:6px;overflow-x:auto;padding-bottom:3px;min-height:39px}
+.nav button{white-space:nowrap}
+.nav button[aria-selected=true]{background:#087b8b;border-color:#90f1ed;box-shadow:inset 0 -2px #bafcf6}
+.workspace{min-height:0;min-width:0;flex:1 1 auto;display:grid;grid-template-columns:minmax(0,4fr) minmax(252px,1fr);gap:9px}
+.left{display:flex;flex-direction:column;gap:7px;min-height:0;min-width:0}
+.sim,.plotsection{min-height:0;min-width:0;flex:1 1 auto;display:flex;flex-direction:column;gap:7px;background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:9px 12px;overflow:hidden}
+.plotsection{display:none}
+.topline{flex:0 0 auto;display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+.topline h2{font-size:16px;margin:0 10px 0 0}
+.topline .actions{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+.topline .actions button{font-size:12px;min-height:32px;padding:5px 8px}
+.topline .explain{margin-left:auto;font-size:12px;color:#bfd9eb}
+.plotsection .topline button[aria-pressed=true]{background:#087c8d;border-color:#a1f2f3}
+.svgholder{flex:1 1 auto;min-height:170px;min-width:0;display:flex}
+#waveScene{display:block;width:100%;height:100%;min-height:170px;max-height:none;flex:1 1 auto;background:#0c1e32;border-radius:9px;border:1px solid #375972}
+#waveScene text,.chartsvg text{font-family:system-ui,-apple-system,"Malgun Gothic",sans-serif}
+.caption{font-size:12px;color:var(--muted);line-height:1.47;flex:0 0 auto;margin:0}
+.ticker{font-size:12px;color:#b0f2e4;font-weight:700;flex:0 0 auto;line-height:1.4}
+.measurements{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;flex:0 0 auto}
+.meter{padding:7px 8px;background:#19354a;border:1px solid #42677e;border-radius:9px;min-width:0;min-height:63px;text-align:center}
+.meter small{color:#b7d4e5;display:block;font-size:11px;white-space:nowrap}
+.meter strong{display:block;color:#f6fcff;font-size:clamp(14px,1.4vw,20px);line-height:1.4;font-variant-numeric:tabular-nums;white-space:nowrap}
+.meter:first-child strong,.meter:nth-child(3) strong{color:var(--aqua)}
+.meter:nth-child(4) strong{color:var(--gold)}
+.footnote{font-size:11px;color:#b1cfdf;line-height:1.4;flex:0 0 auto;margin:0}
+.side{min-height:0;min-width:0;display:flex;flex-direction:column;gap:8px;overflow-y:auto;padding-right:2px;scrollbar-width:thin}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:10px 11px}
+.card h2{font-size:15px;margin:0 0 9px}
+.field{margin:0 0 10px}
+.field label{font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:space-between;gap:6px}
+.field output{color:#85eeed;white-space:nowrap;font-variant-numeric:tabular-nums}
+.field input[type=range]{display:block;width:100%;height:26px;accent-color:#70dbe6;margin:1px 0 0}
+.field select{margin:4px 0 0;width:100%;min-height:35px;border-radius:8px;border:1px solid #5a7f97;background:#1c394f;color:#f1fbff;padding:6px}
+.field[hidden]{display:none!important}
+.field .rangeends{display:flex;justify-content:space-between;color:#90afc4;font-size:10px}
+.quicks{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.quicks button{font-size:12px;padding:5px 5px}
+.card .note{color:#b8d4e6;font-size:11px;line-height:1.55;margin:6px 0}
+.key{background:#1c394e;border:1px solid #466882;border-radius:8px;font-size:12px;line-height:1.6;padding:9px}
+.key b{color:#7ce6df}
+.card .modebadge{padding:5px 8px;border-radius:7px;background:#153e4e;color:#a9f3e8;font-size:11px;line-height:1.55;font-weight:700;margin:4px 0}
+.plots{min-height:0;min-width:0;flex:1 1 auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.graphbox{min-height:0;min-width:0;display:flex;flex-direction:column;gap:5px;padding:8px;background:#0e2135;border:1px solid #36576e;border-radius:9px}
+.graphbox h3{margin:0;font-size:13px;color:#e6f5ff}
+.chartsvg{flex:1 1 auto;min-width:0;min-height:165px;display:block;width:100%;height:100%;border:1px solid #36566e;border-radius:8px;background:#081c2e}
+.graphbox .caption{font-size:11px}
+#relationPlot{display:none}
+.plotsection[data-chart=relation] .plots{grid-template-columns:1fr}
+.plotsection[data-chart=relation] .pairgraph{display:none}
+.plotsection[data-chart=relation] #relationPlot{display:flex}
+.compare{flex:0 0 auto;background:#0e2337;border:1px solid #355a72;border-radius:8px;padding:7px 8px;min-width:0;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:11px;text-align:center;white-space:nowrap}
+th,td{border-bottom:1px solid #335068;padding:4px 7px}
+th{color:#d5eaf5}
+.legend{display:flex;flex-wrap:wrap;gap:12px;color:#c0d8e6;font-size:11px}
+.legend span:before{display:inline-block;content:"";width:12px;height:3px;background:currentColor;vertical-align:middle;margin-right:4px}
+.legend .now{color:#6de9e3}.legend .a{color:#ffb1a1}.legend .b{color:#c9b1ff}.legend .p{color:#ffd58b}
+.concepts{display:none;min-width:0;min-height:0;overflow-y:auto}
+.lessongrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.lesson{border-radius:11px;padding:16px;background:var(--panel);border:1px solid var(--line)}
+.lesson h2{color:#8de6eb;font-size:17px;margin:0 0 8px}
+.lesson p{line-height:1.73;margin:8px 0}
+.lesson .formula{border:1px solid #3d6981;background:#1d3c52;padding:10px;font-size:19px;border-radius:8px;line-height:1.7}
+.lesson.wide{grid-column:1/-1}
+.lesson details{border-top:1px solid #395672;padding:9px 0}
+.lesson summary{cursor:pointer;font-weight:750}
+.workspace[data-tab=graphs] .sim{display:none}
+.workspace[data-tab=graphs] .plotsection{display:flex}
+.workspace[data-tab=concept]{display:block}
+.workspace[data-tab=concept] .left,.workspace[data-tab=concept] .side{display:none}
+.workspace[data-tab=concept] .concepts{display:block}
+@media(min-width:901px) and (max-height:750px){.app{padding:7px 9px;gap:5px}.sim,.plotsection{padding:7px 9px;gap:5px}.card{padding:8px}.field{margin-bottom:6px}.meter{min-height:51px;padding:4px 6px}.chartsvg{min-height:135px}}
+@media(max-width:900px){.app{height:auto;min-height:100dvh;overflow:visible}.workspace{display:flex;flex-direction:column}.left{min-height:540px}.sim,.plotsection{min-height:480px}.svgholder{min-height:330px}.side{overflow:visible}.plots{grid-template-columns:1fr}.chartsvg{height:250px;flex:none}.graphbox{min-height:300px}.plotsection{min-height:710px}.lessongrid{grid-template-columns:1fr}.lesson.wide{grid-column:auto}.concepts{overflow:visible}.nav{position:sticky;top:0;z-index:5;background:var(--bg);padding-top:4px}}
+@media(max-width:480px){.app{padding:7px;gap:5px}.header h1{font-size:18px}.header .sub,.header .full{display:none}.nav button{font-size:12px;padding:5px 8px;min-height:32px}.topline h2{width:100%}.topline .explain{display:none}.left{min-height:640px}.measurements{gap:3px}.meter{padding:5px 1px;min-height:52px}.meter small{font-size:9px;letter-spacing:-.04em}.meter strong{font-size:10px;letter-spacing:-.03em}.svgholder{min-height:320px}.card{padding:9px}.lesson{padding:12px}}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+<header class="header"><h1>〰️ 24번 · 파동 속력 실험실</h1><span class="sub">파동의 이동과 매질의 진동을 구별하고, 파장·진동수·속력을 비교합니다.</span><button type="button" id="fullscreen" class="full">⛶ 전체화면</button></header>
+<nav class="nav" role="tablist" aria-label="파동 속력 실험 구성">
+<button type="button" class="navtab" data-tab="travel" role="tab" aria-selected="true">① 파동의 진행</button>
+<button type="button" class="navtab" data-tab="medium" role="tab" aria-selected="false">② 같은 매질</button>
+<button type="button" class="navtab" data-tab="relation" role="tab" aria-selected="false">③ 속력 관계</button>
+<button type="button" class="navtab" data-tab="graphs" role="tab" aria-selected="false">④ 그래프·비교</button>
+<button type="button" class="navtab" data-tab="concept" role="tab" aria-selected="false">⑤ 개념 설명</button>
+</nav>
+<div class="workspace" id="workspace" data-tab="travel">
+<section class="left">
+<section class="sim">
+ <div class="topline">
+  <h2 id="title">움직이는 마루와 제자리에서 진동하는 매질</h2>
+  <div class="actions"><button id="start" class="primary" type="button">▶ 시작</button><button id="pause" type="button">Ⅱ 일시정지</button><button id="restart" type="button">↺ 다시 시작</button><button id="cycle" type="button">▶ 한 주기</button></div>
+  <span class="explain" id="playStatus">기본 속력 2.0 m/s</span>
+ </div>
+ <div class="svgholder"><svg id="waveScene" viewBox="0 0 980 410" role="img" aria-label="오른쪽 또는 왼쪽으로 이동하는 파형과 제자리에서 위아래로 진동하는 매질 점, 실제 마루를 추적하는 표식"></svg></div>
+ <p class="ticker" id="tracker">추적 마루: x = 0.50 m · 시작점에서 0.00 m 이동 · 경과 시간 0.00 s</p>
+ <p class="caption" id="waveCaption">청록 파형: 파동의 전달 · 작은 점: 각 위치에서 진동하는 매질 · 주황 점: 한 위치의 매질 · 노란 마름모: 추적 중인 마루</p>
+</section>
+<section class="plotsection" id="plotsection" data-chart="pair">
+ <div class="topline">
+  <h2>파동 그래프와 조건 A·B 비교</h2>
+  <div class="actions"><button type="button" id="graphPair" aria-pressed="true">변위–위치 / 변위–시간</button><button type="button" id="graphRelation" aria-pressed="false">진동수 관계 그래프</button></div>
+ </div>
+ <div class="legend"><span class="now">현재 조건</span><span class="a">조건 A</span><span class="b">조건 B</span><span class="p">현재 측정점</span></div>
+ <div class="plots">
+   <section class="graphbox pairgraph"><h3>변위–위치: 파장 λ 확인</h3><svg class="chartsvg" id="yxPlot" viewBox="0 0 510 270" role="img" aria-label="각 위치에서의 파동 변위 그래프와 저장 조건 A B의 파형"></svg><p class="caption">가로축: 물리적 위치(m) · 세로축: 변위(m), 고정 ±2 m</p></section>
+   <section class="graphbox pairgraph"><h3>변위–시간: 한 매질 점의 주기 T 확인</h3><svg class="chartsvg" id="ytPlot" viewBox="0 0 510 270" role="img" aria-label="한 위치에서 측정한 시간에 따른 매질 변위 그래프"></svg><p class="caption">고정 4초 창 · 매질 위치 <span id="samplePoint">x = 6 m</span></p></section>
+   <section class="graphbox" id="relationPlot"><h3 id="relationTitle">진동수–속력 관계</h3><svg class="chartsvg" id="vfPlot" viewBox="0 0 990 300" role="img" aria-label="진동수와 파동 속력 또는 파장의 관계 그래프. 세로축의 크기는 고정됩니다."></svg><p class="caption" id="relationHint">서로 다른 조건을 동일 축척에서 비교합니다.</p></section>
+ </div>
+ <div class="compare"><table aria-label="현재 상태와 비교 조건"><thead><tr><th>구분</th><th>모드</th><th>f (Hz)</th><th>λ (m)</th><th>v (m/s)</th><th>T (s)</th><th>A (m)</th><th>방향</th></tr></thead><tbody id="comparison"></tbody></table></div>
+ <p class="caption" id="compareNote">A·B를 저장하면 같은 축척에서 파동을 비교할 수 있습니다.</p>
+</section>
+<div class="measurements" aria-label="실시간 파동 측정값" aria-live="polite">
+ <div class="meter"><small>속력 v</small><strong id="velocity">2.00 m/s</strong></div>
+ <div class="meter"><small>진동수 f</small><strong id="frequency">1.00 Hz</strong></div>
+ <div class="meter"><small>파장 λ</small><strong id="wavelength">2.00 m</strong></div>
+ <div class="meter"><small>주기 T</small><strong id="period">1.00 s</strong></div>
+ <div class="meter"><small>진폭 A</small><strong id="amplitude">0.40 m</strong></div>
+</div>
+<p class="footnote" id="physicalNote">재생 배율은 화면 관찰용이며 표시된 물리적 속력·주기에는 영향을 주지 않습니다.</p>
+</section>
+<aside class="side" aria-label="파동 실험 조작 패널">
+<section class="card">
+ <h2>실험 변수 조작</h2>
+ <div class="field" id="modeField" hidden><label for="modelChoice">그래프에서 비교할 물리 조건</label><select id="modelChoice"><option value="free">다른 파동 조건 · f와 λ 독립</option><option value="fixed">같은 매질 · v 일정</option></select></div>
+ <div class="field"><label for="f">진동수 f <output id="fLabel">1.00 Hz</output></label><input type="range" id="f" min=".5" max="4" step=".1" value="1"><div class="rangeends"><span>0.5 Hz</span><span>4.0 Hz</span></div></div>
+ <div class="field" id="lambdaField"><label for="lambda">파장 λ <output id="lambdaLabel">2.00 m</output></label><input type="range" id="lambda" min=".5" max="8" step=".1" value="2"><div class="rangeends"><span>0.5 m</span><span>8.0 m</span></div></div>
+ <div class="field" id="speedField" hidden><label for="speedFixed">고정 속력 v <output id="speedLabel">2.00 m/s</output></label><input type="range" id="speedFixed" min="1" max="8" step=".1" value="2"><div class="rangeends"><span>1 m/s</span><span>8 m/s</span></div></div>
+ <div class="field"><label for="height">진폭 A <output id="heightLabel">0.40 m</output></label><input type="range" id="height" min=".1" max="2" step=".05" value=".4"><div class="rangeends"><span>0.1 m</span><span>2.0 m</span></div></div>
+ <div class="field"><label for="direction">진행 방향</label><select id="direction"><option value="1">오른쪽 →</option><option value="-1">← 왼쪽</option></select></div>
+ <div class="field"><label for="view">파동 관찰 범위</label><select id="view"><option value="6">0~6 m (확대)</option><option value="12" selected>0~12 m</option><option value="24">0~24 m (전체)</option></select></div>
+ <div class="field"><label for="rate">화면 재생 배율</label><select id="rate"><option value=".1">0.1배 · 천천히</option><option value=".25">0.25배</option><option value=".5" selected>0.5배</option><option value="1">1배 · 기준</option></select></div>
+ <div class="modebadge" id="modeInfo">다른 조건의 f와 λ를 설정하여 v를 계산합니다.</div>
+ <div class="quicks"><button id="freqTwice" type="button">진동수 2배</button><button id="freqHalf" type="button">진동수 1/2배</button><button id="waveReset" type="button">전체 초기화</button><button id="goGraphs" type="button">그래프 보기</button></div>
+</section>
+<section class="card">
+ <h2>계산·조건 저장</h2>
+ <div class="key" id="equation">v = fλ = 1 × 2 = <b>2 m/s</b></div>
+ <div class="quicks" style="margin-top:8px"><button id="saveA" type="button">현재 조건 A 저장</button><button id="saveB" type="button">현재 조건 B 저장</button><button id="loadA" type="button">조건 A 불러오기</button><button id="loadB" type="button">조건 B 불러오기</button></div>
+ <p class="note" id="savedInfo">기본값에서 한 가지 변수만 바꾸어 비교하면 변화가 더 명확합니다.</p>
+ <p class="note">속력은 마루·골 등 같은 위상의 전달 속력입니다. 화면의 매질 점은 수평 이동하지 않습니다.</p>
+</section>
+</aside>
+<section class="concepts" aria-label="파동 속력 개념 및 탐구 해설">
+<div class="lessongrid">
+<article class="lesson"><h2>① 파동의 속력과 매질의 운동</h2><div class="formula">v = fλ = λ/T</div><p>파동은 매질의 진동이 주변으로 전달되는 현상입니다. 마루는 파동 진행 방향으로 이동하지만, 균일한 횡파 모형에서 각 매질 점은 자신의 평형 위치를 중심으로 위아래로 진동합니다.</p><p>속력 v의 단위는 m/s, 진동수 f는 Hz(1/s), 파장 λ는 m입니다. 주기 T는 1/f입니다. 1주기 동안 같은 마루가 이동하는 거리는 파장 한 개, 즉 λ입니다.</p></article>
+<article class="lesson"><h2>② 같은 매질과 서로 다른 조건의 차이</h2><p><b>같은 비분산 매질:</b> 전파 속력이 일정합니다. 진동수가 2배가 되면 파장은 절반이 됩니다. 파원 진동수는 바뀌지만 매질의 속력은 유지됩니다.</p><p><b>관계 탐구:</b> 진동수 f와 파장 λ를 독립적으로 지정하므로 속력 v=fλ도 달라질 수 있습니다. 모든 조건을 같은 매질에서의 실험으로 해석하면 안 됩니다.</p><p>실제 분산 매질에서는 진동수에 따라 위상 속력도 달라질 수 있습니다.</p></article>
+<article class="lesson"><h2>③ 진폭과 속력</h2><p>진폭 A는 매질 점의 최대 변위입니다. 이 선형 파동 모형에서 진폭을 두 배로 하더라도 f와 λ가 같으면 파동의 전달 속력은 변하지 않습니다.</p><div class="formula">y(x,t) = A sin[2π(x/λ − sft)]</div><p>s=+1이면 오른쪽, s=−1이면 왼쪽 진행입니다. 특정 매질 점의 최대 진동 속력은 2πfA이며, 파동의 전파 속력과 다른 개념입니다.</p></article>
+<article class="lesson"><h2>④ 두 그래프를 읽는 방법</h2><p><b>변위–위치 그래프</b>는 같은 순간의 여러 매질 점의 위치를 보여줍니다. 마루에서 다음 마루까지의 거리가 파장입니다.</p><p><b>변위–시간 그래프</b>는 한 매질 점의 시간 변화를 보여줍니다. 마루와 다음 마루 사이의 시간 간격이 주기입니다. 진동수–속력 그래프에서는 f·λ를 독립 지정한 경우 직선이고, 비분산 매질에서 진동수–파장 그래프는 반비례 곡선입니다.</p></article>
+<article class="lesson"><h2>⑤ 파동 화면을 해석할 때</h2><p>파동의 실시간 진행을 보이는 그림은 정현파가 공간 전체에 이미 형성된 이상적 상황입니다. 파원에서 파형이 처음 생성되는 과정, 반사·굴절·회절·감쇠·비선형 효과는 생략합니다.</p><p>파형 진행은 재생 배율을 적용해 느리게 볼 수 있지만, 계산된 v와 T는 물리적 값입니다. 마루 추적 표식은 실제 마루 하나만 따라가며 화면을 벗어나면 사라집니다. 파장의 나머지로 강제로 원위치시키지 않습니다.</p></article>
+<article class="lesson"><h2>⑥ 교과 개념 확인</h2>
+<details><summary>같은 매질에서 f가 1 Hz → 2 Hz라면?</summary><p>파동 속력을 2 m/s로 고정하면 λ는 2 m에서 1 m로 감소합니다. ② 같은 매질 탭에서 비교해 보세요.</p></details>
+<details><summary>λ가 일정하고 f가 1 Hz → 2 Hz라면?</summary><p>λ=2 m를 유지한 두 조건에서는 v=2 m/s → 4 m/s입니다. 이는 서로 다른 전파 속력의 파동 조건을 비교하는 것입니다.</p></details>
+<details><summary>진폭을 2배로 키우면 파동 속력도 2배가 될까요?</summary><p>아닙니다. 선형 파동 모형에서 진폭은 매질 점의 운동 크기를 바꾸지만, f와 λ가 고정되어 있으면 전파 속력은 같습니다.</p></details>
+<details><summary>왜 모든 매질 점이 파동과 같은 방향으로 움직이지 않나요?</summary><p>진행하는 것은 같은 위상(마루·골)의 위치이고, 횡파 매질 점은 평형 위치의 수직 방향으로 진동합니다. 도식에서 주황 점의 x좌표는 고정되어 있습니다.</p></details>
+</article>
+</div>
+</section>
+</div>
+</div>
+<script>
+(function(){
+"use strict";
+const $=id=>document.getElementById(id),TAU=Math.PI*2;
+const defaults={f:1,lambda:2,speedFixed:2,A:.4,dir:1,view:12,rate:.5};
+const s={...defaults,mode:"free",tab:"travel",chart:"pair",t:0,running:false,last:null,stopAt:null,saved:{A:null,B:null}};
+const clamp=(v,min,max)=>Math.max(min,Math.min(max,v)),fmt=(v,d=2)=>Number(v).toFixed(d);
+const P=(o=s)=>{const l=o.mode==="fixed"?o.speedFixed/o.f:o.lambda;return {l,v:o.f*l,T:1/o.f}};
+const yAt=(x,t,o=s)=>o.A*Math.sin(TAU*(x/P(o).l-o.dir*o.f*t));
+const snapshot=()=>({mode:s.mode,f:s.f,lambda:s.lambda,speedFixed:s.speedFixed,A:s.A,dir:s.dir});
+const crestBase=(o=s)=>{const l=P(o).l;return o.dir>0?l/4:l/4+Math.floor((s.view-l/4)/l)*l;};
+const xMap=x=>87+x/s.view*790, yMap=y=>211-y*66;
+const esc=n=>String(n);
+function svgText(x,y,t,color="#d9efff",size=13,align="middle",weight=600){
+ return '<text x="'+x+'" y="'+y+'" text-anchor="'+align+'" fill="'+color+'" font-size="'+size+'" font-weight="'+weight+'">'+t+'</text>';
+}
+function wavePath(o,time,plotX,plotY,maxX,points=950){
+ let d="";for(let i=0;i<=points;i++){const x=maxX*i/points;d+=(i?"L":"M")+fmt(plotX(x),2)+","+fmt(plotY(yAt(x,time,o)),2);}
+ return d;
+}
+function drawWave(){
+ if(s.tab==="graphs"||s.tab==="concept")return;
+ const p=P(),scene=$("waveScene"),range=s.view,now=s.t,ref=Math.min(6,range/2),refY=yAt(ref,now),basis=crestBase(),cx=basis+s.dir*p.v*now;
+ const canSee=cx>=0&&cx<=range;
+ let html='<defs><linearGradient id="wavefill" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#102c43"/><stop offset="1" stop-color="#071727"/></linearGradient>'+
+ '<marker id="speedarr" viewBox="0 0 10 10" markerWidth="7" markerHeight="7" refX="9" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#ffd084"/></marker></defs>'+
+ '<rect width="980" height="410" rx="15" fill="url(#wavefill)"/>';
+ // The physical displacement axis remains fixed, preventing automatic-height masking of amplitude changes.
+ for(let j=-2;j<=2;j++){
+  const yy=yMap(j);html+='<path d="M87 '+yy+'H877" stroke="'+(j===0?"#89a9c3":"#35536d")+'" stroke-width="'+(j===0?2:1)+'"/>';
+  html+=svgText(77,yy+4,j.toFixed(0),"#afcede",12,"end");
+ }
+ for(let k=0;k<=6;k++){
+  const val=range*k/6,x=xMap(val);
+  html+='<path d="M'+x+' 67V348" stroke="#2d455e" stroke-width="1" stroke-dasharray="3 6"/>';
+  html+=svgText(x,369,fmt(val,range===6?1:0),"#bcd7e9",12);
+ }
+ html+=svgText(16,28,"변위 y (m)","#dcefff",14,"start",800);
+ html+=svgText(877,389,"위치 x (m)","#dcefff",14,"end",800);
+ html+='<path d="'+wavePath(s,now,xMap,yMap,range)+'" fill="none" stroke="#68e8e1" stroke-width="3.9" stroke-linejoin="round"/>';
+ const dots=40;
+ for(let k=0;k<=dots;k++){
+  const x=range*k/dots,py=yMap(yAt(x,now));
+  html+='<circle cx="'+fmt(xMap(x),2)+'" cy="'+fmt(py,2)+'" r="'+(k%4===0?3.2:2.3)+'" fill="#a4dbf1" opacity=".66"/>';
+ }
+ html+='<path d="M'+xMap(ref)+' 65V347" fill="none" stroke="#ffb48b" stroke-width="2" stroke-dasharray="4 6" opacity=".85"/>';
+ html+='<circle cx="'+xMap(ref)+'" cy="'+fmt(yMap(refY),1)+'" r="8.4" fill="#ff9b78" stroke="#ffe0c4" stroke-width="2.2"/>';
+ html+=svgText(xMap(ref)+12,49,"매질 점 x="+fmt(ref,1)+"m","#ffc6a8",13,"start",800);
+ // One physical crest is tracked across the entire viewing range, never wrapping modulo wavelength.
+ if(canSee){
+  const px=xMap(cx),py=yMap(s.A);
+  html+='<path d="M'+px+' '+(py-12)+'l9 11 -9 11 -9 -11Z" fill="#ffd187" stroke="#704318" stroke-width="1.8"/>';
+  html+=svgText(clamp(px,95,850),py-20,"추적 마루","#ffdc9b",13,"middle",800);
+  const arrowLen=s.dir*46;html+='<path d="M'+(px-22*s.dir)+' '+(py+24)+'h'+arrowLen+'" stroke="#ffd187" stroke-width="2.7" marker-end="url(#speedarr)"/>';
+ }
+ // λ dimension corresponds to two adjacent actual crests, when both are on-screen.
+ const wavelengthX=p.l/4;
+ if(wavelengthX+p.l<=range){
+  const xa=xMap(wavelengthX),xb=xMap(wavelengthX+p.l);
+  html+='<path d="M'+xa+' 85V100 M'+xb+' 85V100 M'+xa+' 93H'+xb+'" stroke="#ffdc9d" fill="none" stroke-width="1.8"/>';
+  html+=svgText((xa+xb)/2,79,"λ = "+fmt(p.l,2)+"m","#ffe1a2",13,"middle",800);
+ }else html+=svgText(100,84,"λ="+fmt(p.l,2)+" m (현재 화면보다 김)","#ffe1a2",12,"start");
+ const progress=clamp((s.t*p.v)/Math.max(.01,range-basis),0,1);
+ html+='<rect x="91" y="16" width="248" height="34" rx="8" fill="#17374b" stroke="#3a6781"/>';
+ html+=svgText(105,38,"파동 속력 "+fmt(p.v,2)+" m/s · "+(s.dir>0?"→":"←"),"#a4f5e8",15,"start",800);
+ html+='<rect x="660" y="16" width="215" height="34" rx="8" fill="#17374b" stroke="#3a6781"/>';
+ html+=svgText(768,38,"t = "+fmt(now,2)+"s · T = "+fmt(p.T,2)+"s","#e0eeff",14,"middle",750);
+ scene.innerHTML=html;
+ const traveled=p.v*now;
+ $("tracker").textContent=canSee?
+  "한 마루 추적: x = "+fmt(cx,2)+" m · 시작점에서 "+fmt(traveled,2)+" m 이동 · 경과 "+fmt(now,2)+" s":
+  "추적한 마루가 화면을 통과했습니다. 파형은 계속 진행합니다. '다시 시작'을 누르면 새 관찰을 시작합니다.";
+ const sceneExpl={
+  travel:"마루는 진행 방향으로 이동하지만 주황 매질 점은 x좌표를 유지한 채 위아래로 진동합니다.",
+  medium:"같은 비분산 매질에서는 v가 일정합니다. 진동수를 높이면 파장이 짧아지는 모습을 보세요.",
+  relation:"f와 λ를 독립적으로 변경합니다. 계산된 속력에 따라 마루 이동 속도도 달라집니다."
+ };
+ $("waveCaption").textContent=sceneExpl[s.tab]+" 청록=파형, 주황=매질 점, 노랑=한 마루(화면 전체에서 추적).";
+ $("playStatus").textContent=s.running?"● 재생 중":s.stopAt!==null?"한 주기 관찰 준비":"t = "+fmt(now,2)+" s";
+}
+function axisSvg(w,h,xmin,xmax,ymin,ymax,xLabel,yLabel){
+ const L=59,R=w-16,T=29,B=h-42;
+ const X=x=>L+(x-xmin)/(xmax-xmin)*(R-L),Y=y=>B-(y-ymin)/(ymax-ymin)*(B-T);
+ let out='<rect width="'+w+'" height="'+h+'" rx="10" fill="#0b1d30"/>';
+ for(let k=0;k<=4;k++){
+  const xx=xmin+(xmax-xmin)*k/4,yy=ymin+(ymax-ymin)*k/4;
+  out+='<path d="M'+L+' '+Y(yy)+'H'+R+' M'+X(xx)+' '+T+'V'+B+'" fill="none" stroke="#2f4c64" stroke-width="1"/>';
+  out+=svgText(L-7,Y(yy)+4,fmt(yy,Math.abs(ymax-ymin)>20?0:1),"#b1d0e1",11,"end");
+  out+=svgText(X(xx),B+19,fmt(xx,xmax>20?0:1),"#b1d0e1",11);
+ }
+ out+='<path d="M'+L+' '+T+'V'+B+'H'+R+'" fill="none" stroke="#a5c9dd" stroke-width="1.5"/>';
+ out+=svgText(8,18,yLabel,"#e4f3fb",12,"start",750);
+ out+=svgText(R,h-8,xLabel,"#e4f3fb",12,"end",750);
+ return {X,Y,html:out};
+}
+function svgLinePlot(g,fn,x0,x1,steps=340,color="#67e8e2",dash="",width=3){
+ let d="";for(let j=0;j<=steps;j++){
+  const xx=x0+(x1-x0)*j/steps,yy=fn(xx);
+  d+=(j?"L":"M")+fmt(g.X(xx),2)+","+fmt(g.Y(yy),2);
+ }
+ return '<path d="'+d+'" fill="none" stroke="'+color+'" stroke-width="'+width+'" stroke-dasharray="'+dash+'"/>';
+}
+function svgDot(g,x,y,color,r=5){
+ return '<circle cx="'+fmt(g.X(x),2)+'" cy="'+fmt(g.Y(y),2)+'" r="'+r+'" fill="'+color+'" stroke="#061421" stroke-width="1.7"/>';
+}
+function showGraphData(){
+ if(s.tab!=="graphs")return;
+ const current=snapshot(),sampleX=Math.min(6,s.view/2);
+ $("samplePoint").textContent="x = "+fmt(sampleX,1)+" m";
+ // Position view and time view use a physically fixed displacement axis of ±2 m.
+ const xp=axisSvg(510,270,0,s.view,-2,2,"위치 x (m)","변위 y (m)");
+ let xd=xp.html;
+ for(const [key,color,dash] of [["A","#ffa6a0","8,5"],["B","#bea4ff","4,5"],["current","#6ce8e1",""]]){
+  const c=key==="current"?current:s.saved[key];if(!c)continue;
+  xd+=svgLinePlot(xp,x=>yAt(x,s.t,c),0,s.view,410,color,dash,key==="current"?3.2:2);
+ }
+ xd+=svgDot(xp,sampleX,yAt(sampleX,s.t), "#ffd18c",5.3);
+ $("yxPlot").innerHTML=xd;
+ // The time graph displays 4 s windows labeled with real times, no arbitrary data rescaling.
+ const windowStart=Math.floor(Math.max(0,s.t-.00001)/4)*4;
+ const tp=axisSvg(510,270,windowStart,windowStart+4,-2,2,"시간 t (s)","변위 y (m)");
+ let td=tp.html;
+ for(const [key,color,dash]of[["A","#ffa6a0","8,5"],["B","#bea4ff","4,5"],["current","#6ce8e1",""]]){
+  const c=key==="current"?current:s.saved[key];if(!c)continue;
+  td+=svgLinePlot(tp,tt=>yAt(sampleX,tt,c),windowStart,windowStart+4,400,color,dash,key==="current"?3.2:2);
+ }
+ const tOnGraph=clamp(s.t,windowStart,windowStart+4);
+ td+=svgDot(tp,tOnGraph,yAt(sampleX,tOnGraph),"#ffd18c",5.3);
+ $("ytPlot").innerHTML=td;
+ const isFree=s.mode==="free",maxY=isFree?32:16;
+ const relation=axisSvg(990,300,.5,4,0,maxY,"진동수 f (Hz)",isFree?"파동 속력 v (m/s)":"파장 λ (m)");
+ let vd=relation.html;
+ for(const [key,color,dash]of[["A","#ffa6a0","10,6"],["B","#bea4ff","5,6"],["current","#6ce8e1",""]]){
+  const c=key==="current"?current:s.saved[key];if(!c||c.mode!==s.mode)continue;
+  const fn=isFree?f=>f*c.lambda:f=>c.speedFixed/f;
+  vd+=svgLinePlot(relation,fn,.5,4,420,color,dash,key==="current"?3.5:2.4);
+  vd+=svgDot(relation,c.f,isFree?P(c).v:P(c).l,color,key==="current"?6:5);
+ }
+ $("vfPlot").innerHTML=vd;
+ $("relationTitle").textContent=isFree?"관계 탐구: 진동수 f – 속력 v (고정 세로축 0~32 m/s)":"같은 매질: 진동수 f – 파장 λ (고정 세로축 0~16 m)";
+ $("relationHint").textContent=isFree?
+  "각 선은 그 조건의 파장 λ를 일정하게 유지한 v=fλ 관계입니다. 다른 파장일 때 기울기가 달라집니다.":
+  "각 곡선은 그 조건의 일정한 매질 속력 v를 유지한 λ=v/f 관계입니다. 진동수가 증가하면 파장이 줄어듭니다.";
+}
+function compareTable(){
+ const body=$("comparison");body.replaceChildren();
+ for(const [key,item]of[["현재",snapshot()],["A",s.saved.A],["B",s.saved.B]]){
+  const row=document.createElement("tr");
+  const d=item?P(item):null;
+  const cells=item?[key,item.mode==="fixed"?"같은 매질":"관계 탐구",fmt(item.f),fmt(d.l),fmt(d.v),fmt(d.T),fmt(item.A),item.dir>0?"→":"←"]:
+   [key,"미저장","—","—","—","—","—","—"];
+  for(const value of cells){const td=document.createElement("td");td.textContent=value;row.append(td);}body.append(row);
+ }
+ const A=s.saved.A,B=s.saved.B;
+ $("compareNote").textContent=A&&B?
+  "조건 B/A: 진동수 "+fmt(B.f/A.f)+"배 · 파장 "+fmt(P(B).l/P(A).l)+"배 · 속력 "+fmt(P(B).v/P(A).v)+"배. 그래프에는 현재 모드와 일치하는 저장 조건만 표시합니다.":
+  "조건 A와 B를 저장하면 진동수·파장·전파 속력을 같은 표에서 비교합니다.";
+}
+function drawResults(){
+ const p=P();
+ $("velocity").textContent=fmt(p.v)+" m/s";$("frequency").textContent=fmt(s.f)+" Hz";
+ $("wavelength").textContent=fmt(p.l)+" m";$("period").textContent=fmt(p.T)+" s";
+ $("amplitude").textContent=fmt(s.A)+" m";
+ $("fLabel").textContent=fmt(s.f)+" Hz";$("lambdaLabel").textContent=fmt(s.lambda)+" m";
+ $("speedLabel").textContent=fmt(s.speedFixed)+" m/s";$("heightLabel").textContent=fmt(s.A)+" m";
+ const modeText=s.mode==="fixed"?"같은 비분산 매질: v를 고정하고 λ=v/f로 계산합니다.":
+   "서로 다른 파동 조건: f와 λ를 독립 지정하며 v=fλ를 계산합니다.";
+ $("modeInfo").textContent=modeText;
+ $("equation").innerHTML=s.mode==="fixed"?
+  "속력 v = <b>"+fmt(s.speedFixed)+" m/s (매질 일정)</b><br>파장 λ = v/f = "+fmt(s.speedFixed)+"/"+fmt(s.f)+" = <b>"+fmt(p.l)+" m</b><br>주기 T = 1/f = "+fmt(p.T)+" s":
+  "속력 v = fλ = "+fmt(s.f)+" × "+fmt(p.l)+" = <b>"+fmt(p.v)+" m/s</b><br>주기 T = 1/f = <b>"+fmt(p.T)+" s</b>";
+ $("physicalNote").textContent=s.mode==="fixed"?
+  "같은 매질·비분산 가정: 진동수가 바뀌어도 전파 속력은 고정됩니다. 재생 배율은 측정값에 영향을 주지 않습니다.":
+  "관계 탐구는 서로 다른 파동 조건을 비교합니다. 전파 속력은 fλ이고 재생 배율은 측정값에 영향을 주지 않습니다.";
+ $("pause").disabled=!s.running;
+ $("start").disabled=s.running;
+ $("loadA").disabled=!s.saved.A;$("loadB").disabled=!s.saved.B;
+ $("f").value=s.f;$("lambda").value=s.lambda;$("speedFixed").value=s.speedFixed;$("height").value=s.A;
+ $("direction").value=String(s.dir);$("view").value=String(s.view);$("rate").value=String(s.rate);
+ $("modelChoice").value=s.mode;
+}
+function render(){
+ drawResults();if(s.tab==="graphs"){showGraphData();compareTable();}else drawWave();
+}
+function resetTime(){
+ s.t=0;s.last=null;s.stopAt=null;render();
+}
+function changeParam(key,value){
+ s[key]=value;
+ resetTime();
+}
+function switchTab(tab){
+ s.tab=tab;
+ if(tab==="medium")s.mode="fixed";
+ if(tab==="relation"||tab==="travel")s.mode="free";
+ s.running=false;s.last=null;s.stopAt=null;s.t=0;
+ $("workspace").dataset.tab=tab;
+ for(const b of document.querySelectorAll(".navtab"))b.setAttribute("aria-selected",String(b.dataset.tab===tab));
+ const titles={travel:"움직이는 마루와 제자리에서 진동하는 매질",medium:"같은 매질: f가 변하면 λ는 어떻게 달라질까?",relation:"진동수·파장에 따른 파동의 전파 속력",graphs:"그래프·조건 비교",concept:"개념 설명"};
+ $("title").textContent=titles[tab]||"파동 속력";
+ $("modeField").hidden=tab!=="graphs";
+ $("lambdaField").hidden=s.mode==="fixed";
+ $("speedField").hidden=s.mode!=="fixed";
+ const isConcept=tab==="concept";
+ if(!isConcept){requestAnimationFrame(render);}
+}
+function start(){if(s.t>=1e5)s.t=0;s.running=true;s.last=null;s.stopAt=null;render();}
+function pause(){s.running=false;s.last=null;s.stopAt=null;render();}
+function restart(run=true){s.t=0;s.last=null;s.stopAt=null;s.running=run;render();}
+function onePeriod(){s.t=0;s.running=true;s.last=null;s.stopAt=P().T;render();}
+function bind(){
+ for(const [id,key]of[["f","f"],["lambda","lambda"],["speedFixed","speedFixed"],["height","A"]]){
+  $(id).addEventListener("input",e=>{changeParam(key,Number(e.target.value));});
+ }
+ $("direction").onchange=e=>changeParam("dir",Number(e.target.value));
+ $("view").onchange=e=>changeParam("view",Number(e.target.value));
+ $("rate").onchange=e=>{s.rate=Number(e.target.value);s.last=null;render();};
+ $("modelChoice").onchange=e=>{s.mode=e.target.value;s.last=null;s.t=0;s.running=false;$("lambdaField").hidden=s.mode==="fixed";$("speedField").hidden=s.mode!=="fixed";render();};
+ $("start").onclick=start;$("pause").onclick=pause;$("restart").onclick=()=>restart(true);$("cycle").onclick=onePeriod;
+ $("freqTwice").onclick=()=>changeParam("f",clamp(Number(fmt(s.f*2,1)),.5,4));
+ $("freqHalf").onclick=()=>changeParam("f",clamp(Number(fmt(s.f/2,1)),.5,4));
+ $("waveReset").onclick=()=>{Object.assign(s,defaults,{t:0,running:false,last:null,stopAt:null,mode:s.tab==="medium"?"fixed":"free"});s.saved={A:null,B:null};
+  $("graphPair").setAttribute("aria-pressed","true");$("graphRelation").setAttribute("aria-pressed","false");s.chart="pair";$("plotsection").dataset.chart="pair";
+  $("lambdaField").hidden=s.mode==="fixed";$("speedField").hidden=s.mode!=="fixed";
+  render();};
+ $("goGraphs").onclick=()=>switchTab("graphs");
+ for(const key of ["A","B"])$("save"+key).onclick=()=>{s.saved[key]=snapshot();$("savedInfo").textContent="조건 "+key+" 저장 · 그래프·비교 탭에서 겹쳐 비교할 수 있습니다.";render();};
+ for(const key of ["A","B"])$("load"+key).onclick=()=>{const item=s.saved[key];if(!item)return;Object.assign(s,item);s.t=0;s.last=null;s.stopAt=null;s.running=false;
+  $("lambdaField").hidden=s.mode==="fixed";$("speedField").hidden=s.mode!=="fixed";render();};
+ $("graphPair").onclick=()=>{s.chart="pair";$("plotsection").dataset.chart="pair";$("graphPair").setAttribute("aria-pressed","true");$("graphRelation").setAttribute("aria-pressed","false");requestAnimationFrame(showGraphData);};
+ $("graphRelation").onclick=()=>{s.chart="relation";$("plotsection").dataset.chart="relation";$("graphPair").setAttribute("aria-pressed","false");$("graphRelation").setAttribute("aria-pressed","true");requestAnimationFrame(showGraphData);};
+ for(const b of document.querySelectorAll(".navtab"))b.onclick=()=>switchTab(b.dataset.tab);
+ $("fullscreen").onclick=()=>{const p=document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();if(p?.catch)p.catch(()=>{});};
+ document.addEventListener("fullscreenchange",()=>$("fullscreen").textContent=document.fullscreenElement?"⛶ 전체화면 종료":"⛶ 전체화면");
+ document.addEventListener("visibilitychange",()=>{if(document.hidden){s.running=false;s.last=null;render();}});
+ window.addEventListener("resize",()=>requestAnimationFrame(render));
+}
+function animate(now){
+ if(s.running&&!document.hidden){
+  const dt=s.last===null?0:clamp((now-s.last)/1000,0,.075);
+  s.last=now;
+  s.t+=dt*s.rate;
+  if(s.stopAt!==null&&s.t>=s.stopAt){s.t=s.stopAt;s.running=false;s.stopAt=null;s.last=null;}
+  if(s.tab==="graphs"){showGraphData();}else drawWave();
+  $("pause").disabled=!s.running;$("start").disabled=s.running;
+ }
+ requestAnimationFrame(animate);
+}
+bind();switchTab("travel");requestAnimationFrame(animate);
+})();
+</script>
+</body>
+</html>
