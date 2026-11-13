@@ -1,0 +1,117 @@
+/* Mechanics V4: original DOM retained, original chart/scene color palettes retained.
+   Only the selected native panel is lifted into a full-screen classroom view. */
+html{background:#050d18}
+body.ml-v4{margin:0!important;background:#050d18!important;overflow:hidden!important}
+body.ml-v4 main{visibility:hidden!important}
+body.ml-v4 .ml-v4-focus{visibility:visible!important;position:fixed!important;z-index:10004!important;
+ box-sizing:border-box!important;margin:0!important;max-width:none!important;max-height:none!important;min-height:0!important;
+ border-radius:13px!important;border:1px solid #395775!important;box-shadow:0 10px 40px #0009!important;
+ overflow:auto!important;overscroll-behavior:contain;scrollbar-width:thin;transform:none!important}
+body.ml-v4 .ml-v4-focus *{visibility:visible}
+#ml-v4-toolbar{position:fixed!important;inset:0 0 auto!important;z-index:10010!important;background:#09182a!important;
+ color:#f0f8ff!important;border-bottom:1px solid #2d4a62!important;font:13px/1.4 system-ui,'Noto Sans KR',sans-serif!important;
+ box-shadow:0 5px 22px #0007!important;padding:7px 12px 6px!important;box-sizing:border-box!important;height:104px!important;
+ display:grid!important;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:32px 40px;gap:4px 12px}
+#ml-v4-toolbar *{box-sizing:border-box!important}
+.ml-v4-top{grid-column:1/-1;grid-row:1;display:flex;align-items:center;gap:12px;min-width:0}
+.ml-v4-title{color:#f3f9ff!important;font-weight:850;font-size:clamp(14px,1.55vw,19px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:80%}
+.ml-v4-home{color:#b4e9fd!important;margin-left:auto;white-space:nowrap;font-size:12px;text-decoration:none;border:1px solid #345777;border-radius:8px;padding:5px 10px}
+.ml-v4-tabs{grid-column:1;grid-row:2;display:flex;gap:6px;align-items:center;overflow:auto;scrollbar-width:none;min-width:0}
+.ml-v4-actions{grid-column:2;grid-row:2;display:flex;gap:5px;align-items:center;justify-content:flex-end;min-width:0}
+#ml-v4-toolbar button{white-space:nowrap!important;border-radius:8px!important;min-height:34px!important;
+ background:#17314b!important;color:#e8f4ff!important;border:1px solid #395672!important;
+ font:750 12px system-ui,'Noto Sans KR',sans-serif!important;padding:6px 12px!important;cursor:pointer}
+#ml-v4-toolbar button[aria-selected="true"],#ml-v4-toolbar button[aria-pressed="true"]{background:#155260!important;color:#edfff9!important;border-color:#66e6d2!important}
+#ml-v4-toolbar .ml-v4-start{background:#087e74!important;color:#fff!important;border-color:#4bcab1!important}
+#ml-v4-toolbar .ml-v4-pause{background:#254865!important}
+#ml-v4-toolbar button[hidden]{display:none!important}
+.ml-v4-subnav{position:fixed;top:105px;left:12px;right:12px;z-index:10008;
+ display:flex;gap:5px;align-items:center;justify-content:flex-start;flex-wrap:nowrap;overflow-x:auto;background:#0a1c2e;
+ border:1px solid #36516c;border-radius:0 0 10px 10px;padding:3px 7px}
+.ml-v4-subnav:empty{display:none}
+.ml-v4-subnav button{max-width:235px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ml-v4-status{position:fixed;right:12px;top:104px;z-index:10009;padding:3px 7px;
+ background:#0b2437;color:#bde5ed;font-size:11px;max-width:35vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ml-v4-status:empty{display:none}
+body.ml-v4 .ml-v4-scene{top:113px!important;bottom:81px!important;left:12px!important;right:calc(26% + 5px)!important;
+ height:auto!important;width:auto!important;display:block!important;padding:12px!important}
+body.ml-v4 .ml-v4-controls{top:113px!important;bottom:12px!important;right:12px!important;left:calc(74% + 5px)!important;
+ height:auto!important;width:auto!important;display:block!important;padding:11px!important}
+body.ml-v4.ml-v4-no-controls .ml-v4-scene{right:12px!important}
+body.ml-v4 .ml-v4-graph,body.ml-v4 .ml-v4-other{top:157px!important;bottom:12px!important;left:12px!important;right:12px!important;
+ height:auto!important;width:auto!important;display:block!important;padding:16px!important}
+body.ml-v4 .ml-v4-scene :is(canvas,svg){display:block!important;width:100%!important;max-width:100%!important;
+ height:clamp(300px,53vh,620px)!important;max-height:clamp(300px,56vh,640px)!important;object-fit:contain!important}
+body.ml-v4 .ml-v4-scene :is(.sim-stage,.canvas-wrap,.canvasbox,.stage-wrap,.orbit-wrap,.scene,.scene-wrap){max-width:100%!important}
+body.ml-v4 .ml-v4-scene :is(canvas,svg)[id*=graph],body.ml-v4 .ml-v4-scene :is(canvas,svg)[id*=plot]{
+ height:180px!important;max-height:200px!important}
+body.ml-v4 .ml-v4-graph :is(canvas,svg){display:block!important;width:100%!important;max-width:100%!important;
+ height:clamp(290px,57vh,640px)!important;max-height:clamp(290px,60vh,660px)!important;object-fit:contain!important}
+body.ml-v4 .ml-v4-controls :is(h2,h3,h4){font-size:clamp(14px,1.2vw,17px)!important;margin:0 0 6px!important}
+body.ml-v4 .ml-v4-controls :is(.control,.control-row,.ctrl,.field,.group){margin:6px 0!important;padding:5px 0!important}
+body.ml-v4 .ml-v4-controls :is(input[type=range]){height:18px!important;min-height:18px!important;margin:3px 0!important}
+body.ml-v4 .ml-v4-controls :is(button,select,input[type=number]){font-size:12px!important;min-height:31px!important;padding:5px 7px!important}
+body.ml-v4 .ml-v4-controls :is(p,small,.hint,.note,.muted,.sub){font-size:12px!important;line-height:1.42!important}
+body.ml-v4 .ml-v4-focus :is(.stats,.metrics,.readings,.readouts){max-width:100%;gap:7px!important}
+body.ml-v4 .ml-v4-focus :is(.stat,.metric,.read){padding:7px!important}
+body.ml-v4 .ml-v4-focus :is(table,.tablewrap,.table-scroll){max-width:100%;overflow-x:auto!important}
+body.ml-v4 .ml-v4-focus :is(input,button,select,summary):focus-visible{outline:3px solid #efbd55!important;outline-offset:2px}
+body.ml-v4 .ml-v4-focus :is(.control,.stat,.metric,.chart-wrap,.graph-wrap,.tablewrap){box-sizing:border-box!important}
+body.ml-v4 .ml-v4-focus:not(.ml-v4-graph) :is(p,.hint,.muted,.note){line-height:1.45!important}
+.ml-v4-measurements{position:fixed;z-index:10008;bottom:12px;left:12px;right:calc(26% + 5px);height:61px;
+ display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;color:#f1f9ff;background:#08192a;
+ padding:4px;border:1px solid #2c4b68;border-radius:11px;box-sizing:border-box}
+.ml-v4-measurements[hidden]{display:none!important}
+.ml-v4-tile{padding:4px 8px;background:#132c41;border:1px solid #315673;border-radius:7px;min-width:0;
+ display:flex;flex-direction:column;gap:3px;justify-content:center}
+.ml-v4-tile small{font-size:10px;color:#9ec5d8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ml-v4-tile strong{font-size:clamp(12px,1.5vw,18px);line-height:1.1;color:#d5fff3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}
+body.ml-v4.ml-v4-no-controls .ml-v4-measurements{right:12px}
+/* Light-source charts/diagrams keep their intended paper surfaces and dark labels.
+   Dark-source charts keep their intended dark surfaces and bright labels.
+   Do not globally override svg text or canvas pixel colors. */
+body.ml-v4.ml-light-source .ml-v4-focus{background:#f6f9fc!important;color:#17314b!important}
+body.ml-v4.ml-light-source .ml-v4-focus :is(.card,.panel){color:inherit}
+body.ml-v4.ml-light-source .ml-v4-focus :is(p,label,summary,small,h2,h3,h4,td,th){color:#253e58}
+body.ml-v4.ml-light-source .ml-v4-focus :is(.muted,.sub,.hint,.note,.small){color:#465e74}
+body.ml-v4.ml-light-source .ml-v4-focus :is(.stats,.metrics,.stat,.metric,.equation,.formula,.calc){
+ color:#1a334c}
+body.ml-v4.ml-light-source .ml-v4-focus :is(.stats,.metrics,.stat,.metric,.equation,.formula,.calc) :is(strong,b,output){
+ color:#14324e}
+body.ml-v4.ml-dark-source .ml-v4-focus{background:#0d2135!important;color:#eff7ff!important}
+body.ml-v4.ml-dark-source .ml-v4-focus :is(p,label,summary,small,h2,h3,h4,td,th){color:#d6e6f5}
+body.ml-v4.ml-dark-source .ml-v4-focus :is(.muted,.sub,.hint,.note,.small){color:#adc4d8}
+body.ml-v4.ml-dark-source .ml-v4-focus :is(.stats,.metrics,.stat,.metric,.equation,.formula,.calc) :is(strong,b,output){
+ color:#eaf8ff}
+@media(min-width:1000px) and (max-height:800px){
+body.ml-v4 .ml-v4-scene{top:103px!important;bottom:76px!important}
+body.ml-v4 .ml-v4-controls{top:103px!important}
+#ml-v4-toolbar{height:94px!important;grid-template-rows:28px 35px!important;padding:5px 11px!important}
+.ml-v4-subnav{top:95px}
+body.ml-v4 .ml-v4-graph,body.ml-v4 .ml-v4-other{top:141px!important}
+body.ml-v4 .ml-v4-scene :is(canvas,svg){height:clamp(295px,54vh,480px)!important;max-height:clamp(295px,56vh,495px)!important}
+.ml-v4-measurements{height:57px}
+.ml-v4-status{top:94px}
+}
+@media(max-width:900px){
+body.ml-v4{overflow:auto!important}
+#ml-v4-toolbar{height:112px!important;padding:6px 9px!important;grid-template-rows:29px 53px!important;
+ grid-template-columns:minmax(0,1fr)!important}
+.ml-v4-top{grid-column:1!important}
+.ml-v4-tabs{grid-column:1!important;grid-row:2!important;align-self:start}
+.ml-v4-actions{position:fixed;right:9px;top:112px;z-index:10011;background:#0b2034;border-radius:9px;padding:4px}
+#ml-v4-toolbar button{font-size:11px!important;padding:5px 9px!important}
+.ml-v4-subnav{top:153px;left:9px;right:9px}
+.ml-v4-status{display:none}
+body.ml-v4 .ml-v4-scene,body.ml-v4 .ml-v4-controls,body.ml-v4 .ml-v4-graph,body.ml-v4 .ml-v4-other{
+ left:9px!important;right:9px!important;width:auto!important;min-height:0!important}
+body.ml-v4 .ml-v4-scene{top:168px!important;bottom:33%!important}
+body.ml-v4 .ml-v4-controls{top:69%!important;bottom:8px!important}
+body.ml-v4.ml-v4-no-controls .ml-v4-scene{bottom:76px!important}
+body.ml-v4 .ml-v4-graph,body.ml-v4 .ml-v4-other{top:194px!important;bottom:8px!important}
+body.ml-v4 .ml-v4-scene :is(canvas,svg){height:clamp(240px,38vh,450px)!important;max-height:clamp(240px,42vh,460px)!important}
+body.ml-v4 .ml-v4-graph :is(canvas,svg){height:clamp(260px,46vh,470px)!important}
+.ml-v4-measurements{left:9px;right:9px!important;bottom:9px;height:58px}
+body.ml-v4:not(.ml-v4-no-controls) .ml-v4-measurements{display:none}
+}
+@media(prefers-reduced-motion:reduce){#ml-v4-toolbar *{scroll-behavior:auto!important}}
