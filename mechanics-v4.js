@@ -93,6 +93,7 @@ controls.sort((a,b)=>{
  return f(hB)-f(hA);
 });
 var control=controls[0]||null;
+if(!control)body.classList.add('ml-v4-no-controls');
 // Select panels for inquiry and concepts, excluding the actual scene and controls.
 var blocks=$$('main section, main article, main .card, main .panel').filter(n=>{
  var nested=n.querySelectorAll('.card,.panel,section,article').length;
