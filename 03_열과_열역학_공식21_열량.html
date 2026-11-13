@@ -47,7 +47,25 @@ body footer{display:none}
 @media(min-width:1024px) and (max-height:740px){body #scene{height:236px}body #graph{height:250px}body .tl-col .field label{font-size:11.5px}}
 @media(max-width:1023px){body .tl-layout{grid-template-columns:minmax(0,1fr) minmax(240px,.7fr)}body .tl-col.tl-results{grid-column:1/-1}}
 @media(max-width:680px){body main{padding:10px}body .tl-layout{grid-template-columns:1fr}body .tl-col.tl-results{grid-column:auto}body #scene{height:242px}body .tl-nav button{flex:1 1 42%}}
-</style><style id="thermal-fluid-fullscreen-v3">@media(min-width:711px){body main{max-width:none;width:100%;padding:10px clamp(12px,1.25vw,30px) 14px}body .tl-layout{grid-template-columns:minmax(0,1fr) minmax(260px,18vw) minmax(220px,17vw);align-items:start}body #scene{height:clamp(330px,calc(100dvh - 250px),960px)!important}body #graph{height:clamp(330px,calc(100dvh - 260px),960px)!important}body .tl-col .metrics{grid-template-columns:repeat(2,minmax(0,1fr))}body .tl-nav{max-width:none}@media(max-width:1100px){body .tl-layout{grid-template-columns:minmax(0,1fr) minmax(260px,.55fr)}body .tl-col.tl-results{grid-column:1/-1}}@media(max-width:680px){body .tl-layout{grid-template-columns:1fr}body #scene,body #graph{height:300px!important}body .tl-col.tl-results{grid-column:auto}}}</style></head><body><main>
+</style><style id="thermal-fluid-fullscreen-v3">@media(min-width:711px){body main{max-width:none;width:100%;padding:10px clamp(12px,1.25vw,30px) 14px}body .tl-layout{grid-template-columns:minmax(0,1fr) minmax(260px,18vw) minmax(220px,17vw);align-items:start}body #scene{height:clamp(330px,calc(100dvh - 250px),960px)!important}body #graph{height:clamp(330px,calc(100dvh - 260px),960px)!important}body .tl-col .metrics{grid-template-columns:repeat(2,minmax(0,1fr))}body .tl-nav{max-width:none}@media(max-width:1100px){body .tl-layout{grid-template-columns:minmax(0,1fr) minmax(260px,.55fr)}body .tl-col.tl-results{grid-column:1/-1}}@media(max-width:680px){body .tl-layout{grid-template-columns:1fr}body #scene,body #graph{height:300px!important}body .tl-col.tl-results{grid-column:auto}}}</style><style id="thermal-calorimetry-viewport-v4">
+@media(min-width:900px){
+body main{padding:7px 12px 8px!important}
+body header{padding:5px 10px!important}
+body header h1{font-size:20px!important}
+body .tl-nav{margin:4px 0!important;gap:5px!important}
+body .tl-nav button{min-height:31px!important;padding:4px 9px!important}
+body .tl-desc{margin-bottom:4px!important}
+body .tl-layout{grid-template-columns:minmax(0,1fr) minmax(235px,21vw) minmax(210px,19vw)!important;gap:7px!important}
+body .tl-col{gap:6px!important}
+body .tl-col section{padding:8px!important}
+body #scene,body #graph{height:clamp(230px,calc(100dvh - 405px),530px)!important;min-height:0!important;max-height:calc(100dvh - 260px)!important}
+body .tl-col .controls{gap:4px!important}
+body .tl-col .metrics{grid-template-columns:1fr!important}
+body .tl-col .metric{padding:5px!important}
+body .tl-col button{min-height:31px!important;padding:4px 7px!important}
+}
+@media(min-width:681px) and (max-width:899px){body .tl-layout{grid-template-columns:minmax(0,1fr) minmax(220px,.75fr)!important}body .tl-results{grid-column:1/-1}body #scene,body #graph{height:300px!important}}
+</style></head><body><main>
 <header><div class="tag">물리 공식 40 · 인터랙티브 실험실 · 고2</div><h1>21번 · 열량</h1><div class="formula">Q = mcΔT</div><p>질량과 비열, 온도 변화를 바꾸면 필요한 열량은 어떻게 달라질까?</p></header>
 <div class="grid"><section><h2>실험 장면 · 에너지의 출입</h2><canvas id="scene" role="img" aria-label="시료와 온도계, 열의 이동 방향"></canvas><div id="status" class="status" aria-live="polite"></div><progress id="progress" max="1" value="0" aria-label="목표 온도까지 진행률"></progress><div class="row"><button id="start" class="primary">시작</button><button id="pause">일시정지</button><button id="restart">다시 실험</button><button id="reset">전체 초기화</button></div><label class="row small">재생 속도 <select id="speed" style="width:auto"><option value="1">1배</option><option value="10" selected>10배</option><option value="50">50배</option><option value="100">100배</option></select></label><p class="small">실제 모형 시간에 따라 T(t) = T₀ + Pₛt/(mc)로 변합니다. 아래 조작을 바꾸면 시간 0부터 다시 준비합니다.</p></section>
 <section><h2>예측하고 조작하기</h2><p class="small">먼저 예측해 보세요. 같은 온도 변화에서 질량이 두 배면 열량은?</p><div class="controls"><label>시료의 비열 예시<select id="material"><option value="4200">물 · 4,200 J/(kg·K)</option><option value="900">알루미늄 · 900 J/(kg·K)</option><option value="450">철 · 450 J/(kg·K)</option><option value="385">구리 · 385 J/(kg·K)</option><option value="custom">직접 지정</option></select></label><div id="fields"></div></div><p class="note small">온도는 10~90℃에서 조절합니다. 비열 값은 수업용 근삿값입니다. 냉각에서는 같은 크기의 일정한 열 제거율을 가정합니다.</p></section></div>
@@ -77,6 +95,9 @@ function frame(now){if(running&&!document.hidden){if(last!==null){elapsed=Math.m
 const main=document.querySelector('body>main'),header=main.querySelector('header'),grid=main.querySelector('.grid'),cards=[...grid.children],parts=[...main.children].filter(x=>x.tagName==='SECTION');
 if(cards.length!==2||parts.length<3)return;
 const [scene,controls]=cards,[metrics,graph,lesson]=parts;grid.remove();
+const runControls=scene.querySelector('.row');
+const drawing=scene.querySelector('#scene');
+if(runControls&&drawing)drawing.before(runControls);
 const nav=document.createElement('nav');nav.className='tl-nav';nav.setAttribute('aria-label','열량 실험 탭');
 const desc=document.createElement('p');desc.className='tl-desc';
 header.after(nav,desc);
