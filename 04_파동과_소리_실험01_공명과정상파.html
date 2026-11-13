@@ -206,7 +206,7 @@ const baseline={
 };
 function clone(o){return JSON.parse(JSON.stringify(o));}
 const s={tab:"string",focus:"string",items:clone(baseline),play:false,phase:0,last:null,rate:1,view:"displacement",showNodes:false,records:[],saved:{A:null,B:null},graphMax:600,audioOn:false};
-const tkind=()=>s.tab==="compare"?s.focus:s.tab;
+const tkind=()=>s.tab==="compare"||s.tab==="concept"?s.focus:s.tab;
 const active=()=>s.items[tkind()];
 const response=(f,fn,z)=>{const r=f/fn;return 1/Math.sqrt(Math.pow(1-r*r,2)+Math.pow(2*z*r,2));};
 const cdata=(kind=tkind(),p=s.items[kind])=>{
