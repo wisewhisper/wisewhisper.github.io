@@ -83,3 +83,57 @@ main.ml-main{height:auto!important;min-height:100dvh!important;overflow:visible!
 .ml-main>header .law,.ml-main>header .formula{display:none!important}
 }
 @media(prefers-reduced-motion:reduce){.ml-measuring .ml-measure{animation:none}}
+
+/* Revision 2026-11-13 M2: full-size first scene, accessible contrast,
+   compact per-tab layout, clear native diagrams. */
+.ml-main{--ml-stage-min:0}
+.ml-live-grid{grid-template-columns:minmax(0,2.4fr) minmax(238px,.70fr)!important;grid-template-rows:minmax(0,1fr) minmax(62px,auto)!important}
+.ml-visual{overflow:auto!important;scrollbar-width:thin;justify-content:flex-start}
+.ml-visual .ml-piece{flex:1 0 auto!important;display:flex!important;flex-direction:column!important;min-height:0!important}
+.ml-visual .ml-piece :is(.scene,.stage,.canvas-wrap,.canvasbox,.sim-wrap,.sim-stage,.scene-wrap,.graphwrap,.track){flex:1 1 auto;min-height:0}
+.ml-visual .ml-piece :is(canvas,svg){height:clamp(290px,50vh,530px)!important;max-height:clamp(290px,52vh,545px)!important;width:100%!important;object-fit:contain!important}
+.ml-visual .ml-piece :is(.scene,.stage,.sim-stage,.canvas-wrap,.canvasbox){height:auto!important;max-height:none!important;min-height:clamp(285px,48vh,520px)!important}
+.ml-visual .ml-piece :is(.stage,.sim-stage) canvas{height:100%!important;min-height:250px!important;max-height:none!important}
+.ml-visual .ml-piece svg[viewBox]{display:block!important;max-width:100%;width:100%!important;overflow:visible}
+.ml-visual .ml-piece .metrics,.ml-visual .ml-piece .stats,.ml-visual .ml-piece .readings{gap:5px!important;margin-top:4px!important}
+.ml-settings .ml-piece{padding:8px!important}
+.ml-settings .ml-piece .control{padding:4px!important}
+.ml-settings .ml-piece h2{font-size:14px!important}
+.ml-settings .ml-piece p:not(.status):not(.hint){font-size:11px!important;line-height:1.35!important}
+.ml-measurements{grid-template-columns:repeat(4,minmax(0,1fr))!important;align-items:stretch;max-height:88px;overflow:hidden}
+.ml-measure{min-height:0;padding:5px 8px}
+.ml-main .ml-piece :is(label,summary,legend,td,th,dt,dd,p,li,span){color:#dae9f7!important}
+.ml-main .ml-piece :is(.muted,.sub,.hint,.caption,.note,small){color:#b4cadf!important}
+.ml-main .ml-piece a{color:#8ae5ff!important}
+.ml-main .ml-piece :is(input,select,textarea){background-color:#132942!important;color:#f1f8ff!important;border-color:#486f8f!important}
+.ml-main .ml-piece input::placeholder,.ml-main .ml-piece textarea::placeholder{color:#a6bcd2!important;opacity:1}
+.ml-main .ml-piece :is(button,select,input,textarea):focus-visible,.ml-nav button:focus-visible{outline:3px solid #ffda79!important;outline-offset:2px}
+.ml-main .ml-piece :is(.card,.panel,.stats,.metric,.stat,.controls,.equation,.formula,.graph-wrap,.graphwrap,.tablewrap,.reading){color:#eef7ff!important}
+.ml-tab-page.ml-secondary{overflow:auto!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-auto-rows:min-content!important;gap:9px!important;padding:9px!important;align-content:start!important}
+.ml-tab-page.ml-secondary[hidden]{display:none!important}
+.ml-tab-page.ml-secondary .ml-piece{padding:10px!important;margin:0!important;max-height:min(100%,calc(100dvh - 135px));overflow:auto!important;scrollbar-width:thin}
+.ml-tab-page.ml-secondary .ml-piece canvas,.ml-tab-page.ml-secondary .ml-piece svg{max-height:clamp(170px,32vh,320px)!important;height:auto!important;max-width:100%!important}
+.ml-tab-page.ml-secondary .ml-piece :is(p,li){font-size:12px!important;line-height:1.45!important}
+.ml-tab-page.ml-secondary .ml-piece :is(h2,h3){font-size:15px!important;margin-bottom:5px!important}
+.ml-tab-page.ml-secondary .ml-piece details{margin:4px 0!important}
+.ml-source-light .ml-main .ml-piece :is(svg:not(.icon),canvas){border-radius:8px}
+.ml-source-light .ml-main .ml-piece svg:not(.icon){background:#edf4fb!important;filter:none!important}
+.ml-source-light .ml-main .ml-piece svg:not(.icon) text{fill:#163655!important;stroke:none!important}
+.ml-source-light .ml-main .ml-piece svg:not(.icon) :is(rect,circle,path,line,polyline,polygon)[fill="white"]{fill:#fff!important}
+.ml-source-light .ml-main .ml-piece canvas{background:#edf4fb!important;filter:none!important}
+.ml-main .ml-piece :is(.stat,.metric,.read,.equation,.formula){color:#eaf7ff!important}
+.ml-main .ml-piece [style*="color: rgb(0, 0, 0)"],.ml-main .ml-piece [style*="color: black"]{color:#eef7ff!important}
+@media(min-width:1000px) and (max-height:800px){
+.ml-live-grid{grid-template-rows:minmax(0,1fr) 63px!important}
+.ml-visual .ml-piece :is(canvas,svg){height:clamp(300px,53vh,480px)!important;max-height:clamp(300px,54vh,490px)!important}
+.ml-visual .ml-piece :is(.stage,.sim-stage,.scene,.canvas-wrap){min-height:clamp(285px,49vh,450px)!important}
+.ml-tab-page.ml-secondary .ml-piece canvas,.ml-tab-page.ml-secondary .ml-piece svg{max-height:30vh!important}
+}
+@media(max-width:900px){
+.ml-live-grid{display:flex!important;flex-direction:column!important}
+.ml-visual .ml-piece :is(canvas,svg){height:clamp(290px,49vh,440px)!important;max-height:clamp(290px,49vh,440px)!important}
+.ml-visual .ml-piece :is(.stage,.sim-stage,.scene,.canvas-wrap){min-height:290px!important}
+.ml-measurements{grid-template-columns:repeat(2,minmax(0,1fr))!important;max-height:none}
+.ml-tab-page.ml-secondary{grid-template-columns:minmax(0,1fr)!important;height:auto!important;overflow:visible!important}
+.ml-tab-page.ml-secondary .ml-piece{max-height:none!important;overflow:visible!important}
+}
