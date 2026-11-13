@@ -11,7 +11,7 @@
   .wrap{max-width:1310px;margin:auto;padding:24px 20px 50px}.top{display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap;margin-bottom:20px}.eyebrow{color:#79dfd3;font-size:.8rem;font-weight:750;letter-spacing:.15em}h1{font-size:clamp(1.65rem,3vw,2.6rem);letter-spacing:-.045em;margin:4px 0}h2{font-size:1.12rem;margin:0 0 16px;letter-spacing:-.02em}p{margin:0;color:#b9c7df}.tag{border:1px solid #34445e;color:#b9d3e8;border-radius:999px;padding:7px 12px;font-size:.8rem}.layout{display:grid;grid-template-columns:minmax(310px,370px) minmax(0,1fr);gap:16px}.panel{background:#131f35;border:1px solid #283954;border-radius:20px;padding:20px;box-shadow:0 16px 38px #04091822}.controls{grid-row:span 2}.panelhead{display:flex;align-items:center;justify-content:space-between;gap:10px}.hint{font-size:.83rem;color:#96a9c4}.control{margin:21px 0 25px}.controlhead{display:flex;justify-content:space-between;gap:12px;align-items:baseline;font-size:.9rem}.controlhead output{font-variant-numeric:tabular-nums;font-weight:800;color:#80e4d7}.control input{display:block;width:100%;accent-color:#62d6c9;margin-top:12px;cursor:pointer}.endpoints{display:flex;justify-content:space-between;font-size:.72rem;color:#91a7c3;margin-top:1px}.segmented{display:flex;gap:6px;background:#0c172a;padding:5px;border-radius:12px;margin-top:12px}.segmented button{flex:1;min-width:0;background:transparent;border:0;border-radius:9px;color:#aebfd6;padding:10px 4px;font-weight:700}.segmented button.active{background:#4bd4c1;color:#092326}.notice{margin-top:11px;background:#0e2632;border-left:3px solid #50d7c7;padding:11px 12px;font-size:.82rem;color:#cae9e7;border-radius:5px}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:22px}.actions button,.recordbtn{border:1px solid #4e6281;border-radius:10px;color:#e8f0ff;background:#22324e;padding:9px 13px;font-weight:700}.actions button:hover,.recordbtn:hover{background:#334767}.actions button.primary,.recordbtn.primary{background:#50d7c7;border-color:#50d7c7;color:#092a2c}.control input:disabled{opacity:.4;cursor:not-allowed}.disabledlabel{opacity:.55}.visual{min-height:410px}.visual svg{display:block;width:100%;height:auto;max-height:365px}.meters{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px;margin-top:12px}.meter{background:#0c192c;border:1px solid #293d57;border-radius:12px;padding:12px;min-width:0}.meter small{display:block;color:#a2b4ce;font-size:.76rem}.meter strong{font-size:clamp(.97rem,1.7vw,1.25rem);font-variant-numeric:tabular-nums;white-space:nowrap}.meter:nth-child(1) strong,.meter:nth-child(2) strong{color:#6ce3d6}.meter:nth-child(4) strong{color:#f9c773}.formula{font-size:.82rem;color:#b7c8df;margin-top:12px}.below{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:16px}.graphcanvas{display:block;width:100%;height:230px;background:#0c192c;border-radius:12px}.graphkey{font-size:.8rem;color:#aec4dc;margin-top:10px}.swatch{display:inline-block;width:11px;height:11px;border-radius:50%;background:#58dccb;margin-right:5px}.tablewrap{max-height:242px;overflow:auto;border:1px solid #2c405e;border-radius:10px}.records{width:100%;border-collapse:collapse;text-align:right;font-size:.78rem;white-space:nowrap}.records th,.records td{padding:8px 9px;border-bottom:1px solid #293a54}.records th{position:sticky;top:0;background:#233653;color:#dce7f8}.records th:first-child,.records td:first-child{text-align:left}.empty{text-align:center!important;color:#aabbd3;padding:30px!important}.study{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:16px}.study ol{padding-left:20px;margin:0;color:#c7d4e7}.study li{margin:7px 0}.study summary{cursor:pointer;color:#6fe0d4;font-weight:700}.study details{margin-top:12px}.study details p{padding:8px 0}.foot{margin-top:20px;font-size:.75rem;color:#91a6be}.foot a{color:#80dfd6}.part-title{font-size:.86rem;color:#c4d6e9}.chip{font-size:.78rem;color:#9fe4db;background:#143337;border-radius:30px;padding:5px 10px}
   @media(max-width:980px){.layout{grid-template-columns:1fr}.controls{grid-row:auto}.below,.study{grid-template-columns:1fr}.meters{grid-template-columns:repeat(3,1fr)}}@media(max-width:540px){.wrap{padding:17px 12px 35px}.panel{padding:16px;border-radius:16px}.meters{grid-template-columns:repeat(2,1fr)}.visual{min-height:0}.records{font-size:.71rem}}
 </style>
-<link rel="stylesheet" href="electric-lab-v6.css?v=20261112-7"><link rel="stylesheet" href="electric-lab-v7-dark.css?v=20261112-11"><script src="electric-lab-v6.js?v=20261112-8" defer></script><style id="capacitor-unified-31">
+<link rel="stylesheet" href="electric-lab-v6.css?v=20261112-7"><link rel="stylesheet" href="electric-lab-v7-dark.css?v=20261112-11"><script src="electric-lab-v6.js?v=20261113-capacitor-inline-v12" defer></script><style id="capacitor-unified-31">
 /* Capacitance Lab unified with formula 31: independent C/V charts and Q–V comparison */
 #gapGraphGroup[hidden],#qvGraphGroup[hidden]{display:none!important}
 .cap-graph-tabs,.cap-save-actions{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
@@ -54,6 +54,79 @@ body[data-electric-v6="1"] .e7-shell[data-lab="실험04_평행판축전기"] .e7
  body[data-electric-v6="1"] .e7-shell[data-lab="실험04_평행판축전기"] .e7-graphstage>.e7-panel:first-child,
  body[data-electric-v6="1"] .e7-shell[data-lab="실험04_평행판축전기"] .e7-graphstage>.e7-panel:nth-child(2){flex:0 0 auto!important;min-height:0!important;overflow:visible!important}
 }
+</style><style id="capacitor-results-inline-v12">
+/* Capacitor experiment 04: five measured quantities in one persistent row below the apparatus. */
+.visual .capacitor-result-strip{
+ display:grid!important;
+ grid-template-columns:repeat(5,minmax(0,1fr))!important;
+ flex:0 0 auto!important;min-width:0!important;min-height:0!important;
+ gap:6px!important;margin:6px 0 0!important;
+ width:100%!important;align-content:stretch!important;
+}
+.visual .capacitor-result-strip .meter{
+ display:flex!important;flex-direction:column!important;justify-content:center!important;
+ min-width:0!important;min-height:58px!important;
+ margin:0!important;padding:6px 8px!important;border-radius:9px!important;
+ background:#112b41!important;border:1px solid #416780!important;
+ overflow:hidden!important;text-align:center!important;
+}
+.visual .capacitor-result-strip .meter small{
+ display:block!important;color:#b9d5e6!important;
+ font-size:clamp(10px,.84vw,12px)!important;font-weight:600!important;
+ white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;
+ line-height:1.35!important;
+}
+.visual .capacitor-result-strip .meter strong{
+ display:block!important;color:#e7fcff!important;
+ font-size:clamp(12px,1.23vw,19px)!important;line-height:1.35!important;
+ white-space:nowrap!important;overflow:visible!important;
+ font-weight:850!important;font-variant-numeric:tabular-nums!important;
+}
+.visual .capacitor-result-strip .meter:nth-child(1) strong,
+.visual .capacitor-result-strip .meter:nth-child(2) strong{color:#7bf3e5!important}
+.visual .capacitor-result-strip .meter:nth-child(5) strong{color:#ffd48f!important}
+body[data-electric-v6="1"] .e7-shell[data-lab="실험04_평행판축전기"] .e7-stage{
+ overflow:hidden!important;
+}
+body[data-electric-v6="1"] .e7-shell[data-lab="실험04_평행판축전기"] .e7-stage>.e7-panel.visual{
+ display:flex!important;flex-direction:column!important;
+ min-height:0!important;overflow:hidden!important;height:100%!important;
+ gap:5px!important;
+}
+body[data-electric-v6="1"] .e7-shell[data-lab="실험04_평행판축전기"] .e7-stage>.visual #apparatus{
+ flex:1 1 0px!important;height:0!important;width:100%!important;
+ min-height:95px!important;max-height:none!important;
+ object-fit:contain!important;overflow:hidden!important;
+}
+body[data-electric-v6="1"] .e7-shell[data-lab="실험04_평행판축전기"] .e7-stage>.visual>.panelhead{
+ flex:0 0 auto!important;margin:0!important;
+}
+body[data-electric-v6="1"] .e7-shell[data-lab="실험04_평행판축전기"] .e7-stage>.visual>.formula{
+ flex:0 0 auto!important;margin:2px 0 0!important;
+ padding:3px 5px!important;line-height:1.3!important;
+ font-size:11px!important;white-space:normal!important;
+}
+@media (min-width:901px) and (max-height:690px){
+ body[data-electric-v6="1"] .e7-shell[data-lab="실험04_평행판축전기"] .e7-stage>.visual .capacitor-result-strip .meter{
+  min-height:48px!important;padding:4px!important;
+ }
+ body[data-electric-v6="1"] .e7-shell[data-lab="실험04_평행판축전기"] .e7-stage>.visual>.formula{font-size:10px!important;}
+}
+@media(max-width:900px){
+ body[data-electric-v6="1"] .e7-shell[data-lab="실험04_평행판축전기"] .e7-stage,
+ body[data-electric-v6="1"] .e7-shell[data-lab="실험04_평행판축전기"] .e7-stage>.e7-panel.visual{
+  height:auto!important;overflow:visible!important;
+ }
+ body[data-electric-v6="1"] .e7-shell[data-lab="실험04_평행판축전기"] .e7-stage>.visual #apparatus{
+  height:auto!important;min-height:220px!important;max-height:54vh!important;flex:0 0 auto!important;
+ }
+}
+@media(max-width:600px){
+ .visual .capacitor-result-strip{gap:3px!important;margin-top:5px!important;}
+ .visual .capacitor-result-strip .meter{padding:5px 1px!important;min-height:50px!important}
+ .visual .capacitor-result-strip .meter small{font-size:9px!important;letter-spacing:-.04em}
+ .visual .capacitor-result-strip .meter strong{font-size:10px!important;letter-spacing:-.045em}
+}
 </style></head>
 <body>
 <main class="wrap">
@@ -73,7 +146,7 @@ body[data-electric-v6="1"] .e7-shell[data-lab="실험04_평행판축전기"] .e7
       <svg id="apparatus" role="img" aria-labelledby="svgTitle svgDesc" viewBox="0 0 700 340"><title id="svgTitle">평행판 축전기 단면 모형</title><desc id="svgDesc">양전하 위쪽 극판, 음전하 아래쪽 극판과 그 사이 전기장 및 유전체</desc><defs><linearGradient id="plateGrad"><stop stop-color="#76b9d7"/><stop offset=".5" stop-color="#c6e1eb"/><stop offset="1" stop-color="#67a6c2"/></linearGradient><pattern id="dielPattern" width="12" height="12" patternUnits="userSpaceOnUse"><rect width="12" height="12" fill="#cd9d64" fill-opacity=".25"/><path d="M0 12L12 0" stroke="#efc589" stroke-opacity=".38" stroke-width="2"/></pattern><marker id="arrow" markerWidth="7" markerHeight="7" refX="3.5" refY="4" orient="auto"><path d="M1 1L6 4L1 7" fill="none" stroke="#62e1cf" stroke-width="1.5"/></marker></defs>
         <rect width="700" height="340" rx="16" fill="#0c192c"/><g id="wires" fill="none" stroke="#9cc5d9" stroke-width="3" stroke-linecap="round"><path id="wireTop"/><path id="wireBottom"/><path d="M617 98V142M617 184V240"/></g><g id="batteryGlyph"><path d="M602 145h30M608 157h18M602 170h30M608 182h18" stroke="#f5c777" stroke-width="3"/><text x="646" y="164" fill="#f5c777" font-size="15">전지</text></g><text id="disconnectText" x="612" y="166" fill="#ffca85" font-size="14" display="none">분리</text>
         <rect id="dielectricRect" fill="url(#dielPattern)" stroke="#efc589" stroke-width="1"/><g id="fieldLines" stroke="#62e1cf" stroke-width="1.7" opacity=".8" marker-end="url(#arrow)"></g><rect id="topPlate" height="14" rx="5" fill="url(#plateGrad)"/><rect id="bottomPlate" height="14" rx="5" fill="url(#plateGrad)"/><g id="chargeTop" fill="#ffc270" font-size="19" font-weight="700" text-anchor="middle"></g><g id="chargeBottom" fill="#91c5fa" font-size="22" font-weight="700" text-anchor="middle"></g><text id="gapText" x="65" y="182" fill="#b4c9e0" font-size="15" text-anchor="middle"></text><text id="dielectricText" x="350" y="304" fill="#dbc9ae" font-size="14" text-anchor="middle"></text><text x="350" y="329" fill="#8299b6" font-size="12" text-anchor="middle">그림은 이해를 위한 단면도이며 크기와 전하 개수는 비례하지 않습니다.</text></svg>
-      <div class="meters" aria-live="polite"><div class="meter"><small>정전 용량 C</small><strong id="mC"></strong></div><div class="meter"><small>전하량 Q</small><strong id="mQ"></strong></div><div class="meter"><small>판 사이 전압 V</small><strong id="mV"></strong></div><div class="meter"><small>전기장 E</small><strong id="mE"></strong></div><div class="meter"><small>저장 에너지 U</small><strong id="mU"></strong></div></div>
+      <div class="meters capacitor-result-strip" aria-label="시뮬레이션 실시간 측정 결과" aria-live="polite"><div class="meter"><small>정전 용량 C</small><strong id="mC"></strong></div><div class="meter"><small>전하량 Q</small><strong id="mQ"></strong></div><div class="meter"><small>판 사이 전압 V</small><strong id="mV"></strong></div><div class="meter"><small>전기장 E</small><strong id="mE"></strong></div><div class="meter"><small>저장 에너지 U</small><strong id="mU"></strong></div></div>
       <div class="formula" id="formula">C = ε₀ A[1 + (κ − 1)f] / d　·　Q = CV　·　E = V/d　·　U = ½CV²</div>
     </section>
     <div class="below">
