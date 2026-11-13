@@ -1,6 +1,9 @@
 /* Unified mechanics interface. Original simulation objects, models and handlers retained. */
 (()=>{'use strict';
 const main=document.querySelector('main'),body=document.body;
+const filename=decodeURIComponent(location.pathname.split('/').pop()||'');
+const lightLegacy=/^01_운동과_힘_(?:공식(?:01|03|04|05|06|07|19|20)|실험(?:03|09))_/.test(filename);
+if(lightLegacy)document.documentElement.classList.add('ml-source-light');
 if(!main||main.dataset.mechanicsReady)return;
 main.dataset.mechanicsReady='1';main.classList.add('ml-main');
 const title=document.querySelector('h1')?.textContent.trim()||document.title;
@@ -56,6 +59,7 @@ function kind(p){
  const controls=hasAny(p,'input[type=range],select,input[type=number]');
  const measures=hasAny(p,'.metrics,.stats,.readings,.readouts,.meters,.metric,.stat,.reading');
  if(/교사용|해설|개념|모형의|원리|오개념|정의|적용 조건|기호와|수학적 열쇠|핵심 개념|측정과 물리 법칙/.test(h)&&!controls&&!hasCanvas)return'concept';
+ if(/관찰|진자의 움직임|발사|궤도 관측|두 물체의 인력|수평면 운동|같은 극 자석|미끄러짐/.test(h)&&hasCanvas&&!/그래프/.test(h))return'scene';
  if(/예측|탐구|비교|미션|활동|기록|데이터|질문|관찰하고 설명|조건 A|조건 비교/.test(h)&&!hasScene&&!(/실험 조건|조건 조작/.test(h)&&controls))return'inquiry';
  if(/그래프|관계|시간에 따른|시간 변화|시간 변화와 함께|값 대입/.test(h)&&hasCanvas&&!hasScene)return'graph';
  if(/실험 조건|조건 조작|변수 조작|실험 조절|조작|변수 조절|조건 조절|설정|실험 입력/.test(h)&&controls&&!hasScene)return'controls';
@@ -69,7 +73,7 @@ function kind(p){
 }
 const buckets={scene:[],controls:[],results:[],graph:[],inquiry:[],concept:[]};
 for(const panel of panels){if(used.has(panel))continue;const k=kind(panel);buckets[k].push(panel);used.add(panel);}
-const order={scene:visual,controls:settingsScroll,results:measurements,graph,inquiry,concept};
+const order={scene:visual,controls:settingsScroll,results:graph,graph,inquiry,concept};
 function move(panel,dest){panel.classList.add('ml-piece');dest.append(panel);}
 for(const [k,dest]of Object.entries(order))for(const panel of buckets[k])move(panel,dest);
 // Rescue scene and controls if a particular legacy layout combines both.
@@ -83,7 +87,7 @@ if(!settingsScroll.children.length){
 }
 function extractReadouts(){
  const selectors=['.metrics','.stats','.readings','.readouts','.meters','.reading','.results','.kpis','.dashboard'];
- const sources=[...visual.children,...settingsScroll.children];
+ const sources=[...visual.children,...settingsScroll.children,...graph.children];
  for(const p of sources){
   const nodes=selectors.flatMap(s=>Array.from(p.querySelectorAll(s)));
   for(const n of nodes){
@@ -93,7 +97,7 @@ function extractReadouts(){
    for(const cell of cells){
     const strong=cell.querySelector('strong,.big,.v,.value,.num,output,b');
     const name=cell.querySelector('small,.k,.label,span')?.textContent||cell.childNodes[0]?.textContent||'측정값';
-    if(!strong)continue;
+    if(!strong||measurements.children.length>=4)continue;
     const wrap=el('div','ml-measure'),label=el('span',null,name.trim().slice(0,34)),value=el('strong');
     value.dataset.source='1';value.textContent=strong.textContent;
     wrap.append(label,value);measurements.append(wrap);
@@ -114,6 +118,8 @@ if(!measurements.children.length){
 }
 if(!measurements.children.length){const wrap=el('div','ml-measure');wrap.append(el('span',null,'실험 결과'),el('strong',null,'조건을 바꾸어 관찰'));measurements.append(wrap);}
 if(buckets.scene.length===0){visual.prepend(el('h2',null,'실험 장면'));}
+if(visual.children.length>1){const extras=Array.from(visual.children).slice(1);for(const node of extras)if(node.querySelector('canvas,svg')&&!/그래프/.test(textOf(node)))inquiry.append(node);}
+
 // Gather old action buttons. Click their original handlers; do not replace physics logic.
 const all=Array.from(document.querySelectorAll('button')).filter(b=>!nav.contains(b)&&!controlsRow.contains(b));
 const normalized=b=>b.textContent.replace(/\s+/g,' ').trim();
