@@ -247,6 +247,10 @@ body .wrap>.thermal-cycle.active{display:block!important}
 body .wrap>.layout[hidden]{display:none!important;visibility:hidden!important}
 body .wrap>.thermal-cycle[hidden]{display:none!important}
 body .wrap>.thermal-cycle.active:not([hidden]){display:block!important}
+</style><style id="thermal-cycle-detached-workspace-v10">
+body .wrap>.thermal-cycle.active{margin:0!important;padding:0!important;width:100%!important}
+body .wrap>.thermal-cycle.active>.otto-head{margin:2px 0 9px!important}
+body .wrap>.thermal-cycle.active>.otto-grid{margin-top:0!important}
 </style></head>
 <body>
 <div class="wrap">
@@ -617,6 +621,13 @@ if(cycleQuestion){
   else{cycleQuestion.hidden=true;cycleQuestion.classList.remove('otto-question-above-tabs');if(cycleQuestion.parentNode!==cyclePanel)cyclePanel.insertBefore(cycleQuestion,cyclePanel.firstChild);}
 }
 const standalone=name==='concept'||name==='cycle';
+// Physically remove the old process workspace from the DOM for standalone tabs.
+// This prevents its controls/results from occupying space regardless of CSS priority.
+if(standalone){
+  if(layout.isConnected)layout.remove();
+}else if(!layout.isConnected){
+  wrap.insertBefore(layout,cyclePanel);
+}
 layout.hidden=standalone;
 layout.style.setProperty('display',standalone?'none':'grid','important');
 layout.setAttribute('aria-hidden',String(standalone));
