@@ -52,6 +52,67 @@ details[open]{background:rgba(19,39,62,.35)}
 .ww-page .metric,.ww-page .stat{padding:8px!important}
 body[data-lab-page*="02_일과_에너지_운동량"] #lab-compact-toggle{display:none!important}
 @media(max-width:820px){.ww-page.ww-active{display:flex;flex-direction:column;gap:9px}.ww-page>*{width:100%!important}.ww-tab{font-size:13px!important;padding:6px 9px!important}.card,.panel{padding:10px!important}.ww-page canvas#scene{height:310px!important}.ww-page #scene{max-height:none}}
+</style><style id="ww-one-screen-20261113">
+/* Unified 1366×768 teaching display: scene and controls stay inside first viewport. */
+html{scrollbar-gutter:stable}
+body{margin:0!important;background:#05080f!important}
+main{max-width:1720px!important;padding:7px 13px 11px!important}
+main>header{min-height:0!important;padding:0 3px 4px!important;margin:0 0 2px!important}
+main>header h1{font-size:21px!important;line-height:1.2!important;margin:0 0 3px!important}
+main>header p,main>header .lead,main>header>.small,main>header .eyebrow,main>header .kicker,main>header .tag{display:none!important}
+main>header .formula,main>header .law{font-size:16px!important;padding:0!important;margin:0!important}
+main>.lead{display:none!important}
+.ww-tabs{padding:4px 0 7px!important;margin:0 0 7px!important;gap:7px!important}
+.ww-tab{min-height:36px!important;padding:6px 13px!important}
+.ww-page.ww-active{display:grid!important;grid-template-columns:minmax(0,1.68fr) minmax(315px,.93fr)!important;gap:8px!important;align-items:start!important}
+.ww-page.ww-active.ww-concepts{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+.ww-page.ww-active:not(.ww-concepts)>:nth-child(1){grid-column:1!important;grid-row:1!important}
+.ww-page.ww-active:not(.ww-concepts)>:nth-child(2){grid-column:2!important;grid-row:1!important}
+.ww-page.ww-active:not(.ww-concepts)>:nth-child(n+3){grid-column:1/-1!important;grid-row:auto!important}
+.ww-page .card,.ww-page .panel{padding:9px 11px!important}
+.ww-page .card h2,.ww-page .panel h2{margin:0 0 4px!important;font-size:16px!important;line-height:1.3!important}
+.ww-page .card h3{font-size:14px!important;margin:3px 0!important}
+.ww-page .card>p,.ww-page .panel>p{margin:3px 0!important;font-size:12px!important;line-height:1.35!important}
+.ww-page .control,.ww-page .param{margin:3px 0!important}
+.ww-page label,.ww-page output{line-height:1.25!important}
+.ww-page .buttons,.ww-page .actions{margin:4px 0!important;gap:5px!important}
+.ww-page button:not(.ww-tab){min-height:32px!important;padding:4px 8px!important;font-size:13px!important}
+.ww-page input[type=range]{min-height:18px!important;height:23px!important;margin:2px 0!important}
+.ww-page select,.ww-page input[type=number]{min-height:29px!important;padding:3px 6px!important}
+.ww-page .stat,.ww-page .metric{padding:5px 7px!important}
+.ww-page .stats,.ww-page .metrics,.ww-page .readout{gap:5px!important}
+.ww-page .stat strong,.ww-page .metric strong,.ww-page .readout b{font-size:clamp(14px,1.12vw,18px)!important;line-height:1.3!important}
+.ww-page #scene{max-height:clamp(220px,37vh,380px)!important}
+.ww-page canvas#scene{height:clamp(225px,36vh,360px)!important}
+.ww-page .stage #sim{height:clamp(225px,34vh,340px)!important}
+.ww-page .canvasbox canvas{height:clamp(220px,36vh,360px)!important}
+.ww-page canvas#force,.ww-page canvas#momentum,.ww-page #chart,.ww-page #chartEnergy{max-height:42vh!important}
+.ww-page .stage .metrics{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+.ww-page .stage .metric strong{font-size:14px!important}
+.ww-page .readout{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+.ww-page .graphs,.ww-page .lower{grid-column:1/-1!important}
+.ww-page .equation,.ww-page .calculation{margin:5px 0!important;padding:6px!important}
+.ww-page .scroll,.ww-page .tablewrap{max-height:40vh;overflow:auto}
+.ww-page.ww-active:not(.ww-concepts)>:nth-child(2){max-height:calc(100dvh - 135px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}
+.ww-page.ww-active:not(.ww-concepts)>:nth-child(n+3){max-height:calc(100dvh - 505px);overflow-y:auto;scrollbar-width:thin}
+.ww-page [id="comparison"],.ww-page [id="compare"]{max-height:100%}
+@media(min-width:1000px) and (max-height:820px){
+.ww-page #scene{max-height:32vh!important}
+.ww-page canvas#scene{height:31vh!important}
+.ww-page .stage #sim{height:30vh!important}
+.ww-page .canvasbox canvas{height:30vh!important}
+.ww-page.ww-active:not(.ww-concepts)>:nth-child(n+3){max-height:clamp(105px,21vh,185px)}
+}
+@media(max-width:999px){
+html{scrollbar-gutter:auto}
+main{padding:10px!important}
+main>header p,main>header .lead{display:block!important}
+.ww-page.ww-active,.ww-page.ww-active.ww-concepts{display:flex!important;flex-direction:column!important;gap:9px!important}
+.ww-page.ww-active>*{width:100%!important;grid-column:auto!important;grid-row:auto!important;max-height:none!important;overflow:visible!important}
+.ww-page #scene,.ww-page canvas#scene,.ww-page .stage #sim,.ww-page .canvasbox canvas{height:clamp(250px,42vh,420px)!important;max-height:55vh!important}
+.ww-page .readout{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+.ww-page .stage .metrics{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
 </style></head><body><main><header><small>물리 공식 40 · 인터랙티브 실험실</small><h1>13. 중력 위치 에너지 — 기준면에서 얼마나 높을까?</h1><div class="formula">U<sub>g</sub> = mgh</div><p>질량·중력 가속도·기준면에 대한 높이를 바꾸면 위치 에너지는 어떻게 달라질까?</p></header><div class="grid">
 <section class="panel"><h2>두 위치와 기준면</h2><canvas id="scene" role="img" aria-label="시작 위치와 도착 위치, 기준면, 높이와 아래쪽 중력"></canvas><p class="note">○ 점선: 시작 위치 1 · ■ 실선: 도착 위치 2 · 가로 점선: U = 0인 기준면. 높이 h는 기준면 위에서 +, 아래에서 −입니다.</p><div class="metrics" aria-live="polite"><div class="metric"><span>도착 높이 h₂</span><strong id="height"></strong></div><div class="metric"><span>도착 위치 에너지 U₂</span><strong id="energy"></strong></div><div class="metric"><span>위치 에너지 변화 ΔU</span><strong id="delta"></strong></div><div class="metric"><span>중력이 한 일 W<sub>g</sub></span><strong id="work"></strong></div></div><p class="note">정적인 위치 비교 모형입니다. 움직임이나 소요 시간은 계산하지 않습니다. 입력을 바꾸면 즉시 새 조건으로 계산합니다.</p></section>
 <section class="panel"><h2>예측 → 조작</h2><p>물체를 그대로 두고 기준면만 높이면 ΔU도 바뀔까요?</p><div id="controls" class="controls"></div><div class="buttons"><button data-g="9.8">지구 9.8</button><button data-g="1.62">달 1.62</button><button data-g="3.71">화성 3.71</button><button id="zero">기준면을 도착 위치로</button><button id="reset" class="primary">전체 초기화</button></div><p class="note">천체 버튼의 값은 수업용 대표값이며 단위는 m/s²입니다.</p><div class="calc" id="calc"></div><p class="note">m: 질량(kg), g: 중력 가속도의 크기(m/s²), y: 위쪽이 +인 위치 좌표(m), y₀: 기준면 좌표(m), h = y − y₀: 기준면에 대한 높이(m), U: 위치 에너지(J).</p></section>
