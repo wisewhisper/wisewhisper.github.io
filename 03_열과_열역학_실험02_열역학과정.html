@@ -94,6 +94,46 @@ body .layout .thermal-progress{padding:9px;background:#111f34;border:1px solid #
  body .layout .stage canvas{height:245px}
  body .layout .thermal-left>.chartbox .thermal-caption{font-size:10px;line-height:1.2;margin:4px 0 0}
 }
+</style><style id="thermal-engine-four-process-cycle-v1">
+/* 열기관 순환의 본 화면은 한 줄로, 각 과정의 상세 풀이만 선택적으로 확장 */
+body .thermal-cycle{display:none;min-width:0}
+body .thermal-cycle.active{display:block}
+.thermal-cycle .cy-grid{display:grid;grid-template-columns:minmax(0,1.07fr) minmax(0,1.08fr) minmax(290px,.9fr);gap:9px;align-items:start}
+.thermal-cycle .cy-card{min-width:0;background:#101e31;border:1px solid #314c66;border-radius:11px;padding:10px;color:#eef6ff}
+.thermal-cycle h2{font-size:15px;margin:0 0 6px}
+.thermal-cycle .cy-description{font-size:11.5px;color:#bad2e3;line-height:1.38;margin:5px 0}
+.thermal-cycle canvas{width:100%;height:270px;display:block;border:1px solid #29475e;border-radius:8px;background:#071729}
+.thermal-cycle .cy-stage-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;margin-top:8px}
+.thermal-cycle .cy-stage{padding:5px 4px;background:#13273e;border:1px solid #31506a;border-radius:7px;font-size:10.5px;text-align:center;color:#c4d9e8;line-height:1.35}
+.thermal-cycle .cy-stage.active{background:#0e4644;border-color:#6cdabe;color:#eafff9}
+.thermal-cycle .cy-controls{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin:7px 0}
+.thermal-cycle .cy-controls button,.thermal-cycle .cy-controls select{background:#19344d;color:#f2f8ff;border:1px solid #4a6d86;border-radius:7px;min-height:32px;padding:4px 8px;font-size:11.5px;font-weight:700}
+.thermal-cycle .cy-controls .cy-primary{background:#0a7c6e;border-color:#56d4bf}
+.thermal-cycle .cy-controls button:disabled{opacity:.45}
+.thermal-cycle .cy-controls label{font-size:11.5px;color:#bbd1df;display:flex;gap:5px;align-items:center}
+.thermal-cycle .cy-readout{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}
+.thermal-cycle .cy-kpi{background:#152c41;border:1px solid #2e5168;border-radius:7px;padding:6px;min-width:0}
+.thermal-cycle .cy-kpi span{display:block;font-size:10.5px;color:#afc8d9;line-height:1.25}
+.thermal-cycle .cy-kpi strong{display:block;font-size:14px;margin-top:3px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.thermal-cycle .cy-phase{padding:7px;border:1px solid #3a655d;background:#102f36;border-radius:8px;margin-top:6px}
+.thermal-cycle .cy-phase strong{font-size:12px;color:#8be6cb}
+.thermal-cycle .cy-phase p{font-size:11px;line-height:1.4;color:#d2e7ef;margin:4px 0}
+.thermal-cycle .cy-formula{color:#ffce89;font-size:11.5px;font-weight:700;line-height:1.45;overflow-wrap:anywhere}
+.thermal-cycle .cy-summary{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px;padding:7px;background:#162b3c;border:1px solid #31516a;border-radius:8px;font-size:11.5px}
+.thermal-cycle .cy-summary b{color:#8ee6d1}
+.thermal-cycle .cy-problem{margin-top:9px;padding:9px 12px}
+.thermal-cycle .cy-problem h2{font-size:14px}
+.thermal-cycle .cy-problem p{margin:5px 0;font-size:12px;line-height:1.48;color:#d1e3ed}
+.thermal-cycle .cy-problem details{margin-top:8px;border-top:1px solid #37536e;padding-top:7px}
+.thermal-cycle .cy-problem summary{font-size:12px;font-weight:750;color:#8de5d1;cursor:pointer}
+.thermal-cycle .cy-worked{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:8px}
+.thermal-cycle .cy-worked article{background:#142a3f;border:1px solid #2f4e69;border-radius:8px;padding:9px}
+.thermal-cycle .cy-worked h3{font-size:12px;margin:0 0 4px;color:#8fe7d4}
+.thermal-cycle .cy-worked p{font-size:11.5px}
+.thermal-cycle .cy-worked .cy-whole{grid-column:1/-1}
+.thermal-cycle .cy-graph-key{font-size:11px;color:#b9d0df;margin-top:5px}
+@media(max-width:1150px){.thermal-cycle .cy-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.thermal-cycle .cy-side{grid-column:1/-1}.thermal-cycle .cy-readout{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:710px){.thermal-cycle .cy-grid{grid-template-columns:1fr}.thermal-cycle .cy-side{grid-column:auto}.thermal-cycle .cy-readout{grid-template-columns:repeat(2,minmax(0,1fr))}.thermal-cycle .cy-worked{grid-template-columns:1fr}.thermal-cycle .cy-stage{font-size:10px}}
 </style></head>
 <body>
 <div class="wrap">
@@ -381,8 +421,9 @@ lesson.classList.add('thermal-concept');
 const compare=document.createElement('section');compare.className='panel thermal-compare';
 compare.innerHTML='<h2>같은 초기 상태의 네 과정 비교</h2><p class="thermal-caption">1 mol 이상 이원자 기체, 초기 300 K·100 kPa·24.94 L. 팽창 부피비 1.6(등온·정압·가역 단열), 정적 과정은 초기 부피 고정</p><canvas id="pvCompare" width="800" height="350"></canvas><div style="overflow-x:auto"><table><thead><tr><th>과정</th><th>T (K)</th><th>P (kPa)</th><th>W (J)</th><th>Q (J)</th></tr></thead><tbody id="pvCompareRows"></tbody></table></div>';
 left.append(compare);
-const notes={isothermal:'온도가 일정할 때 피스톤 이동과 P–V 경로를 확인합니다.',isobaric:'압력이 일정한 팽창·압축에서 부피와 온도가 함께 변합니다.',isochoric:'부피가 일정하므로 피스톤과 P–V 수직 경로를 관찰합니다.',adiabatic:'초기·최종 등온선(점선) 사이를 단열 경로(녹색 실선)로 이동합니다. 팽창하면 냉각, 압축하면 가열됩니다.',compare:'같은 초기 상태에서 서로 다른 과정의 압력·일·열량을 비교합니다.',concept:'물리 모형, 네 과정의 조건과 열·일의 부호를 설명합니다.'};
-const configs=[['isothermal','① 등온'],['isobaric','② 정압'],['isochoric','③ 정적'],['adiabatic','④ 단열'],['compare','⑤ 네 과정 비교'],['concept','⑥ 개념 설명']];
+const cyclePanel=document.createElement('section');cyclePanel.id='thermal-cycle';cyclePanel.className='thermal-cycle';cyclePanel.setAttribute('aria-label','네 과정으로 구성한 열기관 1사이클과 풀이');layout.after(cyclePanel);
+const notes={isothermal:'온도가 일정할 때 피스톤 이동과 P–V 경로를 확인합니다.',isobaric:'압력이 일정한 팽창·압축에서 부피와 온도가 함께 변합니다.',isochoric:'부피가 일정하므로 피스톤과 P–V 수직 경로를 관찰합니다.',adiabatic:'초기·최종 등온선(점선) 사이를 단열 경로(녹색 실선)로 이동합니다. 팽창하면 냉각, 압축하면 가열됩니다.',compare:'같은 초기 상태에서 서로 다른 과정의 압력·일·열량을 비교합니다.',cycle:'네 가지 열역학 과정을 연결한 실제 닫힌 P–V 사이클을 한 번 실행하고, 기체가 한 순일을 계산합니다.',concept:'물리 모형, 네 과정의 조건과 열·일의 부호를 설명합니다.'};
+const configs=[['isothermal','① 등온'],['isobaric','② 정압'],['isochoric','③ 정적'],['adiabatic','④ 단열'],['compare','⑤ 네 과정 비교'],['cycle','⑥ 열기관 한 사이클'],['concept','⑦ 개념 설명']];
 function drawComparison(){
 const cv=document.getElementById('pvCompare'),c=cv.getContext('2d');
 const W=cv.width,H=cv.height,V0=24.9434,P0=100,T0=300,R=8.31446,g=1.4,ratio=1.6;
@@ -403,10 +444,10 @@ c.fillStyle='#eaf5ff';c.fillText('P(kPa)',5,13);c.fillText('V(L)',W-40,H-6);
 document.getElementById('pvCompareRows').innerHTML=paths.map(p=>'<tr><td style="color:'+p.color+'">'+p.name+'</td><td>'+p.end.T.toFixed(1)+'</td><td>'+p.end.P.toFixed(1)+'</td><td>'+p.end.W.toFixed(1)+'</td><td>'+p.end.Q.toFixed(1)+'</td></tr>').join('');
 }
 function tab(name){
-desc.textContent=notes[name];layout.hidden=name==='concept';lesson.classList.toggle('active',name==='concept');
+desc.textContent=notes[name];layout.hidden=name==='concept'||name==='cycle';lesson.classList.toggle('active',name==='concept');cyclePanel.classList.toggle('active',name==='cycle');if(window.thermalCycleVisibility)window.thermalCycleVisibility(name==='cycle');
 const cmp=name==='compare';compare.classList.toggle('active',cmp);
 if(cmp){left.append(compare);stage.remove();chart.remove();drawComparison();}
-else if(name!=='concept'){const b=mid.querySelector('[data-process="'+name+'"]');if(b)b.click();left.append(stage,chart);compare.remove();}
+else if(name!=='concept'&&name!=='cycle'){const b=mid.querySelector('[data-process="'+name+'"]');if(b)b.click();left.append(stage,chart);compare.remove();}
 for(const b of nav.children)b.setAttribute('aria-selected',String(b.dataset.tab===name));
 requestAnimationFrame(()=>window.dispatchEvent(new Event('resize')));
 }
@@ -416,6 +457,140 @@ info.innerHTML='<div class="adiabatic-keys"><span class="adiabatic-key initial" 
 chart.append(info);
 const p=document.createElement('p');p.className='thermal-caption';p.textContent='P–V 그래프 아래의 부호 있는 면적은 W = ∫P dV이며 팽창은 양수, 압축은 음수입니다.';chart.append(p);
 tab('isothermal');
+})();
+</script><script id="thermal-cycle-controller">
+(()=>{'use strict';
+const pane=document.getElementById('thermal-cycle');if(!pane)return;
+const R=8.314462618,GAMMA=1.4,CV=R/(GAMMA-1),CP=CV+R;
+const A={V:20,T:300};A.P=R*A.T/A.V;
+const B={V:20,T:330};B.P=R*B.T/B.V;
+const C={V:25,P:B.P};C.T=C.P*C.V/R;
+const D={T:A.T};D.V=C.V*Math.pow(C.T/D.T,1/(GAMMA-1));D.P=R*D.T/D.V;
+const steps=[
+{title:'① 정적 가열 A→B',label:'정적 가열',info:'피스톤을 고정한 채 열을 공급합니다. 부피가 일정하므로 W=0이고, 받은 열은 내부 에너지로 저장됩니다.'},
+{title:'② 정압 팽창 B→C',label:'정압 팽창',info:'압력을 일정하게 유지하며 열을 공급합니다. 기체가 팽창하며 일 W=PΔV를 하고, 내부 에너지도 증가합니다.'},
+{title:'③ 단열 팽창 C→D',label:'단열 팽창',info:'열적으로 절연된 상태에서 팽창합니다. Q=0이고 기체가 한 일만큼 내부 에너지가 감소하여 온도가 내려갑니다.'},
+{title:'④ 등온 압축 D→A',label:'등온 압축',info:'300 K의 열저장고와 접촉해 일정한 온도로 압축합니다. 외부가 기체에 일을 하고, 기체는 그만큼 열을 방출합니다.'}
+];
+const eachWork=[0,B.P*(C.V-B.V),CV*(C.T-D.T),R*A.T*Math.log(A.V/D.V)];
+const eachHeat=[CV*(B.T-A.T),CP*(C.T-B.T),0,eachWork[3]];
+const totalW=eachWork.reduce((a,b)=>a+b,0),totalQ=eachHeat.reduce((a,b)=>a+b,0);
+const heatIn=eachHeat.filter(q=>q>0).reduce((a,b)=>a+b,0),heatOut=-eachHeat.filter(q=>q<0).reduce((a,b)=>a+b,0);
+function f(v,d=1){return Number(v).toLocaleString('ko-KR',{maximumFractionDigits:d,minimumFractionDigits:d})}
+function signed(v,d=1){return (v>=0?'+':'−')+f(Math.abs(v),d)}
+function stateAt(z){
+const segment=Math.min(3,Math.floor(Math.min(3.999999,Math.max(0,z))));
+const u=z>=4?1:Math.max(0,Math.min(1,z-segment));
+let V,T,P,W,Q,du;
+if(segment===0){V=A.V;T=A.T+(B.T-A.T)*u;P=R*T/V;W=0;du=CV*(T-A.T);Q=du;}
+else if(segment===1){V=B.V+(C.V-B.V)*u;P=B.P;T=P*V/R;W=P*(V-B.V);du=CV*(T-B.T);Q=du+W;}
+else if(segment===2){V=C.V+(D.V-C.V)*u;T=C.T*Math.pow(C.V/V,GAMMA-1);P=R*T/V;du=CV*(T-C.T);W=-du;Q=0;}
+else{V=D.V+(A.V-D.V)*u;T=A.T;P=R*T/V;W=R*T*Math.log(V/D.V);du=0;Q=W;}
+const accumulatedW=eachWork.slice(0,segment).reduce((a,b)=>a+b,0)+W;
+const accumulatedQ=eachHeat.slice(0,segment).reduce((a,b)=>a+b,0)+Q;
+return {V,T,P,W,Q,du,accumulatedW,accumulatedQ,segment,u,z};
+}
+pane.innerHTML='<div class="cy-grid">'
++'<section class="cy-card"><h2>움직이는 피스톤 열기관 · 단 한 사이클</h2><canvas id="cyclePiston" aria-label="정적 가열, 정압 팽창, 단열 팽창, 등온 압축으로 이루어진 피스톤 실린더의 한 주기"></canvas><div class="cy-stage-row" id="cyStages"></div><p class="cy-description">이상 기체의 준정적 순환 모형입니다. 실제 엔진의 크랭크축·열전달 시간·마찰을 계산하는 장치는 아닙니다.</p></section>'
++'<section class="cy-card"><h2>P–V 폐곡선 · 순일은 둘러싼 면적</h2><canvas id="cycleGraph" aria-label="열기관 A B C D A의 폐곡선과 움직이는 현재 상태점"></canvas><div class="cy-graph-key">회색: 예정 경로 · 청록색: 진행 경로 · 색 영역: 순환의 순일 (시계방향)</div><div class="cy-summary"><span>한 사이클 순일 <b id="cyNet"></b></span><span>열효율 <b id="cyEta"></b></span></div></section>'
++'<section class="cy-card cy-side"><h2>한 사이클 조작 및 계산</h2><div class="cy-controls"><button type="button" class="cy-primary" id="cyPlay">▶ 시작</button><button type="button" id="cyPause">Ⅱ 정지</button><button type="button" id="cyNext">다음 과정</button><button type="button" id="cyReset">↺ 초기화</button><label>속도 <select id="cySpeed"><option value="0.5">0.5배</option><option value="1" selected>1배</option><option value="2">2배</option></select></label></div>'
++'<div class="cy-readout"><div class="cy-kpi"><span>현재 압력</span><strong id="cyP"></strong></div><div class="cy-kpi"><span>현재 부피</span><strong id="cyV"></strong></div><div class="cy-kpi"><span>현재 온도</span><strong id="cyT"></strong></div><div class="cy-kpi"><span>이 과정에서 한 일 W</span><strong id="cyW"></strong></div><div class="cy-kpi"><span>이 과정에서 받은 열 Q</span><strong id="cyQ"></strong></div><div class="cy-kpi"><span>누적 순일 W</span><strong id="cySum"></strong></div></div>'
++'<div class="cy-phase"><strong id="cyTitle"></strong><p id="cyInfo"></p><div class="cy-formula" id="cyFormula"></div></div><div class="cy-description" id="cyStatus" role="status" aria-live="polite"></div></section>'
++'</div><section class="cy-card cy-problem"><h2>예시문제 · 네 과정으로 1회 순환하는 열기관의 순일 구하기</h2>'
++'<p>1 mol의 이원자 이상 기체(γ = 1.40, Cᵥ = 5R/2, R = 8.314 J/(mol·K))가 A → B → C → D → A로 순환한다. A는 300 K·20 L, A→B는 부피 20 L에서 330 K까지 정적 가열, B→C는 압력 일정하게 25 L까지 팽창, C→D는 가역 단열 팽창하여 300 K에 도달, D→A는 300 K에서 등온 압축한다. <b>각 단계에서 기체가 한 일과 1회 순일, 열효율을 구하시오.</b></p>'
++'<div class="cy-summary"><span>정적: <b>W₁ = 0 J</b></span><span>정압: <b id="cyAnswer2"></b></span><span>단열: <b id="cyAnswer3"></b></span><span>등온: <b id="cyAnswer4"></b></span><span>순일: <b id="cyAnswerNet"></b></span></div>'
++'<details id="cySolution"><summary>각 과정의 구체적인 풀이와 열기관 효율 확인 (눌러 펼치기)</summary><div class="cy-worked" id="cyWorked"></div></details></section>';
+const get=id=>document.getElementById(id);
+get('cyStages').innerHTML=steps.map((st,i)=>'<div class="cy-stage" data-cycle-stage="'+i+'">'+st.title+'</div>').join('');
+get('cyNet').textContent=f(totalW)+' J';
+get('cyEta').textContent=f(totalW/heatIn*100,2)+'%';
+get('cyAnswer2').textContent=signed(eachWork[1])+' J';
+get('cyAnswer3').textContent=signed(eachWork[2])+' J';
+get('cyAnswer4').textContent=signed(eachWork[3])+' J';
+get('cyAnswerNet').textContent=signed(totalW)+' J';
+get('cyWorked').innerHTML=
+'<article><h3>① A → B · 정적 가열</h3><p>V = 20 L 일정 → ΔV = 0. 따라서 <b>W₁ = ∫P dV = 0 J</b>.</p><p>기체가 받은 열 Q₁ = nCᵥΔT = (5/2)×8.314×(330−300) = <b>'+f(eachHeat[0])+' J</b>. 온도는 올라가지만 피스톤은 움직이지 않습니다.</p></article>'
++'<article><h3>② B → C · 정압 팽창</h3><p>Pᴮ = nRTᴮ/Vᴮ = 8.314×330/0.020 = <b>'+f(B.P)+' kPa</b>.</p><p>W₂ = PΔV = '+f(B.P)+' kPa × (25−20) L = <b>'+signed(eachWork[1])+' J</b>. (1 kPa·L = 1 J)</p><p>Tᶜ = Tᴮ(Vᶜ/Vᴮ) = 412.5 K. Q₂ = nCₚΔT = (7/2)R×(412.5−330) = <b>'+signed(eachHeat[1])+' J</b>.</p></article>'
++'<article><h3>③ C → D · 가역 단열 팽창</h3><p>Q₃ = 0이며 TV^(γ−1) = 일정. D의 온도는 300 K이므로 Vᴰ = 25×(412.5/300)^(1/0.4) = <b>'+f(D.V,2)+' L</b>.</p><p>ΔU₃ = nCᵥ(Tᴰ−Tᶜ). 따라서 W₃ = −ΔU₃ = (5/2)R×(412.5−300) = <b>'+signed(eachWork[2])+' J</b>. 내부 에너지가 감소하고 기체는 일을 합니다.</p></article>'
++'<article><h3>④ D → A · 등온 압축</h3><p>T = 300 K 일정 → ΔU₄ = 0. 외부가 기체를 압축하므로 기체가 한 일은 음수입니다.</p><p>W₄ = nRT ln(Vᴬ/Vᴰ) = 8.314×300×ln(20/'+f(D.V,2)+') = <b>'+signed(eachWork[3])+' J</b>.</p><p>등온 이상 기체에서는 Q₄ = W₄이므로 <b>'+f(-eachHeat[3])+' J</b>의 열을 외부로 방출합니다.</p></article>'
++'<article class="cy-whole"><h3>⑤ 한 사이클 순일과 열효율</h3><p>처음과 끝이 같은 상태이므로 ΔU(한 사이클) = 0. 따라서 <b>Wₙₑₜ = W₁+W₂+W₃+W₄ = 0 + '+f(eachWork[1])+' + '+f(eachWork[2])+' − '+f(-eachWork[3])+' = '+f(totalW)+' J</b>.</p><p>유입열 Qᵢₙ = Q₁+Q₂ = '+f(heatIn)+' J, 방출열의 크기 Qₒᵤₜ = '+f(heatOut)+' J이며 Qᵢₙ−Qₒᵤₜ = '+f(totalQ)+' J입니다. 열효율 η = Wₙₑₜ/Qᵢₙ = <b>'+f(totalW/heatIn*100,2)+'%</b>. 이 순환은 고온·저온 저장고 두 개만을 사용하는 카르노 순환이 아니라 네 종류의 이상적 준정적 과정을 연결한 교육용 열기관 사이클입니다.</p></article>';
+const texts=[
+'W = 0, Q = nCᵥ(T−Tᴬ)',
+'W = Pᴮ(V−Vᴮ), Q = nCₚ(T−Tᴮ)',
+'Q = 0, W = −ΔU = nCᵥ(Tᶜ−T)',
+'ΔU = 0, W = Q = nRT ln(V/Vᴰ)'
+];
+let z=0,running=false,stamp=0,raf=0,visible=false;
+function fit(el){const b=el.getBoundingClientRect(),ratio=Math.min(2,window.devicePixelRatio||1),w=Math.max(200,b.width||350),h=Math.max(180,b.height||270),W=Math.round(w*ratio),H=Math.round(h*ratio);if(el.width!==W||el.height!==H){el.width=W;el.height=H;}const ctx=el.getContext('2d');ctx.setTransform(ratio,0,0,ratio,0,0);ctx.clearRect(0,0,w,h);return{ctx,w,h};}
+function drawPiston(st){
+const obj=fit(get('cyclePiston')),c=obj.ctx,w=obj.w,h=obj.h,cx=w*.43,cylWidth=Math.min(150,w*.43),left=cx-cylWidth/2,base=h-34;
+const height=56+(st.V-A.V)/(D.V-A.V)*130,top=base-height,change=(st.T-A.T)/120;
+const grad=c.createLinearGradient(0,top,0,base);
+const cool=Math.max(0,Math.min(1,change)),red=Math.round(48+180*cool),green=Math.round(115-25*cool),blue=Math.round(200-130*cool);
+grad.addColorStop(0,'rgba('+red+','+green+','+blue+',.93)');grad.addColorStop(1,'rgba(23,91,142,.45)');
+c.fillStyle=grad;c.fillRect(left+4,top+6,cylWidth-8,base-top-8);
+c.lineWidth=4;c.strokeStyle='#a0bed4';c.beginPath();c.moveTo(left,30);c.lineTo(left,base);c.lineTo(left+cylWidth,base);c.lineTo(left+cylWidth,30);c.stroke();
+c.fillStyle='#d6e6f2';c.fillRect(left-5,top,cylWidth+10,10);c.fillStyle='#789ab0';c.fillRect(cx-6,11,12,Math.max(0,top-11));
+c.fillStyle='#f2faff';c.textAlign='center';c.font='700 13px system-ui';c.fillText(f(st.T,1)+' K',cx,Math.max(top+23,base-21));
+const phaseColors=['#ffc788','#ffce83','#79dbb2','#7cbaff'];
+c.font='bold 12px system-ui';c.fillStyle=phaseColors[st.segment];c.fillText(steps[st.segment].label,cx,h-8);
+for(let i=0;i<18;i++){const px=left+11+((i*47)%101)/101*(cylWidth-22),py=top+18+((i*67)%97)/97*Math.max(12,height-32);c.beginPath();c.arc(px,py,2.2,0,Math.PI*2);c.fillStyle='#eff9ff';c.fill();}
+const Q=st.segment===2?0:st.Q,anchorX=left-15,ay=Math.max(48,Math.min(base-24,top+height*.7));
+c.textAlign='left';c.font='700 12px system-ui';
+if(st.segment===2){c.fillStyle='#a3c3d3';c.fillText('단열벽',9,ay-15);c.fillText('Q = 0',9,ay+4);}
+else{const inbound=st.segment!==3;c.fillStyle=inbound?'#ffa37b':'#79baff';c.fillText(inbound?'열 유입':'열 방출',8,ay-17);
+const xFrom=inbound?8:anchorX,xTo=inbound?anchorX:8;c.strokeStyle=c.fillStyle;c.lineWidth=3;c.beginPath();c.moveTo(xFrom,ay);c.lineTo(xTo,ay);c.stroke();
+const dir=Math.sign(xTo-xFrom);c.beginPath();c.moveTo(xTo,ay);c.lineTo(xTo-8*dir,ay-5);c.lineTo(xTo-8*dir,ay+5);c.closePath();c.fill();}
+const fx=w-43,fy=h*.48,rotation=st.z*1.3;
+c.strokeStyle='#99d8ea';c.lineWidth=3;c.beginPath();c.arc(fx,fy,29,0,Math.PI*2);c.stroke();
+for(let k=0;k<5;k++){const ang=rotation+k*Math.PI*2/5;c.beginPath();c.moveTo(fx,fy);c.lineTo(fx+25*Math.cos(ang),fy+25*Math.sin(ang));c.stroke();}
+c.fillStyle='#ffce80';c.beginPath();c.arc(fx,fy,6,0,Math.PI*2);c.fill();
+c.font='11px system-ui';c.fillStyle='#d6eafd';c.textAlign='center';c.fillText('출력축',fx,fy+45);
+c.font='10px system-ui';c.fillText(st.segment===3?'외부 일 입력':st.segment===0?'피스톤 고정':'기체의 일',fx,fy-42);
+}
+function drawGraph(st){
+const obj=fit(get('cycleGraph')),ctx=obj.ctx,w=obj.w,h=obj.h,pad={l:50,r:13,t:13,b:35},maxP=165,maxV=62;
+const X=v=>pad.l+(v-16)/(maxV-16)*(w-pad.l-pad.r),Y=p=>h-pad.b-p/maxP*(h-pad.t-pad.b);
+ctx.font='10px system-ui';ctx.lineWidth=1;ctx.fillStyle='#afc9dc';ctx.strokeStyle='#2d465d';
+for(let v=20;v<=60;v+=10){const x=X(v);ctx.beginPath();ctx.moveTo(x,pad.t);ctx.lineTo(x,h-pad.b);ctx.stroke();ctx.fillText(v+'',x-7,h-pad.b+16);}
+for(let p=0;p<=160;p+=40){const y=Y(p);ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(w-pad.r,y);ctx.stroke();ctx.fillText(p+'',8,y+3);}
+ctx.fillStyle='#d8e8f8';ctx.fillText('P (kPa)',5,10);ctx.fillText('V (L)',w-47,h-8);
+const pts=[];for(let seg=0;seg<4;seg++)for(let j=0;j<=90;j++)pts.push(stateAt(seg+j/90));
+ctx.beginPath();pts.forEach((p,i)=>i?ctx.lineTo(X(p.V),Y(p.P)):ctx.moveTo(X(p.V),Y(p.P)));ctx.closePath();ctx.fillStyle='rgba(61,192,159,.13)';ctx.fill();
+ctx.strokeStyle='#6c8299';ctx.lineWidth=2;ctx.beginPath();pts.forEach((p,i)=>i?ctx.lineTo(X(p.V),Y(p.P)):ctx.moveTo(X(p.V),Y(p.P)));ctx.stroke();
+const reached=Math.max(0,Math.round(z*90));ctx.strokeStyle='#76f0c0';ctx.lineWidth=3.5;ctx.beginPath();pts.slice(0,reached+1).forEach((p,i)=>i?ctx.lineTo(X(p.V),Y(p.P)):ctx.moveTo(X(p.V),Y(p.P)));ctx.stroke();
+for(const [label,p] of [['A',A],['B',B],['C',C],['D',D]]){ctx.fillStyle='#f1d8a0';ctx.beginPath();ctx.arc(X(p.V),Y(p.P),3.5,0,Math.PI*2);ctx.fill();ctx.font='700 12px system-ui';ctx.fillText(label,X(p.V)+5,Y(p.P)-8);}
+ctx.fillStyle='#061d29';ctx.beginPath();ctx.arc(X(st.V),Y(st.P),7,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#90ffe2';ctx.lineWidth=3;ctx.stroke();
+ctx.font='700 11px system-ui';ctx.fillStyle='#98f0d6';ctx.fillText('순일 ≈ '+f(totalW,0)+' J',pad.l+7,pad.t+15);
+}
+function update(){
+const st=stateAt(z);
+get('cyP').textContent=f(st.P,1)+' kPa';get('cyV').textContent=f(st.V,2)+' L';get('cyT').textContent=f(st.T,1)+' K';
+get('cyW').textContent=signed(st.W)+' J';get('cyQ').textContent=signed(st.Q)+' J';get('cySum').textContent=signed(st.accumulatedW)+' J';
+get('cyTitle').textContent=steps[st.segment].title+' · '+f(st.u*100,0)+'%';
+get('cyInfo').textContent=steps[st.segment].info;get('cyFormula').textContent=texts[st.segment];
+for(const el of get('cyStages').children)el.classList.toggle('active',Number(el.dataset.cycleStage)===st.segment);
+get('cyStatus').textContent=z>=4?'한 사이클 완료 · 처음 상태 A로 돌아왔습니다. ΔU = 0, 한 일 = '+f(totalW,1)+' J':running?'자동 진행 중 · 전체 '+f(z/4*100,0)+'%':z===0?'시작을 누르면 A → B → C → D → A를 한 번 진행합니다.':'일시정지 · 전체 '+f(z/4*100,0)+'%';
+get('cyPlay').textContent=running?'▶ 진행 중':z>=4?'↻ 다시 시작':'▶ 시작';
+get('cyPlay').disabled=running;get('cyPause').disabled=!running;
+drawPiston(st);drawGraph(st);
+}
+function pause(){running=false;stamp=0;if(raf)cancelAnimationFrame(raf);raf=0;if(visible)update();}
+function frame(now){
+if(!running||!visible)return;
+if(stamp){const dt=Math.min((now-stamp)/1000,.06);z=Math.min(4,z+dt/4*Number(get('cySpeed').value));}
+stamp=now;
+if(z>=4){running=false;raf=0;stamp=0;update();return;}
+update();raf=requestAnimationFrame(frame);
+}
+function play(){if(running)return;if(z>=4)z=0;visible=true;running=true;stamp=0;update();raf=requestAnimationFrame(frame);}
+get('cyPlay').onclick=play;get('cyPause').onclick=pause;
+get('cyReset').onclick=()=>{pause();z=0;update()};
+get('cyNext').onclick=()=>{pause();z=Math.min(4,Math.floor(z+.00001)+1);update()};
+get('cySpeed').onchange=()=>update();
+window.thermalCycleVisibility=(show)=>{visible=show;if(!show){pause();return;}requestAnimationFrame(update)};
+window.addEventListener('resize',()=>{if(visible)update()});
+if(Math.abs(totalW-totalQ)>1e-7||Math.abs(stateAt(4).P-A.P)>1e-7||Math.abs(stateAt(4).V-A.V)>1e-7)throw Error('열기관 사이클 에너지 보존 검증 실패');
 })();
 </script></body>
 </html>
