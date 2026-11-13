@@ -1,559 +1,642 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>공명과 정상파 실험실</title>
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#081623">
+<meta name="description" content="줄, 열린관, 닫힌관의 정상파와 공명, 강제진동의 공명곡선을 한 화면에서 탐구하는 고등학교 물리 실험실">
+<title>정상파와 공명 통합 실험실 | 온라인 과학 실험실</title>
 <style>
-  :root{
-    --bg:#08111f; --panel:#0f1b2d; --panel2:#14243a; --text:#edf6ff; --muted:#a7bdd3;
-    --cyan:#5ee7ff; --blue:#7aa2ff; --green:#6df0ad; --yellow:#ffd166; --red:#ff6b7a;
-    --line:#27415f; --shadow:0 18px 50px rgba(0,0,0,.26);
-  }
-  *{box-sizing:border-box}
-  body{margin:0;background:radial-gradient(circle at 20% 0%,#12325b 0,#08111f 36%,#060d17 100%);color:var(--text);
-    font-family:system-ui,-apple-system,"Segoe UI","Noto Sans KR",sans-serif;min-height:100vh}
-  button,input,select{font:inherit}
-  .wrap{max-width:1220px;margin:auto;padding:18px}
-  header{display:flex;gap:16px;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
-  h1{margin:0;font-size:clamp(1.55rem,4vw,2.45rem);letter-spacing:-.04em}
-  .sub{color:var(--muted);margin-top:6px;line-height:1.55}
-  .badge{padding:8px 12px;border:1px solid #315373;border-radius:999px;color:#bfeaff;background:#0b1a2b;white-space:nowrap;font-size:.86rem}
-  .tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
-  .tab{border:1px solid var(--line);background:#0d1929;color:#bcd0e4;padding:11px 10px;border-radius:12px;cursor:pointer;font-weight:700}
-  .tab.active{background:linear-gradient(135deg,#123a5d,#183b77);color:#fff;border-color:#4e7da8;box-shadow:inset 0 0 0 1px #315f88}
-  .grid{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(300px,.75fr);gap:12px}
-  .card{background:linear-gradient(180deg,rgba(20,36,58,.96),rgba(10,22,38,.96));border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}
-  .card h2{font-size:1.05rem;margin:0;padding:15px 16px 8px}
-  .cardbody{padding:12px 16px 16px}
-  .stage{position:relative;min-height:410px}
-  canvas{display:block;width:100%;height:410px;background:linear-gradient(180deg,#081522 0%,#0a1a2a 56%,#09121d 100%);touch-action:none}
-  .overlay{position:absolute;left:14px;top:12px;display:flex;flex-wrap:wrap;gap:7px;pointer-events:none}
-  .pill{background:rgba(4,12,23,.73);border:1px solid #294665;border-radius:999px;padding:6px 9px;font-size:.77rem;color:#d9edff;backdrop-filter:blur(7px)}
-  .status{border-color:#3c6c8f}
-  .status.good{color:#b6ffd4;border-color:#3c9069;background:rgba(11,53,38,.72)}
-  .status.warn{color:#ffe6a0;border-color:#8e6c2d;background:rgba(53,41,11,.72)}
-  .controls{display:grid;gap:10px}
-  .control{background:#0b1727;border:1px solid #223a55;border-radius:13px;padding:10px}
-  .control .row{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:7px}
-  label{font-size:.88rem;color:#d8e8f5;font-weight:650}
-  .value{font-variant-numeric:tabular-nums;color:var(--cyan);font-size:.86rem}
-  input[type=range]{width:100%;accent-color:#5acbff}
-  select{width:100%;background:#0a1422;color:#eff8ff;border:1px solid #31506d;border-radius:9px;padding:8px}
-  .buttons{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-  .btn{border:1px solid #31506d;background:#10263f;color:#eff8ff;border-radius:11px;padding:10px;cursor:pointer;font-weight:750}
-  .btn.primary{background:linear-gradient(135deg,#176a8b,#245fb9);border-color:#4ba5d0}
-  .btn:active{transform:translateY(1px)}
-  .metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}
-  .metric{background:#0a1523;border:1px solid #223a55;border-radius:12px;padding:10px}
-  .metric b{display:block;font-size:1.03rem;color:#fff;font-variant-numeric:tabular-nums}
-  .metric span{color:#91a8bf;font-size:.75rem}
-  .formula{margin-top:10px;padding:11px 12px;border-radius:12px;background:#091421;border:1px dashed #355676;color:#cfe3f5;font-size:.86rem;line-height:1.55}
-  .modechips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
-  .chip{border:1px solid #35526b;background:#0b1826;color:#b9d0e4;border-radius:999px;padding:5px 8px;font-size:.74rem;cursor:pointer}
-  .chip.near{border-color:#4bbd83;color:#baffd6;background:#0d2b22}
-  .hidden{display:none!important}
-  .lower{display:grid;grid-template-columns:1.1fr .9fr;gap:12px;margin-top:12px}
-  .info{padding:14px 16px;line-height:1.6;color:#c9dceb;font-size:.9rem}
-  .info strong{color:#fff}
-  .tasks{display:grid;gap:8px}
-  .task{padding:10px;border:1px solid #2a4561;border-radius:12px;background:#0b1726}
-  .task b{color:#fff}
-  table{width:100%;border-collapse:collapse;font-size:.8rem}
-  th,td{border-bottom:1px solid #28415c;padding:8px 6px;text-align:center}
-  th{color:#a9c2da;background:#0b1726;position:sticky;top:0}
-  .tablewrap{max-height:230px;overflow:auto;border:1px solid #28415c;border-radius:11px}
-  .recordbar{display:flex;gap:8px;margin:10px 0}
-  .note{font-size:.76rem;color:#8fa8bf;line-height:1.5}
-  .legend{display:flex;flex-wrap:wrap;gap:9px;margin-top:9px;font-size:.75rem;color:#a9bfd3}
-  .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:4px}
-  .cyan{background:var(--cyan)} .yellow{background:var(--yellow)} .red{background:var(--red)} .green{background:var(--green)}
-  @media(max-width:850px){
-    .grid,.lower{grid-template-columns:1fr}
-    .stage,canvas{min-height:335px;height:335px}
-    header{display:block}.badge{display:inline-block;margin-top:9px}
-  }
-  @media(max-width:520px){
-    .wrap{padding:10px}.tabs{gap:5px}.tab{font-size:.8rem;padding:10px 5px}
-    .cardbody{padding:10px}.metrics{grid-template-columns:1fr 1fr}.buttons{grid-template-columns:1fr 1fr 1fr}
-    .stage,canvas{min-height:300px;height:300px}
-  }
-</style>
-</head>
-<body>
-<div class="wrap">
-  <header>
-    <div>
-      <h1>🎵 공명과 정상파 실험실</h1>
-      <div class="sub">진동수를 바꾸며 공명점을 찾고, 마디·배의 위치와 고유진동수 규칙을 직접 확인해 보세요.</div>
-    </div>
-    <div class="badge">고등학교 물리 · 인터랙티브 실험</div>
-  </header>
-
-  <div class="tabs">
-    <button class="tab active" data-tab="string">① 줄의 정상파</button>
-    <button class="tab" data-tab="air">② 기주 공명</button>
-    <button class="tab" data-tab="curve">③ 공명 곡선</button>
-  </div>
-
-  <div class="grid">
-    <section class="card">
-      <div class="stage">
-        <canvas id="canvas"></canvas>
-        <div class="overlay">
-          <div class="pill" id="modeLabel">줄의 양끝 고정</div>
-          <div class="pill status" id="resStatus">공명 탐색 중</div>
-          <div class="pill" id="phaseLabel">실시간 애니메이션</div>
-        </div>
-      </div>
-    </section>
-
-    <aside class="card">
-      <h2 id="controlTitle">줄의 조건 설정</h2>
-      <div class="cardbody">
-        <div id="stringControls" class="controls">
-          <div class="control">
-            <div class="row"><label>줄 길이 L</label><span class="value" id="sLVal"></span></div>
-            <input id="sL" type="range" min="0.50" max="2.50" step="0.05" value="1.20">
-          </div>
-          <div class="control">
-            <div class="row"><label>장력 T</label><span class="value" id="sTVal"></span></div>
-            <input id="sT" type="range" min="20" max="200" step="2" value="80">
-          </div>
-          <div class="control">
-            <div class="row"><label>선밀도 μ</label><span class="value" id="sMuVal"></span></div>
-            <input id="sMu" type="range" min="0.002" max="0.020" step="0.001" value="0.010">
-          </div>
-          <div class="control">
-            <div class="row"><label>구동 진동수 f</label><span class="value" id="sFVal"></span></div>
-            <input id="sF" type="range" min="5" max="180" step="0.2" value="37.3">
-          </div>
-          <div class="control">
-            <div class="row"><label>감쇠비 ζ</label><span class="value" id="sZVal"></span></div>
-            <input id="sZ" type="range" min="0.015" max="0.18" step="0.005" value="0.045">
-          </div>
-        </div>
-
-        <div id="airControls" class="controls hidden">
-          <div class="control">
-            <div class="row"><label>관의 종류</label></div>
-            <select id="airType">
-              <option value="open">양쪽 열린관</option>
-              <option value="closed">한쪽 닫힌관</option>
-            </select>
-          </div>
-          <div class="control">
-            <div class="row"><label>관 길이 L</label><span class="value" id="aLVal"></span></div>
-            <input id="aL" type="range" min="0.25" max="2.00" step="0.01" value="0.86">
-          </div>
-          <div class="control">
-            <div class="row"><label>공기 온도</label><span class="value" id="aTempVal"></span></div>
-            <input id="aTemp" type="range" min="0" max="35" step="1" value="20">
-          </div>
-          <div class="control">
-            <div class="row"><label>소리 진동수 f</label><span class="value" id="aFVal"></span></div>
-            <input id="aF" type="range" min="40" max="1200" step="1" value="199">
-          </div>
-          <div class="control">
-            <div class="row"><label>감쇠비 ζ</label><span class="value" id="aZVal"></span></div>
-            <input id="aZ" type="range" min="0.015" max="0.18" step="0.005" value="0.040">
-          </div>
-        </div>
-
-        <div id="curveControls" class="controls hidden">
-          <div class="control">
-            <div class="row"><label>고유진동수 f₀</label><span class="value" id="cF0Val"></span></div>
-            <input id="cF0" type="range" min="5" max="60" step="0.5" value="20">
-          </div>
-          <div class="control">
-            <div class="row"><label>외력 진동수 f</label><span class="value" id="cFVal"></span></div>
-            <input id="cF" type="range" min="1" max="90" step="0.2" value="20">
-          </div>
-          <div class="control">
-            <div class="row"><label>감쇠비 ζ</label><span class="value" id="cZVal"></span></div>
-            <input id="cZ" type="range" min="0.02" max="0.30" step="0.01" value="0.06">
-          </div>
-        </div>
-
-        <div class="buttons" style="margin-top:12px">
-          <button class="btn primary" id="playBtn">⏸ 일시정지</button>
-          <button class="btn" id="slowBtn">½ 느리게</button>
-          <button class="btn" id="resetBtn">↺ 초기화</button>
-        </div>
-
-        <div class="metrics">
-          <div class="metric"><b id="m1">—</b><span id="m1n">파동 속력</span></div>
-          <div class="metric"><b id="m2">—</b><span id="m2n">가장 가까운 고유진동수</span></div>
-          <div class="metric"><b id="m3">—</b><span id="m3n">파장</span></div>
-          <div class="metric"><b id="m4">—</b><span id="m4n">상대 진폭</span></div>
-        </div>
-
-        <div class="formula" id="formula"></div>
-        <div class="modechips" id="modeChips"></div>
-      </div>
-    </aside>
-  </div>
-
-  <div class="lower">
-    <section class="card">
-      <h2>🔬 탐구 활동</h2>
-      <div class="info">
-        <div id="taskString" class="tasks">
-          <div class="task"><b>탐구 1.</b> 구동 진동수만 천천히 변화시키며 진폭이 갑자기 커지는 지점을 찾으세요.</div>
-          <div class="task"><b>탐구 2.</b> 공명 상태에서 마디(node)와 배(antinode)의 개수를 세고 고유모드 번호와 비교하세요.</div>
-          <div class="task"><b>탐구 3.</b> 장력 T를 4배로 하면 파동 속력과 고유진동수가 몇 배가 되는지 예측한 뒤 확인하세요.</div>
-        </div>
-        <div id="taskAir" class="tasks hidden">
-          <div class="task"><b>탐구 1.</b> 같은 길이에서 열린관과 닫힌관의 첫 공명 진동수를 비교하세요.</div>
-          <div class="task"><b>탐구 2.</b> 닫힌관에서는 왜 짝수차 고조파가 나타나지 않는지 경계조건으로 설명하세요.</div>
-          <div class="task"><b>탐구 3.</b> 온도를 올리면 음속과 공명 진동수가 어떻게 변하는지 확인하세요.</div>
-        </div>
-        <div id="taskCurve" class="tasks hidden">
-          <div class="task"><b>탐구 1.</b> 감쇠비를 작게 만들수록 공명곡선의 꼭대기와 폭이 어떻게 변하는지 관찰하세요.</div>
-          <div class="task"><b>탐구 2.</b> 외력 진동수가 고유진동수 부근일 때 에너지 전달이 가장 커지는 이유를 설명하세요.</div>
-          <div class="task"><b>탐구 3.</b> Q ≈ 1/(2ζ)를 이용해 감쇠비와 선택도의 관계를 설명하세요.</div>
-        </div>
-        <div class="legend">
-          <span><i class="dot cyan"></i>진동하는 매질/응답</span>
-          <span><i class="dot yellow"></i>배</span>
-          <span><i class="dot red"></i>마디</span>
-          <span><i class="dot green"></i>공명 상태</span>
-        </div>
-      </div>
-    </section>
-
-    <section class="card">
-      <h2>🧾 측정 기록</h2>
-      <div class="cardbody">
-        <div class="recordbar">
-          <button class="btn primary" id="recordBtn">현재 값 기록</button>
-          <button class="btn" id="csvBtn">CSV 저장</button>
-          <button class="btn" id="clearBtn">기록 지우기</button>
-        </div>
-        <div class="tablewrap">
-          <table>
-            <thead><tr><th>#</th><th>실험</th><th>조건</th><th>f(Hz)</th><th>공명값(Hz)</th><th>응답</th></tr></thead>
-            <tbody id="records"></tbody>
-          </table>
-        </div>
-        <p class="note">※ 이 시뮬레이션은 이상적인 선형 정상모드와 감쇠 진동자 모델을 사용합니다. 실제 실험에서는 줄의 굽힘 강성, 끝단 보정, 공기 저항 등으로 값이 조금 달라질 수 있습니다.</p>
-      </div>
-    </section>
-  </div>
+:root{color-scheme:dark;--bg:#081524;--panel:#11293e;--card:#1b384e;--border:#3c6079;--text:#f0faff;--muted:#bad3e4;--teal:#6ce7e1;--amber:#ffd08b;--pink:#f49eb7;--violet:#b5adff}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font:14px/1.48 system-ui,-apple-system,"Malgun Gothic",sans-serif}
+button,input,select{font:inherit}button{cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #baf6ff;outline-offset:2px}
+button:disabled{opacity:.45;cursor:default}button{border:1px solid #507c96;background:#264963;color:#eefbff;padding:6px 10px;border-radius:8px;font-weight:750;min-height:34px}
+button:hover:not(:disabled){background:#32607a}button.primary{background:#087c8d;border-color:#89eff0}
+[hidden]{display:none!important}
+.app{height:100dvh;min-height:605px;display:flex;flex-direction:column;gap:7px;padding:8px 11px;overflow:hidden}
+header{display:flex;align-items:center;gap:10px;min-height:35px;flex:0 0 auto}
+header h1{font-size:clamp(19px,1.85vw,25px);white-space:nowrap;margin:0;line-height:1.25}
+header .tagline{font-size:12px;color:var(--muted)}
+header #full{margin-left:auto}
+.tabs{display:flex;gap:6px;align-items:center;overflow-x:auto;padding:0 0 3px;flex:0 0 auto;min-height:37px}
+.tabs button{font-size:13px;white-space:nowrap}
+.tabs button[aria-selected=true]{background:#087b8b;border-color:#99eded;box-shadow:inset 0 -2px #b8ffff}
+.workspace{flex:1 1 auto;min-height:0;min-width:0;display:grid;grid-template-columns:minmax(0,4fr) minmax(252px,1fr);gap:9px}
+.stagecol{min-width:0;min-height:0;display:flex;flex-direction:column;gap:7px}
+.scene-card,.analysis-card{background:var(--panel);border:1px solid var(--border);border-radius:11px;padding:9px 11px;flex:1 1 auto;min-height:0;min-width:0;overflow:hidden;display:flex;flex-direction:column;gap:7px}
+.analysis-card{display:none}
+.panel-top{display:flex;gap:6px;align-items:center;flex-wrap:wrap;flex:0 0 auto}
+.panel-top h2{font-size:16px;margin:0 10px 0 0}
+.panel-top button{font-size:12px;padding:5px 8px;min-height:32px}
+.panel-top .hint{font-size:11px;margin-left:auto;color:#c5dfec}
+.canvas-holder{flex:1 1 auto;min-height:160px;display:flex;min-width:0}
+#stage{display:block;width:100%;height:100%;min-height:160px;flex:1 1 auto;background:#0a1d30;border:1px solid #385b74;border-radius:9px}
+.caps{font-size:12px;color:#b9d6e6;line-height:1.45;margin:0;flex:0 0 auto}
+.status{font-size:12px;color:#b1f4e3;font-weight:700;min-height:18px;line-height:1.4;flex:0 0 auto}
+.results{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;flex:0 0 auto}
+.result{min-width:0;min-height:62px;padding:7px 4px;border:1px solid #426980;border-radius:9px;text-align:center;background:#1b364c}
+.result small{display:block;color:#bad4e4;font-size:11px;white-space:nowrap}
+.result b{display:block;color:#f4fdff;font-size:clamp(14px,1.3vw,19px);white-space:nowrap;font-variant-numeric:tabular-nums;line-height:1.45}
+.result:nth-child(2) b,.result:nth-child(5) b{color:var(--teal)}.result:nth-child(4) b{color:var(--amber)}
+.controlcol{min-width:0;min-height:0;overflow-y:auto;scrollbar-width:thin;display:flex;flex-direction:column;gap:7px;padding-right:2px}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:11px;padding:9px 11px}
+.card h2{font-size:15px;margin:0 0 8px}
+.field{margin-bottom:9px}
+.field label{display:flex;justify-content:space-between;gap:6px;font-size:12px;font-weight:730;align-items:center}
+.field output{color:#8cf4e9;white-space:nowrap;font-variant-numeric:tabular-nums}
+.field input[type=range]{accent-color:#70e2e7;width:100%;height:24px;margin:2px 0 0;display:block}
+.field select{width:100%;background:#1d3a51;border:1px solid #567e97;color:#f0faff;min-height:34px;padding:6px 8px;border-radius:8px;margin-top:4px}
+.field .ends{display:flex;justify-content:space-between;color:#9ebcce;font-size:10px}
+.quicks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}
+.quicks button{padding:5px 6px;font-size:12px;min-height:33px}
+.mode-buttons{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}
+.mode-buttons button{font-size:11px;padding:5px 2px;min-height:31px}
+.mode-buttons button.current{background:#0b788b;border-color:#87f0e9}
+.formula{background:#19394f;border:1px solid #446b84;border-radius:8px;padding:8px;line-height:1.63;font-size:12px}
+.formula b{color:#89f1e4}
+.note{font-size:11px;color:#bed6e5;line-height:1.5;margin:6px 0}
+.note strong{color:#f7da9e}
+.checklabel{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:700;cursor:pointer}
+.checklabel input{accent-color:#76e5dc}
+.radio-row{display:grid;grid-template-columns:repeat(2,1fr);gap:5px}
+.radio-row button[aria-pressed=true]{background:#0a7a8c;border-color:#8ff1ef}
+.graphgrid{flex:1 1 auto;min-width:0;min-height:0;display:grid;grid-template-columns:1.2fr .8fr;gap:8px}
+.graphbox{min-height:0;min-width:0;display:flex;flex-direction:column;gap:5px;background:#0e2236;border:1px solid #36556c;border-radius:9px;padding:8px}
+.graphbox h3{font-size:14px;margin:0}
+.chart{display:block;width:100%;height:100%;min-height:180px;flex:1 1 auto;border:1px solid #344f67;border-radius:8px;background:#091d30}
+.graphbox p{font-size:11px;color:#bfd6e5;line-height:1.4;margin:0}
+.records{flex:0 0 auto;min-width:0;min-height:90px;max-height:180px;overflow:auto;background:#0e2436;border:1px solid #36556c;border-radius:9px;padding:5px}
+table{border-collapse:collapse;width:100%;text-align:center;white-space:nowrap;font-size:11px}
+th,td{padding:4px 7px;border-bottom:1px solid #34566d}th{color:#d7eaf5}
+.legends{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:#c9dceb}
+.legends span:before{content:"";width:12px;height:3px;display:inline-block;background:currentColor;margin-right:5px;vertical-align:middle}
+.legends .current{color:#6ae9df}.legends .saveA{color:#ffd48a}.legends .saveB{color:#c4a7ff}
+.concepts{display:none;min-height:0;min-width:0;overflow-y:auto}
+.lessons{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.lesson{background:var(--panel);border:1px solid var(--border);padding:16px;border-radius:11px}
+.lesson h2{font-size:17px;color:#86f0e8;margin:0 0 8px}
+.lesson p{line-height:1.72;margin:7px 0}
+.lesson .eq{font-size:18px;border:1px solid #426d82;background:#193b50;padding:11px;border-radius:8px}
+.lesson.wide{grid-column:1/-1}
+.lesson details{padding:8px 0;border-top:1px solid #355872}
+.lesson summary{cursor:pointer;font-weight:750}
+.workspace[data-tab=compare] .scene-card{display:none}
+.workspace[data-tab=compare] .analysis-card{display:flex}
+.workspace[data-tab=concept]{display:block}
+.workspace[data-tab=concept] .stagecol,.workspace[data-tab=concept] .controlcol{display:none}
+.workspace[data-tab=concept] .concepts{display:block}
+@media(min-width:901px) and (max-height:760px){.app{padding:6px 9px;gap:5px}.scene-card,.analysis-card{padding:6px 9px;gap:5px}.card{padding:7px 9px}.field{margin-bottom:6px}.result{min-height:50px;padding:4px 3px}.panel-top button{min-height:30px}}
+@media(max-width:900px){.app{height:auto;min-height:100dvh;overflow:visible}.workspace{display:flex;flex-direction:column}.stagecol{min-height:585px}.scene-card{min-height:570px}.canvas-holder{min-height:355px}.analysis-card{min-height:760px}.controlcol{overflow:visible}.graphgrid{grid-template-columns:1fr}.graphbox{min-height:320px}.chart{height:230px;flex:none}.concepts{overflow:visible}.lessons{grid-template-columns:1fr}.lesson.wide{grid-column:auto}.tabs{position:sticky;top:0;z-index:6;background:var(--bg);padding-top:4px}}
+@media(max-width:460px){header h1{font-size:18px}header .tagline,header #full{display:none}.tabs button{font-size:11px;padding:6px 7px}.panel-top h2{width:100%}.stagecol,.scene-card{min-height:680px}.canvas-holder{min-height:365px}.results{gap:3px}.result{padding:5px 1px;min-height:52px}.result small{font-size:9px;letter-spacing:-.04em}.result b{font-size:10px;letter-spacing:-.04em}.graphbox{min-height:295px}}
+</style></head><body>
+<main class="app">
+<header><h1>〰️ 정상파와 공명 통합 실험실</h1><span class="tagline">줄 · 열린관 · 닫힌관 · 공명곡선 · 그래프 측정</span><button id="full" type="button">⛶ 전체화면</button></header>
+<nav class="tabs" role="tablist" aria-label="공명 실험 선택">
+<button data-tab="string" class="tab" role="tab" aria-selected="true" type="button">① 줄의 정상파</button>
+<button data-tab="open" class="tab" role="tab" aria-selected="false" type="button">② 열린관</button>
+<button data-tab="closed" class="tab" role="tab" aria-selected="false" type="button">③ 닫힌관</button>
+<button data-tab="curve" class="tab" role="tab" aria-selected="false" type="button">④ 공명·감쇠</button>
+<button data-tab="compare" class="tab" role="tab" aria-selected="false" type="button">⑤ 그래프·측정</button>
+<button data-tab="concept" class="tab" role="tab" aria-selected="false" type="button">⑥ 개념 설명</button>
+</nav>
+<div class="workspace" id="workspace" data-tab="string">
+<section class="stagecol">
+<section class="scene-card">
+ <div class="panel-top">
+  <h2 id="sceneTitle">줄의 정상파와 구동 공명</h2>
+  <button id="play" class="primary" type="button">▶ 시작</button>
+  <button id="pause" type="button">Ⅱ 일시정지</button>
+  <button id="step" type="button">▷ 위상 한 단계</button>
+  <button id="restart" type="button">↺ 다시 시작</button>
+  <span class="hint" id="playingStatus">재생 대기</span>
+ </div>
+ <div class="canvas-holder"><canvas id="stage" aria-label="두 끝이 고정된 줄이나 공기 기둥의 파형과 마디·배, 강제진동의 공명에 따른 변화를 보여 주는 실험"></canvas></div>
+ <p class="caps" id="sceneDesc">구동 진동수를 바꾸어 정상파가 공명하는 과정을 관찰하세요. 공명점에서 벗어나면 여러 모드가 함께 나타납니다.</p>
+ <div class="results" aria-label="시뮬레이션 실시간 결과" aria-live="polite">
+  <div class="result"><small id="label1">파동 속력</small><b id="value1">89.44 m/s</b></div>
+  <div class="result"><small id="label2">고유진동수</small><b id="value2">37.27 Hz</b></div>
+  <div class="result"><small id="label3">구동 진동수</small><b id="value3">37.3 Hz</b></div>
+  <div class="result"><small id="label4">파장 λ</small><b id="value4">2.40 m</b></div>
+  <div class="result"><small id="label5">상대 응답</small><b id="value5">11.1×</b></div>
+ </div>
+ <div class="status" id="status" role="status">공명 진동수 근처입니다.</div>
+</section>
+<section class="analysis-card">
+ <div class="panel-top"><h2>공명곡선 및 배음 주파수</h2><span class="hint">고정된 Hz 축 범위에서 현재 조건과 저장값 비교</span></div>
+ <div class="legends"><span class="current">현재</span><span class="saveA">조건 A</span><span class="saveB">조건 B</span></div>
+ <div class="graphgrid">
+  <section class="graphbox"><h3>구동 진동수 f – 정규화 응답</h3><canvas id="curveGraph" class="chart" aria-label="진동수와 공명 응답 그래프"></canvas><p>각 조건의 대표 고유모드 응답을 같은 세로축 0~30으로 비교합니다.</p></section>
+  <section class="graphbox"><h3>고유진동수·허용 배음</h3><canvas id="spectrum" class="chart" aria-label="선택한 장치의 허용 공명 진동수 막대 그래프"></canvas><p>폐관에서는 1·3·5···의 홀수 배음만 허용됩니다.</p></section>
+ </div>
+ <div class="records"><table aria-label="현재 조건 및 저장한 조건 비교표"><thead><tr><th>조건</th><th>장치</th><th>L (m)</th><th>구동 f (Hz)</th><th>최근접 fₙ (Hz)</th><th>파장 λ (m)</th><th>상대 응답</th></tr></thead><tbody id="compareBody"></tbody></table></div>
+ <p class="caps" id="graphInfo">조건 A와 B를 저장한 후 같은 축에서 공명 특성을 비교하세요.</p>
+</section>
+</section>
+<aside class="controlcol" aria-label="통합 정상파 실험 조작 패널">
+<section class="card" id="settingCard">
+ <h2>실험 변수 조작</h2>
+ <div id="stringFields">
+  <div class="field"><label for="sLength">줄 길이 L <output id="sLengthOut">1.20 m</output></label><input id="sLength" type="range" min=".5" max="2.5" step=".05" value="1.2"/></div>
+  <div class="field"><label for="tension">장력 F <output id="tensionOut">80 N</output></label><input id="tension" type="range" min="20" max="200" step="2" value="80"/></div>
+  <div class="field"><label for="density">선밀도 μ <output id="densityOut">0.010 kg/m</output></label><input id="density" type="range" min=".002" max=".020" step=".001" value=".010"/></div>
+ </div>
+ <div id="airFields" hidden>
+  <div class="field"><label for="airLength">공기 기둥 길이 L <output id="airLengthOut">0.86 m</output></label><input id="airLength" type="range" min=".25" max="2" step=".01" value=".86"/></div>
+  <div class="field"><label for="temperature">공기 온도 <output id="temperatureOut">20 °C</output></label><input id="temperature" type="range" min="0" max="35" step="1" value="20"/></div>
+  <div class="field"><label for="airView">관찰량</label><select id="airView"><option value="displacement">공기 입자의 변위</option><option value="pressure">공기의 압력 변화</option></select></div>
+ </div>
+ <div id="curveFields" hidden>
+  <div class="field"><label for="fZero">고유진동수 f₀ <output id="fZeroOut">20.0 Hz</output></label><input id="fZero" type="range" min="5" max="60" step=".5" value="20"/></div>
+ </div>
+ <div class="field" id="drivingField">
+  <label for="drive">구동 진동수 f <output id="driveOut">37.3 Hz</output></label><input id="drive" type="range" min="5" max="300" step=".1" value="37.3"/>
+  <div class="ends"><span id="driveMin">5 Hz</span><span id="driveMax">300 Hz</span></div>
+ </div>
+ <div class="field"><label for="damping">감쇠비 ζ <output id="dampingOut">0.045</output></label><input id="damping" type="range" min=".02" max=".3" step=".005" value=".045"/></div>
+ <div id="modeBlock">
+  <div class="field" style="margin-bottom:5px"><label>고유진동 모드 바로 선택</label></div>
+  <div class="mode-buttons" id="modeButtons" aria-label="고유진동 모드 선택"></div>
+ </div>
+ <div class="field"><label for="playbackRate">화면 재생 배율</label><select id="playbackRate"><option value=".25">0.25배 · 천천히</option><option value=".5">0.5배</option><option value="1" selected>1배 · 기준</option><option value="2">2배 · 빠르게</option></select></div>
+ <label class="checklabel" for="components"><input type="checkbox" id="components"> 공명 모드의 마디·배 표시</label>
+ <p class="note">표시용 진동은 관찰할 수 있도록 느리게 재생합니다. 실제 주파수와 화면 진동수는 다르며, 재생 배율을 바꿔도 물리적 계산값은 변하지 않습니다.</p>
+ <div class="quicks" style="margin-top:6px"><button id="quickFirst" type="button">기본 공명 선택</button><button id="quickOff" type="button">공명에서 벗어나기</button><button id="reset" type="button">현재 탭 초기화</button><button id="showGraph" type="button">그래프 보기</button></div>
+</section>
+<section class="card">
+ <h2>계산·소리·실험 기록</h2>
+ <div class="formula" id="formula">v = √(F/μ), fₙ = nv/(2L)</div>
+ <div class="quicks" style="margin-top:7px"><button id="audio" type="button" aria-pressed="false">♪ 실제 진동수 듣기</button><button id="saveA" type="button">조건 A 저장</button><button id="saveB" type="button">조건 B 저장</button><button id="record" type="button">현재 값 기록</button><button id="csv" type="button">CSV 저장</button><button id="clear" type="button">기록 지우기</button></div>
+ <p id="recordInfo" class="note">측정표에는 현재 구동 진동수, 가까운 고유진동수, 응답값이 기록됩니다.</p>
+ <p class="note"><strong>소리 안내:</strong> 실제 선택된 주파수의 순음을 재생합니다. 부피를 낮게 제한하고, 일시정지·탭 전환 시 함께 멈춥니다. 배음이 모두 합성된 실제 악기 소리와는 다릅니다.</p>
+</section>
+<section class="card" id="graphOptions" hidden>
+ <h2>그래프 고정 축척</h2>
+ <div class="field"><label for="graphRange">진동수 범위</label><select id="graphRange"><option value="160">0~160 Hz</option><option value="600" selected>0~600 Hz</option><option value="1500">0~1,500 Hz</option><option value="4500">0~4,500 Hz</option></select></div>
+ <div class="quicks"><button type="button" id="graphString">줄 조건</button><button type="button" id="graphOpen">열린관 조건</button><button type="button" id="graphClosed">닫힌관 조건</button><button type="button" id="graphCurve">공명곡선 조건</button></div>
+ <p class="note">스케일은 슬라이더 조작만으로 자동 변경되지 않습니다. 현재값이 화면 밖이라면 직접 진동수 범위를 넓히세요.</p>
+</section>
+</aside>
+<section class="concepts" aria-label="공명과 정상파 개념 설명">
+ <div class="lessons">
+  <article class="lesson"><h2>① 정상파는 어떻게 생길까?</h2><p>서로 반대 방향으로 진행하는 같은 진동수의 파동이 겹쳐 정상파가 만들어집니다. 특정 위치에서는 항상 변위가 0인 마디, 다른 위치에서는 진폭이 큰 배가 나타납니다.</p><div class="eq">y₁=A sin(kx−ωt)<br>y₂=A sin(kx+ωt)<br>y=2A sin(kx)cos(ωt)</div><p>이 식은 양끝 고정 줄의 기본적인 정상파를 설명합니다. 실제 구동 주파수가 고유진동수에서 벗어나면 여러 모드가 기여하므로 단순한 하나의 고유모드로 표현하지 않습니다.</p></article>
+  <article class="lesson"><h2>② 양끝이 고정된 줄</h2><div class="eq">v=√(F/μ)<br>fₙ=nv/(2L)<br>λₙ=2L/n</div><p>F는 줄에 작용하는 장력(N), μ는 단위 길이당 질량(kg/m), L은 줄의 길이(m)입니다. 양끝이 변위의 마디이므로 n번째 모드에서는 마디 n+1개, 배 n개가 생깁니다.</p><p>장력이 4배이면 v와 모든 고유진동수가 2배가 됩니다. 다른 조건은 같다고 가정합니다.</p></article>
+  <article class="lesson"><h2>③ 양끝 열린관: 변위와 압력</h2><div class="eq">fₙ=nv/(2L)<br>n=1,2,3,…</div><p>양쪽 열린 끝에서는 공기 입자가 자유롭게 움직이므로 변위의 배가 되고, 압력 변화는 마디가 됩니다. 압력 마디와 변위 마디는 같은 위치가 아닙니다. 열린관은 모든 정수배 배음이 가능합니다.</p><p>관 속 공기는 실제로 수평 방향으로 왕복 운동합니다. 그래프의 위아래 곡선은 변위 크기를 나타내는 도식입니다.</p></article>
+  <article class="lesson"><h2>④ 한쪽 닫힌관: 홀수 배음</h2><div class="eq">fₙ=(2n−1)v/(4L)<br>n=1,2,3,…</div><p>닫힌 끝은 공기 입자 변위의 마디, 열린 끝은 변위의 배입니다. 따라서 기본 진동수의 1·3·5·7…배인 홀수 배음만 허용됩니다.</p><p>n번째 허용 모드에서 변위 마디와 배는 각각 n개이며, 압력의 마디와 배도 각각 n개입니다. 실제 관에서는 열린 끝 보정이 필요할 수 있습니다.</p></article>
+  <article class="lesson"><h2>⑤ 공명과 감쇠</h2><div class="eq">R=1/√[(1−r²)²+(2ζr)²]<br>r=f/f₀, Q≈1/(2ζ)</div><p>외부 구동 진동수가 계의 고유진동수 근처일 때 강제진동 응답이 커집니다. ζ가 작으면 공명봉우리는 높고 좁아집니다. 감쇠가 존재할 때 최대 변위 응답은 정확히 f₀가 아닌 f₀√(1−2ζ²) 부근에서 나타납니다(ζ가 충분히 작은 경우).</p><p>실험 화면의 상대 응답은 이 선형 감쇠 진동자 모형에 따른 정규화된 진폭입니다. 실제 소리의 데시벨이나 줄 변위(m)는 아닙니다.</p></article>
+  <article class="lesson"><h2>⑥ 구동 상태와 고유모드를 구분하기</h2><p>줄·관 실험에서는 여러 고유모드의 주파수 응답을 중첩한 정성적 선형 모형을 사용합니다. 각 모드의 응답 크기와 위상은 구동 진동수에 따라 달라집니다. 공명에서 벗어났을 때 화면에 고정 마디를 강제로 표시하지 않습니다.</p><p>마디·배 강조는 특정 모드가 공명에 가까울 때의 <b>고유모드 위치</b>를 표시하는 안내입니다. 실제 구동 위치, 에너지 손실, 경계 반사, 주파수별 감쇠 및 실험 장치의 복잡한 조건은 단순화했습니다.</p></article>
+  <article class="lesson wide"><h2>⑦ 예측·조작·확인</h2>
+   <details><summary>줄의 장력을 4배로 올리면 기본 진동수는?</summary><p>v=√(F/μ)이므로 속력은 2배, f₁=v/(2L)이므로 기본 진동수도 2배입니다.</p></details>
+   <details><summary>같은 온도·길이에서 열린관과 닫힌관의 기본 진동수를 비교하면?</summary><p>열린관 f₁=v/(2L), 닫힌관 f₁=v/(4L)이므로 열린관이 2배입니다. 끝 보정은 무시했습니다.</p></details>
+   <details><summary>닫힌관에는 왜 2배음·4배음이 없나요?</summary><p>닫힌 끝은 변위 마디, 열린 끝은 변위 배여야 합니다. 이 경계조건을 동시에 만족시키는 파장은 λ=4L/(2n−1)이므로 홀수 배음만 허용됩니다.</p></details>
+   <details><summary>공기 입자 변위의 배에서 압력도 가장 클까요?</summary><p>아닙니다. 압력 변화의 마디는 변위의 배에 해당합니다. 공기 입자의 위치 변화와 기체의 압축·팽창은 구분해야 합니다.</p></details>
+   <details><summary>화면의 줄이 느리게 움직이는데 왜 200Hz인가요?</summary><p>실제 200Hz의 고주파 왕복운동은 일반 화면 주사율에서 그대로 표현하기 어렵습니다. 화면은 관찰용으로 낮춘 시각적 진동수로 움직이며 물리 수치와 구별합니다. 소리 버튼의 주파수는 실제 구동 진동수를 따르지만 실제 관·현의 복잡한 배음 스펙트럼은 합성하지 않습니다.</p></details>
+   <details><summary>기주 공명에서 수면을 움직이는 실험은 어디서 하나요?</summary><p>별도의 '기주 공명' 실험실에서 물기둥 길이·끝 보정·공명점 측정을 통해 음속을 계산할 수 있습니다. 이 통합 실험실은 정상파의 경계조건과 고유모드 및 공명 현상에 초점을 맞춥니다.</p></details>
+  </article>
+ </div>
+</section>
 </div>
-
+</main>
 <script>
-(() => {
-  const $ = s => document.querySelector(s);
-  const $$ = s => [...document.querySelectorAll(s)];
-  const canvas = $('#canvas'), ctx = canvas.getContext('2d');
-  let tab='string', playing=true, speed=.55, t=0, last=performance.now(), records=[];
-  const defaults={
-    string:{sL:1.20,sT:80,sMu:.010,sF:37.3,sZ:.045},
-    air:{airType:'open',aL:.86,aTemp:20,aF:199,aZ:.040},
-    curve:{cF0:20,cF:20,cZ:.06}
-  };
-
-  function resize(){
-    const r=canvas.getBoundingClientRect(), d=Math.min(devicePixelRatio||1,2);
-    canvas.width=Math.round(r.width*d); canvas.height=Math.round(r.height*d);
-    ctx.setTransform(d,0,0,d,0,0);
+(function(){
+"use strict";
+const $=id=>document.getElementById(id),TAU=Math.PI*2,clamp=(v,a,b)=>Math.min(b,Math.max(a,v)),fmt=(n,d=2)=>Number(n).toFixed(d);
+const baseline={
+ string:{L:1.2,F:80,mu:.01,f:37.3,z:.045},
+ open:{L:.86,temp:20,f:199.4,z:.04},
+ closed:{L:.86,temp:20,f:99.7,z:.04},
+ curve:{f0:20,f:20,z:.06}
+};
+function clone(o){return JSON.parse(JSON.stringify(o));}
+const s={tab:"string",focus:"string",items:clone(baseline),play:false,phase:0,last:null,rate:1,view:"displacement",showNodes:false,records:[],saved:{A:null,B:null},graphMax:600,audioOn:false};
+const tkind=()=>s.tab==="compare"?s.focus:s.tab;
+const active=()=>s.items[tkind()];
+const response=(f,fn,z)=>{const r=f/fn;return 1/Math.sqrt(Math.pow(1-r*r,2)+Math.pow(2*z*r,2));};
+const cdata=(kind=tkind(),p=s.items[kind])=>{
+ if(kind==="curve"){
+  const f0=p.f0,z=p.z,R=response(p.f,f0,z),peak=z<Math.SQRT1_2?f0*Math.sqrt(1-2*z*z):0;
+  return {kind,p,f:p.f,f0,fn:f0,f1:f0,R,z,peak,Q:1/(2*z),v:null,L:null,lambda:null,n:1,speed:null,modeLabel:"단일 진동자"};
+ }
+ const v=kind==="string"?Math.sqrt(p.F/p.mu):331+.6*p.temp;
+ const f1=v/((kind==="closed"?4:2)*p.L);
+ const fn=n=>kind==="closed"?(2*n-1)*f1:n*f1;
+ const modes=Array.from({length:8},(_,i)=>({n:i+1,f:fn(i+1),harmonic:kind==="closed"?2*i+1:i+1}));
+ let nearest=modes[0];
+ for(const m of modes)if(Math.abs(m.f-p.f)<Math.abs(nearest.f-p.f))nearest=m;
+ return {kind,p,f:p.f,v,L:p.L,lambda:v/p.f,f1,fn:nearest.f,n:nearest.n,harmonic:nearest.harmonic,
+         modes,R:response(p.f,nearest.f,p.z),z:p.z,detune:Math.abs(p.f-nearest.f)/nearest.f};
+};
+function nearResonance(d){return d.kind!=="curve"&&d.detune<Math.max(.024,1.25*d.z);}
+function modalShape(kind,n,u,view){
+ if(kind==="string")return Math.sin(n*Math.PI*u);
+ if(kind==="open")return view==="pressure"?Math.sin(n*Math.PI*u):Math.cos(n*Math.PI*u);
+ const h=2*n-1;
+ return view==="pressure"?-Math.cos(h*Math.PI*u/2):Math.sin(h*Math.PI*u/2);
+}
+function modeWeight(kind,n){
+ const excitation=kind==="string"?Math.sin(n*Math.PI*.27):
+ kind==="open"?Math.cos(n*Math.PI*.12):Math.sin((2*n-1)*Math.PI*.68/2);
+ return excitation/(2*Math.pow(n,1.35));
+}
+function modalResponse(d,u,phase,view="displacement"){
+ let sum=0;
+ for(const m of d.modes){
+  const r=d.f/m.f,lag=Math.atan2(2*d.z*r,1-r*r);
+  const R=response(d.f,m.f,d.z);
+  const kFactor=view==="pressure"?Math.min(m.harmonic,11)*.55:1;
+  sum+=modeWeight(d.kind,m.n)*R*kFactor*modalShape(d.kind,m.n,u,view)*Math.cos(phase-lag);
+ }
+ return Math.tanh(.23*sum);
+}
+function nodes(kind,n,view){
+ const a=[],b=[];
+ if(kind==="string"){
+  for(let i=0;i<=n;i++)a.push(i/n);
+  for(let i=0;i<n;i++)b.push((i+.5)/n);
+ }else if(kind==="open"){
+  for(let i=0;i<=n;i++)(view==="pressure"?a:b).push(i/n);
+  for(let i=0;i<n;i++)(view==="pressure"?b:a).push((i+.5)/n);
+ }else{
+  const h=2*n-1;
+  for(let i=0;i<n;i++){
+   const root=2*i/h,peak=(2*i+1)/h;
+   (view==="pressure"?b:a).push(root);
+   (view==="pressure"?a:b).push(peak);
   }
-  addEventListener('resize',resize); resize();
-
-  function val(id){ return parseFloat($('#'+id).value); }
-  function fmt(x,d=1){ return Number(x).toFixed(d); }
-  function response(f,fn,z){
-    const r=f/fn;
-    return 1/Math.sqrt((1-r*r)**2 + (2*z*r)**2);
+ }
+ return {node:a,anti:b};
+}
+function prep(cv){
+ const r=cv.getBoundingClientRect(),w=Math.floor(r.width),h=Math.floor(r.height);
+ if(w<110||h<85)return null;
+ const dpi=Math.min(window.devicePixelRatio||1,2),W=Math.round(w*dpi),H=Math.round(h*dpi);
+ if(cv.width!==W||cv.height!==H){cv.width=W;cv.height=H;}
+ const c=cv.getContext("2d");if(!c)return null;c.setTransform(dpi,0,0,dpi,0,0);c.clearRect(0,0,w,h);return {c,w,h};
+}
+function txt(c,t,x,y,color="#c9e1f0",size=13,align="left",weight=650){
+ c.font=weight+" "+size+"px system-ui,sans-serif";c.fillStyle=color;c.textAlign=align;c.fillText(String(t),x,y);
+}
+function line(c,x,y,X,Y,color="#c6e4f2",width=1,dash=[]){
+ c.beginPath();c.moveTo(x,y);c.lineTo(X,Y);c.strokeStyle=color;c.lineWidth=width;c.setLineDash(dash);c.stroke();c.setLineDash([]);
+}
+function bg(out){
+ const {c,w,h}=out,g=c.createLinearGradient(0,0,w,h);g.addColorStop(0,"#112c43");g.addColorStop(1,"#081626");
+ c.fillStyle=g;c.fillRect(0,0,w,h);
+ for(let x=16;x<w;x+=37)line(c,x,0,x,h,"#27445855",.7);
+ for(let y=16;y<h;y+=37)line(c,0,y,w,y,"#27445855",.7);
+}
+function drawStanding(out,d){
+ const {c,w,h}=out,cx=h*.51,left=55,right=w-38,span=right-left,amp=Math.min(100,h*.29);
+ const kind=d.kind,view=kind==="string"?"displacement":s.view,choice=nearResonance(d);
+ // The vertical curve represents displacement (or relative pressure), not a transverse motion of air.
+ line(c,left,cx,right,cx,"#b6d0e4",1.8,[6,5]);
+ if(kind==="string"){
+  for(const xx of [left,right]){
+   line(c,xx,cx-amp-23,xx,cx+amp+23,"#c6d7e4",5);
+   c.fillStyle="#436079";c.fillRect(xx-15,cx+amp+15,30,13);
   }
-  function nearest(list,f){
-    let best=list[0], i=0;
-    list.forEach((x,k)=>{ if(Math.abs(x-f)<Math.abs(best-f)){best=x;i=k;} });
-    return {f:best,i};
+ }else{
+  c.fillStyle="#0d34496e";c.fillRect(left,cx-amp-36,span,amp*2+72);
+  for(const yy of [cx-amp-36,cx+amp+36])line(c,left,yy,right,yy,"#a0c9dc",4);
+  if(kind==="closed")line(c,left,cx-amp-39,left,cx+amp+39,"#c7dceb",7);
+  txt(c,kind==="open"?"열린 끝":"닫힌 끝",left,cx-amp-48,"#c5eafa",12,"center");
+  txt(c,"열린 끝",right,cx-amp-48,"#c5eafa",12,"center");
+ }
+ // Particle displacement is horizontal in sound waves: schematic particle positions represent longitudinal motion.
+ if(kind!=="string"){
+  for(let j=0;j<=29;j++){
+   const u=(j+.5)/30,x=left+u*span;
+   if(view==="displacement"){
+    const shift=modalResponse(d,u,s.phase,"displacement")*11;
+    c.beginPath();c.arc(x+shift,cx+amp*.68+(j%3-1)*9,2.8,0,TAU);
+    c.fillStyle="#c9eaf0aa";c.fill();
+    line(c,x,cx+amp*.68+(j%3-1)*9,x+shift,cx+amp*.68+(j%3-1)*9,"#6fd5de66",1.6);
+   }else{
+    const y=modalResponse(d,u,s.phase,"pressure"),tone=Math.round(95+130*Math.abs(y));
+    c.fillStyle=y>=0?"rgba(251,167,98,"+(Math.abs(y)*.33+.08)+")":"rgba(98,194,250,"+(Math.abs(y)*.33+.08)+")";
+    c.fillRect(x-3,cx-amp*.72,6,amp*1.45);
+   }
   }
-  function stringData(){
-    const L=val('sL'), T=val('sT'), mu=val('sMu'), f=val('sF'), z=val('sZ');
-    const v=Math.sqrt(T/mu), f1=v/(2*L), modes=Array.from({length:7},(_,i)=>(i+1)*f1);
-    const n=nearest(modes,f), R=response(f,n.f,z), lam=v/f;
-    return {L,T,mu,f,z,v,f1,modes,n:n.i+1,fn:n.f,R,lam};
+ }
+ // Multimodal sum; off-resonance nodes are never falsely asserted.
+ c.beginPath();
+ for(let i=0;i<=540;i++){
+  const u=i/540,x=left+span*u,y=cx-amp*modalResponse(d,u,s.phase,view);
+  if(i===0)c.moveTo(x,y);else c.lineTo(x,y);
+ }
+ c.strokeStyle=view==="pressure"?"#ffd48d":"#66e6dc";c.lineWidth=3.6;c.shadowBlur=9;c.shadowColor=c.strokeStyle;c.stroke();c.shadowBlur=0;
+ // A theoretical eigenmode overlay is only shown when the corresponding mode dominates near resonance.
+ if(choice&&s.showNodes){
+  const marks=nodes(kind,d.n,view);
+  for(const u of marks.node){
+   const x=left+u*span;c.beginPath();c.arc(x,cx,5.2,0,TAU);c.fillStyle="#ff9ea9";c.fill();
+   if(marks.node.length<8)txt(c,"마디",x,cx+amp+51,"#ffb1be",11,"center");
   }
-  function airData(){
-    const type=$('#airType').value, L=val('aL'), temp=val('aTemp'), f=val('aF'), z=val('aZ');
-    const v=331+0.60*temp;
-    const modes=Array.from({length:7},(_,i)=> type==='open' ? (i+1)*v/(2*L) : (2*i+1)*v/(4*L));
-    const n=nearest(modes,f), R=response(f,n.f,z), lam=v/f;
-    return {type,L,temp,f,z,v,modes,order:n.i+1,harmonic:type==='open'?n.i+1:2*n.i+1,fn:n.f,R,lam};
+  for(const u of marks.anti){
+   const x=left+u*span;c.beginPath();c.arc(x,cx,4.5,0,TAU);c.fillStyle="#ffd38c";c.fill();
+   if(marks.anti.length<8)txt(c,"배",x,cx-amp-16,"#ffdc9d",11,"center");
   }
-  function curveData(){
-    const f0=val('cF0'), f=val('cF'), z=val('cZ'), R=response(f,f0,z);
-    return {f0,f,z,R,Q:1/(2*z), ratio:f/f0};
+ }
+ txt(c,kind==="string"?"양끝 고정 줄":kind==="open"?"양쪽 열린관":"한쪽 닫힌관",20,28,"#e2f5ff",16,"left",800);
+ txt(c,"L = "+fmt(d.L,2)+" m",w-19,h-21,"#c7e2ed",13,"right");
+ txt(c,view==="pressure"?"압력 변화 (상대량)":"변위 (표시용 상대량)",left,h-21,"#bfd4e7",12);
+ txt(c,"구동 f="+fmt(d.f,1)+" Hz · 대표 고유모드 "+d.harmonic+"배음",w-18,28,"#b1f6e9",13,"right");
+ txt(c,choice?(s.showNodes?"이론적 마디·배 강조":"공명 모드가 우세합니다."):"여러 모드 중첩 · 고정 마디 위치를 단정하지 않음",
+     w/2,h-53,choice?"#b7f5cf":"#ffe0a8",13,"center",750);
+}
+function drawOscillator(out,d){
+ const {c,w,h}=out,midY=h*.54,startX=90,wallX=w*.26,massX=w*.56;
+ const fvis=visualFrequency(d.f), lag=Math.atan2(2*d.z*(d.f/d.f0),1-Math.pow(d.f/d.f0,2));
+ const amp=clamp((d.R/30)*105,6,110),x=massX+amp*Math.cos(s.phase-lag),baseline=w*.56;
+ line(c,wallX,midY-105,wallX,midY+98,"#bed2e2",6);
+ // drawn spring
+ c.beginPath();c.moveTo(wallX,midY);for(let k=0;k<=28;k++){const px=wallX+(x-wallX-25)*k/28,py=midY+(k===0||k===28?0:(k%2===0?-15:15));c.lineTo(px,py);}
+ c.strokeStyle="#78d2e4";c.lineWidth=3;c.stroke();
+ c.fillStyle="#7abdd8";c.fillRect(x-25,midY-42,52,84);c.strokeStyle="#bceff8";c.lineWidth=2;c.strokeRect(x-25,midY-42,52,84);
+ line(c,baseline,midY-105,baseline,midY+105,"#91adc888",1.4,[5,5]);
+ const forceX=w*.82,fy=midY-78*Math.cos(s.phase);
+ line(c,forceX,midY,forceX,fy,"#ffca7d",5);
+ c.beginPath();c.arc(forceX,fy,8,0,TAU);c.fillStyle="#ffd28c";c.fill();
+ txt(c,"외력 F(t)",forceX,midY-116,"#ffd797",15,"center",750);
+ txt(c,"응답 x(t)",baseline,midY+123,"#a6f1eb",15,"center",750);
+ txt(c,"공명 진폭 A/A₀="+fmt(d.R,2)+" · 위상 지연 "+fmt(lag*180/Math.PI,1)+"°",w/2,55,"#d8eaf5",16,"center",750);
+ txt(c,"최대 응답 진동수: "+fmt(d.peak,2)+" Hz",w/2,h-32,"#ffdda5",14,"center");
+ txt(c,"구동 진동수 f="+fmt(d.f,1)+" Hz · 시연용 속도 "+fmt(fvis,2)+" 회/s",w/2,h-12,"#c7e4f0",12,"center");
+}
+function drawScene(){
+ if(s.tab==="compare"||s.tab==="concept")return;
+ const out=prep($("stage"));if(!out)return;bg(out);
+ const d=cdata();
+ if(d.kind==="curve")drawOscillator(out,d);else drawStanding(out,d);
+}
+function setResult(items){
+ items.forEach((item,i)=>{$("label"+(i+1)).textContent=item[0];$("value"+(i+1)).textContent=item[1];});
+}
+function setNumbers(){
+ const kind=tkind(),p=active(),d=cdata();
+ $("stringFields").hidden=kind!=="string";
+ $("airFields").hidden=kind==="string"||kind==="curve";
+ $("curveFields").hidden=kind!=="curve";
+ $("modeBlock").hidden=kind==="curve";
+ $("components").parentElement.hidden=kind==="curve";
+ $("drivingField").hidden=false;
+ $("graphOptions").hidden=s.tab!=="compare";
+ $("airView").value=s.view;
+ $("sLength").value=s.items.string.L;$("sLengthOut").textContent=fmt(s.items.string.L,2)+" m";
+ $("tension").value=s.items.string.F;$("tensionOut").textContent=fmt(s.items.string.F,0)+" N";
+ $("density").value=s.items.string.mu;$("densityOut").textContent=fmt(s.items.string.mu,3)+" kg/m";
+ $("airLength").value=p.L??s.items.open.L;
+ $("airLengthOut").textContent=fmt((kind!=="string"&&kind!=="curve")?p.L:s.items.open.L,2)+" m";
+ $("temperature").value=p.temp??s.items.open.temp;
+ $("temperatureOut").textContent=fmt((kind!=="string"&&kind!=="curve")?p.temp:s.items.open.temp,0)+" °C";
+ $("fZero").value=s.items.curve.f0;$("fZeroOut").textContent=fmt(s.items.curve.f0,1)+" Hz";
+ $("damping").value=p.z;$("dampingOut").textContent=fmt(p.z,3);
+ $("playbackRate").value=String(s.rate);
+ if(kind==="curve"){$("drive").min="1";$("drive").max="90";$("drive").step=".2";}
+ else{
+  const upper=Math.ceil(Math.max(180,d.f1*(kind==="closed"?13:8))/10)*10;
+  $("drive").min=kind==="string"?"5":"20";$("drive").max=String(upper);$("drive").step=".1";
+  if(p.f>upper)p.f=upper;
+ }
+ $("drive").value=p.f;$("driveOut").textContent=fmt(p.f,1)+" Hz";
+ $("driveMin").textContent=$("drive").min+" Hz";$("driveMax").textContent=$("drive").max+" Hz";
+ $("play").disabled=s.play;$("pause").disabled=!s.play;
+ $("playingStatus").textContent=s.play?"● 시연 재생 중":"Ⅱ 멈춤";
+ $("components").checked=s.showNodes;
+ if(kind==="curve"){
+  $("sceneTitle").textContent="외부 구동과 공명곡선 · 감쇠";
+  $("sceneDesc").textContent="질량–용수철의 정규화 강제진동 응답입니다. 공명봉우리의 위치는 감쇠비 ζ에 따라 고유진동수 f₀에서 약간 낮아질 수 있습니다.";
+  setResult([["고유진동수 f₀",fmt(d.f0,1)+" Hz"],["최대 응답 fₚ",fmt(d.peak,1)+" Hz"],["구동 진동수",fmt(d.f,1)+" Hz"],["응답 A/A₀",fmt(d.R,2)+"×"],["품질계수 Q",fmt(d.Q,2)]]);
+  $("formula").innerHTML="r=f/f₀="+fmt(d.f/d.f0,3)+"<br>R=1/√[(1−r²)²+(2ζr)²] = <b>"+fmt(d.R,2)+"</b><br>Q≈1/(2ζ)="+fmt(d.Q,2);
+  $("status").textContent="R="+fmt(d.R,2)+" · 계산상 최대 응답은 "+fmt(d.peak,2)+" Hz 부근에서 나타납니다.";
+ }else{
+  const name=kind==="string"?"줄의 정상파":kind==="open"?"양쪽 열린관":"한쪽 닫힌관";
+  $("sceneTitle").textContent=name+" · 구동 공명";
+  $("sceneDesc").textContent=kind==="string"?"줄의 두 끝은 변위 마디입니다. 구동 진동수가 고유진동수와 멀어지면 여러 진동 모드가 겹칩니다.":
+   "공기는 관의 길이 방향으로 진동합니다. 변위와 압력의 마디·배 위치가 서로 다르므로 관찰량을 바꿔 확인하세요.";
+  const shown=nearResonance(d);
+  setResult([["파동 속력 v",fmt(d.v,1)+" m/s"],["최근접 fₙ",fmt(d.fn,1)+" Hz"],["구동 진동수",fmt(d.f,1)+" Hz"],["구동파 파장 λ",fmt(d.lambda,2)+" m"],["모드 응답",fmt(d.R,2)+"×"]]);
+  $("formula").innerHTML=(kind==="string"?"v=√(F/μ)=<b>"+fmt(d.v,2)+" m/s</b><br>":
+   "v≈331+0.6×온도=<b>"+fmt(d.v,2)+" m/s</b><br>")+
+   (kind==="closed"?"fₙ=(2n−1)v/(4L)":"fₙ=nv/(2L)")+
+   "<br>가까운 "+d.harmonic+"배음="+fmt(d.fn,2)+" Hz · λ="+fmt(d.lambda,2)+" m";
+  $("status").textContent=shown?
+   "● 공명 영역 · "+d.n+"번째 허용 모드("+d.harmonic+"배음) · 이론적 마디 "+nodes(kind,d.n,kind==="string"?"displacement":s.view).node.length+"개, 배 "+nodes(kind,d.n,kind==="string"?"displacement":s.view).anti.length+"개":
+   "공명에서 벗어난 구동 상태 · 여러 고유모드가 중첩되므로 특정 모드의 마디를 고정 표시하지 않습니다.";
+ }
+ drawModeButtons(d);
+ // Audio follows physical drive frequency, independent of the on-screen demonstration rate.
+ refreshAudio();
+}
+function drawModeButtons(d){
+ const host=$("modeButtons");host.replaceChildren();if(d.kind==="curve")return;
+ for(const m of d.modes.slice(0,6)){
+  const b=document.createElement("button");b.type="button";
+  b.textContent=(d.kind==="closed"?m.harmonic+"배음":"n="+m.n)+" · "+fmt(m.f,0)+"Hz";
+  if(d.n===m.n&&nearResonance(d))b.className="current";
+  b.onclick=()=>{s.items[d.kind].f=m.f;s.phase=0;updateAll();};
+  host.append(b);
+ }
+}
+function drawAxes(c,w,h,xmax,ymax,xlabel,ylabel){
+ const L=50,R=w-17,T=24,B=h-36, X=x=>L+x/xmax*(R-L),Y=y=>B-y/ymax*(B-T);
+ for(let j=0;j<=4;j++){
+  const x=xmax*j/4,y=ymax*j/4;
+  line(c,L,Y(y),R,Y(y),"#34516b",1);
+  line(c,X(x),T,X(x),B,"#294257",1);
+  txt(c,fmt(x,xmax>100?0:1),X(x),B+16,"#bdd2e4",10,"center");
+  txt(c,fmt(y,ymax>20?0:1),L-8,Y(y)+3,"#bdd2e4",10,"right");
+ }
+ line(c,L,T,L,B,"#bbd6e6",1.5);line(c,L,B,R,B,"#bbd6e6",1.5);
+ txt(c,ylabel,8,15,"#ecf9ff",11);
+ txt(c,xlabel,R,h-5,"#ecf9ff",11,"right");
+ return {X,Y,L,R,T,B};
+}
+function spectralCurve(canvas,items){
+ const out=prep(canvas);if(!out)return;bg(out);
+ const {c,w,h}=out,g=drawAxes(c,w,h,s.graphMax,30,"진동수 (Hz)","진폭비");
+ for(const [item,color,dash]of items){
+  if(!item)continue;
+  const fn=cdata(item.kind,item.p).fn;
+  c.beginPath();for(let j=0;j<=560;j++){
+   const f=s.graphMax*j/560,R=response(f,fn,item.p.z);
+   const xx=g.X(f),yy=g.Y(Math.min(30,R));
+   if(!j)c.moveTo(xx,yy);else c.lineTo(xx,yy);
   }
-
-  function setText(){
-    // 조건 변화에 따라 최소 6개 고유모드를 실제로 탐색할 수 있도록 진동수 범위를 자동 확장
-    const _sV=Math.sqrt(val('sT')/val('sMu')), _sF1=_sV/(2*val('sL'));
-    $('#sF').max=Math.max(200, Math.ceil(6.2*_sF1/10)*10);
-    const _aV=331+0.60*val('aTemp'), _aL=val('aL'), _aType=$('#airType').value;
-    const _aF6=_aType==='open' ? 6*_aV/(2*_aL) : 11*_aV/(4*_aL);
-    $('#aF').max=Math.max(1200, Math.ceil(1.08*_aF6/100)*100);
-
-    $('#sLVal').textContent=fmt(val('sL'),2)+' m';
-    $('#sTVal').textContent=fmt(val('sT'),0)+' N';
-    $('#sMuVal').textContent=fmt(val('sMu'),3)+' kg/m';
-    $('#sFVal').textContent=fmt(val('sF'),1)+' Hz';
-    $('#sZVal').textContent=fmt(val('sZ'),3);
-
-    $('#aLVal').textContent=fmt(val('aL'),2)+' m';
-    $('#aTempVal').textContent=fmt(val('aTemp'),0)+' °C';
-    $('#aFVal').textContent=fmt(val('aF'),0)+' Hz';
-    $('#aZVal').textContent=fmt(val('aZ'),3);
-
-    $('#cF0Val').textContent=fmt(val('cF0'),1)+' Hz';
-    $('#cFVal').textContent=fmt(val('cF'),1)+' Hz';
-    $('#cZVal').textContent=fmt(val('cZ'),2);
-
-    let status=$('#resStatus'), chips=$('#modeChips');
-    if(tab==='string'){
-      const d=stringData(), mismatch=Math.abs(d.f-d.fn)/d.fn, resonant=mismatch<Math.max(.018,1.25*d.z);
-      $('#m1').textContent=fmt(d.v,1)+' m/s'; $('#m1n').textContent='파동 속력 v';
-      $('#m2').textContent=fmt(d.fn,1)+' Hz'; $('#m2n').textContent='가까운 고유진동수 fₙ';
-      $('#m3').textContent=fmt(d.lam,2)+' m'; $('#m3n').textContent='구동파 파장 λ';
-      $('#m4').textContent=fmt(Math.min(d.R,99),1)+'×'; $('#m4n').textContent='상대 응답 진폭';
-      $('#formula').innerHTML=`v = √(T/μ) = <b>${fmt(d.v,1)} m/s</b><br>fₙ = n·v/(2L), &nbsp; λₙ = 2L/n<br>현재 가장 가까운 모드: <b>n = ${d.n}</b>`;
-      chips.innerHTML=d.modes.slice(0,6).map((x,i)=>`<button class="chip ${i+1===d.n?'near':''}" data-f="${x}">n=${i+1} · ${fmt(x,1)} Hz</button>`).join('');
-      status.textContent=resonant?'● 공명! 진폭 크게 증가':'공명점에서 벗어남';
-      status.className='pill status '+(resonant?'good':'warn');
-      $('#modeLabel').textContent='양끝 고정 줄 · '+d.n+'차 모드';
-    }else if(tab==='air'){
-      const d=airData(), mismatch=Math.abs(d.f-d.fn)/d.fn, resonant=mismatch<Math.max(.018,1.25*d.z);
-      $('#m1').textContent=fmt(d.v,1)+' m/s'; $('#m1n').textContent='음속 v';
-      $('#m2').textContent=fmt(d.fn,0)+' Hz'; $('#m2n').textContent='가까운 공명 진동수';
-      $('#m3').textContent=fmt(d.lam,2)+' m'; $('#m3n').textContent='소리 파장 λ';
-      $('#m4').textContent=fmt(Math.min(d.R,99),1)+'×'; $('#m4n').textContent='상대 응답 진폭';
-      $('#formula').innerHTML=d.type==='open'
-        ? `열린관: fₙ = n·v/(2L)<br>양 끝은 <b>변위의 배</b> · 현재 n=${d.order}`
-        : `닫힌관: fₘ = (2m−1)·v/(4L)<br>닫힌 끝은 <b>변위의 마디</b>, 열린 끝은 <b>배</b> · 현재 ${d.harmonic}배음`;
-      chips.innerHTML=d.modes.slice(0,6).map((x,i)=>`<button class="chip ${i===d.order-1?'near':''}" data-f="${x}">${d.type==='open'?'n='+(i+1):(2*i+1)+'배음'} · ${fmt(x,0)} Hz</button>`).join('');
-      status.textContent=resonant?'● 기주 공명!':'공명점에서 벗어남';
-      status.className='pill status '+(resonant?'good':'warn');
-      $('#modeLabel').textContent=(d.type==='open'?'양쪽 열린관':'한쪽 닫힌관')+' · '+(d.type==='open'?d.order+'차':d.harmonic+'배음');
-    }else{
-      const d=curveData(), mismatch=Math.abs(d.f-d.f0)/d.f0, resonant=mismatch<Math.max(.025,1.4*d.z);
-      $('#m1').textContent=fmt(d.f0,1)+' Hz'; $('#m1n').textContent='고유진동수 f₀';
-      $('#m2').textContent=fmt(d.ratio,2); $('#m2n').textContent='진동수비 f/f₀';
-      $('#m3').textContent=fmt(d.Q,1); $('#m3n').textContent='품질계수 Q';
-      $('#m4').textContent=fmt(Math.min(d.R,99),1)+'×'; $('#m4n').textContent='상대 응답 진폭';
-      $('#formula').innerHTML=`A/A₀ = 1 / √[(1−r²)² + (2ζr)²], &nbsp; r=f/f₀<br>작은 감쇠에서 Q ≈ 1/(2ζ) = <b>${fmt(d.Q,1)}</b>`;
-      chips.innerHTML=`<span class="chip">ζ↓ → 공명봉우리 ↑, 폭 ↓</span><span class="chip">ζ↑ → 공명봉우리 ↓, 폭 ↑</span>`;
-      status.textContent=resonant?'● 공명 영역':'공명 영역 밖';
-      status.className='pill status '+(resonant?'good':'warn');
-      $('#modeLabel').textContent='강제진동 · 공명곡선';
-    }
+  c.strokeStyle=color;c.lineWidth=color==="#6de9e3"?2.8:1.7;c.setLineDash(dash);c.stroke();c.setLineDash([]);
+  if(item.p.f<=s.graphMax){
+   const val=response(item.p.f,fn,item.p.z);
+   c.fillStyle=color;c.beginPath();c.arc(g.X(item.p.f),g.Y(Math.min(30,val)),5,0,TAU);c.fill();
   }
-
-  function bg(w,h){
-    ctx.clearRect(0,0,w,h);
-    const g=ctx.createLinearGradient(0,0,0,h);
-    g.addColorStop(0,'#081522');g.addColorStop(1,'#09111b');
-    ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
-    ctx.strokeStyle='rgba(80,130,170,.15)';ctx.lineWidth=1;
-    for(let x=0;x<w;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke()}
-    for(let y=0;y<h;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke()}
-  }
-  function line(x1,y1,x2,y2,color='#5ee7ff',width=2){
-    ctx.strokeStyle=color;ctx.lineWidth=width;ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
-  }
-  function txt(s,x,y,color='#cfe6f8',size=12,align='left'){
-    ctx.fillStyle=color;ctx.font=`${size}px system-ui`;ctx.textAlign=align;ctx.fillText(s,x,y);
-  }
-
-  function drawString(w,h){
-    const d=stringData(), left=52,right=w-35, cy=h*.53, span=right-left, n=d.n;
-    const mismatch=Math.abs(d.f-d.fn)/d.fn, visAmp=Math.min(72, 12+58*(1/(1+18*mismatch))*Math.min(1, .08/d.z));
-    // supports
-    ctx.strokeStyle='#9cb2c5';ctx.lineWidth=3;
-    ctx.beginPath();ctx.moveTo(left,cy-65);ctx.lineTo(left,cy+70);ctx.stroke();
-    ctx.beginPath();ctx.moveTo(right,cy-65);ctx.lineTo(right,cy+70);ctx.stroke();
-    ctx.fillStyle='#5b7187';
-    ctx.beginPath();ctx.moveTo(left-14,cy+70);ctx.lineTo(left+14,cy+70);ctx.lineTo(left,cy+50);ctx.closePath();ctx.fill();
-    ctx.beginPath();ctx.moveTo(right-14,cy+70);ctx.lineTo(right+14,cy+70);ctx.lineTo(right,cy+50);ctx.closePath();ctx.fill();
-    line(left,cy,right,cy,'rgba(190,215,235,.25)',1);
-
-    const phase=Math.sin(2*Math.PI*d.f*(t*0.030));
-    ctx.beginPath();
-    for(let i=0;i<=260;i++){
-      const u=i/260, x=left+u*span;
-      const y=cy-visAmp*Math.sin(n*Math.PI*u)*phase;
-      i?ctx.lineTo(x,y):ctx.moveTo(x,y);
-    }
-    ctx.strokeStyle='#5ee7ff';ctx.lineWidth=3;ctx.shadowBlur=14;ctx.shadowColor='#5ee7ff';ctx.stroke();ctx.shadowBlur=0;
-
-    // nodes
-    for(let k=0;k<=n;k++){
-      const x=left+span*k/n;
-      ctx.fillStyle='#ff6b7a';ctx.beginPath();ctx.arc(x,cy,5,0,Math.PI*2);ctx.fill();
-      if(k>0 && k<n) txt('마디',x,cy+22,'#ff9ea8',11,'center');
-    }
-    // antinodes
-    for(let k=0;k<n;k++){
-      const u=(k+.5)/n, x=left+u*span;
-      const y=cy-visAmp*Math.sin(n*Math.PI*u)*phase;
-      ctx.fillStyle='#ffd166';ctx.beginPath();ctx.arc(x,y,4.5,0,Math.PI*2);ctx.fill();
-      txt('배',x,cy-80,'#ffe298',11,'center');
-    }
-    txt(`L = ${fmt(d.L,2)} m`,(left+right)/2,h-26,'#a9c2d7',13,'center');
-    txt(`f = ${fmt(d.f,1)} Hz`,left,36,'#d9edff',13);
-    txt(`가까운 고유모드 n=${n},  fₙ=${fmt(d.fn,1)} Hz`,right,36,'#d9edff',13,'right');
-  }
-
-  function drawAir(w,h){
-    const d=airData(), left=55,right=w-42, top=92,bottom=h-70, mid=(top+bottom)/2, span=right-left;
-    // pipe
-    ctx.strokeStyle='#9cb5c9';ctx.lineWidth=4;
-    line(left,top,right,top,'#9cb5c9',4); line(left,bottom,right,bottom,'#9cb5c9',4);
-    if(d.type==='closed') line(left,top,left,bottom,'#9cb5c9',7);
-    else {
-      line(left,top,left-12,top,'#9cb5c9',4); line(left,bottom,left-12,bottom,'#9cb5c9',4);
-    }
-    line(right,top,right+12,top,'#9cb5c9',4); line(right,bottom,right+12,bottom,'#9cb5c9',4);
-    const mismatch=Math.abs(d.f-d.fn)/d.fn, amp=Math.min((bottom-top)*.36, 18+(bottom-top)*.29/(1+18*mismatch));
-    const phase=Math.sin(2*Math.PI*d.f*(t*0.0022));
-    const kIndex=d.order;
-    ctx.beginPath();
-    for(let i=0;i<=280;i++){
-      const u=i/280, x=left+u*span;
-      const shape=d.type==='open'?Math.cos(kIndex*Math.PI*u):Math.sin((2*kIndex-1)*Math.PI*u/2);
-      const y=mid-amp*shape*phase;
-      i?ctx.lineTo(x,y):ctx.moveTo(x,y);
-    }
-    ctx.strokeStyle='#5ee7ff';ctx.lineWidth=3;ctx.shadowBlur=14;ctx.shadowColor='#5ee7ff';ctx.stroke();ctx.shadowBlur=0;
-
-    // Nodes/antinodes from analytical shape
-    if(d.type==='open'){
-      for(let j=0;j<=kIndex;j++){ // antinodes at j/n
-        const u=j/kIndex, x=left+u*span; ctx.fillStyle='#ffd166';ctx.beginPath();ctx.arc(x,mid,4,0,Math.PI*2);ctx.fill();
-      }
-      for(let j=0;j<kIndex;j++){
-        const u=(j+.5)/kIndex,x=left+u*span;ctx.fillStyle='#ff6b7a';ctx.beginPath();ctx.arc(x,mid,4,0,Math.PI*2);ctx.fill();
-      }
-    }else{
-      const hnum=2*kIndex-1;
-      for(let j=0;j<=hnum;j++){
-        const u=j/hnum;
-        if(j%2===0){ctx.fillStyle='#ff6b7a'}else{ctx.fillStyle='#ffd166'}
-        ctx.beginPath();ctx.arc(left+u*span,mid,4,0,Math.PI*2);ctx.fill();
-      }
-    }
-    txt(d.type==='open'?'열린 끝: 변위의 배':'닫힌 끝: 변위의 마디',left,61,d.type==='open'?'#ffe298':'#ff9ea8',12);
-    txt('열린 끝: 변위의 배',right,61,'#ffe298',12,'right');
-    txt(`L = ${fmt(d.L,2)} m · v ≈ ${fmt(d.v,1)} m/s`,(left+right)/2,h-31,'#b9cede',13,'center');
-  }
-
-  function drawCurve(w,h){
-    const d=curveData(), padL=55,padR=28,padT=70,padB=48, cw=w-padL-padR,ch=h-padT-padB;
-    const fmax=Math.max(90,d.f0*2.4), maxR=Math.min(18,Math.max(4,response(d.f0,d.f0,d.z)*1.12));
-    line(padL,padT,padL,padT+ch,'#7890a6',1.5); line(padL,padT+ch,padL+cw,padT+ch,'#7890a6',1.5);
-    txt('상대 진폭',padL-8,padT-15,'#cfe5f7',12);
-    txt('진동수 f (Hz)',padL+cw,padT+ch+30,'#cfe5f7',12,'right');
-    // curve
-    ctx.beginPath();
-    for(let i=0;i<=420;i++){
-      const f=fmax*i/420, R=Math.min(maxR,response(f,d.f0,d.z));
-      const x=padL+cw*f/fmax, y=padT+ch-(R/maxR)*ch;
-      i?ctx.lineTo(x,y):ctx.moveTo(x,y);
-    }
-    ctx.strokeStyle='#5ee7ff';ctx.lineWidth=3;ctx.shadowBlur=10;ctx.shadowColor='#5ee7ff';ctx.stroke();ctx.shadowBlur=0;
-    // f0
-    const x0=padL+cw*d.f0/fmax; line(x0,padT,x0,padT+ch,'rgba(255,209,102,.75)',1.5);
-    txt('f₀',x0,padT+ch+19,'#ffd166',12,'center');
-    // current
-    const x=padL+cw*d.f/fmax, R=Math.min(maxR,d.R), y=padT+ch-(R/maxR)*ch;
-    ctx.fillStyle='#6df0ad';ctx.beginPath();ctx.arc(x,y,6,0,Math.PI*2);ctx.fill();
-    line(x,y,x,padT+ch,'rgba(109,240,173,.35)',1);
-    txt(`현재 f=${fmt(d.f,1)} Hz · A/A₀=${fmt(d.R,1)}`,Math.min(w-20,x+12),Math.max(padT+15,y-12),'#baffd5',12,x>w*.72?'right':'left');
-    txt(`ζ=${fmt(d.z,2)} · Q≈${fmt(d.Q,1)}`,w-25,34,'#d8eaff',13,'right');
-  }
-
-  function draw(){
-    const rect=canvas.getBoundingClientRect(), w=rect.width,h=rect.height; bg(w,h);
-    if(tab==='string') drawString(w,h);
-    else if(tab==='air') drawAir(w,h);
-    else drawCurve(w,h);
-  }
-
-  function loop(now){
-    const dt=Math.min(.04,(now-last)/1000); last=now;
-    if(playing)t+=dt*speed;
-    draw();
-    requestAnimationFrame(loop);
-  }
-
-  function switchTab(name){
-    tab=name;
-    $$('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));
-    $('#stringControls').classList.toggle('hidden',name!=='string');
-    $('#airControls').classList.toggle('hidden',name!=='air');
-    $('#curveControls').classList.toggle('hidden',name!=='curve');
-    $('#taskString').classList.toggle('hidden',name!=='string');
-    $('#taskAir').classList.toggle('hidden',name!=='air');
-    $('#taskCurve').classList.toggle('hidden',name!=='curve');
-    $('#controlTitle').textContent=name==='string'?'줄의 조건 설정':name==='air'?'기주의 조건 설정':'강제진동 조건 설정';
-    setText();
-  }
-
-  $$('.tab').forEach(b=>b.addEventListener('click',()=>switchTab(b.dataset.tab)));
-  $$('input,select').forEach(el=>el.addEventListener('input',setText));
-  $('#modeChips').addEventListener('click',e=>{
-    const b=e.target.closest('[data-f]'); if(!b)return;
-    const f=parseFloat(b.dataset.f);
-    if(tab==='string') $('#sF').value=f;
-    if(tab==='air') $('#aF').value=f;
-    setText();
-  });
-  $('#playBtn').addEventListener('click',()=>{
-    playing=!playing; $('#playBtn').textContent=playing?'⏸ 일시정지':'▶ 시작';
-  });
-  $('#slowBtn').addEventListener('click',()=>{
-    speed=speed===.55?.25:.55; $('#slowBtn').textContent=speed<.5?'1× 보통':'½ 느리게';
-  });
-  $('#resetBtn').addEventListener('click',()=>{
-    const d=defaults[tab];
-    Object.entries(d).forEach(([k,v])=>{$('#'+k).value=v});
-    t=0;playing=true;speed=.55;$('#playBtn').textContent='⏸ 일시정지';$('#slowBtn').textContent='½ 느리게';setText();
-  });
-
-  function record(){
-    if(records.length>=12) records.shift();
-    let item;
-    if(tab==='string'){
-      const d=stringData();
-      item={lab:'줄',cond:`L=${fmt(d.L,2)}m, T=${fmt(d.T,0)}N, μ=${fmt(d.mu,3)}`,f:fmt(d.f,1),fn:fmt(d.fn,1),R:fmt(d.R,1)+'×'};
-    } else if(tab==='air'){
-      const d=airData();
-      item={lab:d.type==='open'?'열린관':'닫힌관',cond:`L=${fmt(d.L,2)}m, ${fmt(d.temp,0)}℃`,f:fmt(d.f,0),fn:fmt(d.fn,0),R:fmt(d.R,1)+'×'};
-    } else {
-      const d=curveData();
-      item={lab:'공명곡선',cond:`f₀=${fmt(d.f0,1)}Hz, ζ=${fmt(d.z,2)}`,f:fmt(d.f,1),fn:fmt(d.f0,1),R:fmt(d.R,1)+'×'};
-    }
-    records.push(item); renderRecords();
-  }
-  function renderRecords(){
-    $('#records').innerHTML=records.map((r,i)=>`<tr><td>${i+1}</td><td>${r.lab}</td><td>${r.cond}</td><td>${r.f}</td><td>${r.fn}</td><td>${r.R}</td></tr>`).join('');
-  }
-  $('#recordBtn').addEventListener('click',record);
-  $('#clearBtn').addEventListener('click',()=>{records=[];renderRecords()});
-  $('#csvBtn').addEventListener('click',()=>{
-    if(!records.length){record()}
-    const rows=[['번호','실험','조건','구동진동수(Hz)','공명/고유진동수(Hz)','상대응답'],
-      ...records.map((r,i)=>[i+1,r.lab,r.cond,r.f,r.fn,r.R])];
-    const csv='\ufeff'+rows.map(row=>row.map(v=>`"${String(v).replaceAll('"','""')}"`).join(',')).join('\n');
-    const blob=new Blob([csv],{type:'text/csv;charset=utf-8'}),a=document.createElement('a');
-    a.href=URL.createObjectURL(blob);a.download='공명_정상파_실험기록.csv';a.click();URL.revokeObjectURL(a.href);
-  });
-
-  setText(); requestAnimationFrame(loop);
+ }
+}
+function drawSpectrum(){
+ const out=prep($("spectrum"));if(!out)return;bg(out);
+ const {c,w,h}=out,cur=cdata(), g=drawAxes(c,w,h,s.graphMax,1,"고유진동수 (Hz)","허용");
+ if(cur.kind==="curve"){
+  const x=g.X(cur.f0);
+  line(c,x,g.B,x,g.Y(1),"#ffd188",4);
+  txt(c,"f₀="+fmt(cur.f0,1),Math.min(w-75,x+7),g.T+22,"#ffd98e",12);return;
+ }
+ const vals=cur.modes.slice(0,8);
+ for(const m of vals){
+  if(m.f>s.graphMax)continue;
+  const x=g.X(m.f),y=g.Y(.95);
+  line(c,x,g.B,x,y,m.n===cur.n?"#70eee4":"#99b7e8",5);
+  txt(c,String(m.harmonic),x,y-7,"#effaff",11,"center");
+ }
+ txt(c,"숫자 = 기본 진동수의 배수(폐관: 홀수)",w/2,18,"#d5e7f3",11,"center");
+}
+function graphTable(){
+ const body=$("compareBody");body.replaceChildren();
+ for(const [name,item]of[["현재",{kind:tkind(),p:clone(active())}],["A",s.saved.A],["B",s.saved.B]]){
+  const row=document.createElement("tr"),d=item?cdata(item.kind,item.p):null;
+  const v=d?[name,({string:"줄",open:"열린관",closed:"닫힌관",curve:"진동자"})[d.kind],
+   d.kind==="curve"?"—":fmt(d.L,2),fmt(d.f,2),fmt(d.fn,2),d.kind==="curve"?"—":fmt(d.lambda,2),fmt(d.R,2)]:
+   [name,"—","—","—","—","—","—"];
+  for(const x of v){const td=document.createElement("td");td.textContent=x;row.append(td);}body.append(row);
+ }
+ $("graphInfo").textContent="실험 기록 "+s.records.length+"개 · 서로 다른 장치의 '상대 응답'은 정규화된 모형의 값이며 실제 진폭(m) 또는 음압(Pa)을 직접 비교한 값이 아닙니다.";
+}
+function redrawGraph(){
+ if(s.tab!=="compare")return;
+ const items=[
+  [s.saved.A,"#ffd08b",[8,5]],[s.saved.B,"#b5adff",[4,6]],
+  [{kind:tkind(),p:clone(active())},"#6de9e3",[]]
+ ];
+ spectralCurve($("curveGraph"),items);
+ drawSpectrum();graphTable();
+}
+function redraw(){
+ if(s.tab==="concept")return;
+ if(s.tab==="compare"){redrawGraph();return;}
+ drawScene();
+}
+function updateAll(){
+ setNumbers();
+ redraw();
+}
+function switchTab(tab){
+ s.play=false;s.last=null;
+ s.tab=tab;
+ if(["string","open","closed","curve"].includes(tab))s.focus=tab;
+ $("workspace").dataset.tab=tab;
+ for(const b of document.querySelectorAll(".tabs button"))b.setAttribute("aria-selected",String(b.dataset.tab===tab));
+ if(tab==="open"||tab==="closed")s.view="displacement";
+ if(tab==="compare"){
+  $("graphOptions").hidden=false;
+ }else $("graphOptions").hidden=true;
+ if(tab==="concept")s.audioOn=false;
+ refreshAudio();updateAll();requestAnimationFrame(redraw);
+}
+function visualFrequency(f){
+ return .23+2.75*f/(f+620);
+}
+let audioCtx=null,osc=null,gain=null;
+function refreshAudio(){
+ const should=s.audioOn&&s.play&&s.tab!=="compare"&&s.tab!=="concept"&&!document.hidden;
+ $("audio").textContent=s.audioOn?"♪ 소리 끄기":"♪ 실제 진동수 듣기";
+ $("audio").setAttribute("aria-pressed",String(s.audioOn));
+ if(!audioCtx||!osc||!gain)return;
+ const d=cdata();
+ if(audioCtx.state==="running"){
+  const now=audioCtx.currentTime,physicalFrequency=clamp(d.f,20,12000);
+  osc.frequency.setTargetAtTime(physicalFrequency,now,.03);
+  osc.type=d.kind==="string"?"triangle":"sine";
+  const strength=d.kind==="curve"?d.R:d.R;
+  gain.gain.setTargetAtTime(should?.012*clamp(strength/8,.12,1):0,now,.025);
+ }
+}
+async function toggleAudio(){
+ if(s.audioOn){
+  s.audioOn=false;refreshAudio();return;
+ }
+ try{
+  const AC=window.AudioContext||window.webkitAudioContext;
+  if(!AC){$("recordInfo").textContent="이 브라우저는 Web Audio를 지원하지 않습니다.";return;}
+  if(!audioCtx){audioCtx=new AC();osc=audioCtx.createOscillator();gain=audioCtx.createGain();gain.gain.value=0;osc.connect(gain);gain.connect(audioCtx.destination);osc.start();}
+  await audioCtx.resume();
+  s.audioOn=true;refreshAudio();
+ }catch(e){s.audioOn=false;$("recordInfo").textContent="소리를 시작할 수 없습니다. 브라우저의 오디오 사용 설정을 확인하세요.";}
+}
+function stop(){
+ s.play=false;s.last=null;refreshAudio();updateAll();
+}
+function run(){
+ s.play=true;s.last=null;refreshAudio();updateAll();
+}
+function restart(){
+ s.phase=0;s.play=true;s.last=null;refreshAudio();updateAll();
+}
+function change(key,val){
+ active()[key]=val;
+ s.phase=0;setNumbers();redraw();
+}
+function save(key){
+ s.saved[key]={kind:tkind(),p:clone(active())};
+ $("recordInfo").textContent="조건 "+key+" 저장 완료 · ⑤ 그래프·측정 탭에서 비교할 수 있습니다.";
+ updateAll();
+}
+function exportCsv(){
+ if(!s.records.length)record();
+ const rows=[["번호","장치","길이(m)","구동진동수(Hz)","고유진동수(Hz)","파장(m)","상대응답","감쇠비"],
+  ...s.records.map((item,i)=>{const d=cdata(item.kind,item.p);return [i+1,item.kind,d.L??"",d.f,d.fn,d.lambda??"",d.R,d.z];})];
+ const esc=x=>'"'+String(x).replace(/"/g,'""')+'"';
+ const csv="\uFEFF"+rows.map(row=>row.map(esc).join(",")).join("\r\n");
+ const blob=new Blob([csv],{type:"text/csv;charset=utf-8"});
+ const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="정상파_공명_실험기록.csv";a.click();
+ setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function record(){
+ if(s.records.length>=30)s.records.shift();
+ s.records.push({kind:tkind(),p:clone(active())});
+ $("recordInfo").textContent="실험 기록 "+s.records.length+"개 저장 · CSV로 내려받을 수 있습니다.";
+ updateAll();
+}
+function bind(){
+ document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>switchTab(b.dataset.tab));
+ const link=[
+  ["sLength","string","L"],["tension","string","F"],["density","string","mu"],
+  ["airLength","air","L"],["temperature","air","temp"],["fZero","curve","f0"]
+ ];
+ for(const [id,kind,key]of link)$(id).oninput=e=>{
+  const p=kind==="air"?active():s.items[kind];
+  p[key]=Number(e.target.value);
+  if(kind==="air"){s.items.open[key]=p[key];s.items.closed[key]=p[key];}
+  updateAll();
+ };
+ $("drive").oninput=e=>change("f",Number(e.target.value));
+ $("damping").oninput=e=>change("z",Number(e.target.value));
+ $("airView").onchange=e=>{s.view=e.target.value;updateAll();};
+ $("playbackRate").onchange=e=>{s.rate=Number(e.target.value);s.last=null;};
+ $("components").onchange=e=>{s.showNodes=e.target.checked;redraw();};
+ $("play").onclick=run;$("pause").onclick=stop;$("restart").onclick=restart;
+ $("step").onclick=()=>{s.play=false;s.last=null;s.phase+=Math.PI/6;refreshAudio();updateAll();};
+ $("quickFirst").onclick=()=>{const d=cdata();active().f=d.f1;s.phase=0;updateAll();};
+ $("quickOff").onclick=()=>{const d=cdata();active().f=d.fn*1.32;s.phase=0;updateAll();};
+ $("reset").onclick=()=>{s.items[tkind()]=clone(baseline[tkind()]);s.phase=0;stop();};
+ $("showGraph").onclick=()=>switchTab("compare");
+ $("saveA").onclick=()=>save("A");$("saveB").onclick=()=>save("B");
+ $("record").onclick=record;$("clear").onclick=()=>{s.records=[];$("recordInfo").textContent="측정 기록을 비웠습니다.";updateAll();};
+ $("csv").onclick=exportCsv;$("audio").onclick=()=>toggleAudio();
+ $("graphRange").onchange=e=>{s.graphMax=Number(e.target.value);redrawGraph();};
+ for(const [id,kind]of[["graphString","string"],["graphOpen","open"],["graphClosed","closed"],["graphCurve","curve"]]){
+  $(id).onclick=()=>{s.focus=kind;if(kind==="open"||kind==="closed")s.view="displacement";updateAll();};
+ }
+ $("full").onclick=()=>{const p=document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();if(p&&p.catch)p.catch(()=>{});};
+ document.addEventListener("fullscreenchange",()=>$("full").textContent=document.fullscreenElement?"⛶ 전체화면 종료":"⛶ 전체화면");
+ document.addEventListener("visibilitychange",()=>{if(document.hidden){s.play=false;s.last=null;refreshAudio();}});
+ window.addEventListener("resize",()=>requestAnimationFrame(redraw));
+ if(typeof ResizeObserver!=="undefined"){
+  const ob=new ResizeObserver(()=>requestAnimationFrame(redraw));
+  ob.observe($("stage").parentElement);ob.observe($("curveGraph").parentElement);
+ }
+}
+function tick(now){
+ if(s.play&&!document.hidden&&s.tab!=="compare"&&s.tab!=="concept"){
+  const dt=s.last===null?0:clamp((now-s.last)/1000,0,.075);
+  s.last=now;s.phase+=TAU*visualFrequency(cdata().f)*dt*s.rate;
+  if(!tick.prev||now-tick.prev>31){tick.prev=now;drawScene();}
+ }
+ requestAnimationFrame(tick);
+}
+bind();switchTab("string");requestAnimationFrame(tick);
 })();
-</script>
-</body>
-</html>
+</script></body></html>
