@@ -174,7 +174,7 @@ body .thermal-compare .comp-bar-track{height:8px;min-width:60px;border-radius:20
 body .thermal-compare .comp-bar{height:100%;border-radius:20px}
 @media(max-width:950px){body .thermal-compare .comp-layout{grid-template-columns:1fr}}
 @media(max-width:680px){body .thermal-compare #pvCompare{height:310px}}
-</style></head>
+</style><style id="thermal-fluid-fullscreen-v3">@media(min-width:711px){body .wrap{max-width:none;width:100%;padding:10px clamp(12px,1.25vw,30px) 18px}body .layout{grid-template-columns:minmax(0,1fr) minmax(245px,18vw) minmax(210px,16vw);align-items:start}body .layout .stage canvas,body .layout .chartbox canvas{height:clamp(300px,calc(100dvh - 290px),920px)}body .thermal-left{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}body .thermal-left>.thermal-compare{grid-column:1/-1}body .thermal-compare #pvCompare{height:clamp(360px,calc(100dvh - 340px),1100px)}body .thermal-cycle .cy-grid{grid-template-columns:minmax(0,1.1fr) minmax(0,1.1fr) minmax(290px,.75fr)}body .thermal-cycle canvas{height:clamp(310px,calc(100dvh - 340px),950px)}@media(max-width:1150px){body .layout{grid-template-columns:minmax(0,1fr) 260px}body .thermal-right{grid-column:1/-1}body .thermal-left{grid-template-columns:1fr}body .thermal-cycle .cy-grid{grid-template-columns:repeat(2,minmax(0,1fr))}body .thermal-cycle .cy-side{grid-column:1/-1}}@media(max-width:710px){body .layout{grid-template-columns:1fr}body .thermal-right{grid-column:auto}body .thermal-left{grid-template-columns:1fr}body .layout .stage canvas,body .layout .chartbox canvas,body .thermal-cycle canvas{height:280px}body .thermal-cycle .cy-grid{grid-template-columns:1fr}body .thermal-cycle .cy-side{grid-column:auto}}}</style></head>
 <body>
 <div class="wrap">
   <header>
