@@ -100,3 +100,10 @@ main{max-width:1280px;padding:28px 24px 65px}
 @media(max-width:580px){.category-speed-control{padding:10px 12px;margin:12px 0 -3px}
  .category-speed-adjust{gap:7px}.category-speed-adjust span{font-size:10px}
  .category-speed-adjust output{font-size:11px;min-width:70px}}
+
+/* Real-laboratory preview cards, 16:9 with subdued dark framing. */
+.lab-card[data-preview-mode="real-screen"] .lab-preview{display:block;width:100%;height:auto;aspect-ratio:16/9;min-height:0!important;margin:0 0 13px;border:1px solid #38516e;border-radius:11px;overflow:hidden;background:#0b1626;text-decoration:none}
+.lab-card[data-preview-mode="real-screen"] .lab-preview img{display:block;width:100%;height:100%;aspect-ratio:16/9;object-fit:cover;object-position:center 52%}
+.lab-card[data-preview-mode="real-screen"] .lab-preview svg{display:block;width:100%;height:100%;aspect-ratio:16/9}
+.lab-card[data-preview-mode="real-screen"] .lab-preview::after{display:none;content:none}
+.lab-card[data-preview-mode="real-screen"] .lab-preview:hover{border-color:#93d9ff}
