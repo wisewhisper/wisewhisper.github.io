@@ -128,7 +128,10 @@ const startButton=el('button',null,'▶ 시작'),pauseButton=el('button',null,'�
 startButton.id='ml-start';controlsRow.append(startButton,pauseButton,resetButton);
 function playingText(b){return b&&/일시정지|⏸|Ⅱ/.test(normalized(b));}
 function setStatus(t){status.textContent=t;}
-let inferredRunning=false;\nlet demoHandle=0,demoStarted=0,demoSlider=null;\nfunction stopDemo(){if(demoHandle)cancelAnimationFrame(demoHandle);demoHandle=0;}\nfunction runDemo(){const sliders=[...settingsScroll.querySelectorAll('input[type=range]'),...visual.querySelectorAll('input[type=range]')];demoSlider=sliders.find(x=>+x.max>+x.min);if(!demoSlider){setStatus('설정을 바꾸어 결과를 확인하세요.');return;}stopDemo();demoStarted=0;const min=+demoSlider.min,max=+demoSlider.max;function tick(now){if(!demoStarted)demoStarted=now;const fraction=(1-Math.cos((now-demoStarted)*.0015))/2;demoSlider.value=String(min+(max-min)*fraction);demoSlider.dispatchEvent(new Event('input',{bubbles:true}));if(now-demoStarted>4200){stopDemo();inferredRunning=false;setStatus('● 조건 변화 관찰 완료');return;}demoHandle=requestAnimationFrame(tick)}inferredRunning=true;setStatus('● 변수를 자동 변경하며 결과 관찰 중');demoHandle=requestAnimationFrame(tick)}
+let inferredRunning=false;
+let demoHandle=0,demoStarted=0,demoSlider=null;
+function stopDemo(){if(demoHandle)cancelAnimationFrame(demoHandle);demoHandle=0;}
+function runDemo(){const sliders=[...settingsScroll.querySelectorAll('input[type=range]'),...visual.querySelectorAll('input[type=range]')];demoSlider=sliders.find(x=>+x.max>+x.min);if(!demoSlider){setStatus('설정을 바꾸어 결과를 확인하세요.');return;}stopDemo();demoStarted=0;const min=+demoSlider.min,max=+demoSlider.max;function tick(now){if(!demoStarted)demoStarted=now;const fraction=(1-Math.cos((now-demoStarted)*.0015))/2;demoSlider.value=String(min+(max-min)*fraction);demoSlider.dispatchEvent(new Event('input',{bubbles:true}));if(now-demoStarted>4200){stopDemo();inferredRunning=false;setStatus('● 조건 변화 관찰 완료');return;}demoHandle=requestAnimationFrame(tick)}inferredRunning=true;setStatus('● 변수를 자동 변경하며 결과 관찰 중');demoHandle=requestAnimationFrame(tick)}
 const naturalAutoplay=toggle&&playingText(toggle)&&!all.some(b=>b!==toggle&&isStart(b));
 if(naturalAutoplay){try{toggle.click();}catch(e){}}
 function clickFirst(btn){if(btn&&!btn.disabled){btn.click();return true;}return false;}
