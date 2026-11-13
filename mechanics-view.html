@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>운동과 힘 · 온라인 물리실험실</title><style>
+html,body{margin:0;width:100%;height:100%;background:#050b14;color:#eaf3ff;font-family:system-ui,'Noto Sans KR',sans-serif}
+#experiment{width:100%;height:100%;display:block;border:0}#experiment[hidden]{display:none}
+#loading{padding:22px}a{color:#99d9ff}
+</style></head><body>
+<div id="loading" role="status">물리 실험실을 여는 중입니다…</div>
+<iframe id="experiment" title="운동과 힘 가상 실험실" allow="fullscreen" allowfullscreen hidden></iframe>
+<script>
+(()=>{'use strict';
+const file=new URLSearchParams(location.search).get('file');
+const loading=document.getElementById('loading'),frame=document.getElementById('experiment');
+if(!file||!/^01_운동과_힘_(?:공식(?:01|02|03|04|05|06|07|08|09|10|19|20)|실험(?:0[1-9]|1[0-4]))_[^/\\]+\.html$/.test(file)){loading.textContent='올바른 운동과 힘 실험실 주소가 아닙니다.';return;}
+let loaded=false;
+function fail(reason){loading.textContent=reason+' ';const a=document.createElement('a');a.href='index.html';a.textContent='목록으로';loading.append(a);frame.hidden=true;}
+frame.addEventListener('load',()=>{
+ if(loaded)return;loaded=true;
+ try{
+  const doc=frame.contentDocument;
+  if(!doc||!doc.body)throw new Error('실험 화면을 읽을 수 없습니다.');
+  const css=doc.createElement('link');css.rel='stylesheet';css.href=new URL('mechanics-2026.css?v=20261113-m1',location.href).href;
+  css.onload=()=>{
+   const script=doc.createElement('script');script.src=new URL('mechanics-2026.js?v=20261113-m1',location.href).href;
+   script.onload=()=>{document.title=doc.title+' · WiseWhisper';loading.hidden=true;frame.hidden=false;setTimeout(()=>frame.contentWindow.dispatchEvent(new Event('resize')),100);};
+   script.onerror=()=>fail('실험 화면 구성 스크립트를 불러오지 못했습니다.');
+   doc.body.append(script);
+  };
+  css.onerror=()=>fail('실험 화면 스타일을 불러오지 못했습니다.');
+  doc.head.append(css);
+ }catch(e){fail('실험 화면을 열지 못했습니다.');}
+});
+frame.onerror=()=>fail('원본 실험실을 불러오지 못했습니다.');
+frame.src=file;
+})();
+</script></body></html>
