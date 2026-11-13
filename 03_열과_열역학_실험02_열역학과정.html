@@ -76,6 +76,24 @@ body .layout .thermal-progress{padding:9px;background:#111f34;border:1px solid #
 .thermal-caption{font-size:12px;color:#c3d6e5;line-height:1.4}
 @media(max-width:1100px){body .layout{grid-template-columns:1fr 260px}.thermal-right{grid-column:1/-1}}
 @media(max-width:690px){body .layout{grid-template-columns:1fr}.thermal-right{grid-column:auto}.thermal-nav button{flex:1 1 28%}}
+</style>
+<style id="adiabatic-two-isotherms-v2">
+/* 기존 열역학 과정 탭 전체 높이를 유지하면서 단열 참고선 범례만 추가 */
+.adiabatic-isotherm-info{display:grid;gap:5px;background:#081b2b;border:1px solid #34536b;border-radius:8px;padding:7px 9px;margin-top:5px}
+.adiabatic-isotherm-info[hidden]{display:none!important}
+.adiabatic-keys{display:flex;flex-wrap:wrap;gap:5px 12px;font-size:11px}
+.adiabatic-key{color:#e5f3ff;display:inline-flex;align-items:center;gap:5px}
+.adiabatic-key:before{content:"";display:inline-block;width:19px;border-top:2px dashed #ffcb85}
+.adiabatic-key.final:before{border-color:#78caff}
+.adiabatic-key.path:before{border-top:3px solid #6af0b8}
+.adiabatic-temperature{display:flex;gap:6px 12px;flex-wrap:wrap;font-size:11px;color:#a9e4d1}
+.adiabatic-temperature strong{color:#fff}
+.adiabatic-teaching{font-size:11px;color:#b7c9d8;line-height:1.35}
+@media (min-width:1151px) and (max-height:780px){
+ body .layout .chartbox canvas{height:245px}
+ body .layout .stage canvas{height:245px}
+ body .layout .thermal-left>.chartbox .thermal-caption{font-size:10px;line-height:1.2;margin:4px 0 0}
+}
 </style></head>
 <body>
 <div class="wrap">
@@ -237,7 +255,21 @@ body .layout .thermal-progress{padding:9px;background:#111f34;border:1px solid #
     const cx=w/2, cylW=Math.min(190,w*.68), left=cx-cylW/2, bottom=h-25;
     const ratio=Math.max(.5,Math.min(2,state.V/initial.V)); const gasH=75+(ratio-.5)/1.5*100; const py=bottom-gasH;
     const tempNorm=Math.max(0,Math.min(1,(state.T-150)/380));
-    const grad=c.createLinearGradient(0,py,0,bottom);grad.addColorStop(0,`rgba(255,${Math.round(170-90*tempNorm)},70,.78)`);grad.addColorStop(1,'rgba(60,170,255,.43)');
+    const grad=c.createLinearGradient(0,py,0,bottom);
+    if(process==='adiabatic'){
+      const rel=Math.max(-1,Math.min(1,(state.T-initial.T)/110));
+      if(rel<-.008){
+        const cool=Math.abs(rel);
+        grad.addColorStop(0,`rgba(${Math.round(245-198*cool)},${Math.round(146+45*cool)},255,.82)`);
+        grad.addColorStop(1,'rgba(38,109,221,.6)');
+      }else{
+        grad.addColorStop(0,`rgba(255,${Math.round(182-107*rel)},${Math.round(106-45*rel)},.84)`);
+        grad.addColorStop(1,'rgba(242,125,62,.44)');
+      }
+    }else{
+      grad.addColorStop(0,`rgba(255,${Math.round(170-90*tempNorm)},70,.78)`);
+      grad.addColorStop(1,'rgba(60,170,255,.43)');
+    }
     c.fillStyle=grad;c.fillRect(left+5,py+8,cylW-10,bottom-py-8);
     c.strokeStyle='#8aa5c3';c.lineWidth=5;c.beginPath();c.moveTo(left,25);c.lineTo(left,bottom);c.lineTo(left+cylW,bottom);c.lineTo(left+cylW,25);c.stroke();
     c.fillStyle='#c5d8ec';c.fillRect(left-6,py,cylW+12,12);c.fillStyle='#6e89a8';c.fillRect(cx-8,12,16,py-12);
@@ -248,23 +280,75 @@ body .layout .thermal-progress{padding:9px;background:#111f34;border:1px solid #
     const qArrow=state.Q;
     if(Math.abs(qArrow)>1){c.strokeStyle=qArrow>0?'#ffac5b':'#67d3ff';c.fillStyle=c.strokeStyle;c.lineWidth=4;const ay=bottom-48;c.beginPath();c.moveTo(12,ay);c.lineTo(left-10,ay);c.stroke();c.beginPath();const dir=qArrow>0?1:-1;const tip=qArrow>0?left-10:12;c.moveTo(tip,ay);c.lineTo(tip-9*dir,ay-6);c.lineTo(tip-9*dir,ay+6);c.fill();c.font='700 12px system-ui';c.textAlign='left';c.fillText(qArrow>0?'열 유입':'열 방출',10,ay-10);}
     if(process==='isochoric'){c.fillStyle='#f8da6a';c.font='700 12px system-ui';c.textAlign='center';c.fillText('피스톤 고정',cx,py-12);}
+    if(process==='adiabatic'){
+      const tempChange=state.T-initial.T;
+      c.textAlign='left';c.font='700 12px system-ui';c.fillStyle='#e7f5ff';
+      c.fillText('단열 · Q = 0',8,16);
+      c.font='11px system-ui';
+      c.fillStyle=tempChange<-.05?'#79cbff':tempChange>.05?'#ffbd8d':'#d5e1ee';
+      c.fillText(tempChange<-.05?'팽창 → 냉각':tempChange>.05?'압축 → 가열':'온도 변화 없음',8,34);
+      c.fillText('ΔT = '+(tempChange>=0?'+':'')+fmt(tempChange,1)+' K',8,50);
+    }
   }
   function getPath(samples=90,end=1){const arr=[];for(let i=0;i<=samples;i++)arr.push(calculate(end*i/samples));return arr;}
   function drawGraph(){
     const {w,h}=resizeCanvas(gCanvas,gCtx),c=gCtx;c.clearRect(0,0,w,h);const ml=55,mr=16,mt=18,mb=42,pw=w-ml-mr,ph=h-mt-mb;
     const path=getPath(); const all=[...path,initial,state];
     let minV=Math.min(...all.map(s=>s.V)),maxV=Math.max(...all.map(s=>s.V)),maxP=Math.max(...all.map(s=>s.P));
-    const vPad=Math.max(2,(maxV-minV)*.2);minV=Math.max(0,minV-vPad);maxV+=vPad;maxP=Math.max(140,maxP*1.15);
+    const vPad=Math.max(2,(maxV-minV)*.2);minV=Math.max(.01,minV-vPad);maxV+=vPad;maxP=Math.max(140,maxP*1.15);
+    const adiabaticEnd=path[path.length-1];
+    if(process==='adiabatic'){
+      // 같은 몰수의 이상 기체 등온선: P(V;T)=nRT/V.
+      // 초기/최종 등온선의 왼쪽 꼭짓점까지 축에 포함하여 곡선이 잘리지 않게 한다.
+      const highestIsotherm=Math.max(initial.P*initial.V/minV,adiabaticEnd.P*adiabaticEnd.V/minV);
+      maxP=Math.max(maxP,highestIsotherm*1.08);
+    }
     const X=v=>ml+(v-minV)/(maxV-minV)*pw,Y=p=>mt+ph-p/maxP*ph;
     c.strokeStyle='#243a55';c.lineWidth=1;c.fillStyle='#8ea5bf';c.font='11px system-ui';
     for(let i=0;i<=5;i++){let x=ml+pw*i/5;c.beginPath();c.moveTo(x,mt);c.lineTo(x,mt+ph);c.stroke();c.textAlign='center';c.fillText((minV+(maxV-minV)*i/5).toFixed(0),x,h-20);}
     for(let i=0;i<=5;i++){let y=mt+ph-ph*i/5;c.beginPath();c.moveTo(ml,y);c.lineTo(ml+pw,y);c.stroke();c.textAlign='right';c.fillText((maxP*i/5).toFixed(0),ml-7,y+4);}
     c.strokeStyle='#9bb1c9';c.lineWidth=2;c.beginPath();c.moveTo(ml,mt);c.lineTo(ml,mt+ph);c.lineTo(ml+pw,mt+ph);c.stroke();
     c.fillStyle='#b7cae0';c.textAlign='center';c.fillText('부피 V (L)',ml+pw/2,h-3);c.save();c.translate(13,mt+ph/2);c.rotate(-Math.PI/2);c.fillText('압력 P (kPa)',0,0);c.restore();
-    c.strokeStyle='#ffac5b';c.lineWidth=3;c.beginPath();path.forEach((s,i)=>i?c.lineTo(X(s.V),Y(s.P)):c.moveTo(X(s.V),Y(s.P)));c.stroke();
+    if(process==='adiabatic'){
+      // 등온선은 참고선(점선)이며, 상태점의 운동 경로는 오직 단열 곡선이다.
+      const isos=[
+        {T:initial.T,product:initial.P*initial.V,color:'#ffcb85'},
+        {T:adiabaticEnd.T,product:adiabaticEnd.P*adiabaticEnd.V,color:adiabaticEnd.T<initial.T?'#78caff':'#ff9387'}
+      ];
+      c.save();c.beginPath();c.rect(ml,mt,pw,ph);c.clip();
+      for(const iso of isos){
+        c.strokeStyle=iso.color;c.lineWidth=1.8;c.setLineDash([7,5]);c.beginPath();
+        for(let i=0;i<=180;i++){
+          const v=minV+(maxV-minV)*i/180,p=iso.product/v;
+          i?c.lineTo(X(v),Y(p)):c.moveTo(X(v),Y(p));
+        }
+        c.stroke();
+      }
+      c.restore();c.setLineDash([]);
+    }
+    c.strokeStyle=process==='adiabatic'?'#6af0b8':'#ffac5b';c.lineWidth=3.3;c.beginPath();path.forEach((s,i)=>i?c.lineTo(X(s.V),Y(s.P)):c.moveTo(X(s.V),Y(s.P)));c.stroke();
     const done=getPath(Math.max(2,Math.round(90*progress)),progress);c.fillStyle=state.W<0?'rgba(247,121,132,.19)':'rgba(112,227,174,.16)';c.beginPath();c.moveTo(X(initial.V),Y(0));done.forEach((pt,i)=>{if(i===0)c.lineTo(X(pt.V),Y(pt.P));else c.lineTo(X(pt.V),Y(pt.P))});c.lineTo(X(state.V),Y(0));c.closePath();c.fill();c.strokeStyle='#57d6ff';c.lineWidth=4;c.beginPath();done.forEach((s,i)=>i?c.lineTo(X(s.V),Y(s.P)):c.moveTo(X(s.V),Y(s.P)));c.stroke();
     c.fillStyle='#57d6ff';c.beginPath();c.arc(X(state.V),Y(state.P),6,0,Math.PI*2);c.fill();c.strokeStyle='#fff';c.lineWidth=2;c.stroke();
-    c.fillStyle='#dbeafe';c.font='700 11px system-ui';c.textAlign='left';c.fillText('A',X(initial.V)+8,Y(initial.P)-8);c.fillText('B',X(path[path.length-1].V)+8,Y(path[path.length-1].P)-8);
+    c.fillStyle='#dbeafe';c.font='700 11px system-ui';c.textAlign='left';
+    c.fillText('A',X(initial.V)+8,Y(initial.P)-9);
+    c.fillText('B',X(path[path.length-1].V)+8,Y(path[path.length-1].P)-9);
+    if(process==='adiabatic'){
+      const end=adiabaticEnd,initX=X(initial.V),initY=Y(initial.P),endX=X(end.V),endY=Y(end.P);
+      for(const [px,py,color] of [[initX,initY,'#ffcb85'],[endX,endY,end.T<initial.T?'#78caff':'#ff9387']]){
+        c.beginPath();c.arc(px,py,5.5,0,Math.PI*2);c.fillStyle='#091729';c.fill();
+        c.strokeStyle=color;c.lineWidth=2.5;c.stroke();
+      }
+      const info=$('adiabaticIsothermInfo');
+      if(info){
+        info.hidden=false;
+        info.querySelector('[data-adiabatic="initial"]').textContent='초기 등온선 T₁ = '+fmt(initial.T,1)+' K';
+        info.querySelector('[data-adiabatic="final"]').textContent='최종 등온선 T₂ = '+fmt(end.T,1)+' K';
+        info.querySelector('[data-adiabatic="current"]').textContent='현재 T = '+fmt(state.T,1)+' K · Q = 0 J';
+        info.querySelector('[data-adiabatic="trend"]').textContent=end.T<initial.T-.05?'팽창하면서 온도가 낮아집니다.':end.T>initial.T+.05?'압축하면서 온도가 높아집니다.':'부피 변화가 없어 등온선 두 개가 겹칩니다.';
+      }
+    }else{
+      const info=$('adiabaticIsothermInfo');if(info)info.hidden=true;
+    }
   }
   document.querySelectorAll('.process-btn').forEach(btn=>btn.addEventListener('click',()=>{
     process=btn.dataset.process;document.querySelectorAll('.process-btn').forEach(b=>b.classList.toggle('active',b===btn));
@@ -297,7 +381,7 @@ lesson.classList.add('thermal-concept');
 const compare=document.createElement('section');compare.className='panel thermal-compare';
 compare.innerHTML='<h2>같은 초기 상태의 네 과정 비교</h2><p class="thermal-caption">1 mol 이상 이원자 기체, 초기 300 K·100 kPa·24.94 L. 팽창 부피비 1.6(등온·정압·가역 단열), 정적 과정은 초기 부피 고정</p><canvas id="pvCompare" width="800" height="350"></canvas><div style="overflow-x:auto"><table><thead><tr><th>과정</th><th>T (K)</th><th>P (kPa)</th><th>W (J)</th><th>Q (J)</th></tr></thead><tbody id="pvCompareRows"></tbody></table></div>';
 left.append(compare);
-const notes={isothermal:'온도가 일정할 때 피스톤 이동과 P–V 경로를 확인합니다.',isobaric:'압력이 일정한 팽창·압축에서 부피와 온도가 함께 변합니다.',isochoric:'부피가 일정하므로 피스톤과 P–V 수직 경로를 관찰합니다.',adiabatic:'열이 출입하지 않는 가역 단열 과정을 비교합니다.',compare:'같은 초기 상태에서 서로 다른 과정의 압력·일·열량을 비교합니다.',concept:'물리 모형, 네 과정의 조건과 열·일의 부호를 설명합니다.'};
+const notes={isothermal:'온도가 일정할 때 피스톤 이동과 P–V 경로를 확인합니다.',isobaric:'압력이 일정한 팽창·압축에서 부피와 온도가 함께 변합니다.',isochoric:'부피가 일정하므로 피스톤과 P–V 수직 경로를 관찰합니다.',adiabatic:'초기·최종 등온선(점선) 사이를 단열 경로(녹색 실선)로 이동합니다. 팽창하면 냉각, 압축하면 가열됩니다.',compare:'같은 초기 상태에서 서로 다른 과정의 압력·일·열량을 비교합니다.',concept:'물리 모형, 네 과정의 조건과 열·일의 부호를 설명합니다.'};
 const configs=[['isothermal','① 등온'],['isobaric','② 정압'],['isochoric','③ 정적'],['adiabatic','④ 단열'],['compare','⑤ 네 과정 비교'],['concept','⑥ 개념 설명']];
 function drawComparison(){
 const cv=document.getElementById('pvCompare'),c=cv.getContext('2d');
@@ -327,6 +411,9 @@ for(const b of nav.children)b.setAttribute('aria-selected',String(b.dataset.tab=
 requestAnimationFrame(()=>window.dispatchEvent(new Event('resize')));
 }
 for(const [id,label] of configs){const b=document.createElement('button');b.type='button';b.dataset.tab=id;b.textContent=label;b.onclick=()=>tab(id);nav.append(b)}
+const info=document.createElement('div');info.id='adiabaticIsothermInfo';info.className='adiabatic-isotherm-info';info.hidden=true;
+info.innerHTML='<div class="adiabatic-keys"><span class="adiabatic-key initial" data-adiabatic="initial">초기 등온선 T₁ = 300 K</span><span class="adiabatic-key final" data-adiabatic="final">최종 등온선 T₂</span><span class="adiabatic-key path">녹색 실선: 단열 경로</span></div><div class="adiabatic-temperature"><strong data-adiabatic="current"></strong><span data-adiabatic="trend"></span></div><div class="adiabatic-teaching">점선 두 개는 각각 일정한 온도 T₁, T₂의 상태를 연결하는 참고선입니다. 현재 상태점은 <b>등온선이 아닌 단열 곡선</b>을 따라 이동합니다.</div>';
+chart.append(info);
 const p=document.createElement('p');p.className='thermal-caption';p.textContent='P–V 그래프 아래의 부호 있는 면적은 W = ∫P dV이며 팽창은 양수, 압축은 음수입니다.';chart.append(p);
 tab('isothermal');
 })();
