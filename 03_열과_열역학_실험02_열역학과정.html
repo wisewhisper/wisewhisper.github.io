@@ -225,6 +225,12 @@ body .thermal-left>.thermal-visual-row canvas{display:block!important;width:100%
 body .layout>.thermal-left>.thermal-compare{width:100%!important;flex:0 0 auto}
 @media(max-width:1150px){body .thermal-left>.thermal-visual-row{grid-template-columns:minmax(0,1fr)!important}body .thermal-left>.thermal-visual-row>.stage,body .thermal-left>.thermal-visual-row>.chartbox{grid-column:1!important;grid-row:auto!important}}
 @media(max-width:710px){body .thermal-left>.thermal-visual-row canvas{height:300px!important}}
+</style><style id="otto-problem-first-v6">
+body .thermal-cycle>.otto-problem{display:block!important;position:relative!important;order:-1!important;margin:0 0 10px!important;padding:12px 15px!important;border-color:#497a83!important;background:#102c37!important}
+body .thermal-cycle>.otto-problem h3{margin:0 0 6px!important;font-size:clamp(14px,1.15vw,18px)!important;color:#a6f3de!important}
+body .thermal-cycle>.otto-problem>p{margin:4px 0 7px!important;line-height:1.45!important;font-size:clamp(12px,.9vw,14px)!important}
+body .thermal-cycle>.otto-problem details{margin-top:5px!important}
+body .thermal-cycle>.otto-head{margin:0 0 9px!important}
 </style></head>
 <body>
 <div class="wrap">
@@ -627,6 +633,10 @@ pane.innerHTML='<div class="otto-head"><h2>교과서 그림으로 배우는 열�
 +'<section class="otto-card"><h3>P–V 순환 그래프</h3><canvas id="ottoGraph" aria-label="오토 순환 P-V 그래프"></canvas><p class="otto-desc">A→B 단열 압축 · B→C 정적 가열 · C→D 단열 팽창 · D→A 정적 냉각. 둘러싸인 면적은 한 사이클의 순일입니다.</p></section>'
 +'<section class="otto-card otto-controls"><h3>실험 조작 및 결과</h3><div class="otto-buttons"><button id="ottoStart">▶ 한 사이클 실행</button><button id="ottoPause">Ⅱ 일시정지</button><button id="ottoNext">다음 과정</button><button id="ottoReset">↺ 초기화</button></div><label for="ottoSpeed">재생 속도 <output id="ottoSpeedVal">1.0배</output></label><input id="ottoSpeed" type="range" min=".25" max="3" step=".25" value="1"><label for="ottoSeek">한 사이클 진행률 <output id="ottoProgress">0%</output></label><input id="ottoSeek" type="range" min="0" max="4" step=".01" value="0"><div class="otto-stats"><div>압력 <b id="ottoP"></b></div><div>부피 <b id="ottoV"></b></div><div>온도 <b id="ottoT"></b></div><div>현재 과정 <b id="ottoName"></b></div></div><div class="otto-result">순일 <strong>'+num(Wnet)+' J</strong><span>열효율 '+num(eff*100,2)+'% · 받은 열 '+num(Qin)+' J</span></div></section></div>'
 +'<section class="otto-card otto-problem"><h3>예시문제 · 네 과정에서 기체가 한 일과 열효율 구하기</h3><p>1 mol의 이원자 이상 기체(γ=1.4)가 A(40 L, 300 K)에서 출발해 B까지 가역 단열 압축, C(20 L, 850 K)까지 정적 가열, D까지 가역 단열 팽창, A까지 정적 냉각하여 처음 상태로 돌아온다. 압축비는 2이다. 기체가 한 순일과 열효율을 구하시오.</p><details><summary>과정별 계산과 정답 자세히 보기</summary><div id="ottoSolution"></div></details></section>';
+// Place the worked-example question first, before the piston and P–V experiment.
+const problem=pane.querySelector('.otto-problem');
+const heading=pane.querySelector('.otto-head');
+if(problem&&heading){pane.insertBefore(problem,heading);}
 const sol=document.getElementById('ottoSolution');
 sol.innerHTML='<p>① A→B 단열 압축: TV^(γ−1)=일정 → T_B = 300×2^0.4 = '+num(B.T)+' K. Q_AB=0, W_AB = nCᵥ(T_A−T_B) = '+num(W[0])+' J (음수: 외부가 기체에 일).</p>'
 +'<p>② B→C 정적 가열: V=20 L 일정, W_BC=0. Q_BC = nCᵥ(850−'+num(B.T)+') = '+num(Q[1])+' J.</p>'
