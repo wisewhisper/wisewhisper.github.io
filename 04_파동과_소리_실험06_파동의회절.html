@@ -2,14 +2,51 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>9번 실험실 | 파동의 기본 성질과 회절</title>
+<title>파동의 회절 실험실</title>
 <style>
 :root{color-scheme:dark;--bg:#081323;--card:#112339;--line:#2d4b65;--text:#eaf5ff;--muted:#abc3d5;--cyan:#58dfef;--gold:#ffd471}
 *{box-sizing:border-box}body{margin:0;background:linear-gradient(140deg,#071222,#11283b 60%,#0c1831);color:var(--text);font-family:system-ui,-apple-system,'Noto Sans KR',sans-serif;line-height:1.5}main{max-width:1200px;margin:auto;padding:20px}h1{font-size:clamp(1.5rem,4vw,2.3rem);margin:0 0 5px}h2{font-size:1.15rem;margin:0 0 10px}.sub,.note{color:var(--muted)}.sub{margin:0 0 18px}.grid{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:16px}.card{background:rgba(17,35,57,.94);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:0 8px 30px #0002}.stage{width:100%;height:auto;aspect-ratio:760/420;display:block;border:1px solid var(--line);border-radius:10px;background:#071827}.graph{width:100%;height:190px;display:block;margin-top:12px;border:1px solid var(--line);border-radius:10px;background:#091729}.row{margin:0 0 18px}label{display:flex;justify-content:space-between;gap:12px;font-weight:600}.value{color:var(--gold);font-variant-numeric:tabular-nums}input[type=range]{width:100%;accent-color:#55daea;cursor:pointer;touch-action:auto}.hint{font-size:.82rem;color:var(--muted);margin-top:2px}.buttons{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:12px 0}button{appearance:none;border:1px solid #5a8ca8;border-radius:8px;background:#173b55;color:white;padding:10px 5px;font-weight:700;cursor:pointer;touch-action:manipulation}button:focus-visible,input:focus-visible{outline:3px solid #ffd471;outline-offset:2px}button.primary{background:#087d92}button:hover{filter:brightness(1.2)}.readout{padding:11px;border-radius:10px;background:#091c30;border:1px solid #29506a;font-variant-numeric:tabular-nums}.readout p{margin:4px 0}.readout strong{color:var(--cyan)}.bottom{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}.bottom p,.bottom li{color:var(--muted)}.bottom ol{padding-left:22px;margin:5px 0}.foot{font-size:.84rem;color:var(--muted)}@media(max-width:850px){.grid,.bottom{grid-template-columns:1fr}main{padding:12px}.card{padding:12px}.buttons{grid-template-columns:repeat(3,1fr)}}
 </style>
+<style>
+body.diffraction-v2{background:#071627}
+body.diffraction-v2 main{max-width:1450px;padding:13px 17px}
+body.diffraction-v2 h1{font-size:clamp(1.5rem,2.2vw,2rem);margin:0 0 1px}
+body.diffraction-v2 .sub{margin:0 0 7px;font-size:.86rem}
+.diff-nav{display:flex;flex-wrap:wrap;gap:7px;margin:5px 0 7px}
+.diff-nav button{padding:6px 12px;min-height:39px;background:#17334b;border:1px solid #527087}
+.diff-nav button[aria-selected=true]{background:#0c8979;border-color:#69e1d0}
+.diff-desc{font-size:.86rem;color:#bdd5e6;margin:0 0 7px}
+body.diffraction-v2 .grid{grid-template-columns:minmax(0,2.07fr) minmax(300px,.93fr);gap:11px;align-items:start}
+body.diffraction-v2 .card{padding:11px;border-radius:12px;box-shadow:none}
+body.diffraction-v2 h2{font-size:1rem;margin-bottom:6px}
+body.diffraction-v2 .row{margin:0 0 8px}
+body.diffraction-v2 .hint{font-size:.73rem;margin:0}
+body.diffraction-v2 .buttons{margin:7px 0}
+body.diffraction-v2 .readout{font-size:.84rem;padding:8px}
+body.diffraction-v2 .readout p{margin:2px 0}
+body.diffraction-v2 .stage{aspect-ratio:760/420;width:100%}
+body.diffraction-v2 .graph{height:auto;max-height:400px;aspect-ratio:760/310}
+body.diffraction-v2 .bottom{display:none}
+body.diffraction-v2 .bottom.concept-shown{display:grid;grid-template-columns:1fr 1fr}
+.diff-visual{display:grid;gap:8px;min-width:0}
+.diff-panel[hidden],.diff-side[hidden],body.diffraction-v2 .grid[hidden]{display:none!important}
+.diff-compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.diff-compare-grid>div{background:#071827;border:1px solid #355471;border-radius:10px;padding:7px}
+.diff-compare-grid canvas{display:block;width:100%;height:auto;aspect-ratio:1.65;border-radius:7px;background:#091b2d}
+.diff-compare-grid h3{font-size:.94rem;margin:1px 0 6px}
+.diff-small{color:#b9ccdf;font-size:.82rem;margin:7px 0}
+.diff-row-actions{display:flex;gap:8px;margin-top:4px}
+.diff-row-actions button{min-height:34px;padding:5px 12px}
+.diff-concept-extra{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.diff-concept-extra article{padding:13px;border:1px solid #31516a;border-radius:12px;background:#102a40}
+.diff-concept-extra h3{font-size:.96rem;margin:0 0 6px}
+.diff-concept-extra p{margin:0}
+#diffClock{color:#92eae0;font-weight:700}
+@media(max-width:890px){body.diffraction-v2 .grid,.diff-compare-grid,.diff-concept-extra,body.diffraction-v2 .bottom.concept-shown{grid-template-columns:1fr}}
+</style>
 </head>
 <body><main>
-<h1>9번 실험실 · 파동의 기본 성질과 회절</h1>
+<h1>파동의 회절 실험실</h1>
 <p class="sub">파면이 틈을 지나 어떻게 퍼지는지 관찰하고, 파장과 틈 폭의 관계를 탐구해 보세요.</p>
 <div class="grid"><section class="card"><h2>파동 수조 모형</h2><canvas id="stage" class="stage" width="760" height="420" role="img" aria-label="왼쪽에서 오른쪽으로 진행하는 파동이 가운데 장애물의 틈을 통과해 회절하는 모습"></canvas>
 <canvas id="graph" class="graph" width="760" height="190" role="img" aria-label="회절각에 따른 원거리 상대 세기 그래프"></canvas><p class="foot">파란색·밝은색은 물결의 서로 다른 위상을 나타냅니다. 아래 곡선은 먼 거리에서 예상되는 상대 세기의 정성·정량 비교용 단일 슬릿 모형입니다.</p></section>
@@ -40,11 +77,11 @@ for(let row=0;row<rows;row++){const y=(row+.5)*resolution*PY-2.5;for(let col=0;c
 let real=0,imag=0,axR=0,axI=0;const dx=Math.max((x-wallX)*PX,.045);
 for(let j=0;j<n;j++){const sourceY=-a/2+(j+.5)*dy,r=Math.hypot(dx,y-sourceY),r0=Math.hypot(dx,sourceY), weight=dy/Math.sqrt(Math.max(r,.08)),weight0=dy/Math.sqrt(Math.max(r0,.08));real+=weight*Math.cos(k*r);imag+=weight*Math.sin(k*r);axR+=weight0*Math.cos(k*r0);axI+=weight0*Math.sin(k*r0)}
 // 같은 x의 축상 크기로 정규화해 각도별 회절 분포를 관찰한다.
-const scale=Math.max(Math.hypot(axR,axI),.02);phR[idx]=real/scale;phI[idx]=imag/scale;norm[idx]=Math.min(1.2,Math.hypot(real,imag)/scale);
+const scale=Math.max(a/Math.sqrt(Math.max(dx,.16)),.12);phR[idx]=real/scale;phI[idx]=imag/scale;norm[idx]=Math.min(1.2,Math.hypot(real,imag)/scale);
 }}plotDirty=true}
 function drawStage(){const d=image.data,phase=2*Math.PI*state.freq*t,c=Math.cos(phase),s=Math.sin(phase),a=state.slit, halfGap=a/2/PY, gapTop=H/2-halfGap,gapBot=H/2+halfGap;
 let p=0;for(let j=0;j<rows;j++)for(let i=0;i<cols;i++,p++){const xx=(i+.5)*resolution, yy=(j+.5)*resolution, blocked=Math.abs(xx-wallX)<7&&(yy<gapTop||yy>gapBot);let z=0;
-if(!blocked){z=(phR[p]*c+phI[p]*s)*state.amp;if(xx>=wallX)z=clamp(z,-1.15,1.15)}
+if(!blocked){z=(phR[p]*c+phI[p]*s)*state.amp;if(xx>=wallX)z=clamp(z,-1.15,1.15);const horizontal=(xx-wallX)*PX,dist=xx<wallX?Math.max(0,xx*PX):wallX*PX+Math.hypot(Math.max(0,horizontal),Math.max(0,Math.abs((yy-H/2)*PY)-a/2));const gate=clamp(((t+1.2)-dist/SPEED)/(0.18/state.freq),0,1);z*=gate}
 const q=p*4,bright=clamp(z,-1,1),m=Math.max(0,bright),n=Math.max(0,-bright);d[q]=blocked?103:Math.round(15+140*m+4*n);d[q+1]=blocked?135:Math.round(31+184*m+36*n);d[q+2]=blocked?158:Math.round(57+181*m+95*n);d[q+3]=255}
 bufferCtx.putImageData(image,0,0);ctx.imageSmoothingEnabled=true;ctx.drawImage(buffer,0,0,W,H);
 ctx.fillStyle='#a9bfd0';ctx.fillRect(wallX-5,0,10,gapTop);ctx.fillRect(wallX-5,gapBot,10,H-gapBot);
@@ -59,6 +96,42 @@ function tick(ms){if(!running){frame=0;return}if(!last)last=ms;const dt=Math.min
 function queueRebuild(){if(pendingRebuild)return;pendingRebuild=requestAnimationFrame(()=>{pendingRebuild=0;rebuildField();render()})}
 $('amp').addEventListener('input',e=>{state.amp=Number(e.target.value);updateLabels();render()});$('freq').addEventListener('input',e=>{state.freq=Number(e.target.value);state.lambda=SPEED/state.freq;$('lambda').value=state.lambda;updateLabels();queueRebuild()});$('lambda').addEventListener('input',e=>{state.lambda=Number(e.target.value);state.freq=SPEED/state.lambda;$('freq').value=state.freq;updateLabels();queueRebuild()});$('slit').addEventListener('input',e=>{state.slit=Number(e.target.value);updateLabels();queueRebuild()});
 $('start').addEventListener('click',()=>{if(running)return;running=true;last=0;updateLabels();frame=requestAnimationFrame(tick)});$('pause').addEventListener('click',()=>{running=false;if(frame)cancelAnimationFrame(frame);frame=0;last=0;updateLabels();render()});$('reset').addEventListener('click',()=>{running=false;if(frame)cancelAnimationFrame(frame);if(pendingRebuild)cancelAnimationFrame(pendingRebuild);frame=0;pendingRebuild=0;t=0;last=0;state={...defaults};for(const id of ids)$(id).value=state[id];updateLabels();rebuildField();render()});
-updateLabels();rebuildField();render();
+window.__diffApi={read:()=>({...state,t,running}),step:()=>{running=false;if(frame)cancelAnimationFrame(frame);frame=0;last=0;t+=1/(4*state.freq);updateLabels();render()},refresh:()=>{rebuildField();render()},drawGraph:()=>drawGraph()};updateLabels();rebuildField();render();
 })();
-</script></body></html>
+</script><script>
+(()=>{'use strict';
+const main=document.querySelector('main'),grid=main.querySelector('.grid'),stage=grid.querySelector('#stage'),graph=grid.querySelector('#graph'),bottom=main.querySelector('.bottom');
+const section=stage.closest('section'),aside=grid.querySelector('aside');if(!stage||!graph||!bottom||!aside)return;
+document.body.classList.add('diffraction-v2');
+const title=main.querySelector('h1'),subtitle=main.querySelector('.sub'),nav=document.createElement('nav'),desc=document.createElement('p');nav.className='diff-nav';nav.setAttribute('aria-label','회절 실험 탭');desc.className='diff-desc';subtitle.after(nav,desc);
+const visual=document.createElement('div');visual.className='diff-visual';grid.prepend(visual);visual.append(section);
+const plotPane=document.createElement('section');plotPane.className='card diff-panel';plotPane.innerHTML='<h2>회절각과 상대 세기 분포 (먼 거리의 단일 틈 모형)</h2>';visual.append(plotPane);const note=section.querySelector('.foot');plotPane.append(graph);if(note)plotPane.append(note);
+graph.width=760;graph.height=310;
+const cmp=document.createElement('section');cmp.className='card diff-panel';cmp.innerHTML='<h2>동일한 파장, 서로 다른 틈 폭 비교</h2><p class="diff-small">왼쪽은 좁은 틈(a/λ≈0.65), 오른쪽은 조작 패널에서 지정한 틈입니다. 같은 매질·진동수를 유지합니다.</p><div class="diff-compare-grid"><div><h3 id="compareLeftTitle">A: 좁은 틈</h3><canvas id="compA" width="240" height="145"></canvas></div><div><h3 id="compareRightTitle">B: 조절하는 틈</h3><canvas id="compB" width="240" height="145"></canvas></div></div><p class="diff-small">틈 폭/파장(a/λ)이 작을수록 측면으로 퍼짐이 뚜렷해집니다. 정성적인 근거리 휘겐스 합성 화면입니다.</p>';visual.append(cmp);
+const newActions=document.createElement('div');newActions.className='diff-row-actions';const step=document.createElement('button');step.type='button';step.textContent='+¼주기';step.onclick=()=>window.__diffApi.step();newActions.append(step);
+const clock=document.createElement('span');clock.id='diffClock';clock.style.alignSelf='center';newActions.append(clock);aside.querySelector('.buttons').after(newActions);
+const theory=bottom.querySelectorAll('.card')[1];if(theory){const extra=document.createElement('div');extra.className='diff-concept-extra';extra.innerHTML='<article><h3>휘겐스 원리</h3><p>틈을 통과한 파면 위의 각 지점을 새로운 파원의 집합으로 생각할 수 있습니다. 이들이 만들어 내는 파동을 중첩하면 회절파의 퍼짐을 설명할 수 있습니다.</p></article><article><h3>회절이 눈에 띄는 조건</h3><p>회절은 틈이 넓어도 발생하지만 틈의 폭이 파장과 비슷하거나 더 작을수록 두드러집니다. 회절 자체는 굴절과 다른 현상입니다.</p></article>';theory.append(extra)}
+const descriptions={
+slit:'평면파가 틈에 도달한 뒤 회절파가 퍼지는 과정을 관찰하세요. 시작·일시정지·¼주기 진행을 사용할 수 있습니다.',
+compare:'같은 파장의 파동을 좁은 틈과 넓은 틈으로 통과시켜 회절 범위를 나란히 비교합니다.',
+graph:'단일 틈에서 먼 거리로 진행한 파동의 상대 세기와 첫 어두운 방향을 계산합니다.',
+concept:'회절 원리, 주파수와 파장의 관계, 이상화 조건과 탐구 활동을 한곳에 정리했습니다.'
+};
+const tabs=[['slit','① 단일 틈 회절'],['compare','② 조건 비교'],['graph','③ 회절각·세기'],['concept','④ 개념 설명']];
+let active='slit',dirty=true,cacheA=null,cacheB=null;
+function select(name){active=name;for(const b of nav.children)b.setAttribute('aria-selected',String(b.dataset.tab===name));desc.textContent=descriptions[name];grid.hidden=name==='concept';bottom.classList.toggle('concept-shown',name==='concept');section.hidden=name!=='slit';cmp.hidden=name!=='compare';plotPane.hidden=name!=='graph';if(name==='graph')window.__diffApi.drawGraph();if(name==='compare')dirty=true}
+for(const [name,label] of tabs){const b=document.createElement('button');b.type='button';b.dataset.tab=name;b.textContent=label;b.setAttribute('aria-selected','false');b.onclick=()=>select(name);nav.append(b)}
+const xs=200,ys=120,W=8,H=5,wall=3.6;
+function makeField(lambda,a){const k=2*Math.PI/lambda,n=Math.min(38,Math.max(9,Math.ceil(a/lambda*13))),dy=a/n,re=new Float32Array(xs*ys),im=new Float32Array(xs*ys),travel=new Float32Array(xs*ys);for(let py=0;py<ys;py++){const y=((py+.5)/ys-.5)*H;for(let px=0;px<xs;px++){const x=(px+.5)/xs*W,i=py*xs+px;if(x<wall){re[i]=Math.cos(k*(x-wall));im[i]=Math.sin(k*(x-wall));travel[i]=x/2;continue}const dx=Math.max(x-wall,.045);let rr=0,ii=0;for(let j=0;j<n;j++){const sy=-a/2+(j+.5)*dy,r=Math.hypot(dx,y-sy),weight=dy/Math.sqrt(Math.max(r,.08));rr+=weight*Math.cos(k*r);ii+=weight*Math.sin(k*r)}const scale=Math.max(a/Math.sqrt(Math.max(dx,.16)),.12);re[i]=rr/scale;im[i]=ii/scale;travel[i]=(wall+Math.hypot(x-wall,Math.max(0,Math.abs(y)-a/2)))/2}}return {re,im,travel,a,lambda}}
+function renderCompare(canvas,cache,t,f,amp){const out=canvas.getContext('2d'),scratch=document.createElement('canvas');scratch.width=xs;scratch.height=ys;const c=scratch.getContext('2d'),data=c.createImageData(xs,ys),d=data.data,phase=2*Math.PI*f*t,cc=Math.cos(phase),ss=Math.sin(phase);for(let i=0;i<cache.re.length;i++){const gate=Math.max(0,Math.min(1,(t+1.2-cache.travel[i])/(.18/f)));const z=Math.max(-1,Math.min(1,(cache.re[i]*cc+cache.im[i]*ss)*amp*gate)),up=Math.max(0,z),down=Math.max(0,-z),j=4*i;d[j]=Math.round(17+125*up);d[j+1]=Math.round(37+193*up+26*down);d[j+2]=Math.round(65+168*up+95*down);d[j+3]=255}c.putImageData(data,0,0);out.drawImage(scratch,0,0,canvas.width,canvas.height);const cx=wall/W*canvas.width,top=canvas.height/2-cache.a/H*canvas.height/2,bottom=canvas.height/2+cache.a/H*canvas.height/2;out.fillStyle='#a5bbd4';out.fillRect(cx-3,0,6,Math.max(0,top));out.fillRect(cx-3,Math.min(canvas.height,bottom),6,Math.max(0,canvas.height-bottom));out.fillStyle='#fff4c0';out.font='bold 11px system-ui';out.fillText('진행 →',8,14)}
+let last=0;
+function loop(stamp){if(active==='compare'&&stamp-last>70){last=stamp;const s=window.__diffApi.read();const narrow=Math.min(3.2,.65*s.lambda),wide=s.slit;if(dirty||!cacheA||!cacheB||cacheA.lambda!==s.lambda||cacheB.a!==wide){cacheA=makeField(s.lambda,narrow);cacheB=makeField(s.lambda,wide);dirty=false}
+renderCompare(document.getElementById('compA'),cacheA,s.t,s.freq,s.amp);renderCompare(document.getElementById('compB'),cacheB,s.t,s.freq,s.amp);
+document.getElementById('compareLeftTitle').textContent='A · a/λ = '+(narrow/s.lambda).toFixed(2);document.getElementById('compareRightTitle').textContent='B · a/λ = '+(wide/s.lambda).toFixed(2);
+}
+const info=window.__diffApi.read();clock.textContent='t = '+info.t.toFixed(2)+' s';requestAnimationFrame(loop)}
+for(const id of ['lambda','freq','slit'])document.getElementById(id).addEventListener('input',()=>{dirty=true});
+select('slit');requestAnimationFrame(loop);
+})();
+</script>
+</body></html>
