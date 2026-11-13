@@ -57,45 +57,84 @@
     @media(max-width:620px){.wrap{padding:10px}.topbar{align-items:flex-start;flex-direction:column}.layout{gap:10px}.side{grid-template-columns:1fr}.side>h2,.side>.preset-wrap,.side>.audio-row{grid-column:auto}.actions{grid-template-columns:1fr 1fr}.metrics{grid-template-columns:1fr 1fr}.metric{min-height:92px}.lower,.mission-grid{grid-template-columns:1fr}.canvas-wrap canvas{height:330px}.caption{display:block}.caption span{display:block}.compare{grid-template-columns:1fr}.badge{font-size:.9rem}}
     @media(max-width:400px){.metrics{grid-template-columns:1fr}.metric .v{overflow-wrap:anywhere}}
     @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
-  </style>
+  
+/* Ambulance/person native-tabs laboratory v2 */
+html,body{font-size:14px!important;background:#081725!important}
+.wrap{max-width:none!important;width:100%!important;height:100dvh;min-height:600px;overflow:hidden;padding:8px 11px!important;display:flex;flex-direction:column;gap:7px}
+.topbar{margin:0!important;min-height:35px;flex:0 0 auto}
+.titlebox h1{font-size:clamp(19px,1.8vw,25px)!important}
+.tabs{display:flex;flex:0 0 auto;align-items:center;gap:6px;min-height:39px;overflow-x:auto;padding-bottom:4px}
+.tabs button{white-space:nowrap;font-size:13px;font-weight:720;min-height:33px;padding:5px 9px;border:1px solid #527d95;border-radius:8px;color:#edfaff;background:#25485f}
+.tabs button[aria-selected="true"]{background:#087b8e;border-color:#9af2ed;box-shadow:inset 0 -2px #b2ffff}
+.layout{display:grid!important;grid-template-columns:minmax(0,4fr) minmax(255px,1fr)!important;grid-template-rows:minmax(0,1fr)!important;gap:9px!important;min-height:0;min-width:0;flex:1 1 auto}
+.stage{grid-column:1;grid-row:1;min-height:0;min-width:0;display:flex;flex-direction:column;gap:6px;padding:9px 11px!important;overflow:hidden}
+.canvas-wrap{flex:1 1 auto;min-height:185px;display:flex}
+.canvas-wrap canvas{width:100%!important;height:100%!important;flex:1 1 auto;min-height:185px;max-height:none}
+.stage .actions{margin:0;display:flex;grid-template-columns:none;flex:0 0 auto;gap:5px;flex-wrap:wrap}
+.stage .actions .btn{min-height:32px;padding:5px 9px;font-size:12px}
+.stage .caption{font-size:11px;flex:0 0 auto}
+.side{grid-column:2!important;grid-row:1!important;min-height:0;overflow-y:auto;display:flex!important;flex-direction:column!important;gap:7px!important;padding:9px!important;scrollbar-width:thin}
+.side>h2,.side>.preset-wrap,.side>.audio-row,.side>#audioStatus{grid-column:auto!important}
+.side .control{padding:7px}
+.side .control label,.side .value{font-size:12px}
+.side input[type=range]{height:27px;min-height:27px}
+.side .hint{font-size:11px}
+.metrics{grid-column:auto!important;display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;flex:0 0 auto;gap:5px!important}
+.metric{min-width:0;min-height:67px!important;padding:6px 4px!important;border-radius:8px;text-align:center;background:#193348}
+.metric .k{font-size:11px!important;white-space:nowrap}
+.metric .v{font-size:clamp(12px,1.2vw,18px)!important;line-height:1.45;white-space:nowrap}
+.metric .s{font-size:10px!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#tabMessage{font-size:12px;line-height:1.4;color:#b6f1e6;font-weight:720;margin:0}
+.lower{grid-column:1!important;grid-row:1!important;display:none!important;min-height:0;min-width:0;flex-direction:column!important;gap:7px!important}
+.lower .graph{display:flex;flex:1 1 auto;min-height:0;flex-direction:column}
+.lower .graph #graphCanvas{height:100%!important;flex:1 1 auto;min-height:190px}
+.lower .explain{flex:0 0 auto}
+#workspace[data-tab="graphs"] .stage{display:none!important}
+#workspace[data-tab="graphs"] .lower{display:flex!important}
+#workspace[data-tab="graphs"] .metrics,#workspace[data-tab="graphs"] #tabMessage{display:none!important}
+.concept-tab{display:none;grid-column:1/-1;min-height:0;overflow-y:auto}
+#workspace[data-tab="concept"]{display:block!important}
+#workspace[data-tab="concept"] .stage,#workspace[data-tab="concept"] .side,#workspace[data-tab="concept"] .lower{display:none!important}
+#workspace[data-tab="concept"] .concept-tab{display:block!important}
+.concept-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.concept-grid .card{padding:16px}
+.concept-grid h2{font-size:16px;color:#8ff0e8;margin:0 0 9px}
+.concept-grid p{line-height:1.72}
+.concept-grid .wide{grid-column:1/-1}
+#statusText{font-size:12px}
+@media(min-width:901px) and (max-height:730px){.wrap{padding:6px 9px!important;gap:5px}.side{padding:6px!important}.side .control{padding:5px}.metric{min-height:53px!important;padding:3px!important}}
+@media(max-width:900px){.wrap{height:auto;min-height:100dvh;overflow:visible}.layout{display:flex!important;flex-direction:column}.stage{min-height:530px}.canvas-wrap{min-height:310px}.side{overflow:visible}.lower{min-height:700px}.concept-grid{grid-template-columns:1fr}.tabs{position:sticky;top:0;background:#081725;z-index:5;padding-top:4px}}
+@media(max-width:480px){.titlebox h1{font-size:18px!important}.titlebox p{display:none}.tabs button{font-size:11px;padding:6px 7px}.stage{min-height:635px}.metrics{gap:3px!important}.metric{min-height:50px!important;padding:4px 0!important}.metric .k,.metric .s{font-size:9px!important}.metric .v{font-size:10px!important}.canvas-wrap{min-height:330px}}
+</style>
 </head>
 <body>
 <main class="wrap">
   <header class="topbar">
-    <div class="titlebox"><h1>도플러 효과 실험실</h1><p>음원과 관찰자를 움직여, 단위 시간에 만나는 파면 수의 변화를 확인하세요.</p></div>
+    <div class="titlebox"><h1>🚑 구급차와 사람 · 도플러 효과 실험실</h1><p>구급차 사이렌과 사람의 움직임으로 소리의 높낮이와 크기를 비교합니다.</p></div>
     <div class="badge" aria-live="polite"><i></i><span id="statusText">실험 준비</span></div>
   </header>
 
-  <section class="layout">
+  <nav class="tabs" role="tablist" aria-label="도플러 효과 실험 선택">
+<button data-tab="ambulance" role="tab" aria-selected="true" type="button">① 구급차 이동</button>
+<button data-tab="observer" role="tab" aria-selected="false" type="button">② 사람 이동</button>
+<button data-tab="passby" role="tab" aria-selected="false" type="button">③ 구급차 통과</button>
+<button data-tab="graphs" role="tab" aria-selected="false" type="button">④ 그래프·비교</button>
+<button data-tab="concept" role="tab" aria-selected="false" type="button">⑤ 개념 설명</button></nav>
+<section class="layout" id="workspace" data-tab="ambulance">
     <section class="card stage" aria-labelledby="labHeading">
       <h2 id="labHeading" class="sr-only">도플러 효과 시뮬레이션</h2>
       <div class="canvas-wrap">
-        <canvas id="simCanvas" role="img" aria-label="음원, 관찰자와 대표 파면의 움직임"></canvas>
-        <div class="legend"><span class="tag">● 음원</span><span class="tag">◆ 관찰자</span><span class="tag">│ 대표 파면</span></div>
+        <canvas id="simCanvas" role="img" aria-label="사이렌을 울리며 움직이는 구급차와 길가의 사람, 대표 음파 파면의 진행"></canvas>
+        <div class="legend"><span class="tag">🚑 구급차</span><span class="tag">🚶 사람</span><span class="tag">│ 대표 파면</span></div>
       </div>
-      <div class="caption"><span>오른쪽이 +방향 · 정지한 공기 · 1차원 등속 운동</span><span>파면 간격은 관찰을 위해 확대했습니다.</span></div>
+      <div class="caption"><span>오른쪽이 +방향 · 정지한 공기 · 1차원 등속 운동</span><span>실제 주파수와 다른 표본 파면으로 진행을 표시합니다.</span></div>
       <div class="actions">
         <button class="btn primary" id="startBtn">▶ 시작</button>
         <button class="btn" id="pauseBtn">Ⅱ 일시정지</button>
         <button class="btn" id="stepBtn">▸ 한 단계</button>
-        <button class="btn" id="resetBtn">↺ 처음부터</button>
+        <button class="btn" id="resetBtn">↺ 처음부터</button><button class="btn" id="goGraph">그래프 보기</button>
       </div>
-    </section>
-
-    <aside class="card side" aria-labelledby="controlHeading">
-      <h2 id="controlHeading" class="section-title">실험 조건</h2>
-      <div class="preset-wrap"><label for="preset" class="hint">빠른 실험</label><select id="preset" class="preset"><option value="sourceApproach">음원이 접근</option><option value="stationary">모두 정지</option><option value="sourceRecede">음원이 멀어짐</option><option value="observerApproach">관찰자가 접근</option><option value="observerRecede">관찰자가 멀어짐</option><option value="bothApproach">서로 접근</option><option value="chase">같은 방향 추격</option><option value="custom" disabled>사용자 설정</option></select></div>
-      <div class="control"><div class="control-head"><label for="frequency">음원 진동수 fₛ</label><output id="frequencyOut" for="frequency" class="value">500 Hz</output></div><input id="frequency" type="range" min="200" max="1000" step="10" value="500"></div>
-      <div class="control"><div class="control-head"><label for="sourceSpeed">음원 속도 vₛ</label><output id="sourceSpeedOut" for="sourceSpeed" class="value">+30 m/s →</output></div><input id="sourceSpeed" type="range" min="-100" max="100" step="5" value="30"><div class="hint">음수 ← · 양수 →</div></div>
-      <div class="control"><div class="control-head"><label for="observerSpeed">관찰자 속도 vₒ</label><output id="observerSpeedOut" for="observerSpeed" class="value">0 m/s</output></div><input id="observerSpeed" type="range" min="-50" max="50" step="5" value="0"><div class="hint">음수 ← · 양수 →</div></div>
-      <div class="control"><div class="control-head"><label for="temperature">공기 온도 T</label><output id="temperatureOut" for="temperature" class="value">20 ℃</output></div><input id="temperature" type="range" min="0" max="40" step="1" value="20"></div>
-      <div class="control"><div class="control-head"><label for="timeScale">시간 배율</label><output id="timeScaleOut" for="timeScale" class="value">1.0×</output></div><input id="timeScale" type="range" min="0.25" max="2" step="0.25" value="1"></div>
-      <div class="control audio-row toggle"><div><label for="soundToggle">관측음 듣기</label><div class="hint">기본 음량을 낮게 설정했습니다.</div></div><input id="soundToggle" type="checkbox" aria-label="관측음 듣기"></div>
-      <div id="audioStatus" class="hint" role="status" aria-live="polite"></div>
-      <div class="control audio-row" style="grid-column:1/-1"><label for="amplitudeMeter">관측 진폭 <output id="amplitudeOut">1.00배</output></label><meter id="amplitudeMeter" min="0" max="6.58" value="1" style="width:100%;height:14px" aria-label="초기 거리 대비 관측 진폭"></meter><div class="hint" id="intensityOut">상대 세기 1.00배 · 초기 거리 기준</div></div>
-    </aside>
-
-    <section class="metrics" aria-label="실시간 측정값">
+        <section class="metrics" aria-label="실시간 측정값">
       <article class="card metric"><div class="k">관측 진동수 fₒ</div><div id="observed" class="v cyan">548.0 Hz</div><div id="pitchLabel" class="s">▲ 원래보다 높음</div></article>
       <article class="card metric"><div class="k">진동수 변화 Δf</div><div id="delta" class="v yellow">+48.0 Hz</div><div id="ratio" class="s">fₒ/fₛ = 1.096</div></article>
       <article class="card metric"><div class="k">음속 c</div><div id="soundSpeed" class="v">343.0 m/s</div><div class="s">c ≈ 331 + 0.6T</div></article>
@@ -103,12 +142,35 @@
       <article class="card metric"><div class="k">오른쪽/왼쪽 파장</div><div id="wavelengths" class="v green">0.626 / 0.746 m</div><div class="s">λ→ / λ←</div></article>
     </section>
 
+<p id="tabMessage">구급차가 접근하는 동안 들리는 사이렌의 진동수와 세기를 관찰합니다.</p>
+    </section>
+
+    <aside class="card side" aria-labelledby="controlHeading">
+      <h2 id="controlHeading" class="section-title">실험 조건</h2>
+      <div class="preset-wrap"><label for="preset" class="hint">빠른 실험</label><select id="preset" class="preset"><option value="sourceApproach">구급차 접근</option><option value="stationary">모두 정지</option><option value="sourceRecede">구급차 멀어짐</option><option value="observerApproach">사람 접근</option><option value="observerRecede">사람 멀어짐</option><option value="bothApproach">구급차·사람 접근</option><option value="chase">구급차·사람 추격</option><option value="custom" disabled>사용자 설정</option></select></div>
+      <div class="control"><div class="control-head"><label for="frequency">음원 진동수 fₛ</label><output id="frequencyOut" for="frequency" class="value">500 Hz</output></div><input id="frequency" type="range" min="200" max="1000" step="10" value="500"></div>
+      <div class="control"><div class="control-head"><label for="sourceSpeed">구급차 속도 vₛ</label><output id="sourceSpeedOut" for="sourceSpeed" class="value">+30 m/s →</output></div><input id="sourceSpeed" type="range" min="-100" max="100" step="5" value="30"><div class="hint">음수 ← · 양수 →</div></div>
+      <div class="control"><div class="control-head"><label for="observerSpeed">사람 속도 vₒ</label><output id="observerSpeedOut" for="observerSpeed" class="value">0 m/s</output></div><input id="observerSpeed" type="range" min="-50" max="50" step="5" value="0"><div class="hint">음수 ← · 양수 →</div></div>
+      <div class="control"><div class="control-head"><label for="temperature">공기 온도 T</label><output id="temperatureOut" for="temperature" class="value">20 ℃</output></div><input id="temperature" type="range" min="0" max="40" step="1" value="20"></div>
+      <div class="control"><div class="control-head"><label for="timeScale">시간 배율</label><output id="timeScaleOut" for="timeScale" class="value">1.0×</output></div><input id="timeScale" type="range" min="0.25" max="2" step="0.25" value="1"></div>
+      <div class="control audio-row toggle"><div><label for="soundToggle">관측음 듣기</label><div class="hint">기본 음량을 낮게 설정했습니다.</div></div><input id="soundToggle" type="checkbox" aria-label="관측음 듣기"></div>
+      <div id="audioStatus" class="hint" role="status" aria-live="polite"></div>
+      <div class="control audio-row" style="grid-column:1/-1"><label for="amplitudeMeter">관측 진폭 <output id="amplitudeOut">1.00배</output></label><meter id="amplitudeMeter" min="0" max="6.58" value="1" style="width:100%;height:14px" aria-label="초기 거리 대비 관측 진폭"></meter><div class="hint" id="intensityOut">상대 세기 1.00배 · 초기 거리 기준</div></div>
+    </aside>
+
     <section class="lower">
       <article class="card graph"><h2>시간에 따른 관측 진동수</h2><canvas id="graphCanvas" role="img" aria-label="시간에 따른 관측 진동수 그래프"></canvas><div class="hint">— 관측 진동수　- - 원래 진동수　│ 통과 순간</div></article>
       <article class="card explain"><h2>지금의 물리 해석</h2><div class="formula">fₒ = fₛ × (c − vₒn) / (c − vₛn)</div><p id="interpretation" class="interpretation">음원이 관찰자 쪽으로 움직여 파면 간격이 좁아집니다.</p><div class="compare"><div class="mini">음원 30 m/s 접근<strong id="sourceCompare">548.0 Hz</strong></div><div class="mini">관찰자 30 m/s 접근<strong id="observerCompare">543.7 Hz</strong></div></div><p class="hint">같은 상대속도라도 값이 조금 다릅니다. 소리는 공기라는 기준 매질을 통해 전파되기 때문입니다.</p></article>
     </section>
 
-    <details class="card mission">
+<section class="concept-tab"><div class="concept-grid">
+<article class="card"><h2>① 구급차와 사람의 도플러 효과</h2><div class="formula">fₒ = fₛ (c − n vₒ)/(c − n vₛ)</div><p>오른쪽을 양의 방향으로 두고 n은 구급차에서 사람을 향하는 방향(+1 또는 −1)입니다. 음원인 구급차가 사람 쪽으로 이동하면 사람이 만나는 파면의 빈도가 커져 높은 음을 듣습니다.</p></article>
+<article class="card"><h2>② 구급차와 사람의 움직임은 다릅니다</h2><p>구급차가 움직이면 발생한 파면의 간격이 달라지고, 사람이 움직이면 파면을 만나는 속도가 달라집니다. 같은 상대속도라도 두 경우의 관측 진동수가 정확히 같지는 않습니다.</p></article>
+<article class="card"><h2>③ 지나가기 전후의 음높이</h2><p>가까워질 때는 음이 높고, 지나가서 멀어지면 낮아집니다. 1차원 정면 교차를 가정하므로 교차 순간에는 방향 부호가 바뀝니다. 실제 도로에서 거리를 두고 지나가면 변화가 더 부드럽습니다.</p></article>
+<article class="card"><h2>④ 소리의 크기와 세기</h2><p>진동수는 음높이를, 진폭과 세기는 소리의 크기를 나타냅니다. 같은 사이렌이라도 거리가 가까울수록 크게 들립니다. 이 실험은 유효 거리 √(r²+20²)m를 적용한 정규화된 감쇠 모형이며, 절대 dB값을 나타내지 않습니다.</p></article>
+<article class="card"><h2>⑤ 파면 시각화와 소리</h2><p>화면의 대표 파면은 실제 500Hz의 모든 파면을 그리지 않습니다. 실제 파장은 λ→=(c−vₛ)/fₛ, λ←=(c+vₛ)/fₛ로 계산됩니다. 관측음은 실제 관측 진동수의 순음을 재생하며 음량은 안전을 위해 낮게 제한합니다.</p></article>
+<article class="card"><h2>⑥ 예측·관찰·해설</h2><p>20°C의 공기에서 c=343m/s, fₛ=500Hz일 때 구급차가 30m/s로 접근하면 약 547.9Hz, 사람이 30m/s로 접근하면 약 543.7Hz입니다.</p><details><summary>두 물체가 정지하고 서로 가까이 있으면?</summary><p>관측 진동수는 사이렌과 같습니다. 거리로 달라지는 것은 소리의 크기입니다.</p></details></article>
+<article class="card wide">    <details class="card mission">
       <summary>탐구 미션 펼치기 · 예상하고 확인하기</summary>
       <div class="mission-grid">
         <p>음높이는 진동수로, 소리의 크기는 진폭과 세기로 구분합니다. 구면파의 원거리 근사에서 진폭은 거리의 역수, 세기는 거리 제곱의 역수에 비례합니다. 이 실험은 정면 통과 시 발산을 막기 위해 유효 거리 √(r²+20²) m를 사용한 완화 모형이며, 실제 음원의 절대 세기(dB)를 측정하는 모형은 아닙니다.</p>
@@ -117,7 +179,8 @@
       </div>
     </details>
     <footer class="sources">모델 범위: 정지·균일한 공기, 1차원 고전 음파, |vₛ| &lt; c. 바람·반사·가속·충격파는 제외합니다. 참고: <a href="https://openstax.org/books/university-physics-volume-1/pages/17-7-the-doppler-effect" target="_blank" rel="noreferrer">OpenStax University Physics</a> · <a href="https://www.jpl.nasa.gov/edu/resources/lesson-plan/exploring-the-doppler-effect-with-nasa/" target="_blank" rel="noreferrer">NASA/JPL 수업 자료</a></footer>
-  </section>
+</article>
+</div></section>  </section>
 </main>
 <script>
 (()=>{'use strict';
@@ -127,37 +190,71 @@ const presets={sourceApproach:[500,30,0,20],stationary:[500,0,0,20],sourceRecede
 const state={status:'idle',t:0,last:0,raf:0,token:0,xs:-75,xo:55,waves:[],emitAcc:0,history:[],cross:null,audio:null,osc:null,gain:null};
 let W=800,H=460,GW=700,GH=220,dpr=1;
 function vals(){const fs=+els.frequency.value,vs=+els.sourceSpeed.value,vo=+els.observerSpeed.value,T=+els.temperature.value,c=331+.6*T;return{fs,vs,vo,T,c,time:+els.timeScale.value}}
-function physics(){const p=vals(),dx=state.xo-state.xs,n=Math.abs(dx)<.05?0:Math.sign(dx);let fo=p.fs;if(n)fo=p.fs*(p.c-p.vo*n)/(p.c-p.vs*n);fo=Math.max(0,Math.min(4000,fo));return{...p,n,fo,delta:fo-p.fs,front:(p.c-p.vs)/p.fs,rear:(p.c+p.vs)/p.fs,distance:Math.abs(dx),closing:n? -n*(p.vo-p.vs):0}}
+function physics(){const p=vals(),dx=state.xo-state.xs,n=dx>=0?1:-1;let fo=p.fs*(p.c-p.vo*n)/(p.c-p.vs*n);fo=Math.max(0,fo);return{...p,n,fo,delta:fo-p.fs,front:(p.c-p.vs)/p.fs,rear:(p.c+p.vs)/p.fs,distance:Math.abs(dx),closing:-n*(p.vo-p.vs)}}
 function direction(v){return v>0?`+${v} m/s →`:v<0?`${v} m/s ←`:'0 m/s'}
 // Finite-distance illustration: spherical spreading, softened within 20 m.
 // A ∝ 1/sqrt(r²+20²), I ∝ A²; reference distance is 130 m.
 function amplitudeAt(r){return Math.sqrt(130*130+20*20)/Math.sqrt(r*r+20*20)}
-function updateAmplitude(){const a=amplitudeAt(Math.abs(state.xo-state.xs));$('amplitudeOut').textContent=a.toFixed(2)+'배';$('amplitudeMeter').value=a;$('intensityOut').textContent='상대 세기 '+(a*a).toFixed(2)+'배 · 초기 거리 기준';if(state.gain&&state.audio&&$('soundToggle').checked&&state.status==='running')state.gain.gain.setTargetAtTime(Math.min(.1,.015*a),state.audio.currentTime,.06)}
+function updateAmplitude(){const a=amplitudeAt(Math.abs(state.xo-state.xs));$('amplitudeOut').textContent=a.toFixed(2)+'배';$('amplitudeMeter').value=a;$('intensityOut').textContent='상대 세기 '+(a*a).toFixed(2)+'배 · 초기 거리 기준';if(state.gain&&state.audio&&$('soundToggle').checked&&state.status==='running')state.gain.gain.setTargetAtTime(Math.min(.06,.007*a),state.audio.currentTime,.06)}
 function relation(q){if(Math.abs(state.xo-state.xs)<1)return'통과 순간';if(Math.abs(q.closing)<.1)return'거리 변화 없음';return q.closing>0?'서로 접근 중':'서로 멀어지는 중'}
 function updateReadout(){const q=physics();$('frequencyOut').textContent=q.fs+' Hz';$('sourceSpeedOut').textContent=direction(q.vs);$('observerSpeedOut').textContent=direction(q.vo);$('temperatureOut').textContent=q.T+' ℃';$('timeScaleOut').textContent=q.time.toFixed(2)+'×';els.frequency.setAttribute('aria-valuetext',q.fs+' 헤르츠');els.sourceSpeed.setAttribute('aria-valuetext',direction(q.vs));els.observerSpeed.setAttribute('aria-valuetext',direction(q.vo));els.temperature.setAttribute('aria-valuetext',q.T+' 도');els.timeScale.setAttribute('aria-valuetext',q.time.toFixed(2)+' 배');$('observed').textContent=q.fo.toFixed(1)+' Hz';$('delta').textContent=(q.delta>=0?'+':'')+q.delta.toFixed(1)+' Hz';$('ratio').textContent='fₒ/fₛ = '+(q.fo/q.fs).toFixed(3);$('soundSpeed').textContent=q.c.toFixed(1)+' m/s';$('distance').textContent=q.distance.toFixed(1)+' m';$('relation').textContent=relation(q);$('wavelengths').textContent=q.front.toFixed(3)+' / '+q.rear.toFixed(3)+' m';$('pitchLabel').textContent=Math.abs(q.delta)<.05?'＝ 원래와 같음':q.delta>0?'▲ 원래보다 높음':'▼ 원래보다 낮음';
-let text;if(!q.n)text='1차원 정면 통과 순간입니다. 통과 직후 파동 진행 방향과 관측 진동수가 바뀝니다.';else if(Math.abs(q.delta)<.05)text='단위 시간에 관찰자가 만나는 파면 수가 음원의 발생 진동수와 같습니다.';else if(q.delta>0)text='서로 접근하여 관찰자가 단위 시간에 더 많은 파면을 만나므로 높은 음으로 듣습니다.';else text='서로 멀어져 관찰자가 단위 시간에 더 적은 파면을 만나므로 낮은 음으로 듣습니다.';$('interpretation').textContent=text;
-$('sourceCompare').textContent=(q.fs*q.c/(q.c-30)).toFixed(1)+' Hz';$('observerCompare').textContent=(q.fs*(q.c+30)/q.c).toFixed(1)+' Hz';if(state.osc&&state.audio)state.osc.frequency.setTargetAtTime(q.fo,state.audio.currentTime,.025);updateAmplitude();updateStatus();}
+let text;if(Math.abs(state.xo-state.xs)<.5)text='구급차와 사람이 교차하는 구간입니다. 근접 통과에서는 관측 진동수가 접근값에서 이탈값으로 바뀝니다.';else if(Math.abs(q.delta)<.05)text='단위 시간에 관찰자가 만나는 파면 수가 음원의 발생 진동수와 같습니다.';else if(q.delta>0)text='서로 접근하여 관찰자가 단위 시간에 더 많은 파면을 만나므로 높은 음으로 듣습니다.';else text='서로 멀어져 관찰자가 단위 시간에 더 적은 파면을 만나므로 낮은 음으로 듣습니다.';$('interpretation').textContent=text;
+$('sourceCompare').textContent=(q.fs*q.c/(q.c-30)).toFixed(1)+' Hz';$('observerCompare').textContent=(q.fs*(q.c+30)/q.c).toFixed(1)+' Hz';if(state.osc&&state.audio)state.osc.frequency.setTargetAtTime(Math.min(1800,Math.max(50,q.fo)),state.audio.currentTime,.025);updateAmplitude();updateStatus();}
 function updateStatus(){let t=state.status==='running'?'실험 중':state.status==='paused'?'일시정지':state.status==='complete'?'실험 완료':'실험 준비';if(state.status==='running')t+=' · '+relation(physics());$('statusText').textContent=t;$('startBtn').textContent=state.status==='paused'?'▶ 계속':'▶ 시작'}
 function reset(keep=true){state.token++;if(state.raf)cancelAnimationFrame(state.raf);Object.assign(state,{status:'idle',t:0,last:0,raf:0,xs:-75,xo:55,waves:[],emitAcc:0,history:[],cross:null});if(!keep){els.frequency.value=500;els.sourceSpeed.value=30;els.observerSpeed.value=0;els.temperature.value=20;els.timeScale.value=1;$('preset').value='sourceApproach'}quiet();updateReadout();draw();drawGraph()}
 function emit(){state.waves.push({x:state.xs,t:state.t})}
-function advance(dt){const q=vals(),before=state.xo-state.xs;state.t+=dt;state.xs+=q.vs*dt;state.xo+=q.vo*dt;const after=state.xo-state.xs;if(!state.cross&&(Math.abs(before)<1e-9||Math.abs(after)<1e-9||Math.sign(before)!==Math.sign(after)))state.cross=state.t;state.emitAcc+=dt;while(state.emitAcc>=.16){state.emitAcc-=.16;emit()}state.waves=state.waves.filter(w=>q.c*(state.t-w.t)<300);const ph=physics();state.history.push({t:state.t,f:ph.fo});if(state.history.length>500)state.history.shift();if(Math.abs(state.xs)>125||Math.abs(state.xo)>125||state.t>15){state.status='complete';state.token++;quiet()}updateReadout();}
+function advance(dt){const q=vals(),before=state.xo-state.xs;state.t+=dt;state.xs+=q.vs*dt;state.xo+=q.vo*dt;const after=state.xo-state.xs;if(state.cross===null&&(Math.abs(before)<1e-9||Math.abs(after)<1e-9||Math.sign(before)!==Math.sign(after)))state.cross=state.t;state.emitAcc+=dt;while(state.emitAcc>=.16){state.emitAcc-=.16;emit()}state.waves=state.waves.filter(w=>q.c*(state.t-w.t)<300);const ph=physics();state.history.push({t:state.t,f:ph.fo});if(state.history.length>950)state.history.shift();if(Math.abs(state.xs)>125||Math.abs(state.xo)>125||state.t>15){state.status='complete';state.token++;quiet()}updateReadout();}
 function loop(now,token){if(token!==state.token||state.status!=='running')return;if(!state.last)state.last=now;const real=Math.min((now-state.last)/1000,.05);state.last=now;advance(real*vals().time);draw();drawGraph();if(token!==state.token||state.status!=='running')return;state.raf=requestAnimationFrame(n=>loop(n,token))}
 function start(){if(state.status==='running')return;if(state.status==='complete')reset(true);state.status='running';state.last=0;const token=++state.token;if($('soundToggle').checked)startAudio();state.raf=requestAnimationFrame(n=>loop(n,token));updateStatus()}
 function pause(){if(state.status!=='running')return;state.status='paused';state.token++;if(state.raf)cancelAnimationFrame(state.raf);state.raf=0;state.last=0;quiet();updateStatus()}
 function worldX(x){return 54+(x+120)/240*(W-108)}
 function resizeCanvas(c,context,heightSetter){const r=c.getBoundingClientRect();dpr=Math.min(devicePixelRatio||1,2);c.width=Math.round(r.width*dpr);c.height=Math.round(r.height*dpr);context.setTransform(dpr,0,0,dpr,0,0);heightSetter(r.width,r.height)}
 function drawArrow(x,y,v,color){if(!v)return;const len=Math.min(54,Math.abs(v)*1.15),dir=Math.sign(v);ctx.strokeStyle=color;ctx.fillStyle=color;ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+dir*len,y);ctx.stroke();ctx.beginPath();ctx.moveTo(x+dir*len,y);ctx.lineTo(x+dir*(len-9),y-6);ctx.lineTo(x+dir*(len-9),y+6);ctx.fill()}
+function drawAmbulance(x,y,v){
+ ctx.save();ctx.translate(x,y);ctx.scale(v<0?-1:1,1);
+ ctx.fillStyle="#f8fbfd";ctx.strokeStyle="#8ba7b9";ctx.lineWidth=2;
+ ctx.beginPath();ctx.roundRect(-40,-26,80,38,7);ctx.fill();ctx.stroke();
+ ctx.fillStyle="#a8ccdf";ctx.fillRect(12,-19,19,14);
+ ctx.fillStyle="#e94353";ctx.fillRect(-26,-19,14,5);ctx.fillRect(-21,-23,5,14);ctx.fillRect(-34,-2,70,7);
+ for(const wx of [-23,22]){ctx.beginPath();ctx.arc(wx,13,8,0,2*Math.PI);ctx.fillStyle="#172d3d";ctx.fill();ctx.beginPath();ctx.arc(wx,13,3.5,0,2*Math.PI);ctx.fillStyle="#dae8f0";ctx.fill();}
+ ctx.beginPath();ctx.roundRect(-11,-36,22,8,3);ctx.fillStyle=state.status==="running"&&Math.floor(state.t*7)%2?"#ff5d75":"#53d6ff";ctx.fill();
+ ctx.fillStyle="#ffc464";ctx.fillRect(36,0,5,6);
+ ctx.restore();
+ ctx.font="bold 13px system-ui";ctx.fillStyle="#ffdfab";ctx.textAlign="center";ctx.fillText("구급차 · 사이렌",x,y-48);drawArrow(x,y-62,v,"#ffd28b");
+}
+function drawPerson(x,y,v){
+ ctx.save();ctx.translate(x,y);ctx.lineCap="round";
+ ctx.fillStyle="#f4c1a4";ctx.beginPath();ctx.arc(0,-25,10,0,2*Math.PI);ctx.fill();
+ ctx.lineWidth=5;ctx.strokeStyle="#ff9bac";ctx.beginPath();ctx.moveTo(0,-13);ctx.lineTo(0,9);ctx.moveTo(0,-5);ctx.lineTo(-12,1);ctx.moveTo(0,-5);ctx.lineTo(12,1);ctx.moveTo(0,9);ctx.lineTo(-10,28);ctx.moveTo(0,9);ctx.lineTo(10,28);ctx.stroke();
+ ctx.fillStyle="#603b30";ctx.fillRect(-7,-36,14,5);ctx.restore();
+ ctx.font="bold 13px system-ui";ctx.fillStyle="#ffc1d0";ctx.textAlign="center";ctx.fillText("사람 · 관찰자",x,y-48);drawArrow(x,y-62,v,"#ff9fb1");
+}
 function draw(){ctx.clearRect(0,0,W,H);const grd=ctx.createLinearGradient(0,0,0,H);grd.addColorStop(0,'#09172a');grd.addColorStop(1,'#06101d');ctx.fillStyle=grd;ctx.fillRect(0,0,W,H);const y=H*.58;ctx.strokeStyle='#324967';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(35,y+45);ctx.lineTo(W-35,y+45);ctx.stroke();for(let i=0;i<9;i++){const x=35+i*(W-70)/8;ctx.strokeStyle='#233853';ctx.beginPath();ctx.moveTo(x,y+39);ctx.lineTo(x,y+52);ctx.stroke()}
 const q=vals();for(const w of state.waves){const rad=q.c*(state.t-w.t),a=Math.max(.12,1-rad/300),left=worldX(w.x-rad),right=worldX(w.x+rad);ctx.strokeStyle=`rgba(91,215,255,${a})`;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(left,y-115);ctx.lineTo(left,y+34);ctx.stroke();ctx.beginPath();ctx.moveTo(right,y-115);ctx.lineTo(right,y+34);ctx.stroke()}
 const sx=worldX(state.xs),ox=worldX(state.xo);ctx.setLineDash([5,5]);ctx.strokeStyle='#526b89';ctx.beginPath();ctx.moveTo(sx,y+72);ctx.lineTo(ox,y+72);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle='#b8cbe0';ctx.textAlign='center';ctx.font='14px system-ui';ctx.fillText(Math.abs(state.xo-state.xs).toFixed(1)+' m',(sx+ox)/2,y+92);
-ctx.fillStyle='#ffcf5c';ctx.beginPath();ctx.arc(sx,y,18,0,Math.PI*2);ctx.fill();ctx.fillStyle='#07101f';ctx.font='bold 19px system-ui';ctx.fillText('S',sx,y+7);ctx.fillStyle='#ffcf5c';ctx.font='bold 14px system-ui';ctx.fillText('음원',sx,y-29);drawArrow(sx,y-50,q.vs,'#ffcf5c');
-ctx.save();ctx.translate(ox,y);ctx.rotate(Math.PI/4);ctx.fillStyle='#ff6b7d';ctx.fillRect(-14,-14,28,28);ctx.restore();ctx.fillStyle='#07101f';ctx.font='bold 18px system-ui';ctx.fillText('O',ox,y+6);ctx.fillStyle='#ff9aaa';ctx.font='bold 14px system-ui';ctx.fillText('관찰자',ox,y-29);drawArrow(ox,y-50,q.vo,'#ff6b7d');
-ctx.fillStyle='#9fb4ca';ctx.textAlign='left';ctx.font='13px system-ui';ctx.fillText('파면은 방출 위치에서 공기 기준 음속으로 전파',18,H-18)}
-function drawGraph(){g.clearRect(0,0,GW,GH);g.fillStyle='#081321';g.fillRect(0,0,GW,GH);const p=vals(),hist=state.history,tmax=Math.max(8,state.t),all=hist.map(x=>x.f).concat([p.fs]),min=Math.max(0,Math.min(...all)-70),max=Math.max(...all)+70;const X=t=>45+t/tmax*(GW-65),Y=f=>18+(max-f)/(max-min)*(GH-48);g.strokeStyle='#29415e';g.lineWidth=1;for(let i=0;i<4;i++){const y=18+i*(GH-48)/3;g.beginPath();g.moveTo(44,y);g.lineTo(GW-20,y);g.stroke()}g.strokeStyle='#9aacbe';g.setLineDash([7,6]);g.beginPath();g.moveTo(45,Y(p.fs));g.lineTo(GW-20,Y(p.fs));g.stroke();g.setLineDash([]);if(state.cross){g.strokeStyle='#ff6b7d';g.beginPath();g.moveTo(X(state.cross),18);g.lineTo(X(state.cross),GH-30);g.stroke()}if(hist.length){g.strokeStyle='#5bd7ff';g.lineWidth=3;g.beginPath();hist.forEach((d,i)=>i?g.lineTo(X(d.t),Y(d.f)):g.moveTo(X(d.t),Y(d.f)));g.stroke()}g.fillStyle='#a9bdd2';g.font='12px system-ui';g.fillText(max.toFixed(0)+' Hz',4,22);g.fillText(min.toFixed(0)+' Hz',4,GH-30);g.fillText(tmax.toFixed(1)+' s',GW-48,GH-8)}
-async function startAudio(){try{if(!state.audio){const AC=window.AudioContext||window.webkitAudioContext;if(!AC)throw new Error('unsupported');state.audio=new AC();state.osc=state.audio.createOscillator();state.gain=state.audio.createGain();state.osc.type='sine';state.gain.gain.value=0;state.osc.connect(state.gain).connect(state.audio.destination);state.osc.start()}await state.audio.resume();state.gain.gain.setTargetAtTime(state.status==='running'?Math.min(.1,.015*amplitudeAt(Math.abs(state.xo-state.xs))):0,state.audio.currentTime,.06);$('audioStatus').textContent='거리별 음량 반영 · 시작하면 관측음이 들립니다.';updateReadout()}catch(e){$('soundToggle').checked=false;$('soundToggle').disabled=true;$('audioStatus').textContent='이 브라우저에서는 소리를 재생할 수 없습니다. 시각 실험은 계속 사용할 수 있습니다.'}}
+drawAmbulance(sx,y,q.vs);drawPerson(ox,y,q.vo);
+ctx.fillStyle='#9fb4ca';ctx.textAlign='left';ctx.font='13px system-ui';ctx.fillText('대표 파면은 실제 사이렌 주파수보다 성기게 표시한 도식',18,H-18)}
+function drawGraph(){g.clearRect(0,0,GW,GH);g.fillStyle='#081321';g.fillRect(0,0,GW,GH);const p=vals(),hist=state.history,tmax=15,min=0,max=1800;const X=t=>45+t/tmax*(GW-65),Y=f=>18+(max-f)/(max-min)*(GH-48);g.strokeStyle='#29415e';g.lineWidth=1;for(let i=0;i<4;i++){const y=18+i*(GH-48)/3;g.beginPath();g.moveTo(44,y);g.lineTo(GW-20,y);g.stroke()}g.strokeStyle='#9aacbe';g.setLineDash([7,6]);g.beginPath();g.moveTo(45,Y(p.fs));g.lineTo(GW-20,Y(p.fs));g.stroke();g.setLineDash([]);if(state.cross!==null){g.strokeStyle='#ff6b7d';g.beginPath();g.moveTo(X(state.cross),18);g.lineTo(X(state.cross),GH-30);g.stroke()}if(hist.length){g.strokeStyle='#5bd7ff';g.lineWidth=3;g.beginPath();hist.forEach((d,i)=>i?g.lineTo(X(d.t),Y(d.f)):g.moveTo(X(d.t),Y(d.f)));g.stroke()}g.fillStyle='#a9bdd2';g.font='12px system-ui';g.fillText(max.toFixed(0)+' Hz',4,22);g.fillText(min.toFixed(0)+' Hz',4,GH-30);g.fillText(tmax.toFixed(1)+' s',GW-48,GH-8)}
+async function startAudio(){try{if(!state.audio){const AC=window.AudioContext||window.webkitAudioContext;if(!AC)throw new Error('unsupported');state.audio=new AC();state.osc=state.audio.createOscillator();state.gain=state.audio.createGain();state.osc.type='sine';state.gain.gain.value=0;state.osc.connect(state.gain).connect(state.audio.destination);state.osc.start()}await state.audio.resume();state.gain.gain.setTargetAtTime(state.status==='running'?Math.min(.06,.007*amplitudeAt(Math.abs(state.xo-state.xs))):0,state.audio.currentTime,.06);$('audioStatus').textContent='거리별 음량 반영 · 시작하면 관측음이 들립니다.';updateReadout()}catch(e){$('soundToggle').checked=false;$('soundToggle').disabled=true;$('audioStatus').textContent='이 브라우저에서는 소리를 재생할 수 없습니다. 시각 실험은 계속 사용할 수 있습니다.'}}
 function quiet(){if(state.gain&&state.audio)state.gain.gain.setTargetAtTime(0,state.audio.currentTime,.02)}
 Object.values(els).forEach(el=>el.addEventListener('input',()=>{$('preset').value='custom';if(state.status==='running')pause();reset(true)}));$('preset').addEventListener('change',e=>{if(e.target.value==='custom')return;const [f,vs,vo,T]=presets[e.target.value];els.frequency.value=f;els.sourceSpeed.value=vs;els.observerSpeed.value=vo;els.temperature.value=T;reset(true)});$('startBtn').onclick=start;$('pauseBtn').onclick=pause;$('resetBtn').onclick=()=>reset(true);$('stepBtn').onclick=()=>{if(state.status==='running')pause();if(state.status==='complete')reset(true);state.status='paused';advance(.08*vals().time);draw();drawGraph()};$('soundToggle').addEventListener('change',e=>{if(e.target.checked)startAudio();else{quiet();$('audioStatus').textContent='관측음을 껐습니다.'}});$('checkQuiz').onclick=()=>{const ok=$('quizAnswer').value==='same';$('quizFeedback').textContent=ok?'정답입니다. 정지해 있다면 파면 도달 간격은 변하지 않고, 가까워지면 주로 음량만 커집니다.':'다시 생각해 보세요. 거리 자체가 아니라 파면을 만나는 빈도가 음높이를 바꿉니다.';$('quizFeedback').style.color=ok?'#55e6a5':'#ffcf5c'};
 addEventListener('keydown',e=>{if(e.target.matches('input,select,button'))return;if(e.code==='Space'){e.preventDefault();state.status==='running'?pause():start()}if(e.key.toLowerCase()==='r')reset(true)});new ResizeObserver(()=>{resizeCanvas(sim,ctx,(w,h)=>{W=w;H=h});resizeCanvas(graph,g,(w,h)=>{GW=w;GH=h});draw();drawGraph()}).observe(document.querySelector('.layout'));document.addEventListener('visibilitychange',()=>{if(document.hidden&&state.status==='running')pause()});reset(true);
+
+let currentTab="ambulance";
+function setTab(tab,applyPreset=true){
+ currentTab=tab;$("workspace").dataset.tab=tab;
+ document.querySelectorAll(".tabs button").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.tab===tab)));
+ if(applyPreset&&["ambulance","observer","passby"].includes(tab)){
+  const scenario=tab==="observer"?"observerApproach":"sourceApproach";
+  const [f,vs,vo,T]=presets[scenario];els.frequency.value=f;els.sourceSpeed.value=vs;els.observerSpeed.value=vo;els.temperature.value=T;$("preset").value=scenario;reset(true);
+ }
+ if(tab==="graphs"||tab==="concept"){if(state.status==="running")pause();quiet();}
+ $("tabMessage").textContent=({ambulance:"구급차가 움직일 때 사람에게 들리는 사이렌의 높낮이와 크기를 관찰하세요.",observer:"구급차는 정지하고 사람이 움직입니다. 파면 간격이 그대로인지 확인하세요.",passby:"구급차가 가까워질 때와 지나간 뒤의 음높이를 비교하세요.",graphs:"가로축 0~15초·세로축 0~1800Hz로 고정했습니다.",concept:"도플러 효과의 원리와 표현의 한계를 확인하세요."})[tab];
+ if(tab!=="concept")requestAnimationFrame(()=>{resizeCanvas(sim,ctx,(w,h)=>{W=w;H=h});resizeCanvas(graph,g,(w,h)=>{GW=w;GH=h});draw();drawGraph();});
+}
+document.querySelectorAll(".tabs button").forEach(b=>b.addEventListener("click",()=>setTab(b.dataset.tab)));
+$("goGraph").onclick=()=>setTab("graphs",false);
+setTab("ambulance",false);
 })();
 </script>
 </body>
