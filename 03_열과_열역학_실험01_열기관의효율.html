@@ -77,7 +77,58 @@ th{position:sticky;top:0;background:#13243a;color:#cde3fb}
   #sim{height:350px}.metrics{grid-template-columns:1fr 1fr}.metric b{font-size:1.15rem}
 }
 </style>
-</head>
+<style id="thermal-engine-tabs-v1">
+:root{color-scheme:dark;--bg:#080f1b;--panel:#101e31;--panel2:#182a40}
+body{background:radial-gradient(circle at 10% 0,#16283d,#080f1b 55%);color:#eef6ff}
+body header{max-width:1480px;padding:10px 16px 4px}
+body header h1{font-size:26px;line-height:1.15}
+body header .subtitle{font-size:12px;line-height:1.4;margin:3px 0}
+body main{max-width:1480px;padding:0 16px 18px;display:block}
+.tl-nav{display:flex;flex-wrap:wrap;gap:7px;max-width:1480px;padding:0 16px;margin:7px auto 5px}
+.tl-nav button{font-size:13px;min-height:35px;padding:5px 13px;background:#183049;color:#ecf5ff;border:1px solid #486d82;border-radius:8px}
+.tl-nav button[aria-selected=true]{background:#087d70;border-color:#71e2ca}
+.tl-desc{max-width:1480px;padding:0 16px;margin:0 auto 7px;font-size:12px;color:#b6cede;line-height:1.3}
+.tl-work{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,310px) minmax(210px,250px);gap:10px;align-items:start}
+.tl-column{display:grid;gap:9px;min-width:0}
+body .tl-column .panel{border-radius:12px;box-shadow:none;min-width:0}
+body .tl-column .controls{position:static;padding:11px;align-self:start}
+body .tl-column .control{margin:7px 0}
+body .tl-column small,body .tl-column .footerNote,body .tl-column .hint{font-size:11.5px;line-height:1.35}
+body .tl-column .control .labelrow{font-size:12px}
+body .tl-column .control input[type=range]{height:20px}
+body .tl-column .controls button{padding:5px 7px;min-height:33px;font-size:12px}
+body .tl-column .mode{margin:4px 0;gap:5px}
+body .tl-column .buttons{margin:7px 0;gap:5px}
+body .tl-column .stage{padding:9px}
+body .tl-column #sim{height:355px}
+body .tl-column .canvasWrap{border-radius:10px}
+body .tl-column .metrics{grid-template-columns:1fr 1fr;gap:5px;margin:0}
+body .tl-column .metric{padding:8px;border-radius:9px}
+body .tl-column .metric b{font-size:17px}
+body .tl-column .metric span{font-size:11px}
+body .tl-column .grid2{display:block;margin:0}
+body .tl-column .grid2>.section{margin:0 0 7px}
+body .tl-column .section{padding:10px}
+body .tl-column .section h2{font-size:14px;margin:0 0 7px}
+body .tl-column #graph{height:274px}
+body .tl-column .barrow{grid-template-columns:61px 1fr 70px;gap:4px;font-size:11px}
+body .tl-column .insight{padding:6px;font-size:11.5px;line-height:1.35;margin-top:5px}
+body .tl-column .formula{gap:5px}
+body .tl-column .eq{padding:7px;font-size:12px}
+body .tl-column .task{padding:6px;font-size:11.5px}
+body .tl-column .task strong{margin-bottom:2px}
+body .tl-column .tableWrap{max-height:260px}
+body .tl-column .tableWrap table{font-size:11px}
+body .tl-column .tableWrap td,body .tl-column .tableWrap th{padding:5px}
+body .tl-column .actions{gap:5px;margin-top:6px}
+body .tl-column .actions button{padding:6px;font-size:12px}
+body .tl-concept{display:none}
+body .tl-concept.tl-open{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+body .tl-concept .panel{padding:15px}
+body .tl-concept .footerNote{font-size:13px}
+@media(max-width:1080px){.tl-work{grid-template-columns:minmax(0,1fr) 260px}.tl-results{grid-column:1/-1}}
+@media(max-width:690px){.tl-work{grid-template-columns:1fr}.tl-results{grid-column:auto}body .tl-concept.tl-open{grid-template-columns:1fr} .tl-nav button{flex:1 1 42%}body .tl-column #sim{height:350px}}
+</style></head>
 <body>
 <header>
   <h1>🔥 열기관 효율 실험실</h1>
@@ -392,5 +443,39 @@ th{position:sticky;top:0;background:#13243a;color:#cde3fb}
   update();
 })();
 </script>
-</body>
+<script>
+(()=>{'use strict';
+const main=document.querySelector('body>main'),aside=main.querySelector('aside.controls'),stage=main.querySelector('section.stage');
+if(!aside||!stage)return;
+const nav=document.createElement('nav');nav.className='tl-nav';const desc=document.createElement('p');desc.className='tl-desc';document.querySelector('body>header').after(nav,desc);
+const workspace=document.createElement('div');workspace.className='tl-work';
+const left=document.createElement('div'),center=document.createElement('div'),right=document.createElement('div');
+for(const c of [left,center,right])c.className='tl-column';right.classList.add('tl-results');workspace.append(left,center,right);main.append(workspace);
+center.append(aside);
+const wrap=stage.querySelector('.canvasWrap'),metrics=stage.querySelector('.metrics'),rows=[...stage.querySelectorAll('.grid2')],record=[...stage.querySelectorAll('.panel.section')].find(el=>el.querySelector('#records'));
+const energy=[...stage.querySelectorAll('.panel.section')].find(el=>el.querySelector('#barQh'));
+const relation=[...stage.querySelectorAll('.panel.section')].find(el=>el.querySelector('.eq'));
+const chart=[...stage.querySelectorAll('.panel.section')].find(el=>el.querySelector('#graph'));
+const mission=[...stage.querySelectorAll('.panel.section')].find(el=>el.querySelector('#task1'));
+if(!wrap||!metrics||!energy||!relation||!chart||!mission||!record)return;
+const view=document.createElement('section');view.className='panel stage';const read=document.createElement('section');read.className='panel section';read.innerHTML='<h2>핵심 측정 결과</h2>';read.append(metrics);
+const scene=document.createElement('section');scene.className='panel stage';scene.append(wrap);
+const concept=document.createElement('section');concept.className='tl-concept';concept.append(relation,mission);
+const records=document.createElement('section');records.className='panel stage';records.append(record);
+workspace.after(concept);left.append(scene);right.append(read,energy);
+stage.remove();
+const notes={engine:'고온 열원 → 열기관 → 저온 열원의 열 이동과 한 주기 일을 관찰합니다.',eff:'같은 고온·저온 열원 조건에서 카르노 한계와 실제 모형의 효율을 비교합니다.',record:'변수별 그래프와 실험 기록을 살펴보고 CSV로 저장합니다.',concept:'열기관 효율, 카르노 한계, 에너지 보존과 비가역성의 이상화 조건을 정리합니다.'};
+function tab(v){
+desc.textContent=notes[v];workspace.hidden=v==='concept';concept.classList.toggle('tl-open',v==='concept');
+if(v==='engine'){left.append(scene);chart.remove();records.remove();right.append(energy);}
+if(v==='eff'){left.append(chart);scene.remove();records.remove();right.append(energy);}
+if(v==='record'){left.append(records);chart.remove();scene.remove();right.append(energy);}
+for(const b of nav.children)b.setAttribute('aria-selected',String(b.dataset.tab===v));
+requestAnimationFrame(()=>{window.dispatchEvent(new Event('resize'))});
+}
+for(const [v,label] of [['engine','① 열기관 작동'],['eff','② 효율 비교'],['record','③ 그래프·기록'],['concept','④ 개념 설명']]){const b=document.createElement('button');b.dataset.tab=v;b.type='button';b.textContent=label;b.onclick=()=>tab(v);nav.append(b)}
+const bar=energy.querySelector('#insight');const caption=document.createElement('p');caption.className='footerNote';caption.textContent='실제 모형은 선택한 카르노 대비 성능 비율을 적용한 교육용 수치이며, 회전 속도는 출력률이 아닌 개념 애니메이션입니다.';energy.append(caption);
+tab('engine');
+})();
+</script></body>
 </html>
