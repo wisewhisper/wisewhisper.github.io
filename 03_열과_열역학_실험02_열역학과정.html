@@ -33,7 +33,48 @@
     @media(max-width:680px){.wrap{padding:10px}header{align-items:start;flex-direction:column}.law{white-space:normal}.visuals{grid-template-columns:1fr}.stage,.chartbox{min-height:300px}.stats{grid-template-columns:repeat(2,1fr)}.mission-grid{grid-template-columns:1fr}.process-btn{min-height:48px}.buttons button{min-height:48px}}
     @media(prefers-reduced-motion:reduce){.progress>div{transition:none}}
   </style>
-</head>
+<style id="thermal-process-6tabs">
+body{background:#080f1b;color:#edf6ff}body .wrap{max-width:1450px;padding:10px 15px}
+body header{margin-bottom:6px}body header h1{font-size:25px}body header .sub{font-size:12px}
+body .law{padding:6px;font-size:12px}
+.thermal-nav{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 4px}
+.thermal-nav button{background:#152d46;color:#f0f8ff;border:1px solid #456882;border-radius:8px;font-weight:750;padding:6px 11px;min-height:36px;font-size:12px}
+.thermal-nav button[aria-selected=true]{background:#087d6f;border-color:#66dec8}
+.thermal-desc{font-size:12px;color:#bfd2e2;margin:0 0 7px}
+body .layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(240px,275px) minmax(200px,230px);gap:9px;align-items:start}
+body .thermal-left,body .thermal-middle,body .thermal-right{display:grid;gap:8px;min-width:0}
+body .panel{border-radius:12px;box-shadow:none}
+body .layout .controls{padding:10px}
+body .layout .section-title{font-size:11px;margin:0 0 6px}
+body .layout .process-grid{gap:5px}
+body .layout .process-btn{font-size:12px;padding:7px 4px;border-radius:7px}
+body .layout .desc{padding:7px;margin:7px 0;min-height:0;font-size:12px;line-height:1.4}
+body .layout .control-row{margin:8px 0}
+body .layout .control-row label{font-size:12px}
+body .layout input[type=range]{height:20px}
+body .layout .buttons{gap:5px}
+body .layout .buttons button{font-size:12px;padding:7px 4px;border-radius:8px}
+body .layout .sign{font-size:11px;margin-top:7px;padding-top:7px}
+body .layout .stage,body .layout .chartbox{min-height:0;padding:9px}
+body .layout .stage canvas,body .layout .chartbox canvas{height:265px}
+body .layout .stage h2,body .layout .chartbox h2{font-size:14px}
+body .layout .stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}
+body .layout .stat{padding:7px}
+body .layout .stat .sym{font-size:11px}
+body .layout .stat .num{font-size:15px}
+body .layout .thermal-progress{padding:9px;background:#111f34;border:1px solid #324e69;border-radius:10px}
+.thermal-compare{display:none;padding:12px}
+.thermal-compare.active{display:block}
+.thermal-compare canvas{display:block;width:100%;height:310px;background:#091a2a;border-radius:8px}
+.thermal-compare table{width:100%;border-collapse:collapse;font-size:12px}
+.thermal-compare td,.thermal-compare th{padding:7px;border-bottom:1px solid #35516b;text-align:right}
+.thermal-compare td:first-child,.thermal-compare th:first-child{text-align:left}
+.thermal-concept{display:none}
+.thermal-concept.active{display:block}
+.thermal-caption{font-size:12px;color:#c3d6e5;line-height:1.4}
+@media(max-width:1100px){body .layout{grid-template-columns:1fr 260px}.thermal-right{grid-column:1/-1}}
+@media(max-width:690px){body .layout{grid-template-columns:1fr}.thermal-right{grid-column:auto}.thermal-nav button{flex:1 1 28%}}
+</style></head>
 <body>
 <div class="wrap">
   <header>
@@ -236,5 +277,53 @@
   $('description').innerHTML=meta[process].desc;configureTarget();reset();
 })();
 </script>
-</body>
+<script>
+(()=>{'use strict';
+const wrap=document.querySelector('.wrap'),layout=wrap.querySelector('.layout');
+const oldMain=layout.querySelector('main.main'),controls=layout.querySelector('aside.controls');
+const stage=oldMain.querySelector('.stage'),chart=oldMain.querySelector('.chartbox'),stats=oldMain.querySelector('.stats');
+const prog=oldMain.querySelector('#progressBar').parentElement.parentElement;
+const lesson=wrap.querySelector('.mission');if(!lesson||!stage||!chart)return;
+const nav=document.createElement('nav'),desc=document.createElement('p');nav.className='thermal-nav';desc.className='thermal-desc';wrap.querySelector('header').after(nav,desc);
+const left=document.createElement('div'),mid=document.createElement('div'),right=document.createElement('div');
+left.className='thermal-left';mid.className='thermal-middle';right.className='thermal-right';
+layout.replaceChildren(left,mid,right);left.append(stage,chart);mid.append(controls);right.append(stats,prog);prog.classList.add('thermal-progress');
+lesson.classList.add('thermal-concept');
+const compare=document.createElement('section');compare.className='panel thermal-compare';
+compare.innerHTML='<h2>같은 초기 상태의 네 과정 비교</h2><p class="thermal-caption">1 mol 이상 이원자 기체, 초기 300 K·100 kPa·24.94 L. 팽창 부피비 1.6(등온·정압·가역 단열), 정적 과정은 초기 부피 고정</p><canvas id="pvCompare" width="800" height="350"></canvas><div style="overflow-x:auto"><table><thead><tr><th>과정</th><th>T (K)</th><th>P (kPa)</th><th>W (J)</th><th>Q (J)</th></tr></thead><tbody id="pvCompareRows"></tbody></table></div>';
+left.append(compare);
+const notes={isothermal:'온도가 일정할 때 피스톤 이동과 P–V 경로를 확인합니다.',isobaric:'압력이 일정한 팽창·압축에서 부피와 온도가 함께 변합니다.',isochoric:'부피가 일정하므로 피스톤과 P–V 수직 경로를 관찰합니다.',adiabatic:'열이 출입하지 않는 가역 단열 과정을 비교합니다.',compare:'같은 초기 상태에서 서로 다른 과정의 압력·일·열량을 비교합니다.',concept:'물리 모형, 네 과정의 조건과 열·일의 부호를 설명합니다.'};
+const configs=[['isothermal','① 등온'],['isobaric','② 정압'],['isochoric','③ 정적'],['adiabatic','④ 단열'],['compare','⑤ 네 과정 비교'],['concept','⑥ 개념 설명']];
+function drawComparison(){
+const cv=document.getElementById('pvCompare'),c=cv.getContext('2d');
+const W=cv.width,H=cv.height,V0=24.9434,P0=100,T0=300,R=8.31446,g=1.4,ratio=1.6;
+const L=58,B=H-38,Ht=20,pw=W-L-18,ph=B-Ht;
+const X=v=>L+(v-20)/30*pw,Y=p=>B-p/170*ph;
+c.clearRect(0,0,W,H);c.font='12px sans-serif';c.fillStyle='#bcd3e6';c.strokeStyle='#30485c';
+for(let i=0;i<=5;i++){const x=L+i*pw/5;c.beginPath();c.moveTo(x,Ht);c.lineTo(x,B);c.stroke();c.fillText(String(20+i*6),x-9,B+18)}
+for(let i=0;i<=5;i++){const p=i*34,y=Y(p);c.beginPath();c.moveTo(L,y);c.lineTo(W-18,y);c.stroke();c.fillText(String(p),11,y+4)}
+const paths=[
+{name:'정압',color:'#ffd58b',func:v=>P0,end:{T:T0*ratio,P:P0,W:P0*V0*(ratio-1),Q:R/(g-1)*(T0*(ratio-1))+P0*V0*(ratio-1)}},
+{name:'등온',color:'#57d6ff',func:v=>P0*V0/v,end:{T:T0,P:P0/ratio,W:R*T0*Math.log(ratio),Q:R*T0*Math.log(ratio)}},
+{name:'단열',color:'#73e5b4',func:v=>P0*(V0/v)**g,end:{T:T0/ratio**(g-1),P:P0/ratio**g,W:R/(g-1)*T0*(1-ratio**(1-g)),Q:0}},
+{name:'정적',color:'#ba9eff',func:null,end:{T:T0*ratio,P:P0*ratio,W:0,Q:R/(g-1)*T0*(ratio-1)}}
+];
+for(const p of paths){c.strokeStyle=p.color;c.lineWidth=3;c.beginPath();
+if(p.func){for(let j=0;j<=100;j++){const v=V0*(1+(ratio-1)*j/100);if(j===0)c.moveTo(X(v),Y(p.func(v)));else c.lineTo(X(v),Y(p.func(v)))}}else{c.moveTo(X(V0),Y(P0));c.lineTo(X(V0),Y(P0*ratio))}c.stroke()}
+c.fillStyle='#eaf5ff';c.fillText('P(kPa)',5,13);c.fillText('V(L)',W-40,H-6);
+document.getElementById('pvCompareRows').innerHTML=paths.map(p=>'<tr><td style="color:'+p.color+'">'+p.name+'</td><td>'+p.end.T.toFixed(1)+'</td><td>'+p.end.P.toFixed(1)+'</td><td>'+p.end.W.toFixed(1)+'</td><td>'+p.end.Q.toFixed(1)+'</td></tr>').join('');
+}
+function tab(name){
+desc.textContent=notes[name];layout.hidden=name==='concept';lesson.classList.toggle('active',name==='concept');
+const cmp=name==='compare';compare.classList.toggle('active',cmp);
+if(cmp){left.append(compare);stage.remove();chart.remove();drawComparison();}
+else if(name!=='concept'){const b=mid.querySelector('[data-process="'+name+'"]');if(b)b.click();left.append(stage,chart);compare.remove();}
+for(const b of nav.children)b.setAttribute('aria-selected',String(b.dataset.tab===name));
+requestAnimationFrame(()=>window.dispatchEvent(new Event('resize')));
+}
+for(const [id,label] of configs){const b=document.createElement('button');b.type='button';b.dataset.tab=id;b.textContent=label;b.onclick=()=>tab(id);nav.append(b)}
+const p=document.createElement('p');p.className='thermal-caption';p.textContent='P–V 그래프 아래의 부호 있는 면적은 W = ∫P dV이며 팽창은 양수, 압축은 음수입니다.';chart.append(p);
+tab('isothermal');
+})();
+</script></body>
 </html>
