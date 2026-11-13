@@ -3,7 +3,7 @@
 'use strict';
 const buttons=[...document.querySelectorAll('.filter-list .unit-filter[data-unit]')].filter(b=>b.dataset.unit!=='all');
 const palette=['#79d7ff','#ffc878','#ff978e','#bd9bff','#8ae5b1','#76e7e4','#82b2ff','#c6a9ff','#ffd383'];
-const anim=(typ,values,dur='1s',more='')=>'<animateTransform attributeName="transform" type="'+typ+'" values="'+values+'" dur="'+dur+'" repeatCount="indefinite" '+more+'/>';
+const anim=(typ,values,dur='0.3s',more='')=>'<animateTransform attributeName="transform" type="'+typ+'" values="'+values+'" dur="'+dur+'" repeatCount="indefinite" '+more+'/>';
 const line=(d,col='#8adfff',w=5,extra='')=>'<path d="'+d+'" fill="none" stroke="'+col+'" stroke-width="'+w+'" stroke-linecap="round" stroke-linejoin="round" '+extra+'/>';
 const circ=(x,y,r,col)=>'<circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="'+col+'"/>';
 const rect=(x,y,w,h,col,rx=8)=>'<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="'+rx+'" fill="'+col+'"/>';
@@ -19,7 +19,7 @@ function art(n){
  case 2:{
    let s=rect(148,69,184,151,'url(#glass)',18)+line('M147 85V207Q239 235 331 207V85','#81dafa',5);
    for(let k=0;k<9;k++){let x=174+k%3*60, y=107+Math.floor(k/3)*43;
-     s+='<g>'+anim('translate','0 0;'+(k%2?13:-15)+' '+(k%3?11:-10)+';0 0','1s')+circ(x,y,8,k%2?'#f7b783':'#8adfff')+'</g>';}
+     s+='<g>'+anim('translate','0 0;'+(k%2?13:-15)+' '+(k%3?11:-10)+';0 0','0.3s')+circ(x,y,8,k%2?'#f7b783':'#8adfff')+'</g>';}
    return s+'<g>'+anim('translate','0 0;0 30;0 0')+rect(138,61,204,19,'url(#metal)',5)+rect(222,23,35,41,'url(#metal)',5)+'</g>';
  }
  case 3:{
@@ -31,15 +31,15 @@ function art(n){
    '<g>'+anim('translate','-20 0;54 0;-20 0')+circ(110,95,7,'#fffae7')+circ(110,140,7,'#fffae7')+circ(110,185,7,'#fffae7')+'</g>';
  case 5:return line('M123 75H358V207H123V75','#df995b',9)+rect(113,135,17,54,'url(#metal)',2)+rect(131,145,17,34,'#e7c478',2)+
    circ(360,139,39,'url(#glass)')+
-   '<g>'+circ(360,138,27,'#ffe5a8')+'<animate attributeName="opacity" values=".25;1;.25" dur="1s" repeatCount="indefinite"/></g>'+
-   '<path d="M154 75H332M358 177V203H154" stroke="#82effd" stroke-width="5" stroke-linecap="round" stroke-dasharray="8 25" fill="none"><animate attributeName="stroke-dashoffset" values="0;-170" dur="1s" repeatCount="indefinite"/></path>';
+   '<g>'+circ(360,138,27,'#ffe5a8')+'<animate attributeName="opacity" values=".25;1;.25" dur="0.3s" repeatCount="indefinite"/></g>'+
+   '<path d="M154 75H332M358 177V203H154" stroke="#82effd" stroke-width="5" stroke-linecap="round" stroke-dasharray="8 25" fill="none"><animate attributeName="stroke-dashoffset" values="0;-170" dur="0.3s" repeatCount="indefinite"/></path>';
  case 6:{
    let s='';for(let k=0;k<7;k++)s+='<ellipse cx="'+(220+k*21)+'" cy="137" rx="16" ry="57" fill="none" stroke="url(#copper)" stroke-width="8"/>';
    return s+'<g>'+anim('translate','-27 0;52 0;-27 0')+
      rect(86,108,112,59,'url(#metal)',6)+rect(86,108,57,59,'#bd5f68',6)+
      '<text x="114" y="147" font-size="24" text-anchor="middle" fill="#fff">N</text><text x="172" y="147" font-size="24" text-anchor="middle" fill="#fff">S</text></g>'+
      '<g>'+line('M180 91Q240 30 364 91M180 183Q241 244 364 187','#6dbeff',3)+
-     '<animate attributeName="opacity" values=".25;1;.25" dur="1s" repeatCount="indefinite"/></g>';
+     '<animate attributeName="opacity" values=".25;1;.25" dur="0.3s" repeatCount="indefinite"/></g>';
  }
  case 7:return '<g><g>'+anim('rotate','0 240 139;360 240 139')+
    '<ellipse cx="240" cy="139" rx="158" ry="61" transform="rotate(-30 240 139)" fill="none" stroke="#558fff" stroke-width="4"/>'+
