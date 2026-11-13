@@ -120,7 +120,7 @@ body[data-lab-page*="운동량보존법칙"] .ww-page .stage{min-height:0}
     </section>
   </div>
   <div class="lower">
-    <section class="card"><h2>시간에 따른 물리량</h2><canvas id="chart" class="chart" role="img" aria-label="총운동량과 운동에너지의 시간 그래프"></canvas><p class="footer-note">파란 선: 총운동량(kg·m/s) · 보라 선: 운동에너지(J). 서로 다른 눈금을 사용합니다.</p></section>
+    <section class="card"><h2>시간에 따른 물리량</h2><canvas id="chart" class="chart" role="img" aria-label="총운동량과 운동에너지의 시간 그래프"></canvas><div class="chart-dual-note" style="color:#bdd2e5;font-size:13px;margin:5px 0 9px">위: 총운동량 — 충돌 전후 보존 · 아래: 운동 에너지 — 비탄성 충돌에서 감소</div><canvas id="chartEnergy" class="chart" role="img" aria-label="운동 에너지의 시간별 변화를 나타낸 별도의 그래프" style="height:240px;margin-top:9px"></canvas><p class="footer-note">두 그래프는 각각 실제 단위로 표시합니다. 총운동량은 일정하며 운동 에너지는 충돌 유형에 따라 변합니다.</p></section>
     <section class="card"><div class="rowhead"><h2>관찰 기록</h2><span class="footer-note" id="count">0회</span></div><div class="scroll"><table><thead><tr><th>회차/유형</th><th>p 전→후</th><th>K 전→후</th><th>e</th></tr></thead><tbody id="records"><tr><td colspan="4" class="empty">충돌을 실행하면 자동 기록됩니다.</td></tr></tbody></table></div></section>
   </div>
   <section class="card questions" aria-labelledby="questions-title"><h2 id="questions-title">생각을 여는 탐구 질문</h2>
@@ -164,7 +164,28 @@ function render(){const {x:ctx,w,h}=resizeCanvas(els.sim);ctx.clearRect(0,0,w,h)
   ctx.fillStyle='#b9cade';ctx.font='12px system-ui';ctx.textAlign='left';ctx.fillText('− 방향',12,lane+57);ctx.textAlign='right';ctx.fillText('+ 방향',w-12,lane+57);
   const {r1,r2}=radii();body(state.x1,lane,r1,'#71c6ff','1',state.p.m1,ctx);body(state.x2,lane,r2,'#ef4444','2',state.p.m2,ctx);arrow(state.x1,lane-r1-25,state.vel1,'#71c6ff',ctx);arrow(state.x2,lane-r2-25,state.vel2,'#ff8a96',ctx);
   function body(x,y,r,color,label,m,c){const g=c.createRadialGradient(x-r*.35,y-r*.45,2,x,y,r);g.addColorStop(0,'#fff');g.addColorStop(.12,color);g.addColorStop(1,color+'cc');c.fillStyle=g;c.beginPath();c.arc(x,y,r,0,Math.PI*2);c.fill();c.fillStyle='#fff';c.textAlign='center';c.font='800 15px system-ui';c.fillText(label,x,y+4);c.fillStyle='#d6e4f4';c.font='12px system-ui';c.fillText(m.toFixed(1)+' kg',x,y+r+18)}}
-function renderChart(){const {x:ctx,w,h}=resizeCanvas(els.chart);ctx.clearRect(0,0,w,h);const pad={l:38,r:16,t:17,b:27};ctx.strokeStyle='#30495e';ctx.lineWidth=1;for(let i=0;i<5;i++){const y=pad.t+(h-pad.t-pad.b)*i/4;ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(w-pad.r,y);ctx.stroke()}const data=state.history.length?state.history:[{t:0,p:quantities(state.p,state.p.u1,state.p.u2).pb,k:quantities(state.p,state.p.u1,state.p.u2).kb}];const maxT=Math.max(1,data.at(-1).t),ps=data.map(d=>d.p),ks=data.map(d=>d.k),pAbs=Math.max(1,...ps.map(Math.abs)),kMax=Math.max(1,...ks);plot(ps,'#71c6ff',v=>.5-v/(2*pAbs));plot(ks,'#c2a6ff',v=>1-v/kMax);function plot(arr,color,norm){ctx.strokeStyle=color;ctx.lineWidth=2.5;ctx.beginPath();arr.forEach((v,i)=>{const X=pad.l+(w-pad.l-pad.r)*(data[i].t/maxT),Y=pad.t+(h-pad.t-pad.b)*norm(v);i?ctx.lineTo(X,Y):ctx.moveTo(X,Y)});ctx.stroke()}ctx.fillStyle='#b9cade';ctx.font='11px system-ui';ctx.textAlign='left';ctx.fillText('값',7,14);ctx.textAlign='right';ctx.fillText(maxT.toFixed(1)+' s',w-pad.r,h-7);ctx.textAlign='left';ctx.fillText('0',pad.l,h-7)}
+function renderChart(){
+ const data=state.history.length?state.history:[{t:0,p:quantities(state.p,state.p.u1,state.p.u2).pb,k:quantities(state.p,state.p.u1,state.p.u2).kb}];
+ const before=quantities(state.p,state.p.u1,state.p.u2);
+ const timeEnd=Math.max(1,data.at(-1).t);const charts=[
+  {id:'chart',key:'p',title:'총운동량 p (kg·m/s)',color:'#71c6ff',base:before.pb},
+  {id:'chartEnergy',key:'k',title:'총운동에너지 K (J)',color:'#ffd166',base:before.kb}];
+ for(const ch of charts){
+  const canvas=document.getElementById(ch.id);if(!canvas)continue;
+  const {x:ctx,w,h}=resizeCanvas(canvas),pad={l:66,r:18,t:27,b:30};
+  ctx.clearRect(0,0,w,h);ctx.fillStyle='#070f19';ctx.fillRect(0,0,w,h);
+  const arr=[ch.base,...data.map(v=>v[ch.key])];const low=Math.min(0,...arr),high=Math.max(0,...arr);
+  const margin=Math.max(.5,(high-low)*.2);const ymin=low-margin,ymax=high+margin;
+  const X=t=>pad.l+(w-pad.l-pad.r)*t/timeEnd,Y=n=>pad.t+(h-pad.t-pad.b)*(ymax-n)/(ymax-ymin);
+  ctx.font='12px system-ui';ctx.textAlign='left';ctx.fillStyle='#e6efff';ctx.fillText(ch.title,8,16);
+  for(let n=0;n<=4;n++){const v=ymin+(ymax-ymin)*n/4,yy=Y(v);ctx.strokeStyle='#294257';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(pad.l,yy);ctx.lineTo(w-pad.r,yy);ctx.stroke();ctx.fillStyle='#b9ccde';ctx.textAlign='right';ctx.fillText(v.toFixed(1),pad.l-8,yy+4)}
+  ctx.textAlign='center';ctx.fillText('시간 (s)',w/2,h-6);
+  for(let i=0;i<=4;i++){const t=timeEnd*i/4;ctx.fillText(t.toFixed(1),X(t),h-20)}
+  ctx.beginPath();ctx.moveTo(X(0),Y(ch.base));for(const datum of data)ctx.lineTo(X(datum.t),Y(datum[ch.key]));
+  ctx.strokeStyle=ch.color;ctx.lineWidth=3;ctx.stroke();
+  const value=data.at(-1)?.[ch.key]??ch.base;ctx.fillStyle=ch.color;ctx.beginPath();ctx.arc(X(data.at(-1)?.t||0),Y(value),4,0,2*Math.PI);ctx.fill();
+ }
+}
 function loop(ts){if(!state.running)return;const dt=last?Math.min((ts-last)/1000,.04):.016;last=ts;step(dt);if(state.running)raf=requestAnimationFrame(loop)}
 els.start.addEventListener('click',()=>{if(state.done)reset();if(!state.collided&&state.vel1<=state.vel2){state.done=true;els.status.textContent='충돌 없음: 두 물체가 접근하지 않습니다';els.start.disabled=true;els.pause.disabled=true;els.step.disabled=true;return}state.running=true;els.status.textContent=state.collided?'충돌 후 운동 중':'운동 중';els.start.disabled=true;els.pause.disabled=false;last=0;raf=requestAnimationFrame(loop)});
 els.pause.addEventListener('click',()=>{state.running=false;cancelAnimationFrame(raf);els.status.textContent='일시정지';els.start.disabled=false;els.pause.disabled=true});
