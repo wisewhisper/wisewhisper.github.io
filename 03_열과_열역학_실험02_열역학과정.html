@@ -213,6 +213,18 @@ body .thermal-cycle .otto-problem p{font-size:12px;line-height:1.6;color:#d3e6f0
 body .thermal-cycle .otto-problem summary{color:#8de9cf;cursor:pointer;font-weight:750}
 @media(max-width:1150px){body .layout{grid-template-columns:minmax(0,1fr) 260px!important}body .layout>.thermal-right{grid-column:1/-1}body .thermal-cycle .otto-grid{grid-template-columns:repeat(2,minmax(0,1fr))}body .thermal-cycle .otto-controls{grid-column:1/-1}}
 @media(max-width:710px){body .layout{grid-template-columns:1fr!important}body .layout>.thermal-left{grid-template-columns:1fr!important}body .layout>.thermal-left>.stage,body .layout>.thermal-left>.chartbox{grid-column:1!important;grid-row:auto!important}body .layout>.thermal-right{grid-column:auto}body .layout .stage canvas,body .layout .chartbox canvas{height:300px!important}body .thermal-cycle .otto-grid{grid-template-columns:1fr}body .thermal-cycle .otto-controls{grid-column:auto}body .thermal-cycle .otto-card canvas{height:310px}}
+</style><style id="thermal-first-row-structural-v5">
+/* Structural fix: the visual canvases are in one dedicated top-aligned row, never grid auto-placement. */
+body .layout>.thermal-left{display:flex!important;flex-direction:column!important;justify-content:flex-start!important;align-items:stretch!important;align-content:flex-start!important;gap:8px!important}
+body .thermal-left>.thermal-visual-row{display:grid!important;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr)!important;grid-auto-rows:min-content!important;align-items:start!important;align-content:start!important;gap:9px!important;width:100%;margin:0!important;padding:0!important;min-height:0!important}
+body .thermal-left>.thermal-visual-row[hidden]{display:none!important}
+body .thermal-left>.thermal-visual-row>.stage,body .thermal-left>.thermal-visual-row>.chartbox{grid-column:auto!important;grid-row:1!important;align-self:start!important;position:relative!important;margin:0!important;min-height:0!important}
+body .thermal-left>.thermal-visual-row>.stage{grid-column:1!important}
+body .thermal-left>.thermal-visual-row>.chartbox{grid-column:2!important}
+body .thermal-left>.thermal-visual-row canvas{display:block!important;width:100%!important;height:clamp(340px,calc(100dvh - 250px),850px)!important}
+body .layout>.thermal-left>.thermal-compare{width:100%!important;flex:0 0 auto}
+@media(max-width:1150px){body .thermal-left>.thermal-visual-row{grid-template-columns:minmax(0,1fr)!important}body .thermal-left>.thermal-visual-row>.stage,body .thermal-left>.thermal-visual-row>.chartbox{grid-column:1!important;grid-row:auto!important}}
+@media(max-width:710px){body .thermal-left>.thermal-visual-row canvas{height:300px!important}}
 </style></head>
 <body>
 <div class="wrap">
@@ -494,7 +506,7 @@ const lesson=wrap.querySelector('.mission');if(!lesson||!stage||!chart)return;
 const nav=document.createElement('nav'),desc=document.createElement('p');nav.className='thermal-nav';desc.className='thermal-desc';wrap.querySelector('header').after(nav,desc);
 const left=document.createElement('div'),mid=document.createElement('div'),right=document.createElement('div');
 left.className='thermal-left';mid.className='thermal-middle';right.className='thermal-right';
-layout.replaceChildren(left,mid,right);left.append(stage,chart);mid.append(controls);right.append(stats,prog);prog.classList.add('thermal-progress');
+layout.replaceChildren(left,mid,right);const visualRow=document.createElement('div');visualRow.className='thermal-visual-row';visualRow.append(stage,chart);left.append(visualRow);mid.append(controls);right.append(stats,prog);prog.classList.add('thermal-progress');
 const seekBox=document.createElement('section');seekBox.className='panel thermal-progress';seekBox.innerHTML='<label for="thermalSeek" style="font-size:12px;color:#eaf6ff">과정 진행률 선택 <output id="thermalSeekOut">0%</output></label><input id="thermalSeek" aria-label="과정 진행률" type="range" min="0" max="100" step="25" value="0"><div class="thermal-caption">0% · 25% · 50% · 75% · 100%</div>';right.append(seekBox);const seek=document.getElementById('thermalSeek');seek.addEventListener('input',()=>{window.thermoProcessSeek(Number(seek.value)/100);document.getElementById('thermalSeekOut').textContent=seek.value+'%'});const syncSeek=()=>{const now=window.thermoProcessState().progress;seek.value=Math.round(now*4)*25;document.getElementById('thermalSeekOut').textContent=Math.round(now*100)+'%'};setInterval(syncSeek,220);
 lesson.classList.add('thermal-concept');
 const compare=document.createElement('section');compare.className='panel thermal-compare';
@@ -578,8 +590,8 @@ return '<tr'+(focus===mode.id?' class="comp-highlight"':'')+'><th style="color:'
 function tab(name){
 desc.textContent=notes[name];layout.hidden=name==='concept'||name==='cycle';lesson.classList.toggle('active',name==='concept');cyclePanel.classList.toggle('active',name==='cycle');if(window.thermalCycleVisibility)window.thermalCycleVisibility(name==='cycle');
 const cmp=name==='compare';compare.classList.toggle('active',cmp);layout.classList.toggle('thermal-compare-mode',cmp);
-if(cmp){left.append(compare);stage.remove();chart.remove();drawComparison();}
-else if(name!=='concept'&&name!=='cycle'){const b=mid.querySelector('[data-process="'+name+'"]');if(b)b.click();left.append(stage,chart);compare.remove();}
+if(cmp){visualRow.hidden=true;left.append(compare);drawComparison();}
+else if(name!=='concept'&&name!=='cycle'){const b=mid.querySelector('[data-process="'+name+'"]');if(b)b.click();visualRow.hidden=false;compare.remove();}
 for(const b of nav.children)b.setAttribute('aria-selected',String(b.dataset.tab===name));
 requestAnimationFrame(()=>window.dispatchEvent(new Event('resize')));
 }
