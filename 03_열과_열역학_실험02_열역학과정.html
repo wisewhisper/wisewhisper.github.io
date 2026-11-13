@@ -724,37 +724,37 @@ tab('isothermal');
 </script><script id="thermal-cycle-controller">
 (()=>{'use strict';
 const pane=document.getElementById('thermal-cycle');if(!pane)return;
-const R=8.314462618,gamma=1.4,Cv=R/(gamma-1),T0=300,Vlo=20,Vhi=40,r=Vhi/Vlo,Th=850;
-const A={V:Vhi,T:T0},B={V:Vlo,T:T0*Math.pow(r,gamma-1)},C={V:Vlo,T:Th},D={V:Vhi,T:Th/Math.pow(r,gamma-1)};
-for(const st of [A,B,C,D])st.P=R*st.T/st.V;
-const W=[Cv*(A.T-B.T),0,Cv*(C.T-D.T),0],Q=[0,Cv*(C.T-B.T),0,Cv*(A.T-D.T)];
-const Wnet=W.reduce((a,b)=>a+b,0),Qin=Q[1],Qout=-Q[3],eff=Wnet/Qin;
-const names=['A → B · 단열 압축','B → C · 정적 가열','C → D · 단열 팽창','D → A · 정적 냉각'];
-const info=['열이 드나들지 않는 단열 압축입니다. 외부가 기체에 일을 하므로 온도와 압력이 증가합니다. Q=0, W<0.','부피를 고정하고 열을 공급합니다. 기체는 일을 하지 않고 내부 에너지만 증가합니다. W=0, Q>0.','열이 드나들지 않는 단열 팽창입니다. 기체가 외부에 일을 하므로 온도와 압력이 감소합니다. Q=0, W>0.','부피를 고정하고 열을 방출합니다. 기체는 일을 하지 않고 온도와 압력이 감소합니다. W=0, Q<0.'];
+const R=8.314462618,n=.1,gamma=1.4,Cv=R/(gamma-1),T0=300,Vlo=2,Vhi=4,r=Vhi/Vlo,Th=850;
+const D={V:Vhi,T:T0},A={V:Vlo,T:T0*Math.pow(r,gamma-1)},B={V:Vlo,T:Th},C={V:Vhi,T:Th/Math.pow(r,gamma-1)};
+for(const st of [A,B,C,D])st.P=n*R*st.T/st.V;
+const W=[0,n*Cv*(B.T-C.T),0,n*Cv*(D.T-A.T)],Q=[n*Cv*(B.T-A.T),0,n*Cv*(D.T-C.T),0];
+const Wnet=W.reduce((a,b)=>a+b,0),Qin=Q[0],Qout=-Q[2],eff=Wnet/Qin;
+const names=['A → B · 정적 가열','B → C · 단열 팽창','C → D · 정적 냉각','D → A · 단열 압축'];
+const info=['정적 가열: 부피가 일정하므로 W=0, 열 유입 Q>0.','단열 팽창: 기체가 외부에 일을 하므로 W>0, Q=0.','정적 냉각: 부피가 일정하므로 W=0, 열 방출 Q<0.','단열 압축: 외부가 기체에 일을 하므로 W<0, Q=0.'];
 const num=(v,n=1)=>v.toLocaleString('ko-KR',{minimumFractionDigits:n,maximumFractionDigits:n});
 const points=[A,B,C,D,A];let z=0,running=false,last=0,raf=0;
 function stateAt(t){let k=Math.min(3,Math.floor(Math.min(t,3.99999))),u=t>=4?1:t-k;let V,T;
-if(k===0){V=A.V+(B.V-A.V)*u;T=A.T*Math.pow(A.V/V,gamma-1)}
-else if(k===1){V=B.V;T=B.T+(C.T-B.T)*u}
-else if(k===2){V=C.V+(D.V-C.V)*u;T=C.T*Math.pow(C.V/V,gamma-1)}
-else{V=D.V;T=D.T+(A.T-D.T)*u}
-return{V,T,P:R*T/V,k,u};}
+if(k===0){V=A.V;T=A.T+(B.T-A.T)*u}
+else if(k===1){V=B.V+(C.V-B.V)*u;T=B.T*Math.pow(B.V/V,gamma-1)}
+else if(k===2){V=C.V;T=C.T+(D.T-C.T)*u}
+else{V=D.V+(A.V-D.V)*u;T=D.T*Math.pow(D.V/V,gamma-1)}
+return{V,T,P:n*R*T/V,k,u};}
 pane.innerHTML='<div class="otto-head"><h2>교과서 그림으로 배우는 열기관의 한 사이클 · 오토(Otto) 순환</h2><p>두 단열 과정과 두 정적 과정으로 이루어진 이상적인 열기관입니다. 그림의 A→B→C→D→A 경로를 따라 정확히 한 바퀴 움직입니다.</p></div>'
-+'<div class="otto-grid"><section class="otto-card"><h3>피스톤과 열의 이동</h3><canvas id="ottoPiston" aria-label="열기관의 단열 압축, 정적 가열, 단열 팽창, 정적 냉각"></canvas><div class="otto-step" id="ottoStep"></div><p class="otto-desc" id="ottoDesc"></p></section>'
-+'<section class="otto-card"><h3>P–V 순환 그래프</h3><canvas id="ottoGraph" aria-label="오토 순환 P-V 그래프"></canvas><p class="otto-desc">A→B 단열 압축 · B→C 정적 가열 · C→D 단열 팽창 · D→A 정적 냉각. 둘러싸인 면적은 한 사이클의 순일입니다.</p></section>'
-+'<section class="otto-card otto-controls"><h3>실험 조작 및 결과</h3><div class="otto-buttons"><button id="ottoStart">▶ 한 사이클 실행</button><button id="ottoPause">Ⅱ 일시정지</button><button id="ottoNext">다음 과정</button><button id="ottoReset">↺ 초기화</button></div><label for="ottoSpeed">재생 속도 <output id="ottoSpeedVal">1.0배</output></label><input id="ottoSpeed" type="range" min=".25" max="3" step=".25" value="1"><label for="ottoSeek">한 사이클 진행률 <output id="ottoProgress">0%</output></label><input id="ottoSeek" type="range" min="0" max="4" step=".01" value="0"><div class="otto-stats"><div>압력 <b id="ottoP"></b></div><div>부피 <b id="ottoV"></b></div><div>온도 <b id="ottoT"></b></div><div>현재 과정 <b id="ottoName"></b></div></div><div class="otto-result">순일 <strong>'+num(Wnet)+' J</strong><span>열효율 '+num(eff*100,2)+'% · 받은 열 '+num(Qin)+' J</span></div></section></div>'
-+'<section class="otto-card otto-problem"><h3>예시문제 · 네 과정에서 기체가 한 일과 열효율 구하기</h3><p>1 mol의 이원자 이상 기체(γ=1.4)가 A(40 L, 300 K)에서 출발해 B까지 가역 단열 압축, C(20 L, 850 K)까지 정적 가열, D까지 가역 단열 팽창, A까지 정적 냉각하여 처음 상태로 돌아온다. 압축비는 2이다. 기체가 한 순일과 열효율을 구하시오.</p><details><summary>과정별 계산과 정답 자세히 보기</summary><div id="ottoSolution"></div></details></section>';
++'<div class="otto-grid"><section class="otto-card"><h3>피스톤과 열의 이동</h3><canvas id="ottoPiston" aria-label="열기관의 정적 가열, 단열 팽창, 정적 냉각, 단열 압축"></canvas><div class="otto-step" id="ottoStep"></div><p class="otto-desc" id="ottoDesc"></p></section>'
++'<section class="otto-card"><h3>P–V 순환 그래프</h3><canvas id="ottoGraph" aria-label="오토 순환 P-V 그래프"></canvas><p class="otto-desc">A→B 정적 가열 · B→C 단열 팽창 · C→D 정적 냉각 · D→A 단열 압축. 둘러싸인 면적은 한 사이클의 순일입니다.</p></section>'
++'<section class="otto-card otto-controls"><h3>실험 조작 및 결과</h3><div class="otto-buttons"><button id="ottoStart">▶ 한 사이클 실행</button><button id="ottoPause">Ⅱ 일시정지</button><button id="ottoNext">다음 과정</button><button id="ottoReset">↺ 초기화</button></div><label for="ottoSpeed">재생 속도 <output id="ottoSpeedVal">1.0배</output></label><input id="ottoSpeed" type="range" min=".25" max="3" step=".25" value="1"><label for="ottoSeek">한 사이클 진행률 <output id="ottoProgress">0%</output></label><input id="ottoSeek" type="range" min="0" max="4" step=".01" value="0"><div class="otto-stats"><div>압력 <b id="ottoP"></b></div><div>부피 <b id="ottoV"></b></div><div>온도 <b id="ottoT"></b></div><div>현재 과정 <b id="ottoName"></b></div></div><div class="otto-result">한 사이클 누적 일 <strong id="ottoWorkNow">0.0 J</strong><span>열효율 '+num(eff*100,2)+'% · 받은 열 '+num(Qin)+' J</span></div></section></div>'
++'<section class="otto-card otto-problem"><h3>예시문제 · 네 과정에서 기체가 한 일과 열효율 구하기</h3><p>0.1 mol의 이원자 이상 기체(γ=1.4)가 A(2 L, 약 395.9 K)에서 출발해 B(2 L, 850 K)까지 정적 가열, C까지 단열 팽창, D(4 L, 300 K)까지 정적 냉각, A까지 단열 압축하여 처음 상태로 돌아온다. 압축비는 2이다. 기체가 한 순일과 열효율을 구하시오.</p><details><summary>과정별 계산과 정답 자세히 보기</summary><div id="ottoSolution"></div></details></section>';
 // Place the worked-example question first, before the piston and P–V experiment.
 const problem=pane.querySelector('.otto-problem');
 const heading=pane.querySelector('.otto-head');
 if(problem&&heading){pane.insertBefore(problem,heading);}
 const sol=document.getElementById('ottoSolution');
-sol.innerHTML='<p>① A→B 단열 압축: TV^(γ−1)=일정 → T_B = 300×2^0.4 = '+num(B.T)+' K. Q_AB=0, W_AB = nCᵥ(T_A−T_B) = '+num(W[0])+' J (음수: 외부가 기체에 일).</p>'
-+'<p>② B→C 정적 가열: V=20 L 일정, W_BC=0. Q_BC = nCᵥ(850−'+num(B.T)+') = '+num(Q[1])+' J.</p>'
-+'<p>③ C→D 단열 팽창: T_D = 850/2^0.4 = '+num(D.T)+' K. Q_CD=0, W_CD = nCᵥ(850−'+num(D.T)+') = +'+num(W[2])+' J.</p>'
-+'<p>④ D→A 정적 냉각: V=40 L 일정, W_DA=0. Q_DA = nCᵥ(300−'+num(D.T)+') = '+num(Q[3])+' J.</p>'
-+'<p><b>한 사이클의 순일 W = ΣW = '+num(Wnet)+' J</b> = Q_in−Q_out = '+num(Qin)+'−'+num(Qout)+' J. <b>열효율 η = W/Q_in = '+num(eff*100,2)+'%</b>. 오토 순환의 공식 η = 1−1/r^(γ−1) = '+num(eff*100,2)+'%와 같습니다.</p>'
-+'<p>주의: 실제 엔진의 마찰·점화·배기 과정은 생략한 이상적인 가역 순환입니다. 교과서의 P–V 경로와 과정 종류를 그대로 적용한 학습용 모형입니다.</p>';
+sol.innerHTML='<p>① A→B 정적 가열: W_AB=0, Q_AB=nCᵥ(T_B−T_A) = '+num(Q[0])+' J.</p>'
++'<p>② B→C 단열 팽창: T_C=850/2^0.4 = '+num(C.T)+' K, W_BC=nCᵥ(T_B−T_C) = '+num(W[1])+' J.</p>'
++'<p>③ C→D 정적 냉각: W_CD=0, Q_CD=nCᵥ(T_D−T_C) = '+num(Q[2])+' J.</p>'
++'<p>④ D→A 단열 압축: T_A=300×2^0.4 = '+num(A.T)+' K, W_DA=nCᵥ(T_D−T_A) = '+num(W[3])+' J.</p>'
++'<p><b>한 사이클 순일 W = ΣW = '+num(Wnet)+' J</b>, 받은 열 '+num(Qin)+' J, 방출한 열 '+num(Qout)+' J, <b>열효율 η = '+num(eff*100,2)+'%</b>.</p>'
++'<p>이상적인 오토 순환 모형입니다. 실제 엔진의 마찰과 연소·배기 과정은 생략합니다.</p>';
 const pc=document.getElementById('ottoPiston'),gc=document.getElementById('ottoGraph');
 function context(canvas){const dpr=Math.min(2,window.devicePixelRatio||1),w=Math.max(200,canvas.clientWidth),h=Math.max(220,canvas.clientHeight);canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);const c=canvas.getContext('2d');c.setTransform(dpr,0,0,dpr,0,0);return{c,w,h}}
 function drawPiston(st){const{c,w,h}=context(pc),x=w/2,cw=Math.min(190,w*.47),top=38,bottom=h-37,pistonY=bottom-(st.V/Vhi)*(h-130);
@@ -762,19 +762,19 @@ c.fillStyle='#081a2a';c.fillRect(0,0,w,h);c.fillStyle='#b9cedc';c.fillRect(x-cw/
 const hot=Math.min(1,Math.max(0,(st.T-300)/550));c.fillStyle='rgba('+Math.round(50+210*hot)+','+Math.round(145-50*hot)+','+Math.round(230-170*hot)+',.55)';c.fillRect(x-cw/2,pistonY,cw,bottom-pistonY);
 c.fillStyle='#c6d9e7';c.fillRect(x-cw/2-5,pistonY-13,cw+10,13);c.fillRect(x-6,top-10,12,pistonY-top-3);
 c.fillStyle='#eff9ff';c.font='700 14px system-ui';c.fillText(names[st.k],12,23);c.font='12px system-ui';c.fillText('기체 '+num(st.T,0)+' K',x-cw/2+8,bottom-18);
-if(st.k===1||st.k===3){c.fillStyle=st.k===1?'#ffbd72':'#68c8ff';c.font='700 13px system-ui';c.fillText(st.k===1?'열 유입 Q > 0':'열 방출 Q < 0',12,h-13)}
+if(st.k===0||st.k===2){c.fillStyle=st.k===0?'#ffbd72':'#68c8ff';c.font='700 13px system-ui';c.fillText(st.k===0?'열 유입 Q > 0':'열 방출 Q < 0',12,h-13)}
 else{c.fillStyle='#83e6c6';c.font='700 13px system-ui';c.fillText('단열 · Q = 0',12,h-13)}
 }
-function drawGraph(st){const{c,w,h}=context(gc),pad={l:55,r:22,t:30,b:42},maxP=C.P*1.17, X=v=>pad.l+(v-15)/30*(w-pad.l-pad.r),Y=p=>h-pad.b-p/maxP*(h-pad.t-pad.b);
+function drawGraph(st){const{c,w,h}=context(gc),pad={l:55,r:22,t:30,b:42},maxP=B.P*1.17, X=v=>pad.l+(v-1.5)/3*(w-pad.l-pad.r),Y=p=>h-pad.b-p/maxP*(h-pad.t-pad.b);
 c.fillStyle='#081a2a';c.fillRect(0,0,w,h);c.strokeStyle='#2c4b62';c.lineWidth=1;c.font='11px system-ui';c.fillStyle='#a9c9da';
-for(let i=0;i<=4;i++){let v=20+5*i;c.beginPath();c.moveTo(X(v),pad.t);c.lineTo(X(v),h-pad.b);c.stroke();c.fillText(String(v),X(v)-8,h-18)}
+for(let i=0;i<=4;i++){let v=2+.5*i;c.beginPath();c.moveTo(X(v),pad.t);c.lineTo(X(v),h-pad.b);c.stroke();c.fillText(String(v),X(v)-8,h-18)}
 for(let i=0;i<=4;i++){let p=maxP*i/4;c.beginPath();c.moveTo(pad.l,Y(p));c.lineTo(w-pad.r,Y(p));c.stroke();c.fillText(num(p,0),5,Y(p)+4)}
 c.fillText('P (kPa)',7,17);c.fillText('V (L)',w-45,h-7);
 function trace(to,fill){c.beginPath();for(let j=0;j<=to*60;j++){let stt=stateAt(j/60);if(j===0)c.moveTo(X(stt.V),Y(stt.P));else c.lineTo(X(stt.V),Y(stt.P));}if(fill){c.closePath();c.fillStyle='#e5c56b35';c.fill()}else{c.strokeStyle='#73e7c6';c.lineWidth=3;c.stroke()}}
 trace(4,true);trace(4,false);c.strokeStyle='#f7cc7c';c.lineWidth=3;c.beginPath();for(let j=0;j<=z*60;j++){let a=stateAt(j/60);j===0?c.moveTo(X(a.V),Y(a.P)):c.lineTo(X(a.V),Y(a.P))}c.stroke();
 for(const [i,a] of [A,B,C,D].entries()){c.beginPath();c.fillStyle='#edf7ff';c.arc(X(a.V),Y(a.P),4,0,Math.PI*2);c.fill();c.fillText('ABCD'[i],X(a.V)+7,Y(a.P)-7)}
 c.beginPath();c.arc(X(st.V),Y(st.P),7,0,Math.PI*2);c.fillStyle='#ffbd6c';c.fill();c.strokeStyle='#fff';c.lineWidth=2;c.stroke();}
-function draw(){const st=stateAt(z);drawPiston(st);drawGraph(st);document.getElementById('ottoStep').textContent=names[st.k];document.getElementById('ottoDesc').textContent=info[st.k];document.getElementById('ottoP').textContent=num(st.P)+' kPa';document.getElementById('ottoV').textContent=num(st.V)+' L';document.getElementById('ottoT').textContent=num(st.T)+' K';document.getElementById('ottoName').textContent=names[st.k];document.getElementById('ottoProgress').textContent=num(z/4*100,0)+'%';document.getElementById('ottoSeek').value=z;}
+function draw(){const st=stateAt(z);const completed=Math.min(4,Math.floor(z));let cumulative=0;for(let j=0;j<completed;j++)cumulative+=W[j];if(z<4&&completed<4&&completed%2===1){const from=points[completed],partial=stateAt(z);cumulative+=n*Cv*(from.T-partial.T);}document.getElementById('ottoWorkNow').textContent=num(cumulative)+' J';drawPiston(st);drawGraph(st);document.getElementById('ottoStep').textContent=names[st.k];document.getElementById('ottoDesc').textContent=info[st.k];document.getElementById('ottoP').textContent=num(st.P)+' kPa';document.getElementById('ottoV').textContent=num(st.V)+' L';document.getElementById('ottoT').textContent=num(st.T)+' K';document.getElementById('ottoName').textContent=names[st.k];document.getElementById('ottoProgress').textContent=num(z/4*100,0)+'%';document.getElementById('ottoSeek').value=z;}
 function stop(){running=false;cancelAnimationFrame(raf);last=0;}
 function tick(now){if(!running)return;if(last){z=Math.min(4,z+(now-last)/1000*.25*Number(document.getElementById('ottoSpeed').value));}last=now;draw();if(z>=4){stop();return}raf=requestAnimationFrame(tick)}
 document.getElementById('ottoStart').onclick=()=>{if(z>=4)z=0;if(!running){running=true;last=0;raf=requestAnimationFrame(tick)}};
