@@ -109,7 +109,7 @@ th,td{padding:4px 7px;border-bottom:1px solid #34566d}th{color:#d7eaf5}
   <span class="hint" id="playingStatus">재생 대기</span>
  </div>
  <div class="canvas-holder"><canvas id="stage" aria-label="두 끝이 고정된 줄이나 공기 기둥의 파형과 마디·배, 강제진동의 공명에 따른 변화를 보여 주는 실험"></canvas></div>
- <p class="caps" id="sceneDesc">구동 진동수를 바꾸어 정상파가 공명하는 과정을 관찰하세요. 공명점에서 벗어나면 여러 모드가 함께 나타납니다.</p>
+ <p class="caps" id="sceneDesc">공명점에서는 마디가 움직이지 않고, 실선만 제자리에서 위아래로 진동합니다. 옅은 점선은 변하지 않는 최대 진폭 외곽선입니다.</p>
  <div class="results" aria-label="시뮬레이션 실시간 결과" aria-live="polite">
   <div class="result"><small id="label1">파동 속력</small><b id="value1">89.44 m/s</b></div>
   <div class="result"><small id="label2">고유진동수</small><b id="value2">37.27 Hz</b></div>
@@ -236,14 +236,25 @@ function modeWeight(kind,n){
  return excitation/(2*Math.pow(n,1.35));
 }
 function modalResponse(d,u,phase,view="displacement"){
+ // At resonance the standing wave is a single eigenmode:
+ // the node positions are exactly fixed for every phase.
+ const r=d.f/d.fn,lag=Math.atan2(2*d.z*r,1-r*r);
+ const gain=clamp(d.R*2*d.z,0,1);
+ const pure=gain*modalShape(d.kind,d.n,u,view)*Math.cos(phase-lag);
+ const blendStart=Math.max(.024,1.25*d.z);
+ const blend=clamp((d.detune-blendStart)/(blendStart*.8),0,1);
+ if(blend<=0)return pure;
+ // Away from resonance, a linear multimode driven response is appropriate.
  let sum=0;
  for(const m of d.modes){
-  const r=d.f/m.f,lag=Math.atan2(2*d.z*r,1-r*r);
+  const rr=d.f/m.f,lagM=Math.atan2(2*d.z*rr,1-rr*rr);
   const R=response(d.f,m.f,d.z);
   const kFactor=view==="pressure"?Math.min(m.harmonic,11)*.55:1;
-  sum+=modeWeight(d.kind,m.n)*R*kFactor*modalShape(d.kind,m.n,u,view)*Math.cos(phase-lag);
+  sum+=modeWeight(d.kind,m.n)*R*kFactor*modalShape(d.kind,m.n,u,view)*Math.cos(phase-lagM);
  }
- return Math.tanh(.23*sum);
+ const multimode=Math.tanh(.23*sum);
+ // Smooth crossfade prevents a visible jump when moving the drive slider.
+ return (1-blend)*pure+blend*multimode;
 }
 function nodes(kind,n,view){
  const a=[],b=[];
@@ -315,7 +326,26 @@ function drawStanding(out,d){
    }
   }
  }
- // Multimodal sum; off-resonance nodes are never falsely asserted.
+ // At resonance, show the two STATIONARY maximum-displacement envelopes.
+ // The solid line below is the instantaneous position and must oscillate in place.
+ if(choice){
+  const maxAmp=amp*clamp(d.R*2*d.z,0,1);
+  c.save();c.lineWidth=1.8;c.strokeStyle=view==="pressure"?"#ffd48d88":"#89e8e488";
+  c.setLineDash([8,6]);
+  for(const sign of [-1,1]){
+   c.beginPath();
+   for(let i=0;i<=480;i++){
+    const u=i/480,xx=left+span*u;
+    const envelope=Math.abs(modalShape(kind,d.n,u,view));
+    const yy=cx+sign*maxAmp*envelope;
+    if(!i)c.moveTo(xx,yy);else c.lineTo(xx,yy);
+   }
+   c.stroke();
+  }
+  c.restore();
+ }
+ // The solid stroke represents the instantaneous transverse shape,
+ // or a schematic longitudinal-displacement/pressure profile.
  c.beginPath();
  for(let i=0;i<=540;i++){
   const u=i/540,x=left+span*u,y=cx-amp*modalResponse(d,u,s.phase,view);
@@ -409,8 +439,10 @@ function setNumbers(){
  }else{
   const name=kind==="string"?"줄의 정상파":kind==="open"?"양쪽 열린관":"한쪽 닫힌관";
   $("sceneTitle").textContent=name+" · 구동 공명";
-  $("sceneDesc").textContent=kind==="string"?"줄의 두 끝은 변위 마디입니다. 구동 진동수가 고유진동수와 멀어지면 여러 진동 모드가 겹칩니다.":
-   "공기는 관의 길이 방향으로 진동합니다. 변위와 압력의 마디·배 위치가 서로 다르므로 관찰량을 바꿔 확인하세요.";
+  $("sceneDesc").textContent=nearResonance(d)?
+    "공명 상태: 실선은 위아래로 진동하지만 마디는 고정됩니다. 점선은 시간에 따라 변하지 않는 최대 진폭 외곽선입니다.":
+    kind==="string"?"구동 진동수가 공명점에서 벗어나면 여러 고유모드의 진동이 겹칩니다. 양끝은 변위 마디로 고정됩니다.":
+    "공명에서 벗어난 여러 모드 중첩입니다. 관 속 공기의 실제 진동은 길이 방향이며 그래프는 변위 또는 압력의 상대값을 도식화합니다.";
   const shown=nearResonance(d);
   setResult([["파동 속력 v",fmt(d.v,1)+" m/s"],["최근접 fₙ",fmt(d.fn,1)+" Hz"],["구동 진동수",fmt(d.f,1)+" Hz"],["구동파 파장 λ",fmt(d.lambda,2)+" m"],["모드 응답",fmt(d.R,2)+"×"]]);
   $("formula").innerHTML=(kind==="string"?"v=√(F/μ)=<b>"+fmt(d.v,2)+" m/s</b><br>":
@@ -632,8 +664,8 @@ function bind(){
 function tick(now){
  if(s.play&&!document.hidden&&s.tab!=="compare"&&s.tab!=="concept"){
   const dt=s.last===null?0:clamp((now-s.last)/1000,0,.075);
-  s.last=now;s.phase+=TAU*visualFrequency(cdata().f)*dt*s.rate;
-  if(!tick.prev||now-tick.prev>31){tick.prev=now;drawScene();}
+  s.last=now;s.phase=(s.phase+TAU*visualFrequency(cdata().f)*dt*s.rate)%TAU;
+  if(!tick.prev||now-tick.prev>16){tick.prev=now;drawScene();}
  }
  requestAnimationFrame(tick);
 }
