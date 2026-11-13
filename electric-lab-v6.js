@@ -86,8 +86,7 @@ if(toolbar&&!toolbar.closest(".card,.panel")){toolbar.classList.add("e7-toolbar"
 for(const node of grouped.controls)side.append(node);
 for(const node of grouped.readout)side.append(node);
 if(ID==="실험03_RC회로의충전과방전"){
- const meter=main.querySelector("section.meters");
- if(meter){meter.classList.add("e7-meterstrip");side.append(meter);}
+ // RC result strip stays directly underneath its circuit, never in scrollable controls.
  const formula=main.querySelector("#equation");
  if(formula){formula.classList.add("e7-original-equation");grouped.lesson.unshift(formula);}
 }
