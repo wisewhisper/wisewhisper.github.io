@@ -243,6 +243,10 @@ body .wrap>.otto-question-above-tabs details:not([open]){max-height:30px;overflo
 body .wrap>.layout[hidden],body .wrap>.layout[hidden].thermal-compare-mode,body .wrap>.layout[hidden]>.thermal-left,body .wrap>.layout[hidden]>.thermal-middle,body .wrap>.layout[hidden]>.thermal-right{display:none!important}
 body .wrap>.thermal-cycle:not(.active){display:none!important}
 body .wrap>.thermal-cycle.active{display:block!important}
+</style><style id="cycle-exclusivity-explicit-v9">
+body .wrap>.layout[hidden]{display:none!important;visibility:hidden!important}
+body .wrap>.thermal-cycle[hidden]{display:none!important}
+body .wrap>.thermal-cycle.active:not([hidden]){display:block!important}
 </style></head>
 <body>
 <div class="wrap">
@@ -536,7 +540,7 @@ compare.innerHTML='<div class="comp-heading"><h2>동일한 초기 상태의 네 
 +'<div class="comp-insight" id="compInsight" aria-live="polite"></div><div class="comp-formula">정압 W=PΔV · 등온 W=nRT ln(V₂/V₁) · 단열 W=−ΔU · 정적 W=0</div></div></div>'
 +'<div class="comp-results"><h3>현재 진행률에서의 상태 및 에너지 비교</h3><div class="comp-table-wrap"><table><thead><tr><th>과정</th><th>압력 P</th><th>부피 V</th><th>온도 T</th><th>한 일 W</th><th>받은 열 Q</th><th>일의 상대 크기</th></tr></thead><tbody id="pvCompareRows"></tbody></table></div><p class="comp-caption">정압·등온·단열은 최종 부피비를 동일하게 비교합니다. 정적 과정은 부피를 고정하고 온도비 T/T₀를 같은 비율로 변경합니다. 동일한 출발 상태일 뿐 동일한 최종 상태는 아닙니다.</p></div>';
 left.append(compare);
-const cyclePanel=document.createElement('section');cyclePanel.id='thermal-cycle';cyclePanel.className='thermal-cycle';cyclePanel.setAttribute('aria-label','네 과정으로 구성한 열기관 1사이클과 풀이');layout.after(cyclePanel);
+const cyclePanel=document.createElement('section');cyclePanel.id='thermal-cycle';cyclePanel.className='thermal-cycle';cyclePanel.hidden=true;cyclePanel.style.setProperty('display','none','important');cyclePanel.setAttribute('aria-label','네 과정으로 구성한 열기관 1사이클과 풀이');layout.after(cyclePanel);
 const notes={isothermal:'온도가 일정할 때 피스톤 이동과 P–V 경로를 확인합니다.',isobaric:'압력이 일정한 팽창·압축에서 부피와 온도가 함께 변합니다.',isochoric:'부피가 일정하므로 피스톤과 P–V 수직 경로를 관찰합니다.',adiabatic:'초기·최종 등온선(점선) 사이를 단열 경로(녹색 실선)로 이동합니다. 팽창하면 냉각, 압축하면 가열됩니다.',compare:'같은 초기 상태에서 서로 다른 과정의 압력·일·열량을 비교합니다.',cycle:'네 가지 열역학 과정을 연결한 실제 닫힌 P–V 사이클을 한 번 실행하고, 기체가 한 순일을 계산합니다.',concept:'물리 모형, 네 과정의 조건과 열·일의 부호를 설명합니다.'};
 const configs=[['isothermal','① 등온'],['isobaric','② 정압'],['isochoric','③ 정적'],['adiabatic','④ 단열'],['compare','⑤ 네 과정 비교'],['cycle','⑥ 열기관 한 사이클'],['concept','⑦ 개념 설명']];
 function drawComparison(){
@@ -612,7 +616,15 @@ if(cycleQuestion){
   if(name==='cycle'){wrap.insertBefore(cycleQuestion,nav);cycleQuestion.hidden=false;cycleQuestion.classList.add('otto-question-above-tabs');}
   else{cycleQuestion.hidden=true;cycleQuestion.classList.remove('otto-question-above-tabs');if(cycleQuestion.parentNode!==cyclePanel)cyclePanel.insertBefore(cycleQuestion,cyclePanel.firstChild);}
 }
-layout.hidden=name==='concept'||name==='cycle';lesson.classList.toggle('active',name==='concept');cyclePanel.classList.toggle('active',name==='cycle');if(window.thermalCycleVisibility)window.thermalCycleVisibility(name==='cycle');
+const standalone=name==='concept'||name==='cycle';
+layout.hidden=standalone;
+layout.style.setProperty('display',standalone?'none':'grid','important');
+layout.setAttribute('aria-hidden',String(standalone));
+if(standalone){layout.inert=true;}else{layout.inert=false;}
+lesson.classList.toggle('active',name==='concept');
+cyclePanel.classList.toggle('active',name==='cycle');
+cyclePanel.hidden=name!=='cycle';
+cyclePanel.style.setProperty('display',name==='cycle'?'block':'none','important');if(window.thermalCycleVisibility)window.thermalCycleVisibility(name==='cycle');
 const cmp=name==='compare';compare.classList.toggle('active',cmp);layout.classList.toggle('thermal-compare-mode',cmp);
 if(cmp){visualRow.hidden=true;left.append(compare);drawComparison();}
 else if(name!=='concept'&&name!=='cycle'){const b=mid.querySelector('[data-process="'+name+'"]');if(b)b.click();visualRow.hidden=false;compare.remove();}
