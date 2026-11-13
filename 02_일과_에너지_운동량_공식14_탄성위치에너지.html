@@ -193,7 +193,7 @@ panels[1].children[0].querySelector('h2').textContent='용수철 진동의 에�
 panels[1].children[0].querySelector('h2').after(chart);
 const relation=document.createElement('div');relation.className='s-extra';relation.innerHTML='<strong style="color:#9ad9ff">변형량과 힘·에너지 관계</strong><p style="font-size:12px;margin:5px 0">아래 포물선 그래프는 Uₛ = ½kx²이며 현재 진동 궤적을 구별해 표시합니다.</p>';
 panels[1].children[0].append(relation);relation.after(forceGraph);
-let mode='static',time=0,running=false,raf=0,last=0,mass=2,rate=1,angle=0,grab=null,amplitude=model.x;
+let mode='static',activeTab='static',time=0,running=false,raf=0,last=0,mass=2,rate=1,angle=0,grab=null,amplitude=model.x;
 const fmt=(n,d=3)=>(Math.abs(n)<1e-9?0:n).toFixed(d);
 const omega=()=>Math.sqrt(model.k/mass),period=()=>2*Math.PI/omega();
 function physics(t){const w=omega(),A=amplitude,phase=2*Math.PI*((t/period())%1),x=mode==='oscillate'?A*Math.cos(phase):model.x,v=mode==='oscillate'?-A*w*Math.sin(phase):0,U=.5*model.k*x*x,K=.5*mass*v*v;return {x,v,U,K,E:U+K,F:-model.k*x,w,A};}
@@ -222,23 +222,51 @@ function energyChart(){const r=chart.getBoundingClientRect();if(r.width<20)retur
 const oldScene=scene,oldRender=render;
 scene=render3D;
 render=function(){oldRender();refresh();};
+// Rendering is independent from the oscillator clock; only explicit user actions may stop it.
+
 function refresh(){const s=physics(time);el('s-x').textContent=fmt(s.x)+' m';el('s-v').textContent=fmt(s.v)+' m/s';el('s-k').textContent=fmt(s.K)+' J';el('s-e').textContent=fmt(s.E)+' J';
  el('u').textContent=fmt(s.U)+' J';el('f').textContent=fmt(s.F,2)+' N';el('calc').innerHTML='Uₛ = ½kx² = <b>'+fmt(s.U)+' J</b><br>Fₛ = −kx = <b>'+fmt(s.F,2)+' N</b><br>운동 에너지 K = <b>'+fmt(s.K)+' J</b><br>Uₛ + K = <b>'+fmt(s.E)+' J</b><br>T = 2π√(m/k) = '+fmt(period(),2)+' s';
  const f=s.E>1e-10?Math.max(0,Math.min(1,s.U/s.E)):1;el('s-u-bar').style.width=(f*100)+'%';el('s-k-bar').style.width=((1-f)*100)+'%';
  const T=period(),cycles=time/T;cycleInfo.textContent='자동 주기 T = '+fmt(T,2)+' s · 완료 '+Math.floor(cycles)+'회 · 진행 '+fmt(100*(cycles%1),0)+'% · 재생 '+fmt(rate,2)+'배';
- el('s-pause').disabled=!running;render3D();if(panels[1].classList.contains('ww-active'))energyChart();}
+ el('s-pause').disabled=!running;document.body.dataset.springRunning=String(running);if(panels[0].classList.contains('ww-active'))render3D();if(panels[1].classList.contains('ww-active'))energyChart();}
 function stop(){running=false;cancelAnimationFrame(raf);raf=0;last=0;}
 function resetTime(){stop();time=0;amplitude=model.x;el('s-play').textContent='▶ 시작';el('s-status').textContent='조건 변경 · 시작 버튼을 눌러 관찰하세요.';refresh();}
 function start(){if(mode==='static')switchMode('oscillate');if(Math.abs(amplitude)<1e-8){el('s-status').textContent='변형량 x를 0이 아닌 값으로 조절한 뒤 시작하세요.';return;}if(running)return;running=true;last=0;el('s-play').textContent='▶ 진행 중';el('s-status').textContent='자동 연속 진동 중 · 물리적 주기는 질량과 용수철 상수로 결정됩니다.';raf=requestAnimationFrame(frame);}
-function frame(now){if(!running)return;if(!last)last=now;time+=Math.min(.05,(now-last)/1000)*rate;last=now;refresh();raf=requestAnimationFrame(frame);}
-function switchMode(m){stop();mode=m;time=0;amplitude=model.x;const index=m==='graphs'?1:m==='lesson'?2:0;panels.forEach((p,i)=>{p.hidden=i!==index;p.classList.toggle('ww-active',i===index);});
+function frame(now){
+ if(!running)return;
+ if(!last)last=now;
+ const delta=Math.max(0,Math.min(.05,(now-last)/1000))*rate;
+ last=now;
+ time+=delta;
+ // Never stop at a cycle boundary; the physical phase repeats modulo the natural period.
+ try{refresh();}catch(err){
+   stop();el('s-status').textContent='화면 갱신 오류: '+String(err&&err.message||err);
+   console.error('Spring animation rendering error',err);return;
+ }
+ if(running)raf=requestAnimationFrame(frame);
+}
+function switchMode(m){
+ const sameSimulation=(m==='graphs' && running && mode==='oscillate')||(m==='oscillate' && running && activeTab==='graphs');
+ if(!sameSimulation)stop();
+ if(m==='static'||m==='oscillate'){
+   if(!sameSimulation){mode=m;time=0;amplitude=model.x;}
+ }else if(m==='graphs'&&!sameSimulation){
+   mode='oscillate';time=0;amplitude=model.x;
+ }
+ activeTab=m;
+ const index=m==='graphs'?1:m==='lesson'?2:0;
+ panels.forEach((p,i)=>{p.hidden=i!==index;p.classList.toggle('ww-active',i===index);});
  nav.querySelectorAll('button').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.sMode===m)));
- sceneCard.querySelector('h2').textContent=m==='oscillate'?'입체 용수철 수레 · 자유 진동':'입체 용수철 압축·늘림';el('s-play').textContent='▶ 시작';
- el('s-status').textContent=m==='static'?'변형량을 슬라이더 또는 드래그로 변경하세요.':m==='oscillate'?'▶ 시작을 누르면 놓인 물체가 진동합니다.':'그래프에서 U, K, U+K를 비교하세요.';
- requestAnimationFrame(()=>{if(index===0)render();else if(index===1){graph();energyChart();}});}
+ sceneCard.querySelector('h2').textContent=m==='oscillate'?'입체 용수철 수레 · 자유 진동':'입체 용수철 압축·늘림';
+ if(!sameSimulation)el('s-play').textContent='▶ 시작';
+ el('s-status').textContent=m==='static'?'변형량을 조절한 다음 ▶ 시작을 누르세요.':m==='oscillate'?(sameSimulation?'진동 계속 진행 중':'▶ 시작하면 중단 없이 계속 진동합니다.'):m==='graphs'?(sameSimulation?'진동 계속 진행 중 · 그래프 실시간 갱신':'그래프는 진동 시작 후 변화합니다.'):'개념 설명';
+ requestAnimationFrame(()=>{if(index===0)render();else if(index===1){graph();energyChart();}});
+}
 nav.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>switchMode(b.dataset.sMode)));
 el('s-play').onclick=()=>{start();};
 el('s-pause').onclick=()=>{stop();el('s-play').textContent='▶ 이어서';el('s-status').textContent='일시정지 · 시작으로 이어서';refresh();};
+// Graph selection must never cancel an already-running oscillator.
+
 el('s-step').onclick=()=>{stop();mode='oscillate';time+=period()/24;el('s-status').textContent='한 단계 진행 · t='+fmt(time,2)+' s';refresh();};
 el('s-reset').onclick=()=>{stop();time=0;amplitude=model.x;el('s-play').textContent='▶ 시작';el('s-status').textContent='초기 위치로 되돌렸습니다.';refresh();};
 el('s-mass').oninput=e=>{mass=Number(e.target.value);el('s-mass-out').textContent=fmt(mass,1)+' kg';resetTime();};
