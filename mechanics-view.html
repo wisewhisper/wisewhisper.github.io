@@ -18,10 +18,10 @@ frame.addEventListener('load',()=>{
  try{
   const doc=frame.contentDocument;
   if(!doc||!doc.body)throw new Error('실험 화면을 읽을 수 없습니다.');
-  const css=doc.createElement('link');css.rel='stylesheet';css.href=new URL('mechanics-2026.css?v=20261113-m2',location.href).href;
+  const css=doc.createElement('link');css.rel='stylesheet';css.href=new URL('mechanics-v4.css?v=20261113-m4',location.href).href;
   css.onload=()=>{
-   const script=doc.createElement('script');script.src=new URL('mechanics-2026.js?v=20261113-m2',location.href).href;
-   script.onload=()=>{document.title=doc.title+' · WiseWhisper';loading.hidden=true;frame.hidden=false;setTimeout(()=>frame.contentWindow.dispatchEvent(new Event('resize')),100);};
+   const script=doc.createElement('script');script.src=new URL('mechanics-v4.js?v=20261113-m4',location.href).href;
+   script.onload=()=>{document.title=doc.title+' · WiseWhisper';loading.hidden=true;frame.hidden=false;requestAnimationFrame(()=>{frame.contentWindow.dispatchEvent(new Event('resize'));setTimeout(()=>frame.contentWindow.dispatchEvent(new Event('resize')),180);});};
    script.onerror=()=>fail('실험 화면 구성 스크립트를 불러오지 못했습니다.');
    doc.body.append(script);
   };
