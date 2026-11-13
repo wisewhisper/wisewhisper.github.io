@@ -246,7 +246,7 @@ function frame(now){
  if(running)raf=requestAnimationFrame(frame);
 }
 function switchMode(m){
- const sameSimulation=(m==='graphs' && running && mode==='oscillate')||(m==='oscillate' && running && activeTab==='graphs');
+ const sameSimulation=running && mode==='oscillate' && (m==='graphs'||m==='lesson'||m==='oscillate') && (activeTab==='oscillate'||activeTab==='graphs'||activeTab==='lesson');
  if(!sameSimulation)stop();
  if(m==='static'||m==='oscillate'){
    if(!sameSimulation){mode=m;time=0;amplitude=model.x;}
