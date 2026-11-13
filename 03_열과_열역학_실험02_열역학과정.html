@@ -43,6 +43,8 @@ body .law{padding:6px;font-size:12px}
 .thermal-desc{font-size:12px;color:#bfd2e2;margin:0 0 7px}
 body .layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(240px,275px) minmax(200px,230px);gap:9px;align-items:start}
 body .thermal-left,body .thermal-middle,body .thermal-right{display:grid;gap:8px;min-width:0}
+@media(min-width:1151px){body .thermal-left{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);align-items:start}body .thermal-left>.thermal-compare{grid-column:1/-1}}
+
 body .panel{border-radius:12px;box-shadow:none}
 body .layout .controls{padding:10px}
 body .layout .section-title{font-size:11px;margin:0 0 6px}
