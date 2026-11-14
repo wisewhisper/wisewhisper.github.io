@@ -15,4 +15,88 @@ function update(){const p=model(),s=state(p,time);$('stats').innerHTML=[['자기
 function restart(){time=0;running=false;last=null;update();}
 $('dir').onchange=restart;$('play').onclick=()=>{if(time>=model().horizon)time=0;running=true;last=null;update()};$('pause').onclick=()=>{running=false;last=null;update()};$('restart').onclick=restart;$('reset').onclick=()=>{values=Object.fromEntries(defs.map(d=>[d[0],d[5]]));defs.forEach(d=>{$(d[0]+'s').value=$(d[0]+'n').value=d[5]});$('dir').value='1';$('rate').value='1';$('predict').value='';saved={A:null,B:null};compare();restart()};
 function compare(){const rows=[['q (nC)',a=>a.q],['v (m/s)',a=>fmt(a.v*1e4)],['B (T)',a=>a.B],['자기장 방향',a=>a.dir===1?'+z':'−z'],['θ (°)',a=>a.theta],['m (kg)',a=>fmt(a.m*1e-15)],['F (N)',a=>fmt(model(a,a.dir).F)],['r (m)',a=>fmt(model(a,a.dir).r)],['K (J)',a=>fmt(model(a,a.dir).K)]];$('compare').innerHTML=rows.map(([label,f])=>`<tr><th>${label}</th><td>${saved.A?f(saved.A):'미저장'}</td><td>${saved.B?f(saved.B):'미저장'}</td></tr>`).join('');}for(const key of ['A','B'])$('save'+key).onclick=()=>{saved[key]={...values,dir:+$('dir').value};compare()};$('clear').onclick=()=>{saved={A:null,B:null};compare()};document.addEventListener('visibilitychange',()=>{last=null});function frame(now){if(running&&!document.hidden){const p=model();if(last!==null)time=Math.min(p.horizon,time+Math.min((now-last)/1000,.05)*p.horizon/12*+$('rate').value);last=now;if(time>=p.horizon)running=false;update();}else last=null;requestAnimationFrame(frame)}compare();update();requestAnimationFrame(frame);
-</script></body></html>
+</script><style>
+/* Independent fixed teaching tabs; original experiment logic is unchanged. */
+html,body{background:#080d15!important;color-scheme:dark}
+body.wlab-ready{margin:0;overflow-x:hidden}
+.wlab-root{display:block!important;width:100%!important;max-width:none!important;margin:0!important;padding:8px 14px 12px!important;min-width:0!important;box-sizing:border-box}
+body.wlab-ready .wrap{max-width:none!important;padding:8px 14px!important}
+body.wlab-ready header{padding:8px 14px!important;margin:0 0 6px!important;min-height:0!important;background:#0e1725!important}
+body.wlab-ready header h1{font-size:clamp(19px,2.2vw,28px)!important;line-height:1.2;margin:3px 0!important}
+body.wlab-ready header p,body.wlab-ready header .tag,body.wlab-ready header .eyebrow,body.wlab-ready header .hint{font-size:12px!important;margin:2px 0!important}
+body.wlab-ready header .formula{font-size:18px!important}
+.wlab-nav{display:flex!important;flex-wrap:wrap;align-items:center;gap:6px;padding:6px 0 8px;position:relative}
+.wlab-nav button,.wlab-nav a{width:auto!important;min-height:36px!important;padding:6px 14px!important;border:1px solid #415773!important;border-radius:8px!important;background:#17263a!important;color:#e8f3ff!important;font:600 14px system-ui,sans-serif!important;text-decoration:none!important;cursor:pointer}
+.wlab-nav button[aria-selected=true]{background:#126278!important;border-color:#65d5dc!important}
+.wlab-nav a{margin-left:auto}
+.wlab-deck{position:relative;min-width:0}
+.wlab-pane{min-width:0;position:relative;box-sizing:border-box}
+.wlab-pane:not(.wlab-active){position:absolute!important;inset:0!important;visibility:hidden!important;pointer-events:none!important;z-index:-1!important;overflow:hidden!important}
+.wlab-sim{display:grid!important;grid-template-columns:minmax(0,2.25fr) minmax(270px,1fr);gap:10px;align-items:start}
+.wlab-scene,.wlab-control,.wlab-result,.wlab-card,.wlab-extra{min-width:0!important;box-sizing:border-box}
+.wlab-scene,.wlab-control,.wlab-result,.wlab-card{background:#111c2d!important;border:1px solid #2f425a!important;border-radius:12px!important;color:#edf5ff!important;padding:12px!important;margin:0!important}
+.wlab-scene{grid-column:1}.wlab-control{grid-column:2;grid-row:1}.wlab-result{grid-column:1/-1}
+.wlab-wide{grid-column:1/-1!important;padding:0!important;background:none!important;border:0!important}
+.wlab-scene h2,.wlab-control h2,.wlab-result h2,.wlab-card h2{font-size:17px!important;margin:0 0 6px!important}
+.wlab-scene p,.wlab-control p,.wlab-result p{font-size:13px!important;line-height:1.4!important;margin:5px 0!important}
+.wlab-scene #scene,.wlab-scene #wave,.wlab-scene .svgbox{display:block!important;width:100%!important;height:clamp(260px,48vh,570px)!important;object-fit:contain;background:#080f1b!important;border-radius:8px}
+.wlab-scene .canvasbox{width:100%;overflow:hidden}
+.wlab-scene .canvasbox #scene{height:clamp(220px,42vh,490px)!important}
+.wlab-scene .buttons,.wlab-control .buttons,.wlab-control .actions{gap:5px!important;margin:6px 0!important}
+.wlab-scene button,.wlab-control button,.wlab-result button,.wlab-control select,.wlab-control input[type=number]{min-height:34px!important;padding:5px 9px!important;font-size:13px!important}
+.wlab-control label{font-size:13px!important;margin:7px 0 3px!important;line-height:1.35!important}
+.wlab-control input[type=range]{height:28px!important;min-height:28px!important}
+.wlab-control .controls{gap:6px!important}
+.wlab-control .control,.wlab-control .ctrl{margin:6px 0!important}
+.wlab-result .stats,.wlab-result .metrics,.wlab-result .values,.wlab-result .readings,.wlab-result .statgrid{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(125px,1fr))!important;gap:6px!important;margin:3px 0!important}
+.wlab-result .metric,.wlab-result .stat,.wlab-result .value,.wlab-result .reading{padding:7px!important;font-size:13px!important}
+.wlab-result .metric strong,.wlab-result .stat strong,.wlab-result .value strong,.wlab-result .reading strong{font-size:18px!important}
+.wlab-result .calc,.wlab-result .equation{padding:7px!important;margin:4px 0!important;font-size:13px!important}
+.wlab-result .formula{font-size:17px!important}
+.wlab-graph,.wlab-concept{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-content:start}
+.wlab-graph>*,.wlab-concept>*{min-width:0!important;margin:0!important}
+.wlab-graph> :only-child,.wlab-concept> :only-child{grid-column:1/-1!important}
+.wlab-graph canvas,.wlab-graph svg{display:block!important;width:100%!important;height:clamp(220px,43vh,480px)!important;object-fit:contain}
+.wlab-graph .chartgrid{grid-template-columns:1fr!important}
+.wlab-graph .chartgrid canvas{height:clamp(200px,32vh,350px)!important}
+.wlab-concept details{margin:8px 0!important}.wlab-concept .questions{grid-template-columns:1fr!important}
+.wlab-root>footer,.wlab-ready>footer,.wlab-ready .wrap>footer{font-size:12px!important;padding:6px!important}
+.wlab-original{display:none!important}
+.wlab-scene .workspace{min-width:0}
+.wlab-wide .canvas-wrap,.wlab-wide .canvas-wrap canvas{height:clamp(260px,48vh,520px)!important;min-height:0!important}
+.wlab-wide .workspace{grid-template-columns:minmax(0,2fr) minmax(260px,1fr)!important}
+.wlab-composite .svgbox{height:clamp(210px,34vh,350px)!important}
+.wlab-composite .wlab-extra{padding:7px!important;margin-top:6px!important}
+.wlab-composite .spectrum{height:65px!important}
+@media(min-width:950px){.wlab-control{max-height:calc(100dvh - 150px);overflow:auto;scrollbar-width:thin}.wlab-root>.wlab-deck .wlab-result{align-self:start}.wlab-sim{grid-template-columns:minmax(0,2.25fr) minmax(270px,1fr)}}
+@media(max-width:949px){.wlab-sim,.wlab-graph,.wlab-concept,.wlab-wide .workspace{grid-template-columns:1fr!important}.wlab-control,.wlab-scene,.wlab-result{grid-column:1!important;grid-row:auto!important}.wlab-control{overflow:visible!important}.wlab-root{padding:8px!important}.wlab-nav a{margin-left:0}.wlab-scene #scene,.wlab-scene #wave,.wlab-scene .svgbox,.wlab-wide .canvas-wrap,.wlab-wide .canvas-wrap canvas{height:clamp(230px,38vh,340px)!important}.wlab-nav button,.wlab-nav a{min-height:40px!important}.wlab-concept .equations{grid-template-columns:1fr!important}}
+</style><script>(function(c){'use strict';
+const q=s=>document.querySelector(s), root=q(c.root);
+const grab=a=>(a||[]).map(s=>q(s)).filter(Boolean);
+const scene=q(c.scene),control=c.control?q(c.control):null,result=c.result?q(c.result):null;
+const extracted=grab(c.extract),graphs=grab(c.graph),concepts=grab(c.concept),old=grab(c.old),extra=grab(c.sceneExtra);
+if(!root||!scene||(c.control&&!control)||(c.result&&!result)||graphs.length!==(c.graph||[]).length||concepts.length!==(c.concept||[]).length||extracted.length!==(c.extract||[]).length||extra.length!==(c.sceneExtra||[]).length){console.error('Teaching tab layout anchors missing');return;}
+const el=(tag,cls)=>{const n=document.createElement(tag);n.className=cls;return n};
+const nav=el('nav','wlab-nav');nav.setAttribute('aria-label','학습 화면 선택');nav.setAttribute('role','tablist');
+const deck=el('div','wlab-deck'),sim=el('div','wlab-pane wlab-sim'),graph=el('div','wlab-pane wlab-graph'),learn=el('div','wlab-pane wlab-concept');
+const tabs=[['실험하기',sim],...(graphs.length?[['그래프·비교',graph]]:[]),['개념 설명',learn]];
+const wrap=(n)=>{if(n.matches('canvas,svg,details')){const card=el('section','wlab-card');card.append(n);return card}return n};
+root.classList.add('wlab-root');document.body.classList.add('wlab-ready');
+root.append(nav,deck);
+scene.classList.add('wlab-scene');if(c.wide)scene.classList.add('wlab-wide');
+sim.append(scene);
+if(control){control.classList.add('wlab-control');sim.append(control);}
+let read=result;
+if(extracted.length){read=read||el('section','wlab-card');if(!result){const h=el('h2','');h.textContent='실시간 결과';read.append(h)}extracted.forEach(n=>read.append(n));}
+if(read){read.classList.add('wlab-result');sim.append(read)}
+if(extra.length){scene.classList.add('wlab-composite');for(const n of extra){n.classList.add('wlab-extra');scene.append(n)}}
+for(const n of graphs)graph.append(wrap(n));
+for(const n of concepts)learn.append(wrap(n));
+for(const n of old){if(!n.contains(scene)&&!n.contains(control)&&!n.contains(read))n.classList.add('wlab-original')}
+for(const f of [...root.querySelectorAll(':scope>footer'),...document.querySelectorAll('body>footer')])learn.append(f);
+const buttons=[];
+function show(i){tabs.forEach((t,j)=>{const on=i===j;t[1].classList.toggle('wlab-active',on);t[1].inert=!on;t[1].setAttribute('aria-hidden',String(!on));buttons[j].setAttribute('aria-selected',String(on));buttons[j].tabIndex=on?0:-1;});requestAnimationFrame(()=>window.dispatchEvent(new Event('resize')));}
+tabs.forEach((t,i)=>{const b=el('button','');b.type='button';b.id='wlab-tab-'+i;b.textContent=t[0];b.setAttribute('role','tab');b.setAttribute('aria-controls','wlab-panel-'+i);t[1].id='wlab-panel-'+i;t[1].setAttribute('role','tabpanel');t[1].setAttribute('aria-labelledby',b.id);b.addEventListener('click',()=>show(i));b.addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;e.preventDefault();const j=e.key==='Home'?0:e.key==='End'?tabs.length-1:(i+(e.key==='ArrowRight'?1:tabs.length-1))%tabs.length;show(j);buttons[j].focus()});buttons.push(b);nav.append(b);deck.append(t[1]);});
+const back=el('a','');back.href='index.html';back.textContent='← 실험 목록';nav.append(back);
+show(0);
+})({"root":"main","scene":".grid>section:nth-child(1)","control":".grid>section:nth-child(2)","extract":["#stats","#calc","#direction"],"graph":[".grid>section:nth-child(3)"],"concept":[".grid>section:nth-child(4)"],"old":[".grid"]});</script></body></html>
