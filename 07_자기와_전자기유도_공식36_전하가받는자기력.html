@@ -9,7 +9,38 @@ function model(a=values,dir=+$('dir').value){const q=a.q*1e-9,v=a.v*1e4,B=a.B,m=
 function state(p,t){let x,y,vx,vy;if(!p.w){x=p.vp*t;y=0;vx=p.vp;vy=0;}else{const u=p.w*t;x=p.vp*Math.sin(u)/p.w;y=-2*p.vp*Math.sin(u/2)**2/p.w;vx=p.vp*Math.cos(u);vy=-p.vp*Math.sin(u);}return{x,y,z:p.vz*t,vx,vy,vz:p.vz,Fx:p.q*p.B*p.dir*vy,Fy:-p.q*p.B*p.dir*vx};}
 const fmt=x=>x===null?'—':x===0?'0':Math.abs(x)>=.01&&Math.abs(x)<10000?Number(x.toPrecision(4)).toString():x.toExponential(3);
 function arrow(c,x,y,dx,dy,color,label){const norm=Math.hypot(dx,dy);if(norm<1e-30)return;dx=dx/norm*48;dy=dy/norm*48;c.strokeStyle=color;c.fillStyle=color;c.lineWidth=3;c.beginPath();c.moveTo(x,y);c.lineTo(x+dx,y+dy);c.stroke();const a=Math.atan2(dy,dx);c.beginPath();c.moveTo(x+dx,y+dy);c.lineTo(x+dx-10*Math.cos(a-.45),y+dy-10*Math.sin(a-.45));c.lineTo(x+dx-10*Math.cos(a+.45),y+dy-10*Math.sin(a+.45));c.fill();c.fillText(label,x+dx+7,y+dy);}
-function drawScene(p){const c=$('scene').getContext('2d');c.clearRect(0,0,720,600);let pts=Array.from({length:361},(_,i)=>state(p,p.horizon*i/360));let max= Math.max(...pts.flatMap(s=>[Math.abs(s.x),Math.abs(s.y),Math.abs(s.z)]));const extent=max===0?.03:max*1.22,scale=100/extent;for(const [off,side] of [[0,false],[300,true]]){const ox=360,oy=off+153;c.font='16px system-ui';c.fillStyle='#b3c3dd';c.fillText(side?'옆면 xz｜+z ↑':'윗면 xy｜+z는 화면 밖',18,off+27);c.fillText(`축 눈금 간격 ${fmt(extent/2)} m`,18,off+284);for(let k=-2;k<=2;k++){c.strokeStyle='#233952';c.lineWidth=1;c.beginPath();c.moveTo(ox+k*50,off+47);c.lineTo(ox+k*50,off+253);c.moveTo(ox-110,oy+k*50);c.lineTo(ox+110,oy+k*50);c.stroke();}c.fillText('+x →',ox+115,oy+5);c.fillText(side?'+z':'+y',ox+5,off+51);if(!side){c.fillStyle='#ffd278';c.fillText(p.dir===1?'B ⊙':'B ⊗',580,off+55);}const project=s=>[ox+s.x*scale,oy-(side?s.z:s.y)*scale];c.setLineDash([5,5]);c.strokeStyle='#617796';c.beginPath();pts.forEach((s,i)=>{const[x,y]=project(s);i?c.lineTo(x,y):c.moveTo(x,y)});c.stroke();c.setLineDash([]);c.strokeStyle='#5ee5ba';c.lineWidth=2;c.beginPath();for(let i=0;i<=240;i++){const[x,y]=project(state(p,time*i/240));i?c.lineTo(x,y):c.moveTo(x,y)}c.stroke();const s=state(p,time),[x,y]=project(s);c.fillStyle='#ffd278';c.beginPath();c.arc(x,y,6,0,2*Math.PI);c.fill();arrow(c,x,y,s.vx,side?-s.vz:-s.vy,'#5ee5ba','v');arrow(c,x,y,s.Fx,side?0:-s.Fy,'#ff8eb0','F');if(side&&p.F)c.fillStyle='#b3c3dd',c.fillText('Fy 성분은 이 투영에서 보이지 않음',18,off+263);} }
+function drawScene(p){
+ const canvas=$('scene'),W=Math.max(1,Math.round(canvas.clientWidth)),H=Math.max(1,Math.round(canvas.clientHeight));if(W<100||H<100)return;
+ const dpr=Math.min(devicePixelRatio||1,2);if(canvas.width!==Math.round(W*dpr)||canvas.height!==Math.round(H*dpr)){canvas.width=Math.round(W*dpr);canvas.height=Math.round(H*dpr);}
+ const c=canvas.getContext('2d');c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,W,H);c.fillStyle='#04080f';c.fillRect(0,0,W,H);
+ const pts=Array.from({length:361},(_,i)=>state(p,p.horizon*i/360)),current=state(p,time),horizontal=W>=650,gap=8;
+ const pw=horizontal?(W-gap)/2:W,ph=horizontal?H:(H-gap)/2;
+ const bounds=k=>{const v=pts.map(s=>s[k]);return [Math.min(0,...v),Math.max(0,...v)]},xb=bounds('x'),yb=bounds('y'),zb=bounds('z');
+ const xspan=xb[1]-xb[0],yspan=Math.max(yb[1]-yb[0],zb[1]-zb[0]),span=Math.max(xspan,yspan),reserve=Math.min(55,pw*.12,ph*.13);
+ const plotW=Math.max(30,pw-2*reserve-16),plotH=Math.max(30,ph-2*reserve-46);
+ const scale=span>0?Math.min(plotW/Math.max(xspan,span*.000001),plotH/Math.max(yspan,span*.000001)):Math.min(plotW,plotH)/.06;
+ const target=55/scale,base=10**Math.floor(Math.log10(target)),step=([1,2,5,10].find(n=>n*base>=target)||10)*base;
+ for(let i=0;i<2;i++){
+  const side=i===1,b=side?zb:yb,left=horizontal?i*(pw+gap):0,top=horizontal?0:i*(ph+gap),cx=left+pw/2,cy=top+ph/2+3;
+  const ox=cx-(xb[0]+xb[1])*scale/2,oy=cy+(b[0]+b[1])*scale/2,x0=left+13,x1=left+pw-13,y0=top+36,y1=top+ph-26;
+  c.fillStyle='#08121e';c.fillRect(left+1,top+1,pw-2,ph-2);c.strokeStyle='#344458';c.lineWidth=1;c.strokeRect(left+1.5,top+1.5,pw-3,ph-3);
+  c.font='bold 15px system-ui';c.fillStyle='#e5f1ff';c.fillText(side?'옆면 · xz 평면':'윗면 · xy 평면',left+12,top+21);
+  if(!side){c.fillStyle='#ffd278';c.textAlign='right';c.fillText(p.dir===1?'B ⊙':'B ⊗',left+pw-12,top+21);c.textAlign='left';}
+  c.save();c.beginPath();c.rect(x0,y0,x1-x0,y1-y0);c.clip();
+  const delta=step*scale;
+  c.strokeStyle='#1d3043';c.lineWidth=1;c.beginPath();
+  for(let x=ox+Math.ceil((x0-ox)/delta)*delta;x<=x1;x+=delta){c.moveTo(x,y0);c.lineTo(x,y1)}
+  for(let y=oy+Math.ceil((y0-oy)/delta)*delta;y<=y1;y+=delta){c.moveTo(x0,y);c.lineTo(x1,y)}c.stroke();
+  c.strokeStyle='#56728d';c.lineWidth=1.3;c.beginPath();c.moveTo(x0,oy);c.lineTo(x1,oy);c.moveTo(ox,y0);c.lineTo(ox,y1);c.stroke();
+  c.font='13px system-ui';c.fillStyle='#a9c5dd';c.fillText('+x →',x1-42,Math.max(y0+15,Math.min(y1-4,oy-6)));c.fillText(side?'+z ↑':'+y ↑',Math.max(x0+3,Math.min(x1-37,ox+6)),y0+15);
+  const project=s=>[ox+s.x*scale,oy-(side?s.z:s.y)*scale];
+  const trace=(arr,color,width,dashed)=>{c.setLineDash(dashed?[6,5]:[]);c.strokeStyle=color;c.lineWidth=width;c.beginPath();arr.forEach((s,j)=>{const[x,y]=project(s);j?c.lineTo(x,y):c.moveTo(x,y)});c.stroke();c.setLineDash([]);};
+  trace(pts,'#7791ac',1.7,true);trace(Array.from({length:241},(_,j)=>state(p,time*j/240)),'#5ee5ba',3,false);
+  const [x,y]=project(current);c.fillStyle='#ffdc7b';c.beginPath();c.arc(x,y,7,0,2*Math.PI);c.fill();c.font='bold 15px system-ui';
+  arrow(c,x,y,current.vx,side?-current.vz:-current.vy,'#5ee5ba','v');arrow(c,x,y,current.Fx,side?0:-current.Fy,'#ff8eb0','F');c.restore();
+  c.font='12px system-ui';c.fillStyle='#a9c5dd';c.fillText('눈금 간격 '+fmt(step)+' m'+(side&&p.F?' · Fy는 옆면에서 보이지 않음':''),left+12,top+ph-9);
+ }
+}
 function drawGraph(p){const c=$('graph').getContext('2d');c.clearRect(0,0,720,360);const max=Math.abs(p.q)*p.v*p.B*1e6,ymax=max||1;c.font='15px system-ui';c.fillStyle='#b3c3dd';c.fillText('F (μN)',12,22);c.fillText('θ (°)',650,343);for(let i=0;i<=4;i++){const y=290-i*60;c.strokeStyle='#304361';c.beginPath();c.moveTo(70,y);c.lineTo(660,y);c.stroke();c.fillText(fmt(ymax*i/4),8,y+5);}for(let i=0;i<=4;i++)c.fillText(i*45,65+i*147.5,318);c.strokeStyle='#5ee5ba';c.lineWidth=3;c.beginPath();for(let a=0;a<=180;a++){const x=70+a/180*590,y=290-max*Math.sin(a*Math.PI/180)/ymax*240;a?c.lineTo(x,y):c.moveTo(x,y);}c.stroke();c.fillStyle='#ffd278';c.beginPath();c.arc(70+values.theta/180*590,290-p.F*1e6/ymax*240,6,0,Math.PI*2);c.fill();if(!max)c.fillText('자기력 = 0 (세로축 0~1 μN)',260,55);}
 function update(){const p=model(),s=state(p,time);$('stats').innerHTML=[['자기력 크기',fmt(p.F*1e6)+' μN'],['속력',fmt(p.v)+' m/s'],['운동 에너지',fmt(p.K)+' J'],['회전 반지름',p.r===null?'회전 없음':fmt(p.r)+' m']].map(([a,b])=>`<div class="stat">${a}<strong>${b}</strong></div>`).join('');$('calc').innerHTML=`F = |q|vB sinθ<br>= |${fmt(p.q)}| × ${fmt(p.v)} × ${p.B} × sin${values.theta}°<br>= <b>${fmt(p.F)} N</b><br>F⃗ = (${fmt(s.Fx)}, ${fmt(s.Fy)}, 0) N<br>v∥ = ${fmt(p.v*Math.cos(p.th))} m/s (자기장 방향 기준)<br>T = ${p.T&&p.vp?fmt(p.T*1e6)+' μs':'회전 없음'} · F⃗·v⃗ = 0 W`;$('direction').textContent=p.F===0?'힘 = 0: 정지 또는 직선 운동.':`윗면 회전: ${p.w>0?'시계':'반시계'} 방향. 자기력은 매 순간 속도에 수직입니다.`;$('clock').textContent=`t = ${fmt(time*1e6)} μs / ${fmt(p.horizon*1e6)} μs · ${running?'재생 중':time>=p.horizon?'재생 완료':'정지'} · 측정 시작 t = 0`;$('play').textContent=time>=p.horizon?'다시 재생':'시작 / 계속';drawScene(p);drawGraph(p);}
 function restart(){time=0;running=false;last=null;update();}
@@ -99,4 +130,48 @@ function show(i){tabs.forEach((t,j)=>{const on=i===j;t[1].classList.toggle('wlab
 tabs.forEach((t,i)=>{const b=el('button','');b.type='button';b.id='wlab-tab-'+i;b.textContent=t[0];b.setAttribute('role','tab');b.setAttribute('aria-controls','wlab-panel-'+i);t[1].id='wlab-panel-'+i;t[1].setAttribute('role','tabpanel');t[1].setAttribute('aria-labelledby',b.id);b.addEventListener('click',()=>show(i));b.addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;e.preventDefault();const j=e.key==='Home'?0:e.key==='End'?tabs.length-1:(i+(e.key==='ArrowRight'?1:tabs.length-1))%tabs.length;show(j);buttons[j].focus()});buttons.push(b);nav.append(b);deck.append(t[1]);});
 const back=el('a','');back.href='index.html';back.textContent='← 실험 목록';nav.append(back);
 show(0);
-})({"root":"main","scene":".grid>section:nth-child(1)","control":".grid>section:nth-child(2)","extract":["#stats","#calc","#direction"],"graph":[".grid>section:nth-child(3)"],"concept":[".grid>section:nth-child(4)"],"old":[".grid"]});</script></body></html>
+})({"root":"main","scene":".grid>section:nth-child(1)","control":".grid>section:nth-child(2)","extract":["#stats","#calc","#direction"],"graph":[".grid>section:nth-child(3)"],"concept":[".grid>section:nth-child(4)"],"old":[".grid"]});</script><style>
+/* Lab 36: use the actual available canvas area, not a scaled portrait bitmap. */
+body.wlab-ready header{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:5px 12px!important;margin:0!important}
+body.wlab-ready header .tag{display:none}
+body.wlab-ready header h1{font-size:24px!important;margin:0!important}
+body.wlab-ready header .formula{margin-left:auto;font-size:17px!important}
+body.wlab-ready header p{width:100%;margin:0!important}
+.wlab-nav{padding:5px 0!important}
+.wlab-sim{grid-template-columns:minmax(0,1fr) minmax(285px,315px)!important;gap:9px!important;align-items:start}
+.wlab-scene{display:flex;flex-direction:column;gap:5px;padding:9px!important}
+.wlab-scene>h2{margin:0!important;font-size:15px!important}
+.wlab-scene>p.note{margin:0!important;font-size:12px!important}
+.wlab-scene>p.note:last-child{color:#b3c3dd}
+.wlab-scene #scene{height:clamp(350px,calc(100dvh - 210px),850px)!important;object-fit:fill!important;background:#04080f!important}
+.wlab-side36{grid-column:2;grid-row:1;display:flex;flex-direction:column;gap:7px;min-width:0;max-height:calc(100dvh - 111px);overflow:auto;scrollbar-width:thin}
+.wlab-side36 .wlab-control,.wlab-side36 .wlab-result{max-height:none!important;overflow:visible!important;padding:9px!important}
+.wlab-side36 .wlab-control>h2,.wlab-side36 .wlab-result>h2{font-size:15px!important;margin-bottom:3px!important}
+.wlab-side36 .wlab-control label{margin:4px 0 0!important;line-height:1.25!important}
+.wlab-side36 .ctrl{grid-template-columns:minmax(0,1fr) 66px!important;gap:7px!important}
+.wlab-side36 .ctrl input[type=range]{height:24px!important;min-height:24px!important;margin:0}
+.wlab-side36 .ctrl input[type=number]{min-height:28px!important;padding:2px 5px!important}
+.wlab-side36 .wlab-control select{min-height:32px!important}
+.wlab-side36 .wlab-control>p.note{font-size:11px!important;margin:4px 0!important}
+.wlab-side36 .wlab-control details{padding:2px 0!important}
+.wlab-side36 .wlab-control summary,.wlab-side36 .wlab-result summary{min-height:0;font-size:12px;line-height:1.4;cursor:pointer}
+.wlab-side36 .wlab-result #stats{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:4px!important}
+.wlab-side36 .wlab-result .stat{padding:5px!important;font-size:11px!important}
+.wlab-side36 .wlab-result .stat strong{font-size:15px!important}
+.wlab-side36 .wlab-result #direction{font-size:12px!important}
+.wlab-side36 .wlab-result details{padding:4px 0!important}
+.wlab-transport36{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.wlab-transport36 .buttons{margin:0!important}
+.wlab-transport36 label{margin:0!important;font-size:12px;white-space:nowrap}
+.wlab-transport36 select{width:auto!important;min-height:34px!important;padding:4px 8px!important;font-size:13px}
+.wlab-transport36 #clock{margin:0!important;font-size:12px!important}
+.wlab-graph #graph{width:100%!important;height:auto!important;max-height:calc(100dvh - 220px);object-fit:contain}
+@media(max-width:949px){
+ body.wlab-ready header h1{font-size:20px!important}body.wlab-ready header .formula{margin-left:0!important}
+ .wlab-sim{grid-template-columns:1fr!important}
+ .wlab-side36{grid-column:1;grid-row:auto;max-height:none;overflow:visible}
+ .wlab-scene #scene{height:clamp(440px,58dvh,600px)!important}
+ .wlab-graph #graph{max-height:none}
+}
+@media(min-width:950px) and (max-height:650px){.wlab-scene #scene{height:clamp(280px,calc(100dvh - 190px),460px)!important}}
+</style><script>(()=>{const sim=document.querySelector('.wlab-sim'),scene=sim?.querySelector('.wlab-scene'),control=sim?.querySelector('.wlab-control'),result=sim?.querySelector('.wlab-result');if(!scene||!control||!result)return;const side=document.createElement('div');side.className='wlab-side36';side.append(control,result);sim.append(side);const bar=document.createElement('div');bar.className='wlab-transport36';bar.append(scene.querySelector('.buttons'),scene.querySelector('label[for="rate"]'),document.getElementById('rate'),document.getElementById('clock'));scene.querySelector('#scene').after(bar);const calc=document.getElementById('calc'),details=document.createElement('details'),summary=document.createElement('summary');summary.textContent='공식 대입 · 벡터 성분 더 보기';details.append(summary,calc);result.append(details);document.querySelector('.wlab-control h2').textContent='실험 조건';document.querySelector('.wlab-scene h2').textContent='입자 운동 · 두 투영에서 동시 관찰';new ResizeObserver(()=>drawScene(model())).observe(document.getElementById('scene'));window.addEventListener('resize',()=>drawScene(model()));drawScene(model());})();</script></body></html>
