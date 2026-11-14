@@ -25,11 +25,51 @@ function glass(w,kind){const u=w/1000;return kind==='flint'?1.59+.012/u**2:1.495
 function prismTrace(A,I,w,kind){const h=136,half=h*Math.tan(rad(A/2)),tri=[[0,-h/2],[-half,h/2],[half,h/2]],edges=tri.map((a,i)=>[a,tri[(i+1)%3]]),entry=add(mul(tri[0],.48),mul(tri[1],.52)),normal=unit([h,half]),incoming=rot(normal,-rad(I)),n=glass(w,kind),d0=interfaceRay(incoming,normal,1,n);let path=[sub(entry,mul(incoming,110)),entry],d=d0,o=entry,exit=null,bounces=0;
 for(let step=0;step<8;step++){let best=null;for(let i=0;i<edges.length;i++){let q=intersectRay(o,d,...edges[i]);if(q&&(!best||q.t<best.t))best={...q,i}}if(!best)break;path.push(best.p);const e=sub(...edges[best.i].slice().reverse());let outward=unit([e[1],-e[0]]);if(dot(d,outward)<0)outward=mul(outward,-1);let x=interfaceRay(d,outward,n,1);if(x){exit=x;path.push(add(best.p,mul(x,140)));break}d=reflect(d,outward);o=best.p;bounces++}
 return {tri,path,n,bounces,exit, deviation:exit?deg(Math.acos(clamp(dot(incoming,exit),-1,1))):NaN,incoming}}
-const common=[R('A','프리즘 꼭지각',35,65,1,55,'°'),R('I','입사각',0,75,1,45,'°'),Q('glass','유리 종류','crown',[['crown','크라운 유리 (모형)'],['flint','플린트 유리 (모형)']])];
-function prismDraw(i,s,p){const ws=i===0?[s.w]:[700,620,580,530,490,450,400],q=ws.map(w=>prismTrace(s.A,s.I,w,s.glass));let bounds=q.flatMap(a=>a.path.concat(a.tri)),max=Math.max(1,...bounds.map(p=>Math.abs(p[0]))),maxy=Math.max(1,...bounds.map(p=>Math.abs(p[1]))),k=Math.min(205/max,140/maxy),P=a=>[230+a[0]*k,188+a[1]*k];
-panels('프리즘 내부의 빛 진행','굴절률과 분산',()=>{polygon(q[0].tri.map(P),'#67b8d829','#a6d4e9');for(let i=0;i<q.length;i++)ray(q[i].path.map(P),p,light(ws[i]),i===0?2.5:1.8);txt(230,348,q.some(x=>x.bounces)?'일부 경로에서 전반사 발생':'입사 → 굴절 → 출사',GOLD,14,'center');txt(230,367,'유리 내부 굴절률 n(λ) 사용',MUTED,11,'center')},()=>{if(i===2){const values=Array.from({length:81},(_,j)=>prismTrace(s.A,s.I,400+j*3.75,s.glass).deviation).filter(Number.isFinite);let lo=Math.max(0,Math.floor(Math.min(...values,60)-5)),hi=Math.min(180,Math.ceil(Math.max(...values,0)+5));if(!values.length){lo=0;hi=180}if(hi<=lo)hi=lo+1;plot(w=>prismTrace(s.A,s.I,w,s.glass).deviation,400,700,lo,hi,'파장 (nm)','편향각 (°)',MINT,q.filter(x=>Number.isFinite(x.deviation)).map((x,j)=>({x:ws[j],y:x.deviation,color:light(ws[j])})));}else{plot(w=>glass(w,s.glass),400,700,1.48,1.68,'파장 (nm)','굴절률',MINT,ws.map(w=>({x:w,y:glass(w,s.glass),color:light(w)})))}txt(230,369,'짧은 파장의 굴절률이 더 큼 (정상 분산)',MUTED,12,'center')})
+
+const common=[R('A','프리즘 꼭지각',35,65,1,60,'°'),R('I','입사각',0,75,1,45,'°'),Q('glass','유리 종류','flint',[['crown','크라운 유리 (모형)'],['flint','플린트 유리 (고분산 모형)']])];
+const screen=R('L','출사면 뒤 스크린 거리',.5,3,.1,1.5,'m'),waves=[700,650,620,590,570,540,510,490,470,450,430,400],unitM=.0005;
+function spectrum(s){
+ const center=prismTrace(s.A,s.I,550,s.glass),rays=Array.from({length:151},(_,j)=>400+j*2).map(w=>({w,...prismTrace(s.A,s.I,w,s.glass)}));
+ if(!center.exit)return {rays,hits:[],width:NaN,spread:NaN};const axis=center.exit,side=rot(axis,PI/2),plane=add(mul(center.path.at(-2),unitM),mul(axis,s.L||1.5)),hits=[];
+ for(const q of rays){if(!q.exit)continue;const o=mul(q.path.at(-2),unitM),den=dot(q.exit,axis);if(den<=1e-6)continue;const t=dot(sub(plane,o),axis)/den;if(t<=0)continue;const pos=dot(sub(add(o,mul(q.exit,t)),plane),side);if(Number.isFinite(pos))hits.push({w:q.w,pos,bounces:q.bounces,angle:deg(Math.atan2(cross(axis,q.exit),dot(axis,q.exit)))})}
+ return {rays,hits,width:hits.length>=2?Math.max(...hits.map(q=>q.pos))-Math.min(...hits.map(q=>q.pos)):NaN,spread:hits.length>=2?Math.max(...hits.map(q=>q.angle))-Math.min(...hits.map(q=>q.angle)):NaN}
 }
-const LAB={name:'프리즘과 빛의 분산',tabs:[{name:'단색광 굴절',controls:[...common,R('w','파장',400,700,5,550,'nm')],principle:'스넬 법칙 n₁sinθ₁=n₂sinθ₂. 두 경계면에서 굴절한다.',observe:'입사각과 꼭지각을 바꾸고 빛이 빠져나오는 방향을 확인한다.',assume:'삼각 단면, 균질 유리, 기하광학.',question:'출사각이 달라지는 조건은?'},{name:'백색광 분산',controls:common,principle:'정상 분산에서는 짧은 파장의 굴절률이 더 크다.',observe:'7개 대표 파장의 진행 방향을 비교한다.',assume:'색상은 표시용 근사; Cauchy 굴절률 모형.',question:'어떤 색이 더 크게 굴절할까?'},{name:'분산 스펙트럼',controls:common,principle:'파장에 따라 프리즘의 편향각이 달라져 스펙트럼이 분리된다.',observe:'파장-편향각 그래프를 관찰한다.',assume:'구간 안 실제 경로를 추적하고 여러 내부 반사를 허용.',question:'유리 종류를 바꾸면 분산 폭은?'}],draw:prismDraw,metrics:(i,s)=>{let w=i===0?s.w:550,q=prismTrace(s.A,s.I,w,s.glass),v=prismTrace(s.A,s.I,400,s.glass),r=prismTrace(s.A,s.I,700,s.glass);return [['굴절률 ('+w+' nm)',fmt(q.n,4)],['편향각',q.exit?fmt(q.deviation,1)+'°':'출사 없음'],['내부 반사',q.bounces+'회'],['400–700 nm 편향 차',Number.isFinite(v.deviation-r.deviation)?fmt(Math.abs(v.deviation-r.deviation),2)+'°':'—']]},detail:'유리 굴절률 n=A+B/λ² (λ: μm)의 예시 모형이며 특정 제품의 실측값이 아니다. 경계 교차와 스넬 법칙으로 계산하고, 전반사는 반사 방향으로 추적한다.'};
+function rgb(w){return 'rgb('+spectralRGB(w).map(x=>Math.round(255*Math.pow(x,.48))).join(',')+')'}
+function clipEnd(o,d){const a=[];if(d[0]>1e-8)a.push((442-o[0])/d[0]);if(d[0]<-1e-8)a.push((18-o[0])/d[0]);if(d[1]>1e-8)a.push((318-o[1])/d[1]);if(d[1]<-1e-8)a.push((45-o[1])/d[1]);return add(o,mul(d,Math.max(0,Math.min(...a.filter(x=>x>=0)))))}
+function screenDraw(s,p,d){
+ const h=d.hits;if(h.length<2){txt(230,170,'스크린에 도달하는 빛이 부족합니다.',GOLD,15,'center');txt(230,195,'입사각이나 유리 종류를 바꾸세요.',MUTED,13,'center');return}
+ const lim=Math.max(.15,Math.ceil(Math.max(...h.map(q=>Math.abs(q.pos)))/.05)*.05+.01),X=v=>230+v/lim*207;
+ txt(230,54,'550 nm 출사 방향에 수직인 스크린',WHITE,14,'center',true);txt(230,77,'거리 '+fmt(s.L,1)+' m · 위치 (cm)',MUTED,13,'center');
+ rect(22,102,416,148,'#03060b','#60788e');
+ c.save();c.globalAlpha=.3+.7*clamp((p-.35)/.65,0,1);
+ for(let j=0;j<h.length-1;j++){const a=h[j],b=h[j+1];if(b.w-a.w>2.01||a.bounces!==b.bounces||Math.abs(a.angle-b.angle)>1.5)continue;const x1=X(a.pos),x2=X(b.pos);rect(Math.min(x1,x2),104,Math.max(.7,Math.abs(x2-x1)+.5),144,rgb((a.w+b.w)/2))}
+ for(const q of h)line([X(q.pos),104],[X(q.pos),248],rgb(q.w),.65);c.restore();
+ for(let j=-2;j<=2;j++){const v=j*lim/2,x=X(v);line([x,250],[x,258],MUTED,1);txt(x,270,fmt(v*100,1),MUTED,11,'center')}
+ const left=Math.min(...h.map(q=>q.pos)),right=Math.max(...h.map(q=>q.pos));line([X(left),293],[X(right),293],GOLD,1.5);for(const v of [left,right])line([X(v),287],[X(v),299],GOLD,1.5);
+ for(const q of [h[0],h.at(-1)])txt(clamp(X(q.pos),43,417),91,q.w+' nm',rgb(q.w),11,'center',true);
+ txt(230,322,'분산 폭 '+fmt(d.width*100,2)+' cm',GOLD,19,'center',true);txt(230,348,'계산된 스크린 위치 · 자동 축척',MUTED,12,'center');txt(230,366,'색과 밝기는 표시용 근사',MUTED,11,'center')
+}
+function prismDraw(i,s,p){
+ const ws=i===0?[s.w]:waves,q=ws.map(w=>prismTrace(s.A,s.I,w,s.glass)),d=i===0?null:spectrum(s);
+ const bounds=q.flatMap(a=>a.path.slice(0,a.exit?-1:undefined).concat(a.tri)),minx=Math.min(...bounds.map(a=>a[0])),maxx=Math.max(...bounds.map(a=>a[0])),miny=Math.min(...bounds.map(a=>a[1])),maxy=Math.max(...bounds.map(a=>a[1])),k=Math.min(215/Math.max(1,maxx-minx),207/Math.max(1,maxy-miny),1.4),P=a=>[22+(a[0]-minx)*k,175+(a[1]-(miny+maxy)/2)*k];
+ const paths=q.map(a=>{const z=a.path.slice(0,a.exit?-1:undefined).map(P);if(a.exit)z.push(clipEnd(z.at(-1),a.exit));return z});
+ panels('프리즘의 굴절과 출사',i===0?'굴절률과 파장':i===1?'스크린의 연속 스펙트럼':'파장에 따른 편향각',()=>{
+ polygon(q[0].tri.map(P),'#67b8d835','#a6d4e9');
+ if(i===0)ray(paths[0],p,light(ws[0]),2.7);
+ else{ray(paths[0].slice(0,2),Math.min(1,p/.25),WHITE,3.8);for(let j=0;j<q.length;j++)ray(paths[j].slice(1),clamp((p-.25)/.75,0,1),rgb(ws[j]),1.7)}
+ txt(230,340,q.some(a=>a.bounces)?'일부 파장에서 전반사 발생':'입사 → 굴절 → 분산된 출사광',GOLD,14,'center',true);txt(230,361,'실제 굴절각 유지 · 출사 광선 길게 표시',MUTED,11,'center')
+ },()=>{
+ if(i===1){screenDraw(s,p,d);return}
+ if(i===2){const vs=d.rays.filter(q=>Number.isFinite(q.deviation)).map(q=>q.deviation);let lo=vs.length?Math.max(0,Math.floor(Math.min(...vs)-1)):0,hi=vs.length?Math.min(180,Math.ceil(Math.max(...vs)+1)):180;if(hi<=lo)hi=lo+1;plot(w=>prismTrace(s.A,s.I,w,s.glass).deviation,400,700,lo,hi,'파장 (nm)','전체 편향각 (°)',MINT,ws.map((w,j)=>({x:w,y:q[j].deviation,color:rgb(w)})));txt(230,369,'스크린 분산 폭 '+(Number.isFinite(d.width)?fmt(d.width*100,2)+' cm':'—'),GOLD,12,'center')}
+ else{plot(w=>glass(w,s.glass),400,700,1.48,1.68,'파장 (nm)','굴절률',MINT,[{x:s.w,y:glass(s.w,s.glass),color:light(s.w)}]);txt(230,369,'정상 분산: 짧은 파장의 굴절률이 큼',MUTED,12,'center')}
+ })
+}
+const LAB={name:'프리즘과 빛의 분산',tabs:[
+{name:'단색광 굴절',controls:[...common,R('w','파장',400,700,5,550,'nm')],principle:'스넬 법칙 n₁sinθ₁=n₂sinθ₂. 두 경계에서 굴절한다.',observe:'입사각과 꼭지각을 바꾸어 출사 방향을 비교한다.',assume:'균질 유리, 기하광학.',question:'출사 방향이 달라지는 조건은?'},
+{name:'백색광 분산',controls:[...common,screen],principle:'정상 분산에서 짧은 파장의 굴절률이 더 크다.',observe:'고분산 유리와 스크린 거리로 색의 분리 폭을 바꾼다.',assume:'400–700 nm 연속광 근사, 실제 출사 방향 사용.',question:'스크린이 멀어지면 분산각과 분산 폭 중 무엇이 달라질까?'},
+{name:'분산 스펙트럼',controls:[...common,screen],principle:'파장별 편향각이 달라 스펙트럼이 분리된다.',observe:'편향각 그래프와 스크린 분산 폭을 비교한다.',assume:'스크린은 550 nm 출사 방향에 수직; 화면 축척 자동.',question:'유리 종류가 달라지면 각 분산 폭은?'}],
+draw:prismDraw,metrics:(i,s)=>{const w=i===0?s.w:550,q=prismTrace(s.A,s.I,w,s.glass);if(i===0)return [['굴절률',fmt(q.n,4)],['편향각',q.exit?fmt(q.deviation,1)+'°':'출사 없음'],['내부 반사',q.bounces+'회']];const d=spectrum(s);return [['각 분산 폭',Number.isFinite(d.spread)?fmt(d.spread,2)+'°':'—'],['스크린 분산 폭',Number.isFinite(d.width)?fmt(d.width*100,2)+' cm':'—'],['스크린 거리',fmt(s.L,1)+' m'],['도달 파장 표본',d.hits.length+' / 151']]},
+detail:'유리 굴절률 n=A+B/λ² (λ: μm)의 예시 모형이며 특정 제품의 실측값은 아니다. 프리즘 높이 68 mm, 스크린은 550 nm 출사점을 기준으로 그 방향에 수직이다. 스크린 거리를 바꾸어도 분산각은 변하지 않는다. 내부 반사에 따라 일부 파장은 스크린에 도달하지 않을 수 있다. 색과 밝기는 교육용 근사이다.'};
 </script><script id="optics-engine">let W=980,H=460,tab=0,running=false,last=null;const states=LAB.tabs.map(t=>Object.fromEntries(t.controls.map(k=>[k.key,k.value]))),progress=LAB.tabs.map(()=>0);
 function draw(){if(tab===LAB.tabs.length)return;c.clearRect(0,0,W,H);LAB.draw(tab,states[tab],progress[tab])}
 function resize(){const r=cv.getBoundingClientRect();if(!r.width||!r.height)return;W=r.width;H=r.height;const d=Math.min(window.devicePixelRatio||1,2);cv.width=Math.round(W*d);cv.height=Math.round(H*d);c.setTransform(d,0,0,d,0,0);draw()}

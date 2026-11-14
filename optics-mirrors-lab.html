@@ -24,20 +24,46 @@ const R=(key,label,min,max,step,value,unit='')=>({key,label,min,max,step,value,u
 const mirrorF=(i,s)=>i===1?Infinity:i===2?s.f:-s.f;
 function mirrorImage(a,f){if(f===Infinity)return {b:-a,m:1};if(Math.abs(a-f)<1e-8)return {b:Infinity,m:Infinity};let b=a*f/(a-f);return {b,m:-b/a}}
 function mirrorDraw(i,s,p){if(i===0){panels('반사의 법칙 · 법선 기준','입사각과 반사각',()=>{const x=230,y=235,A=rad(s.a),d=[Math.sin(A)*170, -Math.cos(A)*170];rect(34,y,392,25,'#52768c');line([x,48],[x,322],MUTED,1,[5,5]);ray([[x-d[0],y+d[1]],[x,y],[x+d[0],y+d[1]]],p,GOLD);c.beginPath();c.arc(x,y,41,-PI/2-A,-PI/2);c.strokeStyle=MINT;c.stroke();c.beginPath();c.arc(x,y,54,-PI/2,-PI/2+A);c.stroke();txt(x-90,213,'θᵢ '+s.a+'°',MINT);txt(x+28,213,'θᵣ '+s.a+'°',MINT);txt(x,300,'반사면 · 법선과 이루는 각',MUTED,14,'center')},()=>{plot(a=>a,0,90,0,90,'입사각 (°)','반사각 (°)',MINT,[{x:s.a,y:s.a}])});return}
-let a=s.a,f=mirrorF(i,s),{b,m}=mirrorImage(a,f),h=6,finite=Number.isFinite(b),v=finite&&Math.abs(b)<300,bound=Math.max(a+12,Number.isFinite(f)?Math.abs(f)*2+8:0,v?Math.abs(b)+10:0),scale=Math.min(170/bound,12),X=d=>230+scale*d,Y=z=>190-z*scale;
-panels('광선도 · 거울 위치 고정','상거리와 배율',()=>{line([14,190],[446,190],'#647a91',1,[5,5]);if(i===1)rect(230,49,5,284,'#81b4cd');else{c.beginPath();c.ellipse(i===2?190:270,190,40,142,0,i===2?-PI/2:PI/2,i===2?PI/2:3*PI/2);c.strokeStyle='#83bbd7';c.lineWidth=4;c.stroke()}arrow([X(-a),190],[X(-a),Y(h)],MINT,3);if(Number.isFinite(f)){for(const d of [-f,-2*f])if(X(d)>12&&X(d)<448)circ(X(d),190,3,GOLD);txt(X(-f),205,'F',GOLD,11,'center')}
-const obj=[X(-a),Y(h)],q=[230,Y(h)],vtx=[230,190];
-const slope1=Number.isFinite(f)?h/f:0,slope2=-h/a;const left=-210/scale;let end1=[X(left),Y(h+slope1*left)],end2=[X(left),Y(slope2*-left)];
-// reflected ray from the vertex: z = -(h/a)*x for x<0? incoming slope -h/a, reflected slope +h/a, so z=h*x/a.
-end2=[X(left),Y(h*left/a)];ray([obj,q,end1],p,GOLD);ray([obj,vtx,end2],p,BLUE);
-if(finite&&b<0){line(q,[X(-b),Y(m*h)],GOLD,1,[4,4]);line(vtx,[X(-b),Y(m*h)],BLUE,1,[4,4])}if(v){arrow([X(-b),190],[X(-b),Y(m*h)],'#f19dc8',2.5);txt(X(-b),clamp(Y(m*h)-14,44,340),'상','#f19dc8',12,'center')}else txt(230,345,finite?'상이 표시 범위를 벗어남':'평행 반사광 · 무한원 상',GOLD,13,'center');txt(230,365,'거리 축척 자동 조정 · cm',MUTED,11,'center')},()=>{if(i===1){plot(x=>-x,10,100,-100,0,'물체 거리 a (cm)','상거리 b (cm)',MINT,[{x:a,y:b}])}else{plot(x=>{let t=mirrorImage(x,f).b;return Math.abs(t)>150?NaN:t},10,100,-100,150,'물체 거리 a (cm)','상거리 b (cm)',MINT,[{x:a,y:b}])}txt(230,367,'b>0 실상 · b<0 허상',MUTED,12,'center')})
+
+const a=s.a,f=mirrorF(i,s),{b,m}=mirrorImage(a,f),h=5,limit=Number(s.view||110),sx=204/limit,sy=11,finite=Number.isFinite(b),v=finite&&Math.abs(b)<=limit,tip=m*h,verticalOK=finite&&Math.abs(tip*sy)<=139;
+const X=d=>230+sx*d,Y=z=>190-z*sy;
+function objectArrow(x,z,col,isVirtual=false){
+ const base=[x,190],top=[x,Y(z)],sg=z>=0?-1:1,head=Math.min(12,Math.abs(z*sy)*.46),width=Math.min(7,Math.max(2,Math.abs(z*sy)*.3));
+ if(Math.abs(z)<1e-9)return;
+ line(base,[x,top[1]-sg*head*.65],col,isVirtual?2.5:4,isVirtual?[4,3]:[]);
+ polygon([top,[x-width,top[1]-sg*head],[x+width,top[1]-sg*head]],isVirtual?null:col,col);
 }
-const common=[R('a','물체 거리',10,100,1,60,'cm'),R('f','초점거리 크기',10,35,1,20,'cm')];
+panels('광선도 · 물체 크기와 거리 축척 고정','상거리와 배율',()=>{
+ line([14,190],[446,190],'#647a91',1,[5,5]);
+ const tick=limit===110?20:50;
+ for(let x=-Math.floor(limit/tick)*tick;x<=limit;x+=tick){line([X(x),190],[X(x),195],'#7891ab',.8);if(x!==0)txt(X(x),203,x,MUTED,10,'center')}
+ if(i===1)rect(230,50,5,280,'#81b4cd');else{c.beginPath();c.ellipse(i===2?190:270,190,40,140,0,i===2?-PI/2:PI/2,i===2?PI/2:3*PI/2);c.strokeStyle='#83bbd7';c.lineWidth=4;c.stroke()}
+ const obj=[X(-a),Y(h)],q=[230,Y(h)],vtx=[230,190],left=-limit-5,slope1=Number.isFinite(f)?h/f:0;
+ if(Number.isFinite(f)){for(const [d,label] of [[-f,'F'],[-2*f,'C']])if(Math.abs(d)<limit){circ(X(d),190,3,GOLD);txt(X(d),217,label,GOLD,11,'center')}}
+ ray([obj,q,[X(left),Y(h+slope1*left)]],p,GOLD,2.2);
+ ray([obj,vtx,[X(left),Y(h*left/a)]],p,BLUE,2.2);
+ if(finite&&b<0){
+ const right=Math.min(-b,limit+4);line(q,[X(right),Y(h+slope1*right)],GOLD,1,[4,4]);line(vtx,[X(right),Y(h*right/a)],BLUE,1,[4,4])
+ }
+ objectArrow(X(-a),h,MINT);txt(X(-a),Y(h)-15,'물체 5 cm',MINT,13,'center',true);
+ if(v&&verticalOK){objectArrow(X(-b),tip,'#f19dc8',b<0);txt(X(-b),Y(tip)+(tip>0?-14:14),'상', '#f19dc8',13,'center',true)}
+ else if(finite){
+ if(!v){const edge=b>0?23:437;arrow([edge+(b>0?25:-25),258],[edge,258],'#f19dc8',2);txt(230,292,'상이 '+(b>0?'왼쪽':'오른쪽')+' 화면 범위 밖 · 넓은 보기 선택',GOLD,12,'center')}
+ else {const y=tip>0?48:330;line([X(-b),190],[X(-b),y],'#f19dc8',3,b<0?[4,3]:[]);arrow([X(-b),y+(tip>0?18:-18)],[X(-b),y],'#f19dc8',2);txt(230,347,'상 높이가 화면 범위를 넘음',GOLD,12,'center')}
+ }else txt(230,343,'반사광이 평행 · 상은 무한원',GOLD,13,'center');
+ txt(230,366,'가로 ±'+limit+' cm 고정 · 세로 확대 (광선 각도는 모식적)',MUTED,11,'center')
+},()=>{
+ if(i===1)plot(x=>-x,10,100,-100,0,'물체 거리 a (cm)','상거리 b (cm)',MINT,[{x:a,y:b}]);
+ else plot(x=>{let t=mirrorImage(x,f).b;return Math.abs(t)>150?NaN:t},10,100,-150,150,'물체 거리 a (cm)','상거리 b (cm)',MINT,[{x:a,y:b}]);
+ txt(230,367,'물체 높이 5 cm · 상 높이 = 배율 × 5 cm',MUTED,12,'center')
+})
+}
+const view=Q('view','가로 표시 범위 (고정)','110',[['110','기본 ±110 cm'],['250','넓은 보기 ±250 cm']]);const common=[R('a','물체 거리',10,100,1,60,'cm'),R('f','초점거리 크기',10,35,1,20,'cm'),view];
 const LAB={name:'빛의 반사와 거울',tabs:[
 {name:'반사 법칙',controls:[R('a','입사각',0,80,1,35,'°')],principle:'입사각과 반사각은 법선을 기준으로 같으며 같은 평면 위에 있다.',observe:'입사각을 바꾸어 두 광선과 각도 그래프를 비교한다.',assume:'매끈한 평면의 정반사.',question:'입사각을 0°로 하면 빛은 어떻게 진행할까?'},
-{name:'평면거울',controls:[common[0]],principle:'물체와 상은 거울을 대칭면으로 대칭이다. 상은 같은 크기의 정립 허상이다.',observe:'물체 거리와 상거리의 절댓값을 비교한다.',assume:'이상적인 평면거울.',question:'물체를 10 cm 이동하면 상은 얼마나 이동할까?'},
+{name:'평면거울',controls:[common[0],view],principle:'물체와 상은 거울을 대칭면으로 대칭이다. 상은 같은 크기의 정립 허상이다.',observe:'물체 거리와 상거리의 절댓값을 비교한다.',assume:'이상적인 평면거울.',question:'물체를 10 cm 이동하면 상은 얼마나 이동할까?'},
 {name:'오목거울',controls:common,principle:'구면거울 식 1/f=1/a+1/b, 배율 m=−b/a. 오목거울은 f>0이다.',observe:'물체를 초점 안팎으로 이동하고 실상과 허상을 비교한다.',assume:'근축 광선 근사; 초점에서 상은 무한원.',question:'물체가 초점 안에 있을 때 상의 방향은?'},
-{name:'볼록거울',controls:common,principle:'볼록거울은 f<0이며 실제 물체의 상은 축소 정립 허상이다.',observe:'반사광의 뒤쪽 연장선과 상의 위치를 확인한다.',assume:'근축 광선 근사.',question:'물체가 멀어질수록 상의 크기는?'}],draw:mirrorDraw,metrics:(i,s)=>{if(i===0)return [['입사각',s.a+'°'],['반사각',s.a+'°']];let f=mirrorF(i,s),{b,m}=mirrorImage(s.a,f);return [['상거리 b',fmt(b,1)+' cm'],['배율',fmt(m)],['상의 종류',!Number.isFinite(b)?'무한원':b>0?'실상':'허상'],['방향',!Number.isFinite(m)?'—':m>0?'정립':'도립']]},detail:'부호 규약: 물체 거리 a>0, 실상 b>0, 허상 b<0. 오목거울 f>0, 볼록거울 f<0. 광선도에서 거울 앞은 왼쪽이다. 초점 부근에는 상이 화면 밖에 있을 수 있다.'};
+{name:'볼록거울',controls:common,principle:'볼록거울은 f<0이며 실제 물체의 상은 축소 정립 허상이다.',observe:'반사광의 뒤쪽 연장선과 상의 위치를 확인한다.',assume:'근축 광선 근사.',question:'물체가 멀어질수록 상의 크기는?'}],draw:mirrorDraw,metrics:(i,s)=>{if(i===0)return [['입사각',s.a+'°'],['반사각',s.a+'°']];let f=mirrorF(i,s),{b,m}=mirrorImage(s.a,f);return [['상거리 b',fmt(b,1)+' cm'],['배율',fmt(m)],['상의 종류',!Number.isFinite(b)?'무한원':b>0?'실상':'허상'],['상 높이 (크기)',fmt(Math.abs(m)*5,2)+' cm'],['방향',!Number.isFinite(m)?'—':m>0?'정립':'도립'],['물체 높이','5 cm']]},detail:'부호 규약: 물체 거리 a>0, 실상 b>0, 허상 b<0. 오목거울 f>0, 볼록거울 f<0. 광선도에서 거울 앞은 왼쪽이다. 물체 높이는 5 cm로 고정하고 세로 방향을 확대하여 표현한다. 수평 범위는 거리 조작과 무관하게 고정되며 넓은 보기로만 변경된다. 가로·세로 축척이 다르므로 광선도에서 각도 크기를 직접 읽지 않는다. 초점 부근에서 큰 상은 화면 밖으로 나갈 수 있다.'};
 </script><script id="optics-engine">let W=980,H=460,tab=0,running=false,last=null;const states=LAB.tabs.map(t=>Object.fromEntries(t.controls.map(k=>[k.key,k.value]))),progress=LAB.tabs.map(()=>0);
 function draw(){if(tab===LAB.tabs.length)return;c.clearRect(0,0,W,H);LAB.draw(tab,states[tab],progress[tab])}
 function resize(){const r=cv.getBoundingClientRect();if(!r.width||!r.height)return;W=r.width;H=r.height;const d=Math.min(window.devicePixelRatio||1,2);cv.width=Math.round(W*d);cv.height=Math.round(H*d);c.setTransform(d,0,0,d,0,0);draw()}
