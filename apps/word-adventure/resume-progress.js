@@ -84,5 +84,16 @@ beginningTab.addEventListener('click', event => {
   selectStage(0);
 });
 
+const renderBeforeMobileFit = advRender;
+advRender = function () {
+  renderBeforeMobileFit();
+  if (!window.matchMedia('(max-width: 600px)').matches) return;
+  const grid = area.querySelector('.adv-grid');
+  if (!grid) return;
+  const puzzle = ADV[ai];
+  const heightLimit = Math.floor(window.innerHeight * 0.31 * puzzle.cols / puzzle.rows);
+  grid.style.maxWidth = Math.min(puzzle.cols * 60, 370, heightLimit, area.clientWidth - 24) + 'px';
+};
+
 // A returning player lands on the unfinished puzzle without losing prior entries.
 if (savedAdvancedPuzzle() !== null && advState.lastMode !== 'basic') resumePuzzle();
