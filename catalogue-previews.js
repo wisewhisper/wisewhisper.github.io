@@ -17,7 +17,7 @@
     return '<svg viewBox="0 0 480 270" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="대표 실험 장면 도식"><rect width="480" height="270" fill="#0b1626"/><path d="M0 218H480M0 164H480M0 110H480M80 0V270M160 0V270M240 0V270M320 0V270M400 0V270" fill="none" stroke="#293e56" opacity=".5"/>' + art + '</svg>';
   }
   function setupCard(card) {
-    if (card.dataset.unit?.startsWith('09')) return null;
+    if (card.dataset.unit?.startsWith('09') || card.dataset.kind === '전시관') return null;
     const title = card.querySelector('h3')?.textContent.trim() || '실험실';
     const opener = [...card.querySelectorAll('a[href]')].at(-1);
     if (!opener) return null;
