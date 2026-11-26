@@ -86,7 +86,8 @@ canvas{display:block;width:100%;height:100%;border-radius:7px;background:#081321
     <div class="subbar">
       <label>재생 속도 <select id="speed"><option value="0.5">느리게 (0.5T/s)</option><option value="0.8" selected>보통 (0.8T/s)</option><option value="1.6">빠르게 (1.6T/s)</option></select></label>
       <label>관측 위치 x = <output id="probeLabel">0.00λ</output> <input id="probe" type="range" min="-1" max="1" step="0.25" value="0" aria-label="시간 그래프 관측 위치 선택"></label>
-      <label id="phaseControl">파원 B의 위상차 <select id="phaseValue"><option value="0">0° (같은 위상)</option><option value="45">45°</option><option value="90">90°</option><option value="135">135°</option><option value="180">180° (반대 위상)</option><option value="225">225°</option><option value="270">270°</option><option value="315">315°</option><option value="360">360°</option></select></label>
+      <label id="aPhaseControl">파동 A 초기 위상 <select id="aPhaseValue"><option value="0">0° (기본)</option><option value="180">180° (반전)</option></select></label>
+      <label id="phaseControl">파동 B 초기 위상 <select id="phaseValue"><option value="0">0° (기본)</option><option value="45">45°</option><option value="90">90°</option><option value="135">135°</option><option value="180">180° (반대 위상)</option><option value="225">225°</option><option value="270">270°</option><option value="315">315°</option><option value="360">360°</option></select></label>
       <span class="smallpush">각 파동 A=1 · 합성 최대 2A · λ=1 m · 큰 칸 1 m · 작은 눈금 0.25 m · 범위 −5~+5 m</span>
     </div>
 
@@ -137,7 +138,7 @@ const C={bg:'#081321',grid:'#2b4158',axis:'#ccdeee',sub:'#a4bdd5',a:'#4bc6ff',b:
 const TAU=2*Math.PI, FROM=-5, TO=5, START_LEAD=4, FRONT_MEET=1, FULL=6;
 const $=id=>document.getElementById(id);
 const main=$('mainCanvas'),side=$('sideCanvas');const g=main.getContext('2d'),h=side.getContext('2d');
-const state={tab:'approach',t:0,play:false,last:0,raf:null,speed:.8,probe:0,delta:0,extent:12};
+const state={tab:'approach',t:0,play:false,last:0,raf:null,speed:.8,probe:0,delta:0,phaseA:0,extent:12};
 let W=900,H=500,SW=450,SH=500;
 function clamp(x,a,b){return Math.max(a,Math.min(b,x))}
 function reached(x,time,which){return which===0 ? time+START_LEAD-(x-FROM) : time+START_LEAD-(TO-x)}
@@ -145,9 +146,11 @@ function reached(x,time,which){return which===0 ? time+START_LEAD-(x-FROM) : tim
 // tapering a crest into a distorted bump. A and B share the same travel speed.
 // 0° and 180° both start at age=0, so their fronts meet simultaneously.
 // 90° begins at the first zero crossing (age=0.25T) without altering phase.
+function phaseOf(which,delta=state.delta){return which===0?state.phaseA:delta;}
+function relativePhase(delta=state.delta){return delta-state.phaseA;}
 function frontOnset(which,delta=state.delta){
- if(which===0)return 0;
- const phaseRemainder=((delta/Math.PI)%1+1)%1;
+ const phase=phaseOf(which,delta);
+ const phaseRemainder=((phase/Math.PI)%1+1)%1;
  return ((1-phaseRemainder)%1)*.5;
 }
 function activeWave(x,time,which,delta=state.delta){
@@ -157,7 +160,7 @@ function activeWave(x,time,which,delta=state.delta){
 function wave(x,time,which,delta=state.delta){
  if(!activeWave(x,time,which,delta))return 0;
  const age=reached(x,time,which);
- return Math.sin(TAU*age+(which===1?delta:0));
+ return Math.sin(TAU*age+phaseOf(which,delta));
 }
 function sum(x,time,d=state.delta){return wave(x,time,0,d)+wave(x,time,1,d)}
 function xmap(x,x0,x1,r){return r.x+(x-x0)*(r.w/(x1-x0))}
@@ -228,7 +231,7 @@ function curveFromTime(ctx,r,ti,tf,yi,ya,fn,color,style='solid',width=2.4){
 function ticks(a,b,step){let out=[];for(let n=Math.ceil((a-1e-8)/step);n*step<=b+1e-8;n++)out.push(+((n*step).toFixed(6)));return out}
 function fmt(t){return (Math.round(t*100)/100).toFixed(2)}
 function drawSourceFronts(ctx,r,xi,xa,yi,ya,withLabels=true){
- const l=FROM+START_LEAD+state.t-frontOnset(0,0),
+ const l=FROM+START_LEAD+state.t-frontOnset(0,state.delta),
        rr=TO-START_LEAD-state.t+frontOnset(1,state.delta);
  // left/right emission fronts, clipped to domain; the front never disappears, it travels beyond the opposite source
  const valid=[{x:l,col:C.a,label:'A 파면 →'},{x:rr,col:C.b,label:'← B 파면'}];
@@ -236,7 +239,7 @@ function drawSourceFronts(ctx,r,xi,xa,yi,ya,withLabels=true){
 }
 function overlapShading(ctx,r,xi,xa){
  const left=Math.max(xi,TO-START_LEAD-state.t+frontOnset(1,state.delta)),
-       right=Math.min(xa,FROM+START_LEAD+state.t-frontOnset(0,0));
+       right=Math.min(xa,FROM+START_LEAD+state.t-frontOnset(0,state.delta));
  if(right<=left)return;
  ctx.fillStyle='rgba(102,239,165,.07)';ctx.fillRect(xmap(left,xi,xa,r),r.y,xmap(right,xi,xa,r)-xmap(left,xi,xa,r),r.h)
 }
@@ -284,7 +287,7 @@ function plotSpaceTriple(){
       if(Math.abs(v)>1.8){const px=xmap(0,xi,xa,r),py=ymap(v,-s.range,s.range,r);g.beginPath();g.arc(px,py,6,0,TAU);g.fillStyle=C.mark;g.fill();text(g,`${fmt(v)}A`,px+10,py-12,C.mark,'bold 12px system-ui')}}
   }
   plot(g,r,xi,xa,-s.range,s.range,s.fn,s.color,'solid',i===2?4.8:3.2,true,s.which,state.delta);
-  if(i===2&&state.t>=FRONT_MEET)markNodes(g,r,xi,xa,-s.range,s.range,state.delta,false);
+  if(i===2&&state.t>=FRONT_MEET)markNodes(g,r,xi,xa,-s.range,s.range,relativePhase(),false);
   if(i!==2)drawSourceFronts(g,r,xi,xa,-s.range,s.range,false);
   text(g,s.label+(i===2?'  |  최대 진폭 2A':''),l+8,panelTops[i]+11,s.color,i===2?'bold 16px system-ui':'bold 13px system-ui');
  });
@@ -307,7 +310,7 @@ function drawOverlay(xi=-1.5,xa=1.5,phase=0,withGuides=true){
  const left=56,right=17,top=27,bottom=49,r={x:left,y:top,w:W-left-right,h:H-top-bottom};
  overlapShading(g,r,xi,xa);
  axes(g,r,xi,xa,-2.25,2.25,ticks(xi,xa,.25),[-2,-1,0,1,2],{xLabels:true,xNumbersOnAxis:true,xLabelStep:.25,showQuarterNumbers:true,xTitle:'위치 x (m)',yTitle:'변위 y (A 단위)',xText:x=>String(+x.toFixed(2))});
- if(withGuides)markNodes(g,r,xi,xa,-2.25,2.25,phase,true);
+ if(withGuides)markNodes(g,r,xi,xa,-2.25,2.25,relativePhase(phase),true);
  plot(g,r,xi,xa,-2.25,2.25,x=>wave(x,state.t,0,phase),C.a,'dashed',2.8,true,0);
  plot(g,r,xi,xa,-2.25,2.25,x=>wave(x,state.t,1,phase),C.b,'dotted',3.0,true,1,phase);
  plot(g,r,xi,xa,-2.25,2.25,x=>sum(x,state.t,phase),C.s,'solid',4,true,2,phase);
@@ -322,21 +325,24 @@ function drawStanding(){
  const xi=-2.2,xa=2.2,left=54,right=15,top=22,bottom=46,r={x:left,y:top,w:W-left-right,h:H-top-bottom};
  overlapShading(g,r,xi,xa);
  axes(g,r,xi,xa,-2.25,2.25,ticks(-2,2,.25),[-2,-1,0,1,2],{xNumbersOnAxis:true,xLabelStep:.25,showQuarterNumbers:true,xTitle:'위치 x (m)',yTitle:'변위 y (A 단위)',xText:v=>String(+v.toFixed(2))});
- markNodes(g,r,xi,xa,-2.25,2.25,0,true);
+ markNodes(g,r,xi,xa,-2.25,2.25,-state.phaseA,true);
  if(state.t>=FULL){
-  plot(g,r,xi,xa,-2.25,2.25,x=>2*Math.abs(Math.cos(TAU*x)),C.mark,'dashed',1.7);
-  plot(g,r,xi,xa,-2.25,2.25,x=>-2*Math.abs(Math.cos(TAU*x)),C.mark,'dashed',1.7);
+  plot(g,r,xi,xa,-2.25,2.25,x=>2*Math.abs(Math.cos(TAU*x-state.phaseA/2)),C.mark,'dashed',1.7);
+  plot(g,r,xi,xa,-2.25,2.25,x=>-2*Math.abs(Math.cos(TAU*x-state.phaseA/2)),C.mark,'dashed',1.7);
  }
  plot(g,r,xi,xa,-2.25,2.25,x=>wave(x,state.t,0,0),C.a,'dashed',2.4,true,0);
  plot(g,r,xi,xa,-2.25,2.25,x=>wave(x,state.t,1,0),C.b,'dotted',2.6,true,1,0);
  plot(g,r,xi,xa,-2.25,2.25,x=>sum(x,state.t,0),C.s,'solid',3.8,true,2,0);
- text(g,`배: x = 0, ±0.5λ, ±1λ…  /  마디: x = ±0.25λ, ±0.75λ…`,left+6,12,C.axis,'12px system-ui');
+ text(g,state.phaseA===0?'A 0° / B 0°: 배 x = 0, ±0.5 m · 마디 x = ±0.25 m':'A 180° / B 0°: 마디 x = 0, ±0.5 m · 배 x = ±0.25 m',left+6,12,C.axis,'12px system-ui');
 }
 function drawComparison(){
  const left=52,right=16,top=14,bottom=40;
  const hh=(SH-top-bottom-32)/2;
  let ti=Math.max(FULL,state.t-2.1),tf=ti+4.25;
- const stations=[{x:0,label:'배 x = 0 (최대 진폭 2A)',color:C.s},{x:.25,label:'마디 x = 0.25λ (진폭 0)',color:C.mark}];
+ const inverted=Math.abs(state.phaseA-Math.PI)<1e-6;
+ const stations=inverted
+  ?[{x:.25,label:'배 x = 0.25 m (최대 진폭 2A)',color:C.s},{x:0,label:'마디 x = 0 m (진폭 0)',color:C.mark}]
+  :[{x:0,label:'배 x = 0 m (최대 진폭 2A)',color:C.s},{x:.25,label:'마디 x = 0.25 m (진폭 0)',color:C.mark}];
  stations.forEach((s,i)=>{
   const r={x:left,y:top+i*(hh+30)+23,w:SW-left-right,h:hh-10};
   axes(h,r,ti,tf,-2.2,2.2,ticks(ti,tf,1),[-2,0,2],{xLabels:i===1,xText:v=>String(v)});
@@ -351,15 +357,15 @@ function drawPhase(){
  const delta=state.delta,xi=-2,xa=2,left=53,right=14,top=29,bottom=47,r={x:left,y:top,w:W-left-right,h:H-top-bottom};
  overlapShading(g,r,xi,xa);
  axes(g,r,xi,xa,-2.25,2.25,ticks(-2,2,.25),[-2,-1,0,1,2],{xNumbersOnAxis:true,xLabelStep:.25,showQuarterNumbers:true,xTitle:'위치 x (m)',yTitle:'변위 y (A 단위)',xText:v=>String(+v.toFixed(2))});
- markNodes(g,r,xi,xa,-2.25,2.25,delta,true);
+ markNodes(g,r,xi,xa,-2.25,2.25,relativePhase(delta),true);
  if(state.t>=FULL){
-  plot(g,r,xi,xa,-2.25,2.25,x=>2*Math.abs(Math.cos(TAU*x+delta/2)),C.mark,'dashed',1.3);
-  plot(g,r,xi,xa,-2.25,2.25,x=>-2*Math.abs(Math.cos(TAU*x+delta/2)),C.mark,'dashed',1.3);
+  plot(g,r,xi,xa,-2.25,2.25,x=>2*Math.abs(Math.cos(TAU*x+relativePhase(delta)/2)),C.mark,'dashed',1.3);
+  plot(g,r,xi,xa,-2.25,2.25,x=>-2*Math.abs(Math.cos(TAU*x+relativePhase(delta)/2)),C.mark,'dashed',1.3);
  }
  plot(g,r,xi,xa,-2.25,2.25,x=>wave(x,state.t,0,delta),C.a,'dashed',2.6,true,0);
  plot(g,r,xi,xa,-2.25,2.25,x=>wave(x,state.t,1,delta),C.b,'dotted',2.9,true,1,delta);
  plot(g,r,xi,xa,-2.25,2.25,x=>sum(x,state.t,delta),C.s,'solid',3.8,true,2,delta);
- text(g,`파원 B의 위상차 = ${Math.round(delta*180/Math.PI)}°  ·  마디·배의 이동을 확인`,left+6,12,C.axis,'12px system-ui');
+ text(g,`A ${Math.round(state.phaseA*180/Math.PI)}° / B ${Math.round(delta*180/Math.PI)}° · 상대 위상차 ${Math.round(relativePhase(delta)*180/Math.PI)}°`,left+6,12,C.axis,'12px system-ui');
 }
 function drawPhaseSide(){
  const left=52,right=15,top=16,bottom=42,r={x:left,y:top,w:SW-left-right,h:SH-top-bottom};
@@ -370,7 +376,7 @@ function drawPhaseSide(){
  curveFromTime(h,r,ti,tf,-2.25,2.25,tm=>sum(0,tm,state.delta),C.s,'solid',3.2);
  const px=xmap(state.t,ti,tf,r);
  h.save();dash(h,[5,5]);h.strokeStyle=C.axis;h.beginPath();h.moveTo(px,r.y);h.lineTo(px,r.y+r.h);h.stroke();h.restore();
- text(h,`x = 0 · 합성 최대 진폭 = ${Math.abs(2*Math.cos(state.delta/2)).toFixed(2)}A`,left+5,11,C.axis,'12px system-ui');
+ text(h,`x = 0 · 합성 최대 진폭 = ${Math.abs(2*Math.cos(relativePhase()/2)).toFixed(2)}A`,left+5,11,C.axis,'12px system-ui');
 }
 function stage(){if(state.t<FRONT_MEET-1e-5)return '서로 접근';if(state.t<FRONT_MEET+.01)return '중앙에서 만남';if(state.t<FULL-.01)return '중첩 영역 확장';return '정상파 지속 진동'}
 function updateMessage(){
@@ -403,6 +409,7 @@ function updateControls(){
  $('prev').disabled=state.t<=0;
  $('play').textContent=state.play?'❚❚ 일시정지':'▶ 재생';
  $('phaseControl').hidden=!(state.tab==='phase'||state.tab==='approach'||state.tab==='zoom');
+ $('aPhaseValue').value=String(Math.round(state.phaseA*180/Math.PI));
  $('probeLabel').textContent=`${fmt(state.probe)}λ`;
  $('probe').disabled=state.tab==='standing'||state.tab==='phase';
 }
@@ -418,9 +425,9 @@ function draw(){
 }
 const tabDesc={
  approach:['공간에서 본 연속파 A · B · 합성파','파란색 A와 주황색 B는 별도 줄에, 초록색 합성파는 아래 줄에 표시합니다. 가로축=위치, 세로축=변위.','관측점에서 기록한 시간-변위','가로축=시간 t · 세로축=변위 y. 관측 위치를 바꿔 파동이 도달하는 시점과 보강을 비교합니다.'],
- zoom:['중첩부 확대: 같은 좌표축에서 겹쳐 보기','가로축=위치 x · 세로축=변위 y. 분홍 ±2A 안내선과 마디·배 위치를 확인해 보세요.','관측점의 시간-변위 변화','x=0을 선택하고 t=1.25T로 이동해 yA=1, yB=1, 합성파=2를 비교해 보세요.'],
+ zoom:['중첩부 확대: 같은 좌표축에서 겹쳐 보기','가로축=위치 x · 세로축=변위 y. 분홍 ±2A 안내선과 마디·배 위치를 확인해 보세요.','관측점의 시간-변위 변화','A=0°, B=0°에서 t=1.25T에 중심의 보강(2A)을 확인하고, A=180°로 바꿔 상쇄(0)를 비교하세요.'],
  standing:['정상파의 마디·배와 진폭 경계','연속파가 충분히 도달한 뒤, 분홍 점선은 배의 최대 진폭 ±2A 및 마디의 0을 보여 줍니다.','배 vs. 마디의 시간-변위 비교','위: 배 x=0 · 아래: 마디 x=0.25λ. 두 곳을 같은 시간축에서 비교합니다.'],
- phase:['파원 B의 위상차 변화 실험','기본 상태는 같은 위상(0°)입니다. 이 탭에서만 B의 위상을 바꿔 마디·배의 위치 이동을 탐색합니다.','중앙 x=0의 시간-변위 그래프','같은 파장과 속력에서 위상차에 따른 A+B 결과를 비교합니다.']
+ phase:['파동 A·B 초기 위상 변화 실험','A의 0°/180°와 B의 0°~360°를 독립 설정해 두 파동의 상대 위상차와 마디·배 위치를 비교합니다.','중앙 x=0의 시간-변위 그래프','같은 파장과 속력에서 위상차에 따른 A+B 결과를 비교합니다.']
 };
 function switchTab(tab){
  state.tab=tab;
@@ -455,13 +462,14 @@ $('prev').onclick=()=>{stop();setTime(Math.floor(state.t*4+1e-7)/4-.25)};
 $('next').onclick=()=>{stop();setTime(Math.ceil(state.t*4-1e-7)/4+.25)};
 $('meet').onclick=()=>{stop();setTime(FRONT_MEET)};
 $('peak').onclick=()=>{stop();setTime(FRONT_MEET+.25)};
-$('oppositeMeet').onclick=()=>{stop();state.delta=Math.PI;$('phaseValue').value='180';switchTab('phase');setTime(FRONT_MEET+.25)};
+$('oppositeMeet').onclick=()=>{stop();state.phaseA=0;state.delta=Math.PI;$('aPhaseValue').value='0';$('phaseValue').value='180';switchTab('phase');setTime(FRONT_MEET+.25)};
 $('steady').onclick=()=>{stop();setTime(FULL+.25)};
 $('play').onclick=start;
 $('seek').oninput=e=>{const chosen=+e.target.value;stop();setTime(chosen)};
 $('speed').onchange=e=>{state.speed=+e.target.value};
 $('probe').oninput=e=>{state.probe=+e.target.value;draw()};
 $('phaseValue').onchange=e=>{state.delta=+e.target.value*Math.PI/180;draw()};
+$('aPhaseValue').onchange=e=>{state.phaseA=+e.target.value*Math.PI/180;draw()};
 document.querySelectorAll('[data-tab]').forEach(btn=>btn.addEventListener('click',()=>switchTab(btn.dataset.tab)));
 document.addEventListener('keydown',e=>{
  if(e.target.closest('input,button,select'))return;
