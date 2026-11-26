@@ -1,0 +1,147 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>운동에너지와 일-에너지 정리 통합 실험실</title><style>
+*{box-sizing:border-box}html{color-scheme:dark}body{margin:0;background:#050910;color:#eaf3ff;font:15px/1.45 system-ui,-apple-system,sans-serif}main{max-width:1700px;margin:auto;padding:9px 15px}h1{font-size:clamp(20px,2vw,28px);margin:0}header{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}a{color:#92cdf8}small,.muted{color:#b6c7da}h2{font-size:17px;margin:0 0 7px}h3{font-size:16px;margin:8px 0}p{margin:5px 0}nav{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0;border-bottom:1px solid #31435b;padding-bottom:8px}button,select,input,textarea{font:inherit;color:#eaf4ff;background:#172b40;border:1px solid #4b6a85;border-radius:7px;padding:6px 10px}button{cursor:pointer;min-height:34px}button:disabled{opacity:.46;cursor:default}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid #ffd17b;outline-offset:2px}nav button[aria-selected=true],.primary{background:#145d90;border-color:#81c9f8;color:white}input[type=range]{accent-color:#6ac5ff;min-width:0;padding:0;width:100%;height:24px}input[type=number]{width:80px;padding:4px}textarea{width:100%;resize:vertical;min-height:44px}.layout{display:grid;grid-template-columns:minmax(0,2.05fr) minmax(290px,1fr);gap:9px;align-items:start}.panel{border:1px solid #30475c;background:#0d1826;border-radius:12px;padding:11px;min-width:0}.stage{display:flex;flex-direction:column;gap:6px}.scene{display:block;width:100%;height:clamp(245px,43vh,475px);background:#08121e;border:1px solid #2e475d;border-radius:9px}.toolbar{display:flex;align-items:center;gap:5px;flex-wrap:wrap}.toolbar button{padding:4px 8px}.toolbar select{padding:4px}.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}.metrics>div{background:#13273a;border:1px solid #324d64;border-radius:8px;padding:6px 8px}.metrics small{display:block;font-size:12px}.metrics b{font-size:clamp(15px,1.45vw,22px);font-variant-numeric:tabular-nums;display:block;overflow-wrap:anywhere}.readout{background:#11293b;color:#a6e2ff;border-radius:7px;padding:6px 9px;font-weight:600}.ctrl{margin-bottom:7px}.ctrl label{display:flex;justify-content:space-between;font-size:13px;font-weight:600}.ctrl label span{font-weight:400;color:#b9cadd}.ctrl>div{display:grid;grid-template-columns:1fr 80px;align-items:center;gap:8px}.presets{display:flex;gap:4px;flex-wrap:wrap;margin:6px 0}.presets button{font-size:13px;padding:3px 7px}.aside{display:flex;flex-direction:column;gap:7px}.mini{width:100%;height:clamp(125px,20vh,210px);display:block}.miniwrap h3{margin:0;font-size:14px}details{border:1px solid #344e64;border-radius:7px;padding:6px 9px}summary{cursor:pointer;color:#b6e1ff}#question{font-weight:600;color:#ffe1a4}.graphs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.graphs svg{width:100%;max-height:300px;display:block}table{border-collapse:collapse;width:100%;font-size:13px}td,th{border-bottom:1px solid #34465a;padding:5px;text-align:right}th:first-child{text-align:left;color:#c0d6e6}.lesson{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.lesson strong{color:#9fd6ff}.note{font-size:12px;color:#b6c9d9}.seek{display:flex;align-items:center;gap:7px}.seek input{flex:1}.seek span{font-size:12px;min-width:126px}section[hidden],div[hidden]{display:none!important}footer{margin-top:9px;font-size:12px;color:#9fb4c8}@media(min-width:1000px) and (max-height:820px){main{padding:6px 10px}.scene{height:39vh;min-height:230px}.panel{padding:8px}.mini{height:17vh;min-height:112px}.aside{gap:4px}.ctrl{margin:0 0 4px}.metrics>div{padding:4px 6px}nav{margin:5px 0;padding-bottom:5px}.note{font-size:11px}.toolbar button{min-height:30px}.aside .panel{padding:7px 9px}}@media(max-width:950px){.layout,.graphs,.lesson{grid-template-columns:1fr}.scene{height:auto;aspect-ratio:900/430;min-height:200px}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.mini{height:190px}nav button{min-height:39px}.toolbar button{min-height:38px}.ctrl input[type=range]{height:32px}}
+.energyrow{display:grid;grid-template-columns:64px minmax(0,1fr) 83px;gap:8px;align-items:center;font-size:12px;margin:3px 0}.energyrow b{text-align:right;font-variant-numeric:tabular-nums}.bartrack{height:10px;border-radius:7px;background:#263a4d;overflow:hidden}.bartrack i{height:100%;display:block;border-radius:7px}.stage .scene{height:clamp(260px,49vh,500px)}@media(min-width:1000px) and (max-height:820px){.stage .scene{height:42vh}.aside .ctrl label{font-size:12px}.aside .mini{height:15vh;min-height:100px}}@media(max-width:950px){.stage .scene{height:auto;aspect-ratio:900/430}}</style></head><body><main><header><h1>운동에너지와 일-에너지 정리 통합 실험실</h1><a href="index.html">← 실험실 목록</a></header><nav id="tabs" role="tablist" aria-label="실험 선택"></nav><section id="experiment" class="layout"><div class="panel stage"><svg class="scene" id="scene" viewBox="0 0 900 430" role="img" aria-label="두 수레 또는 외력과 마찰이 작용하는 입체 레일"></svg><div class="toolbar"><button id="start" class="primary">▶ 시작</button><button id="pause">Ⅱ 일시정지</button><button id="step">한 단계</button><button id="restart">처음부터</button><button id="reset">전체 초기화</button><label>재생 <select id="rate"><option value=".25">0.25배</option><option value=".5">0.5배</option><option value="1" selected>1배</option><option value="2">2배</option></select></label></div><div class="seek"><input id="seek" type="range" min="0" max="1000" step="1" value="0" aria-label="실험 시간 탐색"><span id="now"></span></div><div id="metrics" class="metrics"></div><div id="bars"></div><div class="readout" id="equation"></div><p class="note" id="modelNote"></p></div><aside class="aside"><div class="panel"><h2>조건 조작</h2><div id="params"></div><div id="presets" class="presets"></div><div class="toolbar"><button id="saveA">조건 A 저장</button><button id="saveB">조건 B 저장</button><small id="notice" aria-live="polite"></small></div></div><div class="panel miniwrap"><h3>실시간 관찰 그래프</h3><svg id="mini" class="mini" viewBox="0 0 620 228" role="img" aria-label="운동에너지 관계 또는 일과 에너지 변화"></svg></div><div class="panel"><h3>예측 → 조작 → 관찰</h3><p id="question"></p><textarea id="prediction" rows="1" placeholder="나의 예측과 관찰 기록 (선택)"></textarea><details id="reveal"><summary>실험 후 원리 확인</summary><p id="answer"></p></details></div></aside></section><section id="graphPage" hidden><div class="toolbar"><button id="graphStart" class="primary">▶ 시작 / 재개</button><button id="graphPause">Ⅱ 일시정지</button><small id="graphStatus"></small><small id="legend"></small></div><div class="graphs"><div class="panel"><h2 id="gtitle1">관계 그래프</h2><svg id="g1" viewBox="0 0 620 228" role="img" aria-label="질량과 운동에너지 또는 알짜일과 운동에너지 변화"></svg></div><div class="panel"><h2 id="gtitle2">관계 그래프</h2><svg id="g2" viewBox="0 0 620 228" role="img" aria-label="속도 또는 시간과 운동에너지"></svg></div><div class="panel" id="third"><h2>속도–시간 그래프</h2><svg id="g3" viewBox="0 0 620 228" role="img" aria-label="속도 시간 그래프"></svg></div><div class="panel"><h2>조건 A·B 비교</h2><table><thead><tr><th>물리량</th><th>현재</th><th>A</th><th>B</th></tr></thead><tbody id="compare"></tbody></table><button id="clear">기록 지우기</button><p class="note">한 변수만 바꾸어 저장하고 비교하세요. 수평 운동 그래프는 실제 도달 거리 또는 정지 순간까지만 표시합니다. 축은 실험 진행 중 고정됩니다.</p></div></div></section><section id="lesson" class="lesson" hidden><article class="panel"><h2>1. 운동에너지 K = ½mv²</h2><p>질량이 두 배이면 K도 두 배, 속력이 두 배이면 K는 네 배입니다. 속도 부호는 운동 방향을 나타내지만 운동에너지는 음수가 될 수 없습니다.</p><p>예: 2 kg, 4 m/s → 16 J. 4 kg, 4 m/s → 32 J. 2 kg, 8 m/s → 64 J. 2 kg, −4 m/s → 16 J.</p><details><summary>같은 운동에너지를 만드는 조건은?</summary><p>질량이 4배이면 속력은 절반입니다. 2 kg, 4 m/s와 8 kg, 2 m/s의 K는 모두 16 J입니다.</p></details></article><article class="panel"><h2>2. 일-에너지 정리</h2><p><strong>Wnet = ΔK = ½mv² − ½mv₀²</strong></p><p>모든 힘의 일을 합한 알짜일이 운동에너지 변화와 같습니다. 일정한 수평 알짜힘에서는 Wnet = ΣF·x입니다.</p><p>알짜일이 0이어도 속력이 0일 필요는 없습니다. 음의 알짜일은 음의 운동에너지가 아니라 운동에너지 감소를 뜻합니다.</p></article><article class="panel"><h2>3. 마찰과 에너지</h2><p>fₖ = μₖmg, ΣF = F − fₖ. 오른쪽 운동일 때 외력이 한 일은 Fx, 마찰력이 한 일은 −fₖx입니다. 운동 에너지의 일부가 열 등으로 전환됩니다.</p><p>m=2 kg, v₀=3 m/s, F=2 N, μₖ=0.2이면 외력은 양의 일을 하지만 알짜힘 −1.92 N에 의해 약 4.6875 m에서 정지합니다.</p><details><summary>5 m에서 정확히 정지하는 초기 속력?</summary><p>F=0, μₖ=0.2이면 v₀=√(2μₖgL) = √19.6 ≈ 4.4272 m/s입니다. 입력 4.427과 4.428을 비교해 보세요.</p></details></article><article class="panel"><h2>4. 모형의 가정과 탐구</h2><p>수평 직선 운동, 일정한 질량, 관성계, 공기 저항 없음, 바퀴의 회전 에너지 제외. 두 수레 비교는 속도가 일정한 상태의 비교이고 가속 과정 자체를 재현하지 않습니다.</p><p>힘·마찰 탭은 첫 정지 이후의 정지 마찰이나 방향 전환을 다루지 않습니다. 재생 배율은 실제 물리량을 변경하지 않습니다. 장면은 기하학적 입체 투영이며 물체 크기와 화살표는 설명용입니다.</p><details><summary>같은 알짜힘에서 거리 두 배이면 속력도 두 배인가?</summary><p>알짜일과 ΔK는 두 배입니다. 초기 속력이 0이면 속력은 √2배이고, 초기 운동에너지가 있다면 일반적으로 다른 비율입니다.</p></details></article></section><footer>온라인 과학실험실 · 20261127-kinetic-work-v1 · 외부 라이브러리 없는 단일 HTML</footer></main><script>
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x)),fmt=(x,d=2)=>Math.abs(x)<1e-9?'0':Number(x.toFixed(d)).toString(),g=9.8;
+const K=(m,v)=>.5*m*v*v;
+function motion(c){
+ const friction=c.mu*c.m*g,net=c.F-friction,a=net/c.m,stop=a<0?c.v0*c.v0/(-2*a):Infinity,xEnd=Math.min(c.L,stop),vEnd=Math.sqrt(Math.max(0,c.v0*c.v0+2*a*xEnd)),end=2*xEnd/(c.v0+vEnd);
+ return {friction,net,a,xEnd,vEnd,end,stops:stop<=c.L,K0:K(c.m,c.v0)};
+}
+function sample(c,t){
+ const p=motion(c),tt=clamp(t,0,p.end),x=clamp(c.v0*tt+.5*p.a*tt*tt,0,p.xEnd),v=Math.max(0,c.v0+p.a*tt),k=K(c.m,v),wf=c.F*x,wf2=-p.friction*x;
+ return {...p,t:tt,x,v,k,wf,wf2,w:p.net*x,dk:k-p.K0};
+}
+function pairs(c){return c.mode==='mass'?[{m:c.m1,v:c.v},{m:c.m2,v:c.v}]:[{m:c.m,v:c.v1},{m:c.m,v:c.v2}]}
+function isPair(c){return c.mode==='mass'||c.mode==='speed'}
+function duration(c){return isPair(c)?c.T:motion(c).end}
+function pairSample(c,t){return pairs(c).map(p=>({...p,x:p.v*clamp(t,0,c.T),k:K(p.m,p.v)}))}
+
+function poly(p,fill,stroke='#6b8ba2'){return '<polygon points="'+p.map(z=>z.join(',')).join(' ')+'" fill="'+fill+'" stroke="'+stroke+'"/>'}
+function ln(x,y,X,Y,col='#7697b4',w=2,dash=''){return '<path d="M'+x+' '+y+'L'+X+' '+Y+'" fill="none" stroke="'+col+'" stroke-width="'+w+'" '+(dash?'stroke-dasharray="'+dash+'"':'')+'/>'}
+function txt(x,y,s,col='#d9e9f8',size=17,anchor='start'){return '<text x="'+x+'" y="'+y+'" fill="'+col+'" font-size="'+size+'" text-anchor="'+anchor+'">'+s+'</text>'}
+function block(x,y,w,h,d,col){return poly([[x,y],[x+w,y],[x+w+d,y-d*.56],[x+d,y-d*.56]],'#a4d9ef')+poly([[x+w,y],[x+w+d,y-d*.56],[x+w+d,y+h-d*.56],[x+w,y+h]],'#20435d')+'<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="4" fill="'+col+'" stroke="#a1cce8"/>'}
+function wheel(x,y,a){return '<g transform="translate('+x+' '+y+') rotate('+a+')"><circle r="12" fill="#07121d" stroke="#93aebf" stroke-width="2"/><circle r="7" fill="#536c7e"/>'+ln(-7,0,7,0,'#cad9e3')+ln(0,-7,0,7,'#cad9e3')+'</g>'}
+function arrow(x,y,v,col,label){const l=Math.sign(v)*Math.min(115,20+Math.abs(v)*4),X=x+l;return Math.abs(v)<1e-9?txt(x,y-9,label+' = 0',col,14,'middle'):ln(x,y,X,y,col,3)+poly([[X,y],[X-Math.sign(l)*12,y-6],[X-Math.sign(l)*12,y+6]],col,col)+txt(clamp((x+X)/2,80,820),y-9,label,col,14,'middle')}
+function rail(y,xmin,xmax){
+ let h=poly([[65,y],[835,y],[870,y-24],[100,y-24]],'#314c60')+poly([[65,y],[835,y],[835,y+10],[65,y+10]],'#172e41')+ln(80,y-8,845,y-8,'#9ab6cb',2);
+ const X=x=>120+650*(x-xmin)/(xmax-xmin);
+ for(let i=0;i<=10;i++){let xx=xmin+(xmax-xmin)*i/10,x=X(xx);h+=ln(x,y-22,x-25,y,'#5a7a91',1);if(i%2===0)h+=ln(x,y+10,x,y+16,'#a5bdce',1)+txt(x,y+32,fmt(xx,1),'#c3d7e6',13,'middle')}
+ return h+txt(860,y+32,'m','#b5c9d9',13,'end');
+}
+function cart(x,y,m,v,d,col){
+ let w=70+3*m,h='<ellipse cx="'+x+'" cy="'+(y+2)+'" rx="'+(w*.65)+'" ry="8" fill="#01050a" opacity=".6"/>';
+ h+=block(x-w/2,y-58,w,35,19,col);
+ for(let i=0;i<Math.min(5,Math.max(1,Math.ceil(m/2)));i++){let a=x-w/2+5+i*(w-10)/5;h+=block(a,y-75,Math.min(15,(w-10)/5-1),15,8,'#778d9f');}
+ h+=wheel(x-w*.3,y-12,d/.16*180/Math.PI)+wheel(x+w*.3,y-12,d/.16*180/Math.PI)+txt(x,y-35,fmt(m,1)+' kg','#fff',14,'middle');
+ return h;
+}
+function sceneSVG(c,t,id='keScene'){
+ let h='<defs><linearGradient id="'+id+'bg" x2="0" y2="1"><stop stop-color="#1a2c40"/><stop offset="1" stop-color="#050b12"/></linearGradient></defs><rect width="900" height="430" fill="url(#'+id+'bg)"/>';
+ if(isPair(c)){
+  const p=pairSample(c,t),bound=Math.max(5,Math.ceil(Math.max(...pairs(c).map(z=>Math.abs(z.v)*c.T))/5)*5),X=x=>450+325*x/bound;
+  h+=txt(22,30,'평행 레일 비교 · 마찰 없음 · 공통 거리 축','#d6eafb',19);
+  for(let i=0;i<2;i++){let z=p[i],y=i?348:160,col=i?'#d88649':'#278dc8',label=i?'B':'A';h+=rail(y,-bound,bound)+ln(450,y-100,450,y,'#8ea9bc',1,'5 4')+cart(X(z.x),y,z.m,z.v,z.x,col)+arrow(X(z.x),y-95,z.v,'#7ee0bc','v '+fmt(z.v)+' m/s')+txt(26,y-108,label+' 수레','#cfe7fa',18)+txt(870,y-108,'K = '+fmt(z.k)+' J',i?'#ffc28b':'#83d1ff',19,'end');}
+  h+=txt(22,421,'수레 질량 표시는 추가 추의 개념 표현 · 바퀴 회전 에너지는 무시','#a7bfd3',13);
+ }else{
+  let z=sample(c,t),X=x=>120+650*x/c.L,x=X(z.x),y=284;
+  h+=txt(22,30,'힘 센서·구동 수레 · 오른쪽 운동 구간','#cfe6fa',19)+rail(y,0,c.L);
+  h+=ln(770,125,770,y,'#88d7ad',2,'6 5')+txt(770,112,'목표 '+fmt(c.L)+' m','#90e5bb',15,'middle');
+  h+=cart(x,y,c.m,z.v,z.x,'#278dc8');
+  h+=arrow(x,145,c.F,'#6dcaff','외력 '+fmt(c.F)+' N')+arrow(x,181,-z.friction,'#ff8e9f','마찰 '+fmt(-z.friction)+' N')+arrow(x,105,z.v,'#7ee0bc','v '+fmt(z.v)+' m/s');
+  if(z.friction>0){for(let j=0;j<10;j++){let px=105+j*70;h+=ln(px,y+10,px+18,y+10,'#ef9874',1)}}
+  h+=txt(22,65,'a = '+fmt(z.a)+' m/s²  ·  ΣF = '+fmt(z.net)+' N','#e6cc99',17);
+  h+=txt(22,350,'x = '+fmt(z.x)+' m  ·  K = '+fmt(z.k)+' J  ·  ΔK = '+fmt(z.dk)+' J','#dcecff',19);
+  h+=txt(22,386,'외력이 한 일 '+fmt(z.wf)+' J  /  마찰력이 한 일 '+fmt(z.wf2)+' J','#c5d8e9',16);
+  h+=txt(22,415,z.stops&&t>=z.end-1e-8?'첫 정지 순간에서 측정 종료 · 이후 운동은 다루지 않음':'힘과 속도의 화살표는 별도의 표시 배율 사용','#a8c3d7',13);
+ }
+ return h;
+}
+
+const $=id=>document.getElementById(id),defaults={mass:{mode:'mass',m1:2,m2:4,v:4,T:5},speed:{mode:'speed',m:2,v1:4,v2:8,T:5},force:{mode:'force',m:2,v0:2,F:8,mu:0,L:10},friction:{mode:'friction',m:2,v0:3,F:2,mu:.2,L:10}};
+let modes=Object.fromEntries(Object.entries(defaults).map(([k,v])=>[k,{...v}])),c=modes.mass,t=0,view='experiment',running=false,last=0,raf=0,rate=1,saved={A:null,B:null};
+const tabs=[['mass','① 질량과 운동에너지'],['speed','② 속력과 운동에너지'],['force','③ 힘과 가속·감속'],['friction','④ 마찰과 에너지 변화'],['graph','⑤ 그래프·비교'],['lesson','⑥ 개념 설명']];
+const questions={mass:['같은 속력에서 질량이 두 배인 수레의 운동에너지는 몇 배일까요?','속도가 같으면 K는 질량에 비례합니다. 2 kg, 4 kg이 4 m/s일 때 각각 16 J, 32 J입니다.'],speed:['속력을 두 배로 하거나 방향만 반대로 하면 운동에너지는 어떻게 달라질까요?','속력 두 배 → 운동에너지 네 배. 속도의 부호만 바꾸면 운동에너지는 그대로입니다.'],force:['외력을 바꾸어 가속·감속을 비교하세요. 알짜일과 운동에너지 변화의 값은 어떻게 되나요?','알짜일은 ΔK입니다. 양의 알짜일은 K 증가, 음의 알짜일은 K 감소를 뜻합니다.'],friction:['외력이 오른쪽이어도 수레가 느려질 수 있을까요?','외력 2 N, 마찰 3.92 N이면 알짜힘은 −1.92 N입니다. 외력이 양의 일을 해도 마찰의 음의 일이 더 크면 K가 감소합니다.']};
+function stop(){running=false;cancelAnimationFrame(raf);raf=0;last=0}
+function rewind(){stop();t=0;render()}
+function start(){if(running)return;if(t>=duration(c)-1e-8)t=0;running=true;last=0;render();raf=requestAnimationFrame(frame)}
+function frame(ms){if(!running)return;t=Math.min(duration(c),t+(last?Math.min(.05,(ms-last)/1000)*rate:0));last=ms;if(t>=duration(c))stop();render();if(running)raf=requestAnimationFrame(frame)}
+function setMode(m){if(m==='graph'||m==='lesson'){view=m;render();return;}if(c.mode!==m){stop();t=0;c=modes[m];$('prediction').value='';$('reveal').open=false;}view='experiment';makeControls();render()}
+function change(k,v){stop();c[k]=v;t=0;render()}
+function control(k,label,min,max,step,unit){const wrap=document.createElement('div');wrap.className='ctrl';wrap.innerHTML='<label for="'+k+'r">'+label+' <span>'+unit+'</span></label><div><input id="'+k+'r" type="range" min="'+min+'" max="'+max+'" step="'+step+'" value="'+c[k]+'" aria-label="'+label+'"><input id="'+k+'n" type="number" min="'+min+'" max="'+max+'" step="'+step+'" value="'+c[k]+'" aria-label="'+label+' 수치"></div>';const a=wrap.querySelector('input[type=range]'),b=wrap.querySelector('input[type=number]');a.oninput=()=>{b.value=a.value;change(k,+a.value)};b.onchange=()=>{let n=b.value.trim()===''?c[k]:Number(b.value);n=Number.isFinite(n)?clamp(Number((Math.round(n/step)*step).toFixed(6)),min,max):c[k];a.value=b.value=n;change(k,n)};$('params').append(wrap)}
+function preset(p){
+ stop();t=0;
+ if(p==='doubleM'){if(c.m1*2>10){$('notice').textContent='질량 2배가 허용 범위를 넘습니다.';return;}c.m2=c.m1*2}
+ else if(p==='doubleV'){if(Math.abs(c.v1*2)>20){$('notice').textContent='속력 2배가 허용 범위를 넘습니다.';return;}c.v2=c.v1*2}
+ else if(p==='reverse')c.v2=-c.v1;
+ else if(p==='equalM')c.m2=c.m1;
+ else if(p==='equalV')c.v2=c.v1;
+ else if(p==='sameK'){c.m=2;c.v1=4;c.v2=-4}
+ else if(p==='accel')Object.assign(c,{m:2,v0:2,F:8,mu:c.mode==='force'?0:.1,L:10});
+ else if(p==='decel')Object.assign(c,{m:2,v0:3,F:c.mode==='force'?-2:2,mu:c.mode==='force'?0:.2,L:10});
+ else if(p==='zero')Object.assign(c,{m:2,v0:2,F:c.mode==='force'?0:3.92,mu:c.mode==='force'?0:.2,L:10});
+ else if(p==='stopAt')Object.assign(c,{m:2,v0:Math.sqrt(19.6),F:0,mu:.2,L:5});
+ $('notice').textContent='새 조건 · 시작하여 비교하세요.';makeControls();render()
+}
+function makeControls(){
+ $('params').replaceChildren();let p=[];
+ if(c.mode==='mass'){control('m1','A 질량',.1,10,.1,'kg');control('m2','B 질량',.1,10,.1,'kg');control('v','공통 속도',-20,20,.1,'m/s');control('T','관찰 시간',1,10,.5,'s');p=[['doubleM','B 질량 2배'],['equalM','같은 질량']]}
+ else if(c.mode==='speed'){control('m','공통 질량',.1,10,.1,'kg');control('v1','A 속도',-20,20,.1,'m/s');control('v2','B 속도',-20,20,.1,'m/s');control('T','관찰 시간',1,10,.5,'s');p=[['doubleV','B 속력 2배'],['reverse','방향 반전'],['equalV','같은 속도']]}
+ else{control('m','질량',.5,10,.1,'kg');control('v0','초기 속력',.5,10,.001,'m/s');control('F','수평 외력',-20,20,.1,'N');if(c.mode==='friction')control('mu','운동 마찰계수',0,.5,.01,'');control('L','목표 거리',1,20,.1,'m');p=[['accel','가속'],['decel','감속'],['zero','알짜일 0']];if(c.mode==='friction')p.push(['stopAt','목표에서 정지'])}
+ $('presets').innerHTML=p.map(([a,b])=>'<button data-p="'+a+'">'+b+'</button>').join('');$('presets').querySelectorAll('button').forEach(b=>b.onclick=()=>preset(b.dataset.p));
+ $('question').textContent=questions[c.mode][0];$('answer').textContent=questions[c.mode][1];
+}
+function drawPlot({series,xmin=0,xmax,ymin,ymax,title,xlabel,ylabel,cursor,marks=[]}){
+ const l=70,r=600,top=32,b=184;let h='<rect width="620" height="228" rx="7" fill="#081522"/>'+txt(11,20,title,'#dceeff',15);
+ const X=x=>l+(r-l)*(x-xmin)/(xmax-xmin||1),Y=y=>b-(b-top)*(y-ymin)/(ymax-ymin||1);
+ for(let i=0;i<=4;i++){const x=xmin+(xmax-xmin)*i/4,y=ymin+(ymax-ymin)*i/4;h+=ln(l,Y(y),r,Y(y),'#2d465a',1)+txt(l-8,Y(y)+4,fmt(y,1),'#b9d0e1',12,'end')+ln(X(x),top,X(x),b,'#253b50',1)+txt(X(x),b+18,fmt(x,1),'#b9d0e1',12,'middle')}
+ if(ymin<=0&&ymax>=0)h+=ln(l,Y(0),r,Y(0),'#a0b6ca',1.4);
+ h+=txt(r,222,xlabel,'#d2e4ef',12,'end')+txt(15,40,ylabel,'#b9d0e1',11);
+ for(const s of series){h+='<path d="'+s.pts.map(([x,y],i)=>(i?'L':'M')+X(x)+' '+Y(y)).join(' ')+'" fill="none" stroke="'+s.color+'" stroke-width="'+(s.width||2.8)+'" stroke-dasharray="'+(s.dash||'')+'"/>'}
+ if(Number.isFinite(cursor))h+=ln(X(clamp(cursor,xmin,xmax)),top,X(clamp(cursor,xmin,xmax)),b,'#eaf3ff',1,'3 4');
+ for(const z of marks){h+='<circle cx="'+X(z.x)+'" cy="'+Y(z.y)+'" r="5" fill="'+z.color+'" stroke="#f2f7ff" stroke-width="1"/>'+txt(clamp(X(z.x)+8,l+4,r-20),clamp(Y(z.y)-9,top+12,b-3),z.label,z.color,12)}
+ return h;
+}
+const cols=['#6cc8ff','#ffc18c','#70e0b5','#fa91a7'];
+function pairGraph(c,axis,includeSaved){
+ const p=pairs(c),pts=Array.from({length:121},(_,i)=>{const a=axis==='mass'?i/120*10:-20+i/120*40;return [a,axis==='mass'?K(a,c.mode==='mass'?c.v:p[0].v):K(c.mode==='speed'?c.m:p[0].m,a)]});
+ const marks=p.map((q,i)=>({x:axis==='mass'?q.m:q.v,y:K(q.m,q.v),color:cols[i],label:i?'B':'A'}));
+ if(includeSaved)for(const [j,key]of ['A','B'].entries()){const q=saved[key];if(q&&isPair(q)){pairs(q).forEach((z,i)=>marks.push({x:axis==='mass'?z.m:z.v,y:K(z.m,z.v),color:cols[j+2],label:key+(i+1)}))}}
+ const max=Math.max(1,...pts.map(p=>p[1]),...marks.map(z=>z.y))*1.12;
+ return drawPlot({series:[{pts,color:cols[0]}],xmin:axis==='mass'?0:-20,xmax:axis==='mass'?10:20,ymin:0,ymax:max,title:axis==='mass'?'질량–운동에너지 · 속도 고정':'속도–운동에너지 · 질량 고정',xlabel:axis==='mass'?'질량 m (kg)':'속도 v (m/s)',ylabel:'J',marks})
+}
+function dynamicsGraph(c,axis,includeSaved){
+ let z=motion(c),sets=[{q:c,label:'현재',color:cols[0]}];if(includeSaved)for(const [i,key]of ['A','B'].entries()){let q=saved[key];if(q&&!isPair(q))sets.push({q,label:key,color:cols[i+2],dash:'6 4'})}
+ const S=[],marks=[];let xmax=Math.max(...sets.map(s=>axis==='time'||axis==='velocity'?motion(s.q).end:s.q.L),.1);
+ for(const set of sets){const d=motion(set.q),q=set.q,make=(key)=>Array.from({length:121},(_,i)=>{const tm=d.end*i/120,r=sample(q,tm);return [axis==='distance'?r.x:tm,r[key]]});if(axis==='velocity'){S.push({pts:make('v'),color:set.color,dash:set.dash});if(set.q===c){const r=sample(c,t);marks.push({x:r.t,y:r.v,color:set.color,label:'현재'})}}else if(axis==='time'){S.push({pts:make('k'),color:set.color,dash:set.dash});if(set.q===c){const r=sample(c,t);marks.push({x:r.t,y:r.k,color:set.color,label:'K'})}}else{S.push({pts:make('w'),color:set.color,dash:set.dash,width:4});if(set.q===c){S.push({pts:make('dk'),color:cols[1],dash:'7 6',width:2});const r=sample(c,t);marks.push({x:r.x,y:r.w,color:cols[1],label:'현재'})}}}
+ const ys=S.flatMap(s=>s.pts.map(p=>p[1])),lo=Math.min(0,...ys),hi=Math.max(0,...ys),pad=Math.max(.5,(hi-lo)*.1),now=sample(c,t);
+ return drawPlot({series:S,xmax,ymin:axis==='velocity'||axis==='time'?0:lo-pad,ymax:hi+pad,title:axis==='distance'?'알짜일 Wnet ━ · ΔK ┄ (겹침)':axis==='time'?'운동에너지 K – 시간':'속도 v – 시간',xlabel:axis==='distance'?'변위 x (m)':'시간 t (s)',ylabel:axis==='velocity'?'m/s':'J',cursor:axis==='distance'?now.x:now.t,marks})
+}
+function energyBar(){
+ let a,b,labelA,labelB;
+ if(isPair(c)){const p=pairSample(c,t);a=p[0].k;b=p[1].k;labelA='수레 A';labelB='수레 B'}
+ else{const z=sample(c,t);a=z.K0;b=z.k;labelA='처음 K';labelB='현재 K'}
+ const mx=Math.max(1,a,b,isPair(c)?0:motion(c).K0,isPair(c)?0:K(c.m,motion(c).vEnd));
+ $('bars').innerHTML=[[a,labelA,cols[0]],[b,labelB,cols[1]]].map(([v,l,col])=>'<div class="energyrow"><span>'+l+'</span><div class="bartrack"><i style="width:'+100*v/mx+'%;background:'+col+'"></i></div><b>'+fmt(v)+' J</b></div>').join('');
+}
+function metrics(){let rows,note,eq;
+ if(isPair(c)){const a=pairSample(c,t),ratio=a[0].k>1e-10?fmt(a[1].k/a[0].k)+'배':'정의 안 됨';rows=[['A 속도',fmt(a[0].v)+' m/s'],['B 속도',fmt(a[1].v)+' m/s'],['A 운동에너지',fmt(a[0].k)+' J'],['B 운동에너지',fmt(a[1].k)+' J']];eq='K = ½mv² · B/A = '+ratio+' · 에너지 차이 '+fmt(a[1].k-a[0].k)+' J';note='관성 기준계·마찰 없는 레일에서 등속 병진 운동. 두 수레는 서로 다른 레일에 있으며 충돌하지 않습니다. 공통 거리 눈금은 실험 시작 전에 정합니다.';}
+ else{const z=sample(c,t);rows=[['현재 속력',fmt(z.v,3)+' m/s'],['운동에너지 K',fmt(z.k,3)+' J'],['알짜일 Wnet',fmt(z.w,3)+' J'],['운동에너지 변화 ΔK',fmt(z.dk,3)+' J']];eq='ΣF = '+fmt(z.net,3)+' N · Wnet = '+fmt(z.w,3)+' J · ΔK = '+fmt(z.dk,3)+' J';note='오른쪽으로 움직이는 첫 구간만 관찰. 목표 도달 또는 첫 정지 순간에서 종료합니다. 운동 마찰력은 이동 중에만 적용하며, 정지 이후의 정지 마찰·재출발은 계산하지 않습니다. 중력과 수직항력의 일은 0입니다.'}
+ $('metrics').innerHTML=rows.map(([a,b])=>'<div><small>'+a+'</small><b>'+b+'</b></div>').join('');$('equation').textContent=eq;$('modelNote').textContent=note;
+ const end=duration(c),done=t>=end-1e-8;$('now').textContent=fmt(t,3)+' / '+fmt(end,3)+' s · '+(running?'실험 중':done?(isPair(c)?'관찰 완료':motion(c).stops?'정지 · 종료':'목표 도달'):t?'일시정지':'준비');$('seek').value=1000*t/end;$('start').disabled=running;$('pause').disabled=!running;$('start').textContent=running?'진행 중':done?'▶ 다시 시작':'▶ 시작 / 재개';
+}
+function compare(){
+ function rows(q){if(!q)return null;if(isPair(q)){const [a,b]=pairs(q);return [q.mode==='mass'?'질량 비교':'속도 비교',fmt(a.m)+' / '+fmt(b.m),fmt(a.v)+' / '+fmt(b.v),'—','—','—',fmt(K(a.m,a.v))+' / '+fmt(K(b.m,b.v)),'—','—','—',K(a.m,a.v)>0?fmt(K(b.m,b.v)/K(a.m,a.v))+'배':'정의 안 됨']}
+ const p=sample(q,duration(q));return [q.mode==='force'?'힘':'마찰',fmt(q.m),fmt(q.v0,3),fmt(q.F),fmt(q.mu),fmt(p.x,3),fmt(p.K0)+' → '+fmt(p.k),fmt(p.wf,3),fmt(p.wf2,3),fmt(p.w,3)+' / '+fmt(p.dk,3),p.stops?'정지':'목표 도달']}
+ const labels=['실험','질량 (kg)','초기 속도 (m/s)','외력 (N)','마찰계수','도달 거리 (m)','운동에너지 (J)','외력의 일 (J)','마찰의 일 (J)','알짜일 / ΔK (J)','비율 또는 종료'];const R=[c,saved.A,saved.B].map(rows);$('compare').innerHTML=labels.map((l,i)=>'<tr><th>'+l+'</th>'+R.map(x=>'<td>'+(x?x[i]:'—')+'</td>').join('')+'</tr>').join('');
+}
+function render(){
+ const exp=view==='experiment';$('experiment').hidden=!exp;$('graphPage').hidden=view!=='graph';$('lesson').hidden=view!=='lesson';$('tabs').querySelectorAll('button').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.mode===(exp?c.mode:view))));
+ if(exp){$('scene').innerHTML=sceneSVG(c,t);metrics();energyBar();$('mini').innerHTML=isPair(c)?pairGraph(c,c.mode==='mass'?'mass':'speed',false):dynamicsGraph(c,'distance',false);}
+ else if(view==='graph'){$('g1').innerHTML=isPair(c)?pairGraph(c,'mass',true):dynamicsGraph(c,'distance',true);$('g2').innerHTML=isPair(c)?pairGraph(c,'speed',true):dynamicsGraph(c,'time',true);$('g3').innerHTML=isPair(c)?'':dynamicsGraph(c,'velocity',true);$('third').hidden=isPair(c);$('gtitle1').textContent=isPair(c)?'질량과 K':'알짜일과 ΔK';$('gtitle2').textContent=isPair(c)?'속도와 K':'K–t';$('legend').textContent=isPair(c)?'A·B 수레의 점 · 녹색/분홍 저장 조건 · 곡선은 현재 고정 변수 기준 (다른 고정 변수의 점은 곡선 밖일 수 있음)':'파랑: 현재 Wnet·K·v / 주황 점선: ΔK / 녹색·분홍: 저장 조건 · 동일한 축으로 비교';$('graphStatus').textContent=fmt(t,3)+' s · '+(running?'진행 중':'정지/완료');compare();}
+}
+$('tabs').innerHTML=tabs.map(([m,l])=>'<button role="tab" data-mode="'+m+'" aria-selected="false">'+l+'</button>').join('');$('tabs').querySelectorAll('button').forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
+$('start').onclick=start;$('pause').onclick=()=>{stop();render()};$('step').onclick=()=>{stop();t=Math.min(duration(c),t+.05);render()};$('restart').onclick=rewind;$('reset').onclick=()=>{stop();modes=Object.fromEntries(Object.entries(defaults).map(([k,v])=>[k,{...v}]));c=modes.mass;t=0;rate=1;saved={A:null,B:null};$('rate').value='1';$('prediction').value='';$('reveal').open=false;$('notice').textContent='';view='experiment';makeControls();render()};
+$('rate').onchange=e=>{rate=+e.target.value;last=0};$('seek').oninput=e=>{stop();t=duration(c)*e.target.value/1000;render()};
+for(const k of ['A','B'])$('save'+k).onclick=()=>{saved[k]={...c};$('notice').textContent='조건 '+k+' 저장 · 그래프·비교 탭에서 확인';};$('clear').onclick=()=>{saved={A:null,B:null};render()};$('graphPause').onclick=()=>{stop();render()};$('graphStart').onclick=start;document.addEventListener('visibilitychange',()=>{if(document.hidden){stop();render()}});
+makeControls();render();
+</script></body></html>
