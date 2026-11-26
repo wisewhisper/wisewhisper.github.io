@@ -1,0 +1,126 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>일과 일률 통합 실험실</title><style>
+*{box-sizing:border-box}html{color-scheme:dark}body{margin:0;background:#050910;color:#eaf3ff;font:15px/1.45 system-ui,-apple-system,sans-serif}main{max-width:1700px;margin:auto;padding:9px 15px}h1{font-size:clamp(20px,2vw,28px);margin:0}header{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}a{color:#92cdf8}small,.muted{color:#b6c7da}h2{font-size:17px;margin:0 0 7px}h3{font-size:16px;margin:8px 0}p{margin:5px 0}nav{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0;border-bottom:1px solid #31435b;padding-bottom:8px}button,select,input,textarea{font:inherit;color:#eaf4ff;background:#172b40;border:1px solid #4b6a85;border-radius:7px;padding:6px 10px}button{cursor:pointer;min-height:34px}button:disabled{opacity:.46;cursor:default}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid #ffd17b;outline-offset:2px}nav button[aria-selected=true],.primary{background:#145d90;border-color:#81c9f8;color:white}input[type=range]{accent-color:#6ac5ff;min-width:0;padding:0;width:100%;height:24px}input[type=number]{width:80px;padding:4px}textarea{width:100%;resize:vertical;min-height:44px}.layout{display:grid;grid-template-columns:minmax(0,2.05fr) minmax(290px,1fr);gap:9px;align-items:start}.panel{border:1px solid #30475c;background:#0d1826;border-radius:12px;padding:11px;min-width:0}.stage{display:flex;flex-direction:column;gap:6px}.scene{display:block;width:100%;height:clamp(245px,43vh,475px);background:#08121e;border:1px solid #2e475d;border-radius:9px}.toolbar{display:flex;align-items:center;gap:5px;flex-wrap:wrap}.toolbar button{padding:4px 8px}.toolbar select{padding:4px}.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}.metrics>div{background:#13273a;border:1px solid #324d64;border-radius:8px;padding:6px 8px}.metrics small{display:block;font-size:12px}.metrics b{font-size:clamp(15px,1.45vw,22px);font-variant-numeric:tabular-nums;display:block;overflow-wrap:anywhere}.readout{background:#11293b;color:#a6e2ff;border-radius:7px;padding:6px 9px;font-weight:600}.ctrl{margin-bottom:7px}.ctrl label{display:flex;justify-content:space-between;font-size:13px;font-weight:600}.ctrl label span{font-weight:400;color:#b9cadd}.ctrl>div{display:grid;grid-template-columns:1fr 80px;align-items:center;gap:8px}.presets{display:flex;gap:4px;flex-wrap:wrap;margin:6px 0}.presets button{font-size:13px;padding:3px 7px}.aside{display:flex;flex-direction:column;gap:7px}.mini{width:100%;height:clamp(125px,20vh,210px);display:block}.miniwrap h3{margin:0;font-size:14px}details{border:1px solid #344e64;border-radius:7px;padding:6px 9px}summary{cursor:pointer;color:#b6e1ff}#question{font-weight:600;color:#ffe1a4}.graphs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.graphs svg{width:100%;max-height:300px;display:block}table{border-collapse:collapse;width:100%;font-size:13px}td,th{border-bottom:1px solid #34465a;padding:5px;text-align:right}th:first-child{text-align:left;color:#c0d6e6}.lesson{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.lesson strong{color:#9fd6ff}.note{font-size:12px;color:#b6c9d9}.seek{display:flex;align-items:center;gap:7px}.seek input{flex:1}.seek span{font-size:12px;min-width:126px}section[hidden],div[hidden]{display:none!important}footer{margin-top:9px;font-size:12px;color:#9fb4c8}@media(min-width:1000px) and (max-height:820px){main{padding:6px 10px}.scene{height:39vh;min-height:230px}.panel{padding:8px}.mini{height:17vh;min-height:112px}.aside{gap:4px}.ctrl{margin:0 0 4px}.metrics>div{padding:4px 6px}nav{margin:5px 0;padding-bottom:5px}.note{font-size:11px}.toolbar button{min-height:30px}.aside .panel{padding:7px 9px}}@media(max-width:950px){.layout,.graphs,.lesson{grid-template-columns:1fr}.scene{height:auto;aspect-ratio:900/430;min-height:200px}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.mini{height:190px}nav button{min-height:39px}.toolbar button{min-height:38px}.ctrl input[type=range]{height:32px}}</style></head><body><main><header><h1>일과 일률 통합 실험실</h1><a href="index.html">← 실험실 목록</a></header><nav id="tabs" role="tablist" aria-label="실험 선택"></nav>
+<section id="experiment" class="layout"><div class="panel stage"><svg class="scene" id="scene" viewBox="0 0 900 430" role="img" aria-label="입체 수레 및 모터 승강 장치"></svg><div class="toolbar"><button id="start" class="primary">▶ 시작</button><button id="pause">Ⅱ 일시정지</button><button id="step">한 단계</button><button id="restart">처음부터</button><button id="reset">전체 초기화</button><label>재생 <select id="rate"><option value=".25">0.25배</option><option value=".5">0.5배</option><option value="1" selected>1배</option><option value="2">2배</option></select></label></div><div class="seek"><input id="seek" type="range" min="0" max="1000" step="1" value="0" aria-label="실험 시간 탐색"><span id="now"></span></div><div id="metrics" class="metrics"></div><div class="readout" id="equation"></div><p class="note" id="modelNote"></p></div><aside class="aside"><div class="panel"><h2>조건 조작</h2><div id="params"></div><div id="presets" class="presets"></div><label>이동 방식 <select id="profile"><option value="uniform">등속 이동</option><option value="smooth">부드러운 출발·도착</option></select></label><div class="toolbar" style="margin-top:6px"><button id="saveA">조건 A 저장</button><button id="saveB">조건 B 저장</button><small id="saved" aria-live="polite"></small></div></div><div class="panel miniwrap"><h3>실시간 관찰 그래프</h3><svg id="mini" class="mini" viewBox="0 0 620 228" role="img" aria-label="실시간 일 또는 일률 그래프"></svg></div><div class="panel"><h3>예측 → 조작 → 관찰</h3><p id="question"></p><textarea id="prediction" rows="1" placeholder="나의 예측과 관찰 기록 (선택)"></textarea><details id="reveal"><summary>실험 후 원리 확인</summary><p id="answer"></p></details></div></aside></section>
+<section id="graphPage" hidden><div class="toolbar"><button id="graphStart" class="primary">▶ 시작 / 재개</button><button id="graphPause">Ⅱ 일시정지</button><small id="graphStatus"></small><small id="legend"></small></div><div class="graphs"><div class="panel"><h2>일–시간</h2><svg id="gW" viewBox="0 0 620 228" role="img" aria-label="누적 일과 시간 관계"></svg><p class="note">전체 구간의 양 끝점 기울기는 평균 일률입니다.</p></div><div class="panel"><h2>순간 일률–시간</h2><svg id="gP" viewBox="0 0 620 228" role="img" aria-label="순간 일률과 시간 관계"></svg><p class="note">곡선 아래의 부호 있는 면적은 해당 구간에서 한 일입니다.</p></div><div class="panel"><h2>변수 관계</h2><svg id="gRelation" viewBox="0 0 620 228" role="img" aria-label="각도와 일 또는 시간과 평균 일률 관계"></svg><p class="note">시간 변화 그래프가 아닙니다. 나머지 변수를 고정하고 한 변수만 바꾼 관계입니다.</p></div><div class="panel"><h2>조건 A·B 비교</h2><table><thead><tr><th>물리량</th><th>현재</th><th>A</th><th>B</th></tr></thead><tbody id="compare"></tbody></table><button id="clear">비교 기록 지우기</button></div></div></section>
+<section id="lesson" class="lesson" hidden><article class="panel"><h2>1. 힘이 한 일</h2><p><strong>W = Fs cos φ</strong></p><p>φ는 힘과 변위 사이의 각입니다. 이 실험에서 θ는 +x 방향과 힘 사이의 각이므로 부호 있는 변위 Δx를 이용해 W = FΔx cos θ로 계산합니다. 힘이 변위와 같은 방향이면 양의 일, 반대면 음의 일, 수직이면 0입니다.</p><p>20 N, 오른쪽 5 m에서 θ가 0°, 60°, 90°, 180°이면 각각 100, 50, 0, −100 J입니다.</p></article><article class="panel"><h2>2. 일률과 시간</h2><p><strong>P̄ = W/Δt, P = F⃗ · v⃗</strong></p><p>600 J를 6 s에 하면 100 W, 3 s에 하면 200 W입니다. 같은 평균 일률이어도 순간 일률은 다를 수 있습니다. W는 일의 기호이기도 하고 와트(일률의 단위)이기도 합니다.</p></article><article class="panel"><h2>3. 모터와 승강기</h2><p>이상적 장치는 중력과 장력만 받습니다. 높이 h만큼 올리고 처음과 끝의 속력이 같으면 장력이 한 일은 mgh입니다. 부드러운 출발·도착에서 장력은 m(g+a), 순간 일률은 장력×속도입니다. 운동에너지가 일시적으로 증가해도 최종 운동에너지 변화가 0이면 전체 일은 mgh입니다.</p><p>구동기 효율·마찰·회전 관성은 제외합니다. 수평 수레는 선택된 힘의 일을 확인하는 지정 경로 모형이며 다른 구동력이 경로를 유지합니다.</p></article><article class="panel"><h2>4. 스스로 설명하기</h2><details><summary>힘이 커도 일이 0일 수 있는 이유는?</summary><p>변위가 없거나 힘과 변위가 수직이면 일은 0입니다.</p></details><details><summary>음의 일을 하면 언제나 물체가 느려지는가?</summary><p>선택한 힘이 음의 일을 하더라도 다른 힘의 일이 양수이면 알짜일이 양수일 수 있습니다. 운동에너지 변화는 알짜일과 같습니다.</p></details><details><summary>승강기가 더 빠르면 전체 일도 커지는가?</summary><p>같은 높이·질량에서 처음과 끝의 운동에너지가 같다면 일은 같고 평균 일률만 커집니다.</p></details><p class="note">재생 속도는 관찰 속도만 변경합니다. 순간 일률은 선택한 물리 구간 안에서의 값이며 등속 모형의 시작·종료 과도 과정은 제외합니다.</p></article></section><footer>물리학 온라인 과학실험실 · 20261127-work-power-v1 · 외부 라이브러리 없는 단일 HTML</footer></main><script>
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x)), fmt=(x,d=2)=>Math.abs(x)<1e-8?'0':Number(x.toFixed(d)).toString();
+function sample(c,t){
+ const u=clamp(t/c.T,0,1),smooth=c.profile==='smooth',q=smooth?u*u*(3-2*u):u,dq=smooth?6*u*(1-u):1,ddq=smooth?6-12*u:0;
+ const x=c.s*q,v=c.s*dq/c.T,a=c.s*ddq/(c.T*c.T),rad=c.theta*Math.PI/180,fx=Math.abs(Math.cos(rad))<1e-12?0:c.F*Math.cos(rad);
+ if(c.mode==='lift'){const mg=c.m*9.8,F=mg+c.m*a,v0=smooth?0:c.s/c.T;return {x,v,a,F,fx:F,W:mg*x+.5*c.m*(v*v-v0*v0),P:F*v,avg:mg*c.s/c.T,total:mg*c.s,gravity:-mg*x};}
+ return {x,v,a,F:c.F,fx,W:fx*x,P:fx*v,avg:fx*c.s/c.T,total:fx*c.s,gravity:0};
+}
+
+function poly(p,fill,stroke='#6b8ba2'){return '<polygon points="'+p.map(z=>z.join(',')).join(' ')+'" fill="'+fill+'" stroke="'+stroke+'"/>'}
+function ln(x,y,X,Y,col='#7697b4',w=2,dash=''){return '<path d="M'+x+' '+y+'L'+X+' '+Y+'" fill="none" stroke="'+col+'" stroke-width="'+w+'" '+(dash?'stroke-dasharray="'+dash+'"':'')+'/>'}
+function txt(x,y,s,col='#d9e9f8',size=17,anchor='start'){return '<text x="'+x+'" y="'+y+'" fill="'+col+'" font-size="'+size+'" text-anchor="'+anchor+'">'+s+'</text>'}
+function arrow(x,y,dx,dy,col,label){if(Math.hypot(dx,dy)<.01)return '';let a=Math.atan2(dy,dx),X=x+dx,Y=y+dy;return ln(x,y,X,Y,col,3.5)+poly([[X,Y],[X-13*Math.cos(a-.5),Y-13*Math.sin(a-.5)],[X-13*Math.cos(a+.5),Y-13*Math.sin(a+.5)]],col,col)+txt(clamp(X,65,835),clamp(Y-12,26,405),label,col,15,'middle')}
+function block(x,y,w,h,d,color){return poly([[x,y],[x+w,y],[x+w+d,y-d*.56],[x+d,y-d*.56]],'#a4d9ef')+poly([[x+w,y],[x+w+d,y-d*.56],[x+w+d,y+h-d*.56],[x+w,y+h]],'#174c70')+'<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="3" fill="'+color+'" stroke="#a1cce8"/>'}
+function wheel(x,y,a){return '<g transform="translate('+x+' '+y+') rotate('+a+')"><circle r="16" fill="#08131f" stroke="#88a8bd" stroke-width="3"/><circle r="9" fill="#465f72"/>'+ln(-9,0,9,0,'#bccbd5',2)+ln(0,-9,0,9,'#bccbd5',2)+'</g>'}
+function sceneSVG(c,t,id='scene'){
+ const z=sample(c,t),bg=id+'bg',steel=id+'metal';
+ let h='<defs><linearGradient id="'+bg+'" x2="0" y2="1"><stop stop-color="#182d41"/><stop offset="1" stop-color="#050b12"/></linearGradient><linearGradient id="'+steel+'" x2="0" y2="1"><stop stop-color="#7c9eb8"/><stop offset="1" stop-color="#223e54"/></linearGradient></defs><rect width="900" height="430" fill="url(#'+bg+')"/>';
+ if(c.mode==='lift'){
+  h+=txt(24,30,'이중 모터 승강 실험대 · 동일한 질량과 높이','#cde6f9',19);
+  for(let j=0;j<2;j++){
+   const cc={...c,T:j?c.T2:c.T},q=sample(cc,t),cx=260+j*390,base=346,sc=230/8,y=base-q.x*sc,co=j?'#eeb36c':'#55b5f2';
+   h+=poly([[cx-147,365],[cx+142,365],[cx+184,338],[cx-105,338]],'#29465a')+poly([[cx-147,365],[cx+142,365],[cx+142,377],[cx-147,377]],'#162d40');
+   for(const dx of [-95,95])h+=block(cx+dx-8,73,16,280,8,'#375369');
+   h+=block(cx-110,61,220,20,12,'#536f83')+block(cx-44,65,88,38,12,'#276184');
+   h+='<circle cx="'+cx+'" cy="98" r="16" fill="#17334b" stroke="#d7e4eb" stroke-width="3"/>'+ln(cx,98,cx,y-48,'#b7c8d2',3)+block(cx-43,y-48,86,45,14,co);
+   for(let n=0;n<=8;n+=2){const yy=base-n*sc;h+=ln(cx-95,yy,cx-82,yy,'#8aaac1',1)+txt(cx-103,yy+5,n+'m','#a7c7de',13,'end');}
+   h+=ln(cx-90,base-c.s*sc,cx+90,base-c.s*sc,'#83d4ad',1.5,'6 5');
+   if(t<cc.T)h+=arrow(cx+64,y-27,0,-Math.min(65,16+q.F*.2),'#ffcf82','장력');
+   h+=txt(cx,130,j?'모터 B':'모터 A',co,18,'middle')+txt(cx,389,'t = '+fmt(Math.min(t,cc.T))+' / '+fmt(cc.T)+' s','#dfeef9',15,'middle')+txt(cx,411,'일 '+fmt(q.W)+' J · 평균 '+fmt(q.avg)+' W',co,16,'middle');
+  }
+ }else{
+  h+=txt(24,30,'수평 레일 · 힘 센서와 구동 수레','#cde6f9',19);
+  h+=poly([[65,300],[805,300],[855,263],[115,263]],'#314e63')+poly([[65,300],[805,300],[805,316],[65,316]],'#132c40')+poly([[805,300],[855,263],[855,279],[805,316]],'#203e55');
+  h+=ln(90,286,820,286,'#a9c4d6',3)+ln(120,267,850,267,'#65879c',3);
+  const ox=450,scale=31;
+  for(let n=-10;n<=10;n++){const x=ox+n*scale;h+=ln(x,300,x+34,267,'#66879e',1)+ln(x,310,x,318,'#9ab6c9',1);if(n%2===0)h+=txt(x,337,n,'#b4ccdf',14,'middle');}
+  h+=txt(830,337,'x (m)','#a7c9de',14,'end')+ln(ox,168,ox,303,'#8ca9ba',1.2,'5 5');
+  const target=ox+c.s*scale,x=ox+z.x*scale,y=214;
+  h+=ln(target,190,target,300,'#77d9ad',1.5,'6 5')+txt(target,181,'목표','#77d9ad',14,'middle');
+  h+='<ellipse cx="'+x+'" cy="287" rx="62" ry="10" fill="#02060b" opacity=".6"/>'+block(x-48,y,96,45,24,'#247ab3')+block(x-20,y-30,40,30,16,'#647e91');
+  const angle=z.x/0.16*180/Math.PI;h+=wheel(x-31,y+51,angle)+wheel(x+31,y+51,angle);
+  h+=txt(x,y+29,'수레','#eaf6ff',15,'middle');
+  const rad=c.theta*Math.PI/180,Flen=c.F===0?0:25+Math.min(c.F,200)*.40,dx=Flen*Math.cos(rad),dy=-Flen*Math.sin(rad),ax=x,ay=194;
+  h+=ln(ax,ay,ax+100,ay,'#9eb8ce',1,'5 5')+arrow(ax,ay,dx,dy,'#ffbd73','F');
+  if(c.F>0&&c.theta>0){const R=27;h+='<path d="M'+(ax+R)+' '+ay+' A'+R+' '+R+' 0 0 0 '+(ax+R*Math.cos(rad))+' '+(ay-R*Math.sin(rad))+'" fill="none" stroke="#ffbd73" stroke-width="2"/>'; }
+  h+=arrow(ax,167,clamp(z.fx*.55,-120,120),0,'#77d9af','F cos θ')+arrow(ox,362,z.x*scale,0,'#73c8ff','변위');
+  h+=txt(25,63,'θ = '+fmt(c.theta,0)+'° · F = '+fmt(c.F)+' N','#ffcf93',16)+txt(25,85,'이동 방향 성분 '+fmt(z.fx)+' N','#8ce0bc',16);
+  h+=txt(24,411,'위치 '+fmt(z.x)+' m  /  누적 일 '+fmt(z.W)+' J  /  속도 '+fmt(z.v)+' m/s','#d4e9fb',17);
+ }
+ return h;
+}
+
+const $=s=>document.getElementById(s);
+const initial={mode:'work',F:20,s:5,theta:60,T:5,T2:3,m:5,profile:'uniform'};
+let c={...initial},t=0,running=false,last=0,raf=0,rate=1,view='experiment',saved={A:null,B:null},taskIndex=0;
+const tabs=[['work','① 힘의 방향과 일'],['sign','② 일의 부호'],['power','③ 일과 일률'],['lift','④ 모터·승강기'],['graph','⑤ 그래프·비교'],['lesson','⑥ 개념 설명']];
+const prompts={
+ work:['힘의 각도를 0°, 60°, 90°로 바꿔 보세요. 같은 힘과 거리에서 누적 일은 어떻게 달라질까요?','이동 방향의 힘 성분만 일을 합니다. 20 N, 5 m에서 100 J → 50 J → 0 J입니다.'],
+ sign:['수레를 오른쪽으로 이동시키면서 180° 방향으로 힘을 가하면 일은 어떤 부호일까요?','이 힘의 일은 음수입니다. 다른 힘이 함께 작용할 수 있으므로 물체가 반드시 즉시 멈추는 것은 아닙니다.'],
+ power:['같은 힘과 변위에서 시간을 절반으로 줄인 뒤 A·B를 비교하세요.','같은 일이라면 평균 일률은 2배입니다. 순간 일률은 이동 방식에 따라 달라집니다.'],
+ lift:['같은 높이로 물체를 들어 올리는 두 모터의 소요 시간을 다르게 설정해 보세요.','처음과 끝의 운동에너지가 같으면 두 모터가 한 일은 mgh로 같습니다. 더 빠른 모터의 평균 일률은 더 큽니다.']
+};
+function duration(){return c.mode==='lift'?Math.max(c.T,c.T2):c.T}
+function stop(){running=false;cancelAnimationFrame(raf);raf=0;last=0}
+function rewind(){stop();t=0;render()}
+function start(){if(running)return;if(t>=duration()-1e-8)t=0;running=true;last=0;render();raf=requestAnimationFrame(frame)}
+function frame(ms){if(!running)return;const dt=last?Math.min(.05,(ms-last)/1000)*rate:0;last=ms;t=Math.min(duration(),t+dt);if(t>=duration())stop();render();if(running)raf=requestAnimationFrame(frame)}
+function setMode(m){if(m==='graph'||m==='lesson'){view=m;render();return;}if(c.mode!==m){stop();t=0;if((m==='lift')!==(c.mode==='lift')){c.s=m==='lift'?4:5;c.T=m==='lift'?6:5;c.profile=m==='lift'?'smooth':'uniform';}c.mode=m;}view='experiment';makeControls();render()}
+function change(k,v){stop();c[k]=v;t=0;render()}
+function control(k,label,min,max,step,unit){const wrap=document.createElement('div');wrap.className='ctrl';wrap.innerHTML='<label for="'+k+'r">'+label+' <span>'+unit+'</span></label><div><input id="'+k+'r" type="range" min="'+min+'" max="'+max+'" step="'+step+'" value="'+c[k]+'" aria-label="'+label+'"><input id="'+k+'n" type="number" min="'+min+'" max="'+max+'" step="'+step+'" value="'+c[k]+'" aria-label="'+label+' 수치"></div>';const a=wrap.querySelector('input[type=range]'),b=wrap.querySelector('input[type=number]');a.oninput=()=>{b.value=a.value;change(k,+a.value)};b.onchange=()=>{let n=b.value.trim()===''?c[k]:Number(b.value);n=Number.isFinite(n)?clamp(Math.round(n/step)*step,min,max):c[k];a.value=b.value=n;change(k,n)};$('params').append(wrap)}
+function makeControls(){
+ $('params').replaceChildren();
+ if(c.mode==='lift'){control('m','물체 질량',.5,20,.5,'kg');control('s','승강 높이',.5,8,.5,'m');control('T','모터 A 시간',2.5,12,.5,'s');control('T2','모터 B 시간',2.5,12,.5,'s');}
+ else{control('F','힘의 크기',0,200,1,'N');control('theta','힘과 +x 방향 각도',0,180,1,'°');control('s','변위 Δx',-10,10,.5,'m');control('T','이동 시간',.5,20,.5,'s');}
+ $('profile').value=c.profile;$('presets').innerHTML=c.mode==='lift'?'<button data-p="same">같은 시간</button><button data-p="half">B 시간 절반</button>':'<button data-angle="0">0°</button><button data-angle="60">60°</button><button data-angle="90">90°</button><button data-angle="180">180°</button><button data-p="half">시간 절반</button>';
+ $('presets').querySelectorAll('[data-angle]').forEach(b=>b.onclick=()=>{change('theta',+b.dataset.angle);makeControls()});$('presets').querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{if(c.mode==='lift')change('T2',b.dataset.p==='same'?c.T:Math.max(2.5,c.T/2));else change('T',Math.max(.5,c.T/2));makeControls()});
+}
+function graphSVG(c,t,kind,series){
+ let W=620,H=228,l=66,r=602,top=32,b=190,pts=series.map(s=>Array.from({length:121},(_,i)=>{const tm=s.q.T*i/120;return [tm,sample(s.q,tm)[kind]]})),T=Math.max(...series.map(s=>s.q.T)),ys=pts.flat().map(p=>p[1]);let lo=Math.min(0,...ys),hi=Math.max(0,...ys),margin=Math.max(.5,(hi-lo)*.1);lo-=margin;hi+=margin;
+ const X=x=>l+(r-l)*x/T,Y=y=>b-(b-top)*(y-lo)/(hi-lo);let s='<rect width="'+W+'" height="'+H+'" rx="6" fill="#081522"/>'+txt(12,20,kind==='W'?'누적 일 W (J)':'순간 일률 P (W)','#dceeff',15);
+ for(let i=0;i<=4;i++){let y=lo+(hi-lo)*i/4,x=T*i/4;s+=ln(l,Y(y),r,Y(y),'#32465a',1)+txt(l-8,Y(y)+4,fmt(y,1),'#a7c5db',12,'end')+ln(X(x),top,X(x),b,'#263c50',1)+txt(X(x),b+17,fmt(x,1),'#a7c5db',12,'middle');}
+ s+=ln(l,Y(0),r,Y(0),'#99b3c9',1.5)+txt(r,H-5,'t (s)','#c3d9e9',12,'end');
+ series.forEach((o,i)=>{let p=pts[i];s+='<path d="'+p.map(([x,y],j)=>(j?'L':'M')+X(x)+' '+Y(y)).join(' ')+'" fill="none" stroke="'+o.color+'" stroke-width="2.5" stroke-dasharray="'+o.dash+'"/>';if(o.live){let tm=Math.min(t,o.q.T);s+='<circle cx="'+X(tm)+'" cy="'+Y(sample(o.q,tm)[kind])+'" r="4.5" fill="'+o.color+'"/>'}});
+ s+=ln(X(clamp(t,0,T)),top,X(clamp(t,0,T)),b,'#f1f6ff',1,'3 4');return s
+}
+function relationSVG(){
+ const lift=c.mode==='lift',isPower=c.mode==='power'||lift,q=sample(c,0),xmin=isPower?(lift?2.5:.5):0,xmax=isPower?(lift?12:20):180;
+ const data=Array.from({length:121},(_,i)=>{let x=xmin+(xmax-xmin)*i/120;return [x,isPower?q.total/x:sample({...c,theta:x},0).total]});
+ let lo=Math.min(0,...data.map(p=>p[1])),hi=Math.max(0,...data.map(p=>p[1])),pad=Math.max(1,(hi-lo)*.12);lo-=pad;hi+=pad;
+ const l=66,r=602,top=32,b=190,X=x=>l+(r-l)*(x-xmin)/(xmax-xmin),Y=y=>b-(b-top)*(y-lo)/(hi-lo);
+ let s='<rect width="620" height="228" rx="6" fill="#081522"/>'+txt(12,20,isPower?'평균 일률 (W) · 전체 일 고정':'전체 일 (J) · 힘과 변위 고정','#dceeff',15);
+ for(let i=0;i<=4;i++){let y=lo+(hi-lo)*i/4,x=xmin+(xmax-xmin)*i/4;s+=ln(l,Y(y),r,Y(y),'#32465a',1)+txt(l-8,Y(y)+4,fmt(y,1),'#a7c5db',12,'end')+txt(X(x),b+17,fmt(x,1),'#a7c5db',12,'middle')}
+ s+=ln(l,Y(0),r,Y(0),'#99b3c9',1.5)+'<path d="'+data.map(([x,y],j)=>(j?'L':'M')+X(x)+' '+Y(y)).join(' ')+'" fill="none" stroke="#70daba" stroke-width="3"/>';
+ s+='<circle cx="'+X(isPower?c.T:c.theta)+'" cy="'+Y(isPower?q.avg:q.total)+'" r="5" fill="#ffcf81"/>'+txt(r,222,isPower?'소요 시간 (s)':'각도 θ (°)','#c3d9e9',12,'end');return s;
+}
+function series(includeSaved){const a=[{q:c,color:'#6ac5ff',dash:'',live:true,label:'현재 A'}];if(c.mode==='lift')a.push({q:{...c,T:c.T2},color:'#efb774',dash:'',live:true,label:'모터 B'});if(includeSaved)for(const k of ['A','B']){let q=saved[k];if(q&&(q.mode==='lift')===(c.mode==='lift'))a.push({q,color:k==='A'?'#72ddb5':'#f48da7',dash:k==='A'?'7 5':'2 5',label:'저장 '+k});}return a}
+function metrics(z){const lift=c.mode==='lift',b=sample({...c,T:c.T2},t),done=t>=duration()-1e-8;let rows=lift?[['모터 A 누적 일',fmt(z.W)+' J'],['모터 B 누적 일',fmt(b.W)+' J'],['모터 A 평균 일률',fmt(z.avg)+' W'],['모터 B 평균 일률',fmt(b.avg)+' W']]:[['누적 일',fmt(z.W)+' J'],['이동 방향 성분',fmt(c.s<0?-z.fx:z.fx)+' N'],['전체 평균 일률',fmt(z.avg)+' W'],['순간 일률',fmt(z.P)+' W']];$('metrics').innerHTML=rows.map(([a,b])=>'<div><small>'+a+'</small><b>'+b+'</b></div>').join('');$('now').textContent=fmt(t)+' / '+fmt(duration())+' s · '+(running?'실험 중':done?'실험 완료':t?'일시정지':'준비');$('seek').value=t/duration()*1000;$('start').textContent=running?'진행 중':done?'▶ 다시 시작':'▶ 시작 / 재개';$('start').disabled=running;$('pause').disabled=!running;}
+function compare(){const rows=[['모드',q=>q.mode==='lift'?'승강기':'수평 수레'],['질량 (kg)',q=>q.mode==='lift'?fmt(q.m):'—'],['힘 (N)',q=>q.mode==='lift'?'가변 장력':fmt(q.F)],['각도 (°)',q=>q.mode==='lift'?'—':fmt(q.theta)],['변위/높이 (m)',q=>fmt(q.s)],['시간 A (s)',q=>fmt(q.T)],['시간 B (s)',q=>q.mode==='lift'?fmt(q.T2):'—'],['전체 일 (J)',q=>fmt(sample(q,0).total)],['평균 일률 A (W)',q=>fmt(sample(q,0).avg)],['평균 일률 B (W)',q=>q.mode==='lift'?fmt(sample({...q,T:q.T2},0).avg):'—']];$('compare').innerHTML=rows.map(([a,f])=>'<tr><th>'+a+'</th>'+[c,saved.A,saved.B].map(q=>'<td>'+(q?f(q):'—')+'</td>').join('')+'</tr>').join('')}
+let lastView='';
+function render(){
+ const z=sample(c,t),lift=c.mode==='lift',experiment=view==='experiment';
+ $('experiment').hidden=!experiment;$('graphPage').hidden=view!=='graph';$('lesson').hidden=view!=='lesson';
+ $('tabs').querySelectorAll('button').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.mode===(experiment?c.mode:view))));
+ if(experiment){
+  $('scene').innerHTML=sceneSVG(c,t);
+  metrics(z);
+  $('modelNote').textContent=lift?'이상적 승강 장치: 중력과 장력이 작용합니다. 등속 모드는 구간 안의 운동만, 부드러운 모드는 정지 출발·도착을 계산합니다.':'선택한 힘의 일만 계산합니다. 구동 장치가 지정한 경로와 속도를 유지하는 모형이며, 선택한 힘이 알짜힘이라는 뜻은 아닙니다. 각도는 +x 기준입니다.';
+  $('equation').textContent=lift?'W = mgh = '+fmt(z.total)+' J · A '+fmt(z.avg)+' W / B '+fmt(sample({...c,T:c.T2},0).avg)+' W':'W = FΔx cos θ = '+fmt(z.total)+' J · P̄ = W/Δt = '+fmt(z.avg)+' W';
+  $('mini').innerHTML=graphSVG(c,t,c.mode==='power'||lift?'P':'W',series(false));
+  if(lastView!==view+':'+c.mode){$('question').textContent=prompts[c.mode][0];$('answer').textContent=prompts[c.mode][1];$('reveal').open=false;}
+ }else if(view==='graph'){
+  $('gW').innerHTML=graphSVG(c,t,'W',series(true));$('gP').innerHTML=graphSVG(c,t,'P',series(true));$('gRelation').innerHTML=relationSVG();$('legend').textContent=series(true).map(x=>x.label).join(' · ')+' | 실험 진행 중 축 고정 · 조건 변경 시 축 재설정';compare();$('graphStatus').textContent=fmt(t)+' s · '+(running?'진행 중':'정지/완료');
+ }
+ lastView=view+':'+c.mode;
+}
+$('tabs').innerHTML=tabs.map(([m,l])=>'<button role="tab" data-mode="'+m+'" aria-selected="false">'+l+'</button>').join('');$('tabs').querySelectorAll('button').forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
+$('start').onclick=start;$('pause').onclick=()=>{stop();render()};$('step').onclick=()=>{stop();t=Math.min(duration(),t+.05);render()};$('restart').onclick=rewind;$('reset').onclick=()=>{stop();c={...initial};t=0;rate=1;saved={A:null,B:null};$('rate').value='1';$('prediction').value='';view='experiment';makeControls();lastView='';render()};$('rate').onchange=e=>{rate=+e.target.value;last=0};$('seek').oninput=e=>{stop();t=duration()*e.target.value/1000;render()};$('profile').onchange=e=>change('profile',e.target.value);
+for(const k of ['A','B'])$('save'+k).onclick=()=>{saved[k]={...c};$('saved').textContent='저장 '+k+' 완료 · 그래프·비교 탭에서 확인';};$('clear').onclick=()=>{saved={A:null,B:null};render()};$('graphPause').onclick=()=>{stop();render()};$('graphStart').onclick=start;
+document.addEventListener('visibilitychange',()=>{if(document.hidden){stop();render()}});
+makeControls();render();
+</script></body></html>
