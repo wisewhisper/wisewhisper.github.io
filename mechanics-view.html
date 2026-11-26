@@ -11,7 +11,8 @@ html,body{margin:0;width:100%;height:100%;background:#050b14;color:#eaf3ff;font-
 const file=new URLSearchParams(location.search).get('file');
 const loading=document.getElementById('loading'),frame=document.getElementById('experiment');
 if(!file||!/^01_운동과_힘_(?:공식(?:01|02|03|04|05|06|07|08|09|10|19|20)|실험(?:0[1-9]|1[0-4]))_[^/\\]+\.html$/.test(file)){loading.textContent='올바른 운동과 힘 실험실 주소가 아닙니다.';return;}
-if(file==="01_운동과_힘_공식01_평균속도.html"){location.replace(file+'?v=20261126-average-v2');return;}
+const native={"01_운동과_힘_공식01_평균속도.html":"20261126-average-v2","01_운동과_힘_공식02_평균가속도.html":"20261126-v2","01_운동과_힘_공식07_무게.html":"20261126-v2","01_운동과_힘_공식10_용수철의힘.html":"20261126-v2","01_운동과_힘_공식20_만유인력.html":"20261126-v2","01_운동과_힘_실험03_단진자와진동.html":"20261126-v2","01_운동과_힘_실험14_포물선운동.html":"20261126-v3"};
+if(Object.hasOwn(native,file)){location.replace(file+'?v='+native[file]);return;}
 let loaded=false;
 function fail(reason){loading.textContent=reason+' ';const a=document.createElement('a');a.href='index.html';a.textContent='목록으로';loading.append(a);frame.hidden=true;}
 frame.addEventListener('load',()=>{
