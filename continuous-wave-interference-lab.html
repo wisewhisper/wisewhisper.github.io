@@ -169,7 +169,16 @@ function axes(ctx,r,xi,xa,yi,ya,xt,yt,opts={}){
  if(yi<=0&&ya>=0){let y=ymap(0,yi,ya,r);ctx.beginPath();ctx.moveTo(r.x,y);ctx.lineTo(r.x+r.w,y);ctx.stroke()}
  if(xi<=0&&xa>=0){let x=xmap(0,xi,xa,r);ctx.beginPath();ctx.moveTo(x,r.y);ctx.lineTo(x,r.y+r.h);ctx.stroke()}
  if(opts.yLabels!==false)yt.forEach(v=>text(ctx,`${v}`,r.x-8,ymap(v,yi,ya,r),C.sub,'11px system-ui','right'));
- if(opts.xLabels!==false)xt.filter(v=>!opts.xLabelStep||Math.abs(v/opts.xLabelStep-Math.round(v/opts.xLabelStep))<1e-6).forEach(v=>text(ctx,opts.xText?opts.xText(v):`${v}`,xmap(v,xi,xa,r),r.y+r.h+13,C.sub,'11px system-ui','center'));
+ if(opts.xLabels!==false)xt.filter(v=>!opts.xLabelStep||Math.abs(v/opts.xLabelStep-Math.round(v/opts.xLabelStep))<1e-6).forEach(v=>{
+ const px=xmap(v,xi,xa,r),py=opts.xNumbersOnAxis&&yi<=0&&ya>=0?ymap(0,yi,ya,r)+13:r.y+r.h+13;
+ const label=opts.xText?opts.xText(v):String(v);
+ if(opts.xNumbersOnAxis){
+  ctx.save();ctx.font='bold 11px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';
+  const tw=ctx.measureText(label).width;
+  ctx.fillStyle='rgba(5,19,35,.88)';ctx.fillRect(px-tw/2-3,py-7,tw+6,14);
+  ctx.fillStyle=v===0?'#fff5ad':'#eef6ff';ctx.fillText(label,px,py);ctx.restore();
+ }else text(ctx,label,px,py,C.sub,'11px system-ui','center');
+});
  if(opts.xTitle)text(ctx,opts.xTitle,r.x+r.w/2,r.y+r.h+32,C.axis,'12px system-ui','center');
  if(opts.yTitle){ctx.save();ctx.translate(Math.max(10,r.x-34),r.y+r.h/2);ctx.rotate(-Math.PI/2);text(ctx,opts.yTitle,0,0,C.axis,'12px system-ui','center');ctx.restore()}
 }
@@ -250,7 +259,7 @@ function plotSpaceTriple(){
   const panelH=available*fractions[i];
   const r={x:l,y:panelTops[i]+23,w:width,h:Math.max(38,panelH-33)};
   overlapShading(g,r,xi,xa);
-  axes(g,r,xi,xa,-s.range,s.range,ticks(-5,5,1),i===2?[-2,-1,0,1,2]:[-1,0,1],{xLabels:true,xLabelStep:1,xText:v=>String(v),xTitle:i===2?'위치 x (m) · 중심 0 m':undefined,yLabels:true});
+  axes(g,r,xi,xa,-s.range,s.range,ticks(-5,5,1),i===2?[-2,-1,0,1,2]:[-1,0,1],{xLabels:true,xNumbersOnAxis:true,xLabelStep:1,xText:v=>String(v),xTitle:i===2?'위치 x (m) · 중심 0 m':undefined,yLabels:true});
   if(i===2){
     g.save();dash(g,[5,5]);g.strokeStyle='rgba(255,121,209,.65)';
     for(let v of [-2,2]){const y=ymap(v,-s.range,s.range,r);g.beginPath();g.moveTo(r.x,y);g.lineTo(r.x+r.w,y);g.stroke()}g.restore();
@@ -280,7 +289,7 @@ function plotSideTime(xprobe=state.probe){
 function drawOverlay(xi=-1.5,xa=1.5,phase=0,withGuides=true){
  const left=56,right=17,top=27,bottom=49,r={x:left,y:top,w:W-left-right,h:H-top-bottom};
  overlapShading(g,r,xi,xa);
- axes(g,r,xi,xa,-2.25,2.25,ticks(xi,xa,1),[-2,-1,0,1,2],{xLabels:true,xLabelStep:1,xTitle:'위치 x (m)',yTitle:'변위 y (A 단위)',xText:x=>String(x)});
+ axes(g,r,xi,xa,-2.25,2.25,ticks(xi,xa,1),[-2,-1,0,1,2],{xLabels:true,xNumbersOnAxis:true,xLabelStep:1,xTitle:'위치 x (m)',yTitle:'변위 y (A 단위)',xText:x=>String(x)});
  if(withGuides)markNodes(g,r,xi,xa,-2.25,2.25,phase,true);
  plot(g,r,xi,xa,-2.25,2.25,x=>wave(x,state.t,0,phase),C.a,'dashed',2.8,true,0);
  plot(g,r,xi,xa,-2.25,2.25,x=>wave(x,state.t,1,phase),C.b,'dotted',3.0,true,1,phase);
@@ -295,7 +304,7 @@ function drawOverlay(xi=-1.5,xa=1.5,phase=0,withGuides=true){
 function drawStanding(){
  const xi=-2.2,xa=2.2,left=54,right=15,top=22,bottom=46,r={x:left,y:top,w:W-left-right,h:H-top-bottom};
  overlapShading(g,r,xi,xa);
- axes(g,r,xi,xa,-2.25,2.25,ticks(-2,2,1),[-2,-1,0,1,2],{xLabelStep:1,xTitle:'위치 x (m)',yTitle:'변위 y (A 단위)',xText:v=>String(v)});
+ axes(g,r,xi,xa,-2.25,2.25,ticks(-2,2,1),[-2,-1,0,1,2],{xNumbersOnAxis:true,xLabelStep:1,xTitle:'위치 x (m)',yTitle:'변위 y (A 단위)',xText:v=>String(v)});
  markNodes(g,r,xi,xa,-2.25,2.25,0,true);
  if(state.t>=FULL){
   plot(g,r,xi,xa,-2.25,2.25,x=>2*Math.abs(Math.cos(TAU*x)),C.mark,'dashed',1.7);
@@ -324,7 +333,7 @@ function drawComparison(){
 function drawPhase(){
  const delta=state.delta,xi=-2,xa=2,left=53,right=14,top=29,bottom=47,r={x:left,y:top,w:W-left-right,h:H-top-bottom};
  overlapShading(g,r,xi,xa);
- axes(g,r,xi,xa,-2.25,2.25,ticks(-2,2,1),[-2,-1,0,1,2],{xLabelStep:1,xTitle:'위치 x (m)',yTitle:'변위 y (A 단위)',xText:v=>String(v)});
+ axes(g,r,xi,xa,-2.25,2.25,ticks(-2,2,1),[-2,-1,0,1,2],{xNumbersOnAxis:true,xLabelStep:1,xTitle:'위치 x (m)',yTitle:'변위 y (A 단위)',xText:v=>String(v)});
  markNodes(g,r,xi,xa,-2.25,2.25,delta,true);
  if(state.t>=8){
   plot(g,r,xi,xa,-2.25,2.25,x=>2*Math.abs(Math.cos(TAU*x+delta/2)),C.mark,'dashed',1.3);
