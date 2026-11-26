@@ -1,141 +1,145 @@
-<!doctype html>
-<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>일과 역학적 에너지 보존 실험실</title><style>
-:root{color-scheme:dark;--bg:#071425;--card:#10243a;--line:#2a4864;--ink:#edf7ff;--muted:#a9c1d5;--blue:#51b8ff;--gold:#ffcf63;--red:#fb8278;--green:#64dbad}*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,'Malgun Gothic',sans-serif;background:radial-gradient(circle at 15% 0,#17375b,var(--bg) 70%);color:var(--ink)}main{max-width:1180px;margin:auto;padding:18px}h1{font-size:clamp(1.45rem,3.7vw,2.1rem);margin:0 0 6px}h2{font-size:1.05rem;margin:0 0 12px}p{line-height:1.55}.lead{color:var(--muted);margin:0 0 20px}.grid{display:grid;grid-template-columns:280px minmax(0,1fr);gap:14px}.card{background:rgba(16,36,58,.96);border:1px solid var(--line);border-radius:16px;padding:16px;min-width:0;box-shadow:0 12px 35px #0002}.controls{grid-row:span 2}label{display:block;margin:0 0 22px;font-weight:650}.value{float:right;color:var(--gold);font-variant-numeric:tabular-nums}input[type=range]{width:100%;margin-top:12px;accent-color:var(--blue);height:30px;touch-action:pan-y}.hint{font-size:.82rem;color:var(--muted);font-weight:400;margin-top:1px}button{border:1px solid #5398c3;background:#17577e;color:#fff;border-radius:9px;font:inherit;font-weight:700;padding:11px 13px;cursor:pointer;min-height:44px}button:hover{background:#2373a0}button:focus-visible,input:focus-visible{outline:3px solid var(--gold);outline-offset:2px}.buttons{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.secondary{background:#26394d;border-color:#50718d}.secondary:hover{background:#35546e}.canvasbox{width:100%;position:relative}canvas{display:block;width:100%;height:300px}.graph{height:245px}.status{background:#193952;border-left:4px solid var(--blue);border-radius:8px;padding:10px 12px;margin-top:12px;line-height:1.45;min-height:45px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}.stat{border:1px solid var(--line);background:#0c1d30;border-radius:9px;padding:9px}.stat small{display:block;color:var(--muted);font-size:.78rem}.stat b{font-size:1rem;font-variant-numeric:tabular-nums}.legend{display:flex;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:.84rem;margin:4px 0 0}.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px}.readout{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.readout>div{background:#0b1d31;border:1px solid var(--line);border-radius:10px;padding:11px}.readout small{display:block;color:var(--muted);margin-bottom:4px}.readout b{font-variant-numeric:tabular-nums}.formula{font-size:.9rem;color:#d5e9f5;margin:10px 0 0}.tasks{grid-column:1/-1}.tasks ol{margin:0;padding-left:23px;line-height:1.8}.note{font-size:.84rem;color:var(--muted);margin:11px 0 0}@media(max-width:770px){.grid{grid-template-columns:1fr}.controls{grid-row:auto}canvas{height:260px}.graph{height:225px}.stats{grid-template-columns:repeat(2,1fr)}.readout{grid-template-columns:1fr}main{padding:12px}.card{padding:13px}}
-</style><style id="ww-dark-tabs-style">
-:root{color-scheme:dark!important;--bg:#05080f!important;--panel:#101b2b!important;--card:#101b2b!important;--ink:#f0f6ff!important;--muted:#bac9dd!important;--line:#314861!important;--blue:#67bcff!important;--green:#62dfb3!important;--red:#ff8394!important;--orange:#ffc477!important}
-html,body{background:#05080f!important;color:#eff6ff!important;min-height:100%}
-body{color-scheme:dark!important}
-main{width:100%!important;max-width:1600px!important;padding:clamp(9px,1.2vw,18px)!important;margin:0 auto!important}
-main>header{background:transparent!important;color:#eff6ff!important;padding:2px 3px 9px!important;margin:0 0 4px!important;border:0!important;border-radius:0!important}
-main>header h1{font-size:clamp(21px,2.1vw,29px)!important;margin:2px 0!important}
-main>header p,main>header .lead{margin:2px 0!important;font-size:14px!important;line-height:1.4!important}
-main>header .formula{font-size:21px!important;color:#93d0ff!important}
-.card,.panel,.metric,.stat,.note,.calc,.calculation,.equation,.status,.readout,.result,.notice{background-color:#101b2b!important;color:#eef5ff!important;border-color:#31445a!important;box-shadow:none!important}
-.card,.panel{padding:clamp(10px,1vw,16px)!important;border:1px solid #31445a!important;border-radius:13px!important;margin:0!important;min-width:0!important}
-.card h2,.panel h2{font-size:clamp(16px,1.15vw,19px)!important;margin:0 0 7px!important;color:#eef6ff!important}
-.card p,.panel p{margin:5px 0!important;line-height:1.44!important}
-.small,.sub,.muted,.note,.hint,.legend,footer,.lead{color:#bac9dd!important}
-button,select,input[type=number],textarea{background:#1a2b41!important;color:#f6f9ff!important;border:1px solid #53708d!important}
-input[type=range]{accent-color:#67bcff!important}
-button.primary{background:#145f96!important;color:white!important;border-color:#69bfff!important}
-button:hover{filter:brightness(1.12)}
-button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid #ffd16d!important;outline-offset:2px}
-svg#scene,svg#graph,svg#workGraph,svg#relationGraph,canvas#scene,canvas#graph,canvas#force,canvas#momentum{background:#070d17!important;border:1px solid #25384c;border-radius:10px;display:block;width:100%}
-svg text{fill:#e4eefa!important}
-svg .legend text{fill:#e4eefa!important}
-canvas{max-width:100%}
-.tablewrap,.table-wrap,.scroll{max-width:100%;overflow-x:auto}
-table{color:#eaf3ff!important}
-th,td{border-color:#334a61!important}
-details{border-color:#31465e!important;color:#e6effb!important}
-details[open]{background:rgba(19,39,62,.35)}
-.ww-tabs{display:flex;gap:7px;flex-wrap:wrap;border-bottom:1px solid #30465f;padding:5px 0 9px;margin:0 0 10px}
-.ww-tab{font:700 15px/1.4 system-ui,sans-serif!important;min-height:39px!important;border:1px solid #425d78!important;border-radius:10px!important;background:#132136!important;color:#c9d9eb!important;cursor:pointer;padding:7px 15px!important}
-.ww-tab[aria-selected="true"]{background:#145982!important;color:white!important;border-color:#77caff!important;box-shadow:inset 0 -2px #8ad8ff!important}
-.ww-page{display:none;grid-template-columns:minmax(0,1.65fr) minmax(285px,.92fr);align-items:start;gap:12px;min-width:0}
-.ww-page.ww-active{display:grid}
-.ww-page>*{min-width:0!important;max-width:100%!important;grid-column:auto!important;grid-row:auto!important}
-.ww-page>.wide,.ww-page>.full,.ww-page>.graphs,.ww-page>.lower{grid-column:1/-1!important}
-.ww-page .metrics,.ww-page .stats,.ww-page .values{gap:7px!important}
-.ww-page .metrics strong,.ww-page .stats strong,.ww-page .metric strong{font-size:clamp(15px,1.4vw,21px)!important;overflow-wrap:anywhere}
-.ww-page .control,.ww-page .param{margin:7px 0!important}
-.ww-page .controls{gap:8px!important}
-.ww-page input[type=range]{min-height:30px!important;height:30px!important}
-.ww-page .buttons{margin:8px 0!important;gap:6px!important}
-.ww-page button:not(.ww-tab){min-height:38px!important;padding:6px 10px!important}
-.ww-page #scene{max-height:clamp(240px,53vh,540px)}
-.ww-page canvas#scene{height:clamp(270px,47vh,430px)!important}
-.ww-page canvas.graph{height:clamp(260px,45vh,410px)!important}
-.ww-page .graph{max-height:55vh}
-.ww-page.ww-concepts{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
-.ww-page.ww-concepts .wide,.ww-page.ww-concepts .full{grid-column:1/-1!important}
-.ww-page .metric,.ww-page .stat{padding:8px!important}
-body[data-lab-page*="02_일과_에너지_운동량"] #lab-compact-toggle{display:none!important}
-@media(max-width:820px){.ww-page.ww-active{display:flex;flex-direction:column;gap:9px}.ww-page>*{width:100%!important}.ww-tab{font-size:13px!important;padding:6px 9px!important}.card,.panel{padding:10px!important}.ww-page canvas#scene{height:310px!important}.ww-page #scene{max-height:none}}
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>역학적 에너지 보존 실험실</title><style>
+*{box-sizing:border-box}html{color-scheme:dark}body{margin:0;background:#050910;color:#eaf3ff;font:15px/1.45 system-ui,-apple-system,sans-serif}main{max-width:1700px;margin:auto;padding:9px 15px}h1{font-size:clamp(20px,2vw,28px);margin:0}header{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}a{color:#92cdf8}small,.muted{color:#b6c7da}h2{font-size:17px;margin:0 0 7px}h3{font-size:16px;margin:8px 0}p{margin:5px 0}nav{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0;border-bottom:1px solid #31435b;padding-bottom:8px}button,select,input,textarea{font:inherit;color:#eaf4ff;background:#172b40;border:1px solid #4b6a85;border-radius:7px;padding:6px 10px}button{cursor:pointer;min-height:34px}button:disabled{opacity:.46;cursor:default}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid #ffd17b;outline-offset:2px}nav button[aria-selected=true],.primary{background:#145d90;border-color:#81c9f8;color:white}input[type=range]{accent-color:#6ac5ff;min-width:0;padding:0;width:100%;height:24px}input[type=number]{width:80px;padding:4px}textarea{width:100%;resize:vertical;min-height:44px}.layout{display:grid;grid-template-columns:minmax(0,2.05fr) minmax(290px,1fr);gap:9px;align-items:start}.panel{border:1px solid #30475c;background:#0d1826;border-radius:12px;padding:11px;min-width:0}.stage{display:flex;flex-direction:column;gap:6px}.scene{display:block;width:100%;height:clamp(245px,43vh,475px);background:#08121e;border:1px solid #2e475d;border-radius:9px}.toolbar{display:flex;align-items:center;gap:5px;flex-wrap:wrap}.toolbar button{padding:4px 8px}.toolbar select{padding:4px}.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}.metrics>div{background:#13273a;border:1px solid #324d64;border-radius:8px;padding:6px 8px}.metrics small{display:block;font-size:12px}.metrics b{font-size:clamp(15px,1.45vw,22px);font-variant-numeric:tabular-nums;display:block;overflow-wrap:anywhere}.readout{background:#11293b;color:#a6e2ff;border-radius:7px;padding:6px 9px;font-weight:600}.ctrl{margin-bottom:7px}.ctrl label{display:flex;justify-content:space-between;font-size:13px;font-weight:600}.ctrl label span{font-weight:400;color:#b9cadd}.ctrl>div{display:grid;grid-template-columns:1fr 80px;align-items:center;gap:8px}.presets{display:flex;gap:4px;flex-wrap:wrap;margin:6px 0}.presets button{font-size:13px;padding:3px 7px}.aside{display:flex;flex-direction:column;gap:7px}.mini{width:100%;height:clamp(125px,20vh,210px);display:block}.miniwrap h3{margin:0;font-size:14px}details{border:1px solid #344e64;border-radius:7px;padding:6px 9px}summary{cursor:pointer;color:#b6e1ff}#question{font-weight:600;color:#ffe1a4}.graphs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.graphs svg{width:100%;max-height:300px;display:block}table{border-collapse:collapse;width:100%;font-size:13px}td,th{border-bottom:1px solid #34465a;padding:5px;text-align:right}th:first-child{text-align:left;color:#c0d6e6}.lesson{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.lesson strong{color:#9fd6ff}.note{font-size:12px;color:#b6c9d9}.seek{display:flex;align-items:center;gap:7px}.seek input{flex:1}.seek span{font-size:12px;min-width:126px}section[hidden],div[hidden]{display:none!important}footer{margin-top:9px;font-size:12px;color:#9fb4c8}@media(min-width:1000px) and (max-height:820px){main{padding:6px 10px}.scene{height:39vh;min-height:230px}.panel{padding:8px}.mini{height:17vh;min-height:112px}.aside{gap:4px}.ctrl{margin:0 0 4px}.metrics>div{padding:4px 6px}nav{margin:5px 0;padding-bottom:5px}.note{font-size:11px}.toolbar button{min-height:30px}.aside .panel{padding:7px 9px}}@media(max-width:950px){.layout,.graphs,.lesson{grid-template-columns:1fr}.scene{height:auto;aspect-ratio:900/430;min-height:200px}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.mini{height:190px}nav button{min-height:39px}.toolbar button{min-height:38px}.ctrl input[type=range]{height:32px}}
+.energyrow{display:grid;grid-template-columns:64px minmax(0,1fr) 83px;gap:8px;align-items:center;font-size:12px;margin:3px 0}.energyrow b{text-align:right;font-variant-numeric:tabular-nums}.bartrack{height:10px;border-radius:7px;background:#263a4d;overflow:hidden}.bartrack i{height:100%;display:block;border-radius:7px}.stage .scene{height:clamp(260px,49vh,500px)}@media(min-width:1000px) and (max-height:820px){.stage .scene{height:42vh}.aside .ctrl label{font-size:12px}.aside .mini{height:15vh;min-height:100px}}@media(max-width:950px){.stage .scene{height:auto;aspect-ratio:900/430}}
+#scene{touch-action:none}.stage .scene{height:clamp(270px,49vh,510px)}.energyrow{grid-template-columns:70px minmax(0,1fr) 90px}.bartrack i{border-radius:0}.aside .ctrl{margin-bottom:3px}@media(min-width:1000px) and (max-height:820px){.stage .scene{height:41vh}.aside .mini{height:14vh;min-height:95px}.aside .panel{padding:6px 8px}.aside .ctrl{margin-bottom:2px}.aside input[type=range]{height:20px}.aside input[type=number]{padding:2px 5px}}@media(max-width:950px){.stage .scene{height:auto;aspect-ratio:900/430}.aside input[type=range]{height:32px}}
+#scene{touch-action:auto}.stage .scene{height:clamp(270px,49vh,510px)}@media(min-width:1000px) and (max-height:820px){.stage .scene{height:41vh}.aside .mini{height:14vh;min-height:95px}}@media(max-width:950px){.stage .scene{height:auto;aspect-ratio:900/430}}</style></head><body><main><header><h1>역학적 에너지 보존 실험실</h1><a href="index.html">← 실험실 목록</a></header><nav id="tabs" role="tablist" aria-label="실험 선택"></nav><section id="experiment" class="layout"><div class="panel stage"><svg class="scene" id="scene" viewBox="0 0 900 430" role="img" aria-label="경사면, 원형 레일, 진자, 용수철 발사 장치"></svg><div class="toolbar"><button id="start" class="primary">▶ 시작</button><button id="pause">Ⅱ 일시정지</button><button id="step">한 단계</button><button id="restart">처음부터</button><button id="reset">전체 초기화</button><label>재생 <select id="rate"><option value=".25">0.25배</option><option value=".5">0.5배</option><option value="1" selected>1배</option><option value="2">2배</option></select></label></div><div class="seek"><input id="seek" type="range" min="0" max="1000" step="1" value="0" aria-label="실험 시간 탐색"><span id="now"></span></div><div id="metrics" class="metrics"></div><div id="bars"></div><div class="readout" id="equation"></div><p class="note" id="workline"></p><p class="note" id="modelNote"></p></div><aside class="aside"><div class="panel"><h2>조건 조작</h2><div id="params"></div><div id="presets" class="presets"></div><div class="toolbar"><button id="saveA">조건 A 저장</button><button id="saveB">조건 B 저장</button><small id="notice" aria-live="polite"></small></div></div><div class="panel miniwrap"><h3>실시간 관찰 그래프</h3><svg id="mini" class="mini" viewBox="0 0 620 228" role="img" aria-label="에너지 시간 그래프"></svg></div><div class="panel"><h3>예측 → 조작 → 관찰</h3><p id="question"></p><textarea id="prediction" rows="1" placeholder="예측과 관찰 기록 (선택)"></textarea><details id="reveal"><summary>실험 후 원리 확인</summary><p id="answer"></p></details></div></aside></section><section id="graphPage" hidden><div class="toolbar"><button id="graphStart" class="primary">▶ 시작 / 재개</button><button id="graphPause">Ⅱ 일시정지</button><small id="graphStatus"></small><small id="legend"></small></div><div class="graphs"><div class="panel"><h2>에너지–시간</h2><svg id="g1" viewBox="0 0 620 228" role="img" aria-label="위치 운동 열 에너지와 전체 에너지"></svg></div><div class="panel"><h2>일과 운동에너지 변화</h2><svg id="g2" viewBox="0 0 620 228" role="img" aria-label="각 힘의 일과 알짜일"></svg></div><div class="panel"><h2>속도–시간</h2><svg id="g3" viewBox="0 0 620 228" role="img" aria-label="시간별 속도 변화"></svg><p class="note">단진자는 한 주기를 반복 표시합니다. 축은 조건 변경 전까지 고정됩니다.</p></div><div class="panel"><h2>조건 A·B 비교</h2><table><thead><tr><th>물리량</th><th>현재</th><th>A</th><th>B</th></tr></thead><tbody id="compare"></tbody></table><div class="toolbar"><button id="loadA">A 불러오기</button><button id="loadB">B 불러오기</button><button id="clear">기록 지우기</button></div><p class="note">저장 조건은 같은 실험 종류에서 그래프로 비교할 수 있습니다. 표는 각 실험 종료 또는 한 주기의 결과입니다.</p></div></div></section><section id="lesson" class="lesson" hidden><article class="panel"><h2>1. 역학적 에너지 보존</h2><p><strong>Emech = U + K</strong></p><p>중력과 탄성력처럼 보존력만 일을 하면 위치에너지와 운동에너지의 합은 일정합니다. 경사면에서 정지 출발할 때 mgh = ½mv², v=√(2gh). 질량은 바닥 속력에 영향을 주지 않습니다.</p><p>경사면과 수평면의 연결은 손실 없는 이상적인 연결로 가정합니다. 바퀴 회전과 공기 저항은 제외합니다.</p></article><article class="panel"><h2>2. 원형 롤러코스터</h2><p>등가 높이 H의 낙하로 얻은 속력으로 원형 레일 바닥에 진입한다고 가정합니다. 높이 y에서 v²=2g(H−y). 꼭대기에서는 N=m(v²/R−g) ≥ 0이어야 접촉합니다.</p><p>따라서 최소 등가 높이는 H=2.5R입니다. 부족하면 N=0인 지점에서 시뮬레이션을 끝냅니다. 이후 공중 운동은 제외합니다.</p></article><article class="panel"><h2>3. 단진자와 용수철 발사</h2><p>단진자는 최저점에서 U=0, 속력 최대입니다. 양 끝에서는 K=0입니다. 작은 각도에서 T≈2π√(L/g)이며 큰 각도에서는 주기가 길어집니다.</p><p>용수철 발사는 처음 압축 에너지 ½kx²가 운동에너지로 전환됩니다. 자연 길이에서 분리되는 이상적 물체의 속력은 x√(k/m)입니다.</p></article><article class="panel"><h2>4. 마찰과 열에너지</h2><p><strong>U + K + Q = E초기</strong></p><p>정지 마찰계수가 tanθ 이상이면 정지 상태에서 스스로 출발하지 않습니다. 운동 중 경사면 마찰력은 μkmg cosθ, 수평면은 μkmg입니다. Q=−Wf는 누적 열 등 내부에너지 증가로 모형화합니다.</p><p>알짜일은 언제나 ΔK입니다. 마찰이 있는 경우 역학적 에너지는 감소하지만 전체 계의 에너지는 보존됩니다.</p><details><summary>탐구: 마찰력이 작아도 열에너지는 생길까요?</summary><p>미끄러지는 동안 마찰력이 한 음의 일에 해당하는 만큼 내부에너지가 증가합니다. 정지 상태의 정지 마찰은 변위가 없으므로 일이 0입니다.</p></details></article></section><footer>온라인 과학실험실 · 20261127-energy-conservation-v2 · 외부 라이브러리 없는 단일 HTML</footer></main><script>
+const g=9.8,clamp=(x,a,b)=>Math.max(a,Math.min(b,x)),fmt=(x,d=2)=>Math.abs(x)<1e-8?'0':Number(x.toFixed(d)).toString(),K=(m,v)=>.5*m*v*v;
+function table(end,fn,N=1000){const a=[0];for(let i=0;i<N;i++)a.push(a[i]+end/N*fn(end*(i+.5)/N));return {a,end,N,T:a[N]}}
+function inv(tab,t){t=clamp(t,0,tab.T);let l=0,r=tab.N;while(r-l>1){let m=(l+r)>>1;if(tab.a[m]<=t)l=m;else r=m}return tab.end*(l+(t-tab.a[l])/(tab.a[r]-tab.a[l]))/tab.N}
+function prepare(c){
+ const m=c.m;
+ if(c.mode==='ramp'||c.mode==='friction'){
+  const th=c.angle*Math.PI/180,mu=c.mode==='friction'?c.mu:0,mus=c.mode==='friction'?Math.max(mu,c.mus):0,L=c.h/Math.sin(th),a=g*(Math.sin(th)-mu*Math.cos(th)),stuck=mus>=Math.tan(th)-1e-12;
+  const t1=stuck?0:Math.sqrt(2*L/a),v1=a*t1,a2=mu*g,L2=stuck?0:Math.min(8,a2>0?v1*v1/(2*a2):8),v2=Math.sqrt(Math.max(0,v1*v1-2*a2*L2)),t2=stuck?0:2*L2/(v1+v2);
+  return {th,mu,mus,L,a,stuck,t1,v1,a2,L2,v2,t2,T:stuck?3:t1+t2,E:m*g*c.h,stopped:!stuck&&a2>0&&v1*v1/(2*a2)<=8+1e-9};
+ }
+ if(c.mode==='coaster'){
+  const H=c.r*c.ratio,lose=c.ratio<2.5,end=lose?Math.acos(2*(1-c.ratio)/3):2*Math.PI,tab=table(end,a=>c.r/Math.sqrt(2*g*(H-c.r*(1-Math.cos(a)))));
+  return {H,lose,tab,T:tab.T,E:m*g*H};
+ }
+ if(c.mode==='pendulum'){
+  const A=c.angle*Math.PI/180,k=Math.sin(A/2),tab=table(2*Math.PI,p=>Math.sqrt(c.l/g)/Math.sqrt(1-k*k*Math.cos(p)**2));
+  return {A,k,tab,T:tab.T,E:m*g*c.l*(1-Math.cos(A))};
+ }
+ const w=Math.sqrt(c.k/m),t1=Math.PI/(2*w),v1=c.x*w,t2=3/v1;
+ return {w,t1,v1,t2,T:t1+t2,E:.5*c.k*c.x*c.x};
+}
+function sample(c,p,t){
+ const m=c.m,tt=c.mode==='pendulum'?((t%p.T)+p.T)%p.T:clamp(t,0,p.T);let y=0,v=0,U=0,Q=0,s=0,x=0,ang=0,F=0,N=0,Wg=0,Wf=0,Ws=0,phase='';
+ if(c.mode==='ramp'||c.mode==='friction'){
+  if(p.stuck){y=c.h;phase='정지 마찰로 출발하지 않음'}
+  else if(tt<=p.t1){s=.5*p.a*tt*tt;y=Math.max(0,c.h-s*Math.sin(p.th));v=p.a*tt;Q=p.mu*m*g*Math.cos(p.th)*s;phase='경사면'}
+  else{let u=tt-p.t1;s=p.L;x=clamp(p.v1*u-.5*p.a2*u*u,0,p.L2);v=Math.max(0,p.v1-p.a2*u);Q=p.mu*m*g*(Math.cos(p.th)*p.L+x);phase='수평면'}
+  U=m*g*y;Wg=m*g*(c.h-y);Wf=-Q;
+ }else if(c.mode==='coaster'){ang=inv(p.tab,tt);y=c.r*(1-Math.cos(ang));v=Math.sqrt(Math.max(0,2*g*(p.H-y)));U=m*g*y;N=m*(v*v/c.r+g*Math.cos(ang));if(Math.abs(N)<1e-7)N=0;Wg=-U;phase=p.lose&&tt>=p.T-1e-9?'접촉 한계 · 이탈 직전':'원형 레일';
+ }else if(c.mode==='pendulum'){let phi=inv(p.tab,tt);ang=2*Math.asin(p.k*Math.cos(phi));y=c.l*(1-Math.cos(ang));v=-2*p.k*Math.sqrt(g*c.l)*Math.sin(phi);U=m*g*y;N=m*(v*v/c.l+g*Math.cos(ang));Wg=p.E-U;phase='자유 진동';
+ }else{if(tt<=p.t1){x=-c.x*Math.cos(p.w*tt);v=c.x*p.w*Math.sin(p.w*tt);U=.5*c.k*x*x;F=-c.k*x;phase='용수철 접촉'}else{x=clamp(p.v1*(tt-p.t1),0,3);v=p.v1;phase='분리 후 등속 운동'}Ws=p.E-U;}
+ const ke=K(m,v),K0=c.mode==='coaster'?p.E:0;
+ return {t:tt,y,v,U,K:ke,Q,E:U+ke+Q,M:U+ke,s,x,ang,F,N,Wg,Wf,Ws,Wnet:Wg+Wf+Ws,dK:ke-K0,phase};
+}
+function poly(p,fill,stroke='#6b8ba2'){return '<polygon points="'+p.map(z=>z.join(',')).join(' ')+'" fill="'+fill+'" stroke="'+stroke+'"/>'}
+function ln(x,y,X,Y,col='#7697b4',w=2,dash=''){return '<path d="M'+x+' '+y+'L'+X+' '+Y+'" fill="none" stroke="'+col+'" stroke-width="'+w+'" '+(dash?'stroke-dasharray="'+dash+'"':'')+'/>'}
+function txt(x,y,s,col='#d9e9f8',size=17,anchor='start'){return '<text x="'+x+'" y="'+y+'" fill="'+col+'" font-size="'+size+'" text-anchor="'+anchor+'">'+s+'</text>'}
+function block(x,y,w,h,d,col){return poly([[x,y],[x+w,y],[x+w+d,y-d*.56],[x+d,y-d*.56]],'#a4d9ef')+poly([[x+w,y],[x+w+d,y-d*.56],[x+w+d,y+h-d*.56],[x+w,y+h]],'#20435d')+'<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="4" fill="'+col+'" stroke="#a1cce8"/>'}
+function wheel(x,y,a){return '<g transform="translate('+x+' '+y+') rotate('+a+')"><circle r="12" fill="#07121d" stroke="#93aebf" stroke-width="2"/><circle r="7" fill="#536c7e"/>'+ln(-7,0,7,0,'#cad9e3')+ln(0,-7,0,7,'#cad9e3')+'</g>'}
+function arrow(x,y,v,col,label){const l=Math.sign(v)*Math.min(115,20+Math.abs(v)*4),X=x+l;return Math.abs(v)<1e-9?txt(x,y-9,label+' = 0',col,14,'middle'):ln(x,y,X,y,col,3)+poly([[X,y],[X-Math.sign(l)*12,y-6],[X-Math.sign(l)*12,y+6]],col,col)+txt(clamp((x+X)/2,80,820),y-9,label,col,14,'middle')}
 
-body[data-lab-page*="운동량보존법칙"] .ww-page .stage{min-height:0}
-.ww-page .stage #sim{height:clamp(260px,41vh,470px)!important;max-height:none!important}
-.ww-page .stage .metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:6px!important}
-.ww-page .stage .metrics strong{font-size:clamp(13px,1vw,17px)!important}
-.ww-page .stage canvas{background:#060c16!important;border-radius:10px}
-.ww-page #chart{height:clamp(230px,35vh,380px)!important;background:#060c16!important}
-.ww-page canvas#force,.ww-page canvas#momentum{height:clamp(210px,33vh,340px)!important}
-.ww-page .controls{min-width:0}.ww-page .actions{gap:5px!important}
-.ww-page .lower,.ww-page .graphs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;grid-column:1/-1}
-.ww-page .tasks{grid-column:1/-1}
-.ww-page .stats{grid-template-columns:repeat(4,minmax(0,1fr))}
-.ww-page .readout{grid-template-columns:repeat(3,minmax(0,1fr))}
-.ww-page .canvasbox canvas{height:clamp(280px,45vh,490px)!important;max-height:none!important}
-.ww-page .graph#chart{height:clamp(250px,45vh,440px)!important;max-height:none!important}
-.ww-page .presets button{min-height:36px!important}
-@media(max-width:820px){.ww-page .stage .metrics,.ww-page .stats{grid-template-columns:repeat(2,minmax(0,1fr))!important}.ww-page .lower,.ww-page .graphs{grid-template-columns:1fr}.ww-page .readout{grid-template-columns:repeat(2,minmax(0,1fr))}}
-</style><style id="ww-one-screen-20261113">
-/* Unified 1366×768 teaching display: scene and controls stay inside first viewport. */
-html{scrollbar-gutter:stable}
-body{margin:0!important;background:#05080f!important}
-main{max-width:1720px!important;padding:7px 13px 11px!important}
-main>header{min-height:0!important;padding:0 3px 4px!important;margin:0 0 2px!important}
-main>header h1{font-size:21px!important;line-height:1.2!important;margin:0 0 3px!important}
-main>header p,main>header .lead,main>header>.small,main>header .eyebrow,main>header .kicker,main>header .tag{display:none!important}
-main>header .formula,main>header .law{font-size:16px!important;padding:0!important;margin:0!important}
-main>.lead{display:none!important}
-.ww-tabs{padding:4px 0 7px!important;margin:0 0 7px!important;gap:7px!important}
-.ww-tab{min-height:36px!important;padding:6px 13px!important}
-.ww-page.ww-active{display:grid!important;grid-template-columns:minmax(0,1.68fr) minmax(315px,.93fr)!important;gap:8px!important;align-items:start!important}
-.ww-page.ww-active.ww-concepts{grid-template-columns:repeat(2,minmax(0,1fr))!important}
-.ww-page.ww-active:not(.ww-concepts)>:nth-child(1){grid-column:1!important;grid-row:1!important}
-.ww-page.ww-active:not(.ww-concepts)>:nth-child(2){grid-column:2!important;grid-row:1!important}
-.ww-page.ww-active:not(.ww-concepts)>:nth-child(n+3){grid-column:1/-1!important;grid-row:auto!important}
-.ww-page .card,.ww-page .panel{padding:9px 11px!important}
-.ww-page .card h2,.ww-page .panel h2{margin:0 0 4px!important;font-size:16px!important;line-height:1.3!important}
-.ww-page .card h3{font-size:14px!important;margin:3px 0!important}
-.ww-page .card>p,.ww-page .panel>p{margin:3px 0!important;font-size:12px!important;line-height:1.35!important}
-.ww-page .control,.ww-page .param{margin:3px 0!important}
-.ww-page label,.ww-page output{line-height:1.25!important}
-.ww-page .buttons,.ww-page .actions{margin:4px 0!important;gap:5px!important}
-.ww-page button:not(.ww-tab){min-height:32px!important;padding:4px 8px!important;font-size:13px!important}
-.ww-page input[type=range]{min-height:18px!important;height:23px!important;margin:2px 0!important}
-.ww-page select,.ww-page input[type=number]{min-height:29px!important;padding:3px 6px!important}
-.ww-page .stat,.ww-page .metric{padding:5px 7px!important}
-.ww-page .stats,.ww-page .metrics,.ww-page .readout{gap:5px!important}
-.ww-page .stat strong,.ww-page .metric strong,.ww-page .readout b{font-size:clamp(14px,1.12vw,18px)!important;line-height:1.3!important}
-.ww-page #scene{max-height:clamp(220px,37vh,380px)!important}
-.ww-page canvas#scene{height:clamp(225px,36vh,360px)!important}
-.ww-page .stage #sim{height:clamp(225px,34vh,340px)!important}
-.ww-page .canvasbox canvas{height:clamp(220px,36vh,360px)!important}
-.ww-page canvas#force,.ww-page canvas#momentum,.ww-page #chart,.ww-page #chartEnergy{max-height:42vh!important}
-.ww-page .stage .metrics{grid-template-columns:repeat(4,minmax(0,1fr))!important}
-.ww-page .stage .metric strong{font-size:14px!important}
-.ww-page .readout{grid-template-columns:repeat(3,minmax(0,1fr))!important}
-.ww-page .graphs,.ww-page .lower{grid-column:1/-1!important}
-.ww-page .equation,.ww-page .calculation{margin:5px 0!important;padding:6px!important}
-.ww-page .scroll,.ww-page .tablewrap{max-height:40vh;overflow:auto}
-.ww-page.ww-active:not(.ww-concepts)>:nth-child(2){max-height:calc(100dvh - 135px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}
-.ww-page.ww-active:not(.ww-concepts)>:nth-child(n+3){max-height:calc(100dvh - 505px);overflow-y:auto;scrollbar-width:thin}
-.ww-page [id="comparison"],.ww-page [id="compare"]{max-height:100%}
-@media(min-width:1000px) and (max-height:820px){
-.ww-page #scene{max-height:32vh!important}
-.ww-page canvas#scene{height:31vh!important}
-.ww-page .stage #sim{height:30vh!important}
-.ww-page .canvasbox canvas{height:30vh!important}
-.ww-page.ww-active:not(.ww-concepts)>:nth-child(n+3){max-height:clamp(105px,21vh,185px)}
+
+function sled(x,y,angle,col='#278ec0',w=58){
+ return '<g transform="translate('+x+' '+y+') rotate('+angle+')"><ellipse cx="0" cy="3" rx="'+(w*.65)+'" ry="6" fill="#03070b" opacity=".55"/>'+block(-w/2,-34,w,31,15,col)+txt(0,-13,'물체','#fff',12,'middle')+'</g>'
 }
-@media(max-width:999px){
-html{scrollbar-gutter:auto}
-main{padding:10px!important}
-main>header p,main>header .lead{display:block!important}
-.ww-page.ww-active,.ww-page.ww-active.ww-concepts{display:flex!important;flex-direction:column!important;gap:9px!important}
-.ww-page.ww-active>*{width:100%!important;grid-column:auto!important;grid-row:auto!important;max-height:none!important;overflow:visible!important}
-.ww-page #scene,.ww-page canvas#scene,.ww-page .stage #sim,.ww-page .canvasbox canvas{height:clamp(250px,42vh,420px)!important;max-height:55vh!important}
-.ww-page .readout{grid-template-columns:repeat(2,minmax(0,1fr))!important}
-.ww-page .stage .metrics{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+function sceneSVG(c,p,t,id='energyScene'){
+ const z=sample(c,p,t),bg=id+'bg';let h='<defs><linearGradient id="'+bg+'" x2="0" y2="1"><stop stop-color="#1c3248"/><stop offset="1" stop-color="#050a12"/></linearGradient></defs><rect width="900" height="430" fill="url(#'+bg+')"/>';
+ if(c.mode==='ramp'||c.mode==='friction'){
+  let run=c.h/Math.tan(p.th),sc=Math.min(650/(run+8),242/c.h),x0=105,y0=330,bx=x0+run*sc,top=y0-c.h*sc,end=bx+8*sc;
+  h+=txt(20,27,c.mode==='friction'?'경사면과 수평면 · 마찰 실험':'경사면과 수평면 · 이상적 운동','#d6eaff',19);
+  h+=poly([[x0,top],[bx,y0],[end,y0],[end+40,y0-25],[bx+40,y0-25],[x0+40,top-25]],'#66849a')+poly([[x0,top],[bx,y0],[x0,y0]],'#263f53')+poly([[x0,y0],[end,y0],[end,y0+12],[x0,y0+12]],'#183346');
+  h+=ln(x0,top,bx,y0,'#b5d4e6',3)+ln(bx,y0,end,y0,'#b5d4e6',3)+ln(x0-26,top,x0-26,y0,'#8ab5d2',1.5,'5 4')+txt(x0-35,(top+y0)/2,fmt(c.h)+' m','#b9d9ed',14,'end');
+  h+=txt(bx-10,y0+32,fmt(c.angle,0)+'°','#c5d8e6',15,'end')+txt((bx+end)/2,y0+32,'8 m','#c5d8e6',15,'middle');
+  for(let i=0;i<=8;i++){let x=bx+i*sc;h+=ln(x,y0,x,y0+8,'#b7d4e5',1)}
+  if(c.mode==='friction'&&p.mu>0){for(let i=0;i<=20;i++){const q=i/20;h+=ln(x0+run*sc*q,top+c.h*sc*q,x0+run*sc*q+22,top+c.h*sc*q-15,'#e4aa78',1.2);h+=ln(bx+8*sc*q,y0,bx+8*sc*q+16,y0-12,'#e4aa78',1.2)}}
+  let x=x0+z.s*Math.cos(p.th)*sc+z.x*sc,y=y0-z.y*sc,theta=z.t<p.t1||p.stuck?c.angle:0;
+  h+=sled(x,y,theta);
+  if(z.v>1e-8){const a=theta*Math.PI/180,dx=65*Math.cos(a),dy=65*Math.sin(a);h+=ln(x,y-55,x+dx,y-55+dy,'#72e1b6',3)+poly([[x+dx,y-55+dy],[x+dx-12*Math.cos(a-.5),y-55+dy-12*Math.sin(a-.5)],[x+dx-12*Math.cos(a+.5),y-55+dy-12*Math.sin(a+.5)]],'#72e1b6')+txt(x+dx/2,y-63+dy/2,'v','#9cebc9',14,'middle')}
+  h+=txt(20,397,'경사면 이동 '+fmt(z.s)+' m · 수평면 '+fmt(z.x)+' m · '+z.phase,'#d5e7f5',16);
+ }else if(c.mode==='coaster'){
+  const R=140,cx=450,cy=194,x=cx+R*Math.sin(z.ang),y=cy+R*Math.cos(z.ang);
+  h+=txt(20,27,'원형 롤러코스터 · 레일 접촉 조건','#d6eaff',19);
+  for(let a=0;a<360;a+=30){let r=a*Math.PI/180,xx=cx+R*Math.sin(r),yy=cy+R*Math.cos(r);h+=ln(xx,yy,xx+22,360,'#314d64',3)}
+  h+='<circle cx="'+(cx+19)+'" cy="'+(cy-12)+'" r="'+R+'" fill="none" stroke="#3c5b71" stroke-width="14"/><circle cx="'+cx+'" cy="'+cy+'" r="'+R+'" fill="none" stroke="#8db4ca" stroke-width="9"/><circle cx="'+cx+'" cy="'+cy+'" r="'+R+'" fill="none" stroke="#20394d" stroke-width="3"/>';
+  h+=ln(cx,cy,cx+R,cy,'#7797b1',1.5,'5 4')+txt(cx+R/2,cy-10,'R = '+fmt(c.r)+' m','#d7e8f5',15,'middle')+txt(cx,cy+27,'H/R = '+fmt(c.ratio),'#f6d5a0',18,'middle');
+  h+=sled(x,y,z.ang*-180/Math.PI,'#cf8346',46)+txt(20,65,'등가 출발 높이 H = '+fmt(p.H)+' m','#b8d9ef',16)+txt(20,91,'바닥 진입 속력 '+fmt(Math.sqrt(2*g*p.H))+' m/s','#b8d9ef',16)+txt(875,65,'수직항력 N = '+fmt(z.N)+' N','#f6cf91',17,'end');
+  h+=txt(450,387,p.lose&&t>=p.T-1e-8?'N = 0 · 레일 접촉 상실 직전에서 종료':'H ≥ 2.5R이면 한 바퀴 접촉 유지 (이상적 조건)','#cfe4f4',17,'middle');
+ }else if(c.mode==='pendulum'){
+  const cx=450,cy=58,R=260,x=cx+R*Math.sin(z.ang),y=cy+R*Math.cos(z.ang),A=p.A;
+  h+=txt(20,27,'단진자 · 큰 각도까지 계산하는 비선형 진동','#d6eaff',19)+block(300,38,300,15,22,'#536d82')+ln(cx,cy,cx,cy+R,'#8daec3',1.5,'6 5');
+  let pts=[];for(let i=0;i<=100;i++){let a=-A+2*A*i/100;pts.push([cx+R*Math.sin(a),cy+R*Math.cos(a)])}h+='<path d="'+pts.map(([a,b],i)=>(i?'L':'M')+a+' '+b).join(' ')+'" fill="none" stroke="#637d94" stroke-width="2" stroke-dasharray="6 5"/>';
+  h+=ln(cx,cy,x,y,'#d2e6f1',3)+ln(cx+2,cy-1,x+2,y-1,'#66879f',1);
+  h+='<defs><radialGradient id="'+id+'ball" cx=".32" cy=".25"><stop stop-color="#ebf5fb"/><stop offset=".35" stop-color="#85a9c0"/><stop offset="1" stop-color="#29475b"/></radialGradient></defs><circle cx="'+x+'" cy="'+y+'" r="24" fill="url(#'+id+'ball)" stroke="#a6c8dc"/>';
+  h+=txt(20,67,'L = '+fmt(c.l)+' m · 시작 각도 '+fmt(c.angle,0)+'°','#c5dcec',16)+txt(875,67,'현재 각도 '+fmt(z.ang*180/Math.PI,1)+'°','#e3eff7',16,'end')+txt(450,388,'주기 '+fmt(p.T,3)+' s · 속력 '+fmt(Math.abs(z.v))+' m/s · 최저점 U = 0','#d1e7f6',17,'middle');
+ }else{
+  const railY=295,X=x=>250+170*x,wall=110,end=X(z.x)-29;
+  h+=txt(20,27,'압축 용수철 발사 장치 · 분리 후 수평 등속 운동','#d6eaff',19)+poly([[55,railY],[835,railY],[875,railY-32],[95,railY-32]],'#344e63')+poly([[55,railY],[835,railY],[835,railY+12],[55,railY+12]],'#172f42')+block(75,130,35,165,22,'#426178');
+  const springEnd=Math.min(X(0)-29,end);let pts=[];for(let i=0;i<=180;i++){let q=i/180;pts.push([wall+(springEnd-wall)*q,railY-20+13*Math.sin(q*20*Math.PI)])}h+='<path d="'+pts.map(([a,b],i)=>(i?'L':'M')+a+' '+b).join(' ')+'" fill="none" stroke="#99d5f9" stroke-width="4"/>';
+  h+=sled(X(z.x),railY,0,'#2387bb')+ln(X(0),110,X(0),railY,'#90b9d6',1.5,'6 5')+txt(X(0),97,'자연 길이','#c4deee',15,'middle')+txt(20,65,'k = '+fmt(c.k)+' N/m · 초기 압축 '+fmt(c.x,2)+' m','#c5ddec',16);
+  h+=txt(450,365,z.phase+' · 변형/이동 '+fmt(z.x,3)+' m · 속력 '+fmt(z.v,3)+' m/s','#d3e9f8',17,'middle');
+ }
+ h+=txt(20,419,'U '+fmt(z.U)+' J   ·   K '+fmt(z.K)+' J   ·   Q '+fmt(z.Q)+' J   ·   전체 '+fmt(z.E)+' J','#e3f1fd',16);
+ return h;
 }
-</style></head><body><main><h1>일과 역학적 에너지 보존 실험실</h1><p class="lead">높이와 마찰을 바꿔 경사면을 내려오는 물체의 위치에너지, 운동에너지, 열에너지와 일을 비교해 보세요.</p><div class="grid"><section class="card controls"><h2>실험 조건</h2><label for="height">출발 높이 <span class="value" id="heightVal"></span><input id="height" type="range" min="1" max="8" step="0.5" value="4"><div class="hint">경사각 30° · 처음 속력 0 m/s</div></label><label for="friction">운동 마찰 계수 <span class="value" id="frictionVal"></span><input id="friction" type="range" min="0" max="0.8" step="0.01" value="0.1"><div class="hint">경사면과 바닥에 같은 계수 적용</div></label><label for="staticFriction">정지 마찰 계수 <span class="value" id="staticFrictionVal">0.20</span><input id="staticFriction" type="range" min="0" max="1" step="0.01" value="0.20"><div class="hint">출발 여부를 결정합니다 (μₛ ≥ μₖ 권장)</div></label><label for="mass">질량 <span class="value" id="massVal"></span><input id="mass" type="range" min="1" max="5" step="0.5" value="2"><div class="hint">중력가속도 g = 9.8 m/s²</div></label><div class="buttons"><button id="start" type="button">▶ 시작</button><button id="pause" type="button" class="secondary">⏸ 일시정지</button><button id="reset" type="button" class="secondary">↺ 초기화</button><button id="replay" type="button" class="secondary">⟲ 다시 실행</button></div><p class="note">값을 바꾸면 새 조건으로 시작 위치에서 다시 준비합니다. 정지 마찰계수 μₛ ≥ tan 30° ≈ 0.577이면 물체가 스스로 내려가지 않습니다.</p></section><section class="card"><h2>움직임 관찰</h2><div class="canvasbox"><canvas id="scene" aria-label="경사면과 수평면을 이동하는 물체의 애니메이션" role="img"></canvas></div><div id="status" class="status" role="status"></div><div class="stats"><div class="stat"><small>이동 시간</small><b id="timeOut">0.00 s</b></div><div class="stat"><small>현재 속력</small><b id="speedOut">0.00 m/s</b></div><div class="stat"><small>경사면 이동</small><b id="rampOut">0.00 m</b></div><div class="stat"><small>수평면 이동</small><b id="flatOut">0.00 m</b></div></div></section><section class="card"><h2>에너지 변화</h2><canvas class="graph" id="chart" aria-label="시간에 따른 위치에너지, 운동에너지, 열에너지의 누적 막대 그래프" role="img"></canvas><div class="legend"><span><i class="dot" style="background:var(--blue)"></i>위치에너지</span><span><i class="dot" style="background:var(--gold)"></i>운동에너지</span><span><i class="dot" style="background:var(--red)"></i>마찰로 전환된 열</span></div><p class="note">쌓인 색의 전체 높이는 처음 위치에너지 mgh로 일정합니다. 열은 누적값으로 표시합니다.</p></section><section class="card"><h2>일과 에너지 계산</h2><div class="readout"><div><small>중력이 한 일 W<sub>g</sub></small><b id="wg">0 J</b></div><div><small>마찰력이 한 일 W<sub>f</sub></small><b id="wf">0 J</b></div><div><small>알짜 일 = 운동에너지 변화</small><b id="net">0 J</b></div><div><small>위치에너지 U</small><b id="potential">0 J</b></div><div><small>운동에너지 K</small><b id="kinetic">0 J</b></div><div><small>열에너지 Q = −W<sub>f</sub></small><b id="heat">0 J</b></div></div><p id="energyResidual" class="note" aria-live="polite"></p><p class="formula">W<sub>g</sub> + W<sub>f</sub> = ΔK &nbsp;·&nbsp; U + K + Q = 처음 에너지 mgh</p><p class="note">이상화: 공기 저항과 회전 운동은 제외합니다. 수평면 길이는 8 m이며 끝에 도달하면 운동을 종료합니다. 정지 마찰계수와 운동 마찰계수를 각각 설정합니다. 정지 마찰계수가 운동 마찰계수보다 작게 입력되면 같은 값으로 맞춥니다. 정지 상태에서는 최대 정지 마찰력이 출발 여부를 결정하고, 미끄러지는 동안에는 운동 마찰력을 적용합니다.</p></section><section class="card tasks"><h2>탐구 질문</h2><ol><li>높이를 일정하게 두고 마찰 계수를 0과 0.30으로 바꿔 바닥 도착 속력과 열에너지를 비교해 보세요.</li><li>마찰을 0으로 두고 높이를 두 배로 바꾸면 바닥 도착 속력은 몇 배가 될까요?</li><li>물체가 경사면에서 출발하지 않는 마찰 계수의 경계를 찾아 힘의 평형으로 설명해 보세요.</li></ol></section></div></main><script>
-(()=>{'use strict';const $=id=>document.getElementById(id),ids=['height','friction','mass'];const g=9.8,theta=Math.PI/6,sin=Math.sin(theta),cos=Math.cos(theta),flatLength=8;let params={},state={t:0,phase:'ready'},running=false,frame=0,last=0;const scene=$('scene'),chart=$('chart');function val(id){return Number($(id).value)}function configure(){params={h:val('height'),mu:val('friction'),mus:Math.max(val('friction'),Number($('staticFriction').value)),m:val('mass')};$('staticFriction').value=params.mus;params.stuck=params.mus*cos>=sin;params.L=params.h/sin;params.a=params.stuck?0:g*(sin-params.mu*cos);params.vBottom=Math.sqrt(Math.max(0,2*params.a*params.L));params.tRamp=params.a>1e-9?Math.sqrt(2*params.L/params.a):0;params.aFlat=params.mu*g;
-if(params.vBottom>0){params.tFlat=params.aFlat>0?Math.min(params.vBottom/params.aFlat,(params.vBottom-Math.sqrt(Math.max(0,params.vBottom**2-2*params.aFlat*flatLength)))/params.aFlat):flatLength/params.vBottom;if(params.aFlat>0&&params.vBottom**2<2*params.aFlat*flatLength)params.tFlat=params.vBottom/params.aFlat;}else params.tFlat=0;params.tEnd=params.tRamp+params.tFlat;for(const id of ids)$(id+'Val').textContent=($(id).value)+(id==='height'?' m':id==='mass'?' kg':'');}
-function sample(t){let s=0,x=0,v=0,phase='ready';if(params.stuck||params.a<=1e-9){phase=t>0?'stuck':'ready';}else if(t<params.tRamp){s=Math.min(params.L,.5*params.a*t*t);v=params.a*t;phase=t===0?'ready':'ramp';}else{let dt=Math.max(0,Math.min(t-params.tRamp,params.tFlat));s=params.L;x=Math.min(flatLength,Math.max(0,params.vBottom*dt-.5*params.aFlat*dt*dt));v=Math.max(0,params.vBottom-params.aFlat*dt);phase=t>=params.tEnd?'done':'flat';}const U=params.m*g*(params.h-s*sin),Q=params.mu*params.m*g*(cos*s+x),K=Math.max(0,.5*params.m*v*v),E=params.m*g*params.h;return{t,s,x,v,U,Q,K,E,Wg:params.m*g*s*sin,Wf:-Q,phase};}
-function size(canvas){let rect=canvas.getBoundingClientRect(),dpr=Math.min(window.devicePixelRatio||1,2),w=Math.max(1,rect.width),h=Math.max(1,rect.height),pw=Math.round(w*dpr),ph=Math.round(h*dpr);if(canvas.width!==pw||canvas.height!==ph){canvas.width=pw;canvas.height=ph}let ctx=canvas.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);return{ctx,w,h}}
-function drawScene(q){let{ctx:c,w,h}=size(scene);c.clearRect(0,0,w,h);const left=35,bottom=h-43,top=43,run=Math.min(w*.48,(bottom-top)/Math.tan(theta)),rise=run*Math.tan(theta),baseX=left+run,endX=w-24,topY=bottom-rise;let bg=c.createLinearGradient(0,0,0,h);bg.addColorStop(0,'#193c5d');bg.addColorStop(1,'#0a1d31');c.fillStyle=bg;c.fillRect(0,0,w,h);c.strokeStyle='#557690';c.lineWidth=3;c.beginPath();c.moveTo(left,topY);c.lineTo(baseX,bottom);c.lineTo(endX,bottom);c.stroke();c.fillStyle='#88a5b8';c.font='12px system-ui';c.fillText('출발',left,Math.max(17,topY-13));c.fillText('바닥',Math.max(0,baseX-13),bottom+22);c.fillText('8 m',endX-30,bottom+22);c.strokeStyle='#a9c1d5';c.setLineDash([3,4]);c.beginPath();c.moveTo(left,topY);c.lineTo(left,bottom);c.stroke();c.setLineDash([]);c.fillStyle='#d8eafa';c.fillText(`${params.h.toFixed(1)} m`,left+5,(topY+bottom)/2);const onRamp=q.s<params.L-1e-6,frac=onRamp?q.s/params.L:q.x/flatLength,px=onRamp?left+run*frac:baseX+(endX-baseX)*frac,py=onRamp?topY+rise*frac:bottom; c.save();c.translate(px,py-13);if(onRamp)c.rotate(theta);c.fillStyle='#ffcf63';c.strokeStyle='#fff1b8';c.lineWidth=2;c.fillRect(-12,-12,24,24);c.strokeRect(-12,-12,24,24);c.restore();if(q.v>.01){c.strokeStyle='#64dbad';c.lineWidth=3;c.beginPath();c.moveTo(px,py-35);c.lineTo(Math.min(w-16,px+24),py-35);c.stroke();c.fillStyle='#64dbad';c.fillText('v',Math.min(w-16,px+27),py-31)}if(q.Q>0){c.fillStyle='#fb8278';c.fillText('열 ↑',Math.max(10,Math.min(w-55,px-20)),Math.max(18,py-49))}}
-function drawGraph(q){const{ctx:c,w,h}=size(chart),pad={l:43,r:12,t:20,b:30};c.clearRect(0,0,w,h);c.fillStyle='#0b1d31';c.fillRect(0,0,w,h);const W=w-pad.l-pad.r,H=h-pad.t-pad.b;for(let i=0;i<=4;i++){let y=pad.t+H*(1-i/4);c.strokeStyle='#28465c';c.beginPath();c.moveTo(pad.l,y);c.lineTo(w-pad.r,y);c.stroke();c.fillStyle='#a9c1d5';c.font='11px system-ui';c.textAlign='right';c.fillText((q.E*i/4).toFixed(0),pad.l-6,y+4)}c.fillStyle='#a9c1d5';c.textAlign='left';c.fillText('J',8,16);c.textAlign='center';let end=params.tEnd||1;c.fillText('시간 (s)',pad.l+W/2,h-3);c.fillText('0',pad.l,h-12);c.fillText(end.toFixed(1),pad.l+W,h-12);let segments=Math.max(1,Math.round(Math.min(q.t,end)*60/end)),bw=Math.max(2,W/Math.max(segments,45));for(let i=0;i<=segments;i++){let ti=Math.min(q.t,end)*i/segments,r=sample(ti),x=pad.l+W*ti/end,off=0;for(let[e,color]of[[r.Q,'#fb8278'],[r.K,'#ffcf63'],[r.U,'#51b8ff']]){let hh=H*Math.max(0,e)/r.E;c.fillStyle=color;c.fillRect(x, pad.t+H-off-hh,bw+1,hh+.6);off+=hh}}c.strokeStyle='#fff';c.lineWidth=1.3;c.beginPath();let nowX=pad.l+W*Math.min(q.t,end)/end;c.moveTo(nowX,pad.t);c.lineTo(nowX,pad.t+H);c.stroke()}
-function render(){$('staticFrictionVal').textContent=Number($('staticFriction').value).toFixed(2);let q=sample(state.t);state.phase=q.phase;drawScene(q);drawGraph(q);const fmt=n=>`${(Math.abs(n)<.005?0:n).toFixed(2)} J`;for(let[id,n]of[['wg',q.Wg],['wf',q.Wf],['net',q.K],['potential',q.U],['kinetic',q.K],['heat',q.Q]])$(id).textContent=fmt(n);$('timeOut').textContent=q.t.toFixed(2)+' s';$('speedOut').textContent=q.v.toFixed(2)+' m/s';$('rampOut').textContent=q.s.toFixed(2)+' m';$('flatOut').textContent=q.x.toFixed(2)+' m';let messages={ready:'시작 버튼을 눌러 운동을 관찰하세요.',ramp:params.mu===0?'경사면: 마찰이 없어 중력이 한 일이 모두 운동에너지로 전환됩니다.':'경사면: 중력이 한 일 중 일부가 운동에너지로, 일부는 열로 전환됩니다.',flat:params.mu===0?'수평면: 마찰이 없어 속력과 운동에너지가 일정합니다.':'수평면: 위치에너지는 일정하고, 운동에너지가 열로 바뀝니다.',done:q.v<.01?'물체가 멈췄습니다. 에너지 합계를 비교해 보세요.':'수평면 끝에 도착했습니다. 에너지 합계를 비교해 보세요.',stuck:'마찰이 중력의 경사면 방향 성분을 버텨 물체가 출발하지 않습니다.'};$('status').textContent=messages[q.phase];$('energyResidual').textContent='전체 에너지 검산: U + K + Q = '+(q.U+q.K+q.Q).toFixed(2)+' J / 처음 에너지 = '+q.E.toFixed(2)+' J';}function stop(){running=false;cancelAnimationFrame(frame);last=0}function tick(ms){if(!running)return;if(!last)last=ms;let dt=Math.min(.05,(ms-last)/1000);last=ms;state.t=Math.min(params.tEnd,state.t+dt);render();if(state.t>=params.tEnd){stop();return}frame=requestAnimationFrame(tick)}function reset(){stop();configure();state={t:0,phase:'ready'};render()}function start(){if(running)return;if(params.stuck||params.a<=1e-9){state.t=.01;render();return}if(state.t>=params.tEnd)state.t=0;running=true;last=0;frame=requestAnimationFrame(tick);render()}$('start').addEventListener('click',start);$('pause').addEventListener('click',stop);$('reset').addEventListener('click',reset);$('replay').addEventListener('click',()=>{reset();start()});for(const id of [...ids,'staticFriction'])$(id).addEventListener('input',reset);window.addEventListener('resize',render);reset();})();
-</script><script id="ww-native-tabs-script">(()=>{'use strict';const root=document.querySelector('main');const list=[".grid > section:nth-child(2)",".grid > section:nth-child(1)",".grid > section:nth-child(4)",".grid > section:nth-child(3)",".grid > section:nth-child(5)"].map(s=>document.querySelector(s));if(list.some(x=>!x)){console.warn('Native lab panels missing');return;}const nav=document.createElement('nav');nav.className='ww-tabs';nav.setAttribute('role','tablist');nav.setAttribute('aria-label','실험 기능');const pages=[];const labels=['실험 · 조작','그래프 · 비교','개념 설명'];[[0,1,2],[3],[4]].forEach((idx,i)=>{const btn=document.createElement('button');btn.type='button';btn.className='ww-tab';btn.textContent=labels[i];btn.setAttribute('role','tab');btn.setAttribute('aria-selected',String(i===0));btn.id='ww-tab-'+i;nav.append(btn);const p=document.createElement('section');p.className='ww-page'+(i===2?' ww-concepts':'')+(i===0?' ww-active':'');p.id='ww-panel-'+i;p.setAttribute('role','tabpanel');p.setAttribute('aria-labelledby',btn.id);p.hidden=i!==0;idx.forEach(n=>p.append(list[n]));pages.push(p);btn.onclick=()=>activate(i);});function activate(i){pages.forEach((p,j)=>{p.hidden=j!==i;p.classList.toggle('ww-active',i===j);nav.children[j].setAttribute('aria-selected',String(i===j));});requestAnimationFrame(()=>window.dispatchEvent(new Event('resize')));}const old=root.querySelector(':scope > .grid');if(old)old.remove();const lower=root.querySelector(':scope > .lower');if(lower&&!lower.children.length)lower.remove();const col=root.querySelector(':scope > .card');if(col&&!col.children.length)col.remove();const hdr=root.querySelector(':scope > header');if(hdr)hdr.after(nav,...pages);else root.prepend(nav,...pages);activate(0);})();</script></body></html>
+function drawPlot({series,xmin=0,xmax,ymin,ymax,title,xlabel,ylabel,cursor,marks=[]}){
+ const l=70,r=600,top=32,b=184;let h='<rect width="620" height="228" rx="7" fill="#081522"/>'+txt(11,20,title,'#dceeff',15);
+ const X=x=>l+(r-l)*(x-xmin)/(xmax-xmin||1),Y=y=>b-(b-top)*(y-ymin)/(ymax-ymin||1);
+ for(let i=0;i<=4;i++){const x=xmin+(xmax-xmin)*i/4,y=ymin+(ymax-ymin)*i/4;h+=ln(l,Y(y),r,Y(y),'#2d465a',1)+txt(l-8,Y(y)+4,fmt(y,1),'#b9d0e1',12,'end')+ln(X(x),top,X(x),b,'#253b50',1)+txt(X(x),b+18,fmt(x,1),'#b9d0e1',12,'middle')}
+ if(ymin<=0&&ymax>=0)h+=ln(l,Y(0),r,Y(0),'#a0b6ca',1.4);
+ h+=txt(r,222,xlabel,'#d2e4ef',12,'end')+txt(15,40,ylabel,'#b9d0e1',11);
+ for(const s of series){h+='<path d="'+s.pts.map(([x,y],i)=>(i?'L':'M')+X(x)+' '+Y(y)).join(' ')+'" fill="none" stroke="'+s.color+'" stroke-width="'+(s.width||2.8)+'" stroke-dasharray="'+(s.dash||'')+'"/>'}
+ if(Number.isFinite(cursor))h+=ln(X(clamp(cursor,xmin,xmax)),top,X(clamp(cursor,xmin,xmax)),b,'#eaf3ff',1,'3 4');
+ for(const z of marks){h+='<circle cx="'+X(z.x)+'" cy="'+Y(z.y)+'" r="5" fill="'+z.color+'" stroke="#f2f7ff" stroke-width="1"/>'+txt(clamp(X(z.x)+8,l+4,r-20),clamp(Y(z.y)-9,top+12,b-3),z.label,z.color,12)}
+ return h;
+}
+
+
+const $=id=>document.getElementById(id),defaults={ramp:{mode:'ramp',m:2,h:4,angle:30},coaster:{mode:'coaster',m:2,r:3,ratio:3},pendulum:{mode:'pendulum',m:2,l:3,angle:50},spring:{mode:'spring',m:2,k:100,x:.25},friction:{mode:'friction',m:2,h:4,angle:30,mu:.2,mus:.3}};
+const tabs=[['ramp','① 경사면'],['coaster','② 롤러코스터'],['pendulum','③ 단진자'],['spring','④ 용수철 발사'],['friction','⑤ 마찰·열에너지'],['graph','⑥ 그래프·비교'],['lesson','⑦ 개념 설명']];
+const qa={ramp:['높이를 두 배로 하면 바닥 속력은 몇 배가 될까요? 질량을 바꾸면?','v=√(2gh). 높이 두 배 → √2배, 질량은 속력에 영향 없음.'],coaster:['레일 한 바퀴를 돌기 위한 최소 등가 높이는 얼마일까요?','꼭대기에서 N≥0이려면 H≥2.5R입니다. H가 부족하면 접촉 한계에서 종료합니다.'],pendulum:['최저점에서 U와 K는 어떻게 될까요? 양쪽 끝에서는?','최저점 K 최대, U=0. 양 끝에서는 K=0, U 최대.'],spring:['압축량을 두 배로 하면 발사 속력과 운동에너지는?','이상적 발사에서 K=½kx², v=x√(k/m). 압축량 두 배 → K 네 배, 속력 두 배.'],friction:['마찰을 크게 하면 출발하지 않는 조건은? 운동 중 에너지는 어디로 갈까요?','μs≥tanθ이면 정지. 운동 중 U+K는 감소하지만 U+K+Q는 일정합니다.']};
+let modes=Object.fromEntries(Object.entries(defaults).map(([k,v])=>[k,{...v}])),c=modes.ramp,p=prepare(c),t=0,view='experiment',running=false,last=0,raf=0,rate=1,saved={A:null,B:null};
+function stop(){running=false;cancelAnimationFrame(raf);raf=0;last=0}
+function resetTime(){stop();t=0;p=prepare(c);render()}
+function start(){if(running)return;if(c.mode!=='pendulum'&&t>=p.T-1e-9)t=0;running=true;last=0;render();raf=requestAnimationFrame(frame)}
+function frame(ms){if(!running)return;t+=(last?Math.min(.05,(ms-last)/1000)*rate:0);last=ms;if(c.mode!=='pendulum'&&t>=p.T){t=p.T;stop()}render();if(running)raf=requestAnimationFrame(frame)}
+function setMode(m){if(m==='graph'||m==='lesson'){view=m;render();return}if(c.mode!==m){stop();c=modes[m];p=prepare(c);t=0;$('prediction').value='';$('reveal').open=false}view='experiment';controls();render()}
+function change(k,v){stop();c[k]=v;if(c.mode==='friction'&&c.mus<c.mu){c.mus=c.mu;if($('musr'))$('musr').value=c.mus;if($('musn'))$('musn').value=c.mus}t=0;p=prepare(c);render()}
+function control(k,label,min,max,step,unit){const d=document.createElement('div');d.className='ctrl';d.innerHTML='<label for="'+k+'r">'+label+' <span>'+unit+'</span></label><div><input id="'+k+'r" type="range" min="'+min+'" max="'+max+'" step="'+step+'" value="'+c[k]+'" aria-label="'+label+'"><input id="'+k+'n" type="number" min="'+min+'" max="'+max+'" step="'+step+'" value="'+c[k]+'" aria-label="'+label+' 수치"></div>';let a=d.querySelector('input[type=range]'),b=d.querySelector('input[type=number]');a.oninput=()=>{b.value=a.value;change(k,+a.value)};b.onchange=()=>{let n=b.value.trim()===''?c[k]:Number(b.value);n=Number.isFinite(n)?clamp(Number((Math.round(n/step)*step).toFixed(6)),min,max):c[k];a.value=b.value=n;change(k,n)};$('params').append(d)}
+function controls(){
+ $('params').replaceChildren();control('m','질량',.5,10,.1,'kg');let a=[];
+ if(c.mode==='ramp'||c.mode==='friction'){control('h','출발 높이',.5,10,.5,'m');control('angle','경사각',15,55,1,'°');a=[['high','높이 2배'],['steep','30° 경사면']];if(c.mode==='friction'){control('mu','운동 마찰계수',0,.9,.01,'');control('mus','정지 마찰계수',0,1.2,.01,'');a.push(['none','마찰 없음'],['rough','거친 면'],['stuck','출발 경계 이상'])}}
+ else if(c.mode==='coaster'){control('r','원형 레일 반지름',1,5,.1,'m');control('ratio','등가 높이 H/R',1.2,4,.05,'배');a=[['loop','한 바퀴'],['limit','접촉 한계 2.5R'],['lose','이탈 조건']]}
+ else if(c.mode==='pendulum'){control('l','진자 길이',.5,6,.1,'m');control('angle','초기 각도',5,85,1,'°');a=[['small','작은 각도'],['large','큰 각도']]}
+ else{control('k','용수철 상수',20,500,1,'N/m');control('x','압축량',.05,.5,.01,'m');a=[['double','압축량 2배'],['springDefault','기본 조건']]}
+ $('presets').innerHTML=a.map(([k,l])=>'<button data-p="'+k+'">'+l+'</button>').join('');$('presets').querySelectorAll('button').forEach(b=>b.onclick=()=>preset(b.dataset.p));$('question').textContent=qa[c.mode][0];$('answer').textContent=qa[c.mode][1];
+}
+function preset(k){if(k==='high')c.h=Math.min(10,c.h*2);if(k==='steep')c.angle=30;if(k==='none'){c.mu=0;c.mus=0}if(k==='rough'){c.angle=30;c.mu=.3;c.mus=.4}if(k==='stuck'){c.mus=Math.min(1.2,Math.ceil(Math.tan(c.angle*Math.PI/180)*100)/100);c.mu=Math.min(c.mu,c.mus);if(c.mus<Math.tan(c.angle*Math.PI/180)){c.angle=45;c.mus=1.01}}if(k==='loop')c.ratio=3;if(k==='limit')c.ratio=2.5;if(k==='lose')c.ratio=1.6;if(k==='small')c.angle=10;if(k==='large')c.angle=75;if(k==='double')c.x=Math.min(.5,c.x*2);if(k==='springDefault')Object.assign(c,defaults.spring);controls();resetTime()}
+const cols=['#ffc16f','#6bcaff','#ef9291','#8ee2b1'];
+function graph(kind,includeSaved=false){const sets=[{q:c,p,color:'#fff'}];if(includeSaved)for(const [i,k]of ['A','B'].entries()){let q=saved[k];if(q&&q.mode===c.mode)sets.push({q,p:prepare(q),color:i?'#f08ba6':'#7ddbb9',label:k})}
+ const series=[],marks=[],now=sample(c,p,t),end=Math.max(...sets.map(o=>o.p.T)),cursor=c.mode==='pendulum'?now.t:t;
+ const keys=kind==='energy'?['U','K','Q','E']:kind==='work'?['Wg','Wf','Ws','Wnet','dK']:['v'];
+ for(const o of sets){for(const [i,key]of keys.entries()){if(o.q!==c&&key!==(kind==='energy'?'K':kind==='work'?'Wnet':'v'))continue;const pts=Array.from({length:201},(_,j)=>{let tm=o.p.T*j/200;return [tm,sample(o.q,o.p,tm)[key]]});let color=o.q===c?(kind==='work'&&key==='dK'?'#e8f4ff':cols[i%4]):o.color;series.push({pts,color,dash:o.q!==c?'3 5':key==='dK'?'6 4':key==='E'?'8 3':'',width:key==='Wnet'?4:2.5});if(o.q===c)marks.push({x:cursor,y:now[key],color,label:keys.length===1?'v':''})}}
+ const ys=series.flatMap(s=>s.pts.map(p=>p[1])),lo=Math.min(0,...ys),hi=Math.max(0,...ys),pad=Math.max(.1,(hi-lo)*.1);
+ return drawPlot({series,xmax:end,ymin:kind==='energy'?0:lo-pad,ymax:hi+pad,title:kind==='energy'?'U · K · Q · 전체 에너지':kind==='work'?'중력·마찰·용수철 일 / 알짜일과 ΔK':'속도–시간 (진자는 접선 속도)',xlabel:'시간 t (s)',ylabel:kind==='velocity'?'m/s':'J',cursor,marks})
+}
+function bars(z){const a=[['위치 U',z.U,cols[0]],['운동 K',z.K,cols[1]],['열 Q',z.Q,cols[2]]],E=Math.max(.001,p.E);$('bars').innerHTML='<div class="energyrow"><span>에너지 구성</span><div class="bartrack" style="display:flex;height:17px">'+a.map(([l,v,col])=>'<i title="'+l+' '+fmt(v)+' J" style="width:'+100*v/E+'%;background:'+col+'"></i>').join('')+'</div><b>'+fmt(z.E)+' J</b></div><div class="toolbar" style="font-size:12px">'+a.map(([l,v,col])=>'<span style="color:'+col+'">'+l+' '+fmt(v)+' J</span>').join(' · ')+'</div>'}
+function compare(){const labels=['실험','질량 (kg)','초기 전체 에너지 (J)','종료 U (J)','종료 K (J)','종료 Q (J)','전체 (J)','알짜일 (J)','ΔK (J)','시간/주기 (s)','결과'];const row=q=>{if(!q)return labels.map(()=> '—');const pp=prepare(q),z=sample(q,pp,pp.T);return [tabs.find(a=>a[0]===q.mode)[1],fmt(q.m),fmt(pp.E),fmt(z.U),fmt(z.K),fmt(z.Q),fmt(z.E),fmt(z.Wnet),fmt(z.dK),fmt(pp.T,3),pp.stuck?'출발 안 함':pp.lose?'접촉 한계':pp.stopped?'정지':q.mode==='pendulum'?'한 주기':'구간 완료']};const rs=[c,saved.A,saved.B].map(row);$('compare').innerHTML=labels.map((l,i)=>'<tr><th>'+l+'</th>'+rs.map(r=>'<td>'+r[i]+'</td>').join('')+'</tr>').join('')}
+function render(){const exp=view==='experiment',z=sample(c,p,t),done=c.mode!=='pendulum'&&t>=p.T-1e-9;$('experiment').hidden=!exp;$('graphPage').hidden=view!=='graph';$('lesson').hidden=view!=='lesson';$('tabs').querySelectorAll('button').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.mode===(exp?c.mode:view))));
+ if(exp){$('scene').innerHTML=sceneSVG(c,p,t);const rows=[['위치에너지 U',fmt(z.U)+' J'],['운동에너지 K',fmt(z.K)+' J'],['열에너지 Q',fmt(z.Q)+' J'],['속력',fmt(Math.abs(z.v),3)+' m/s']];$('metrics').innerHTML=rows.map(([a,b])=>'<div><small>'+a+'</small><b>'+b+'</b></div>').join('');bars(z);
+ $('equation').textContent='U + K + Q = '+fmt(z.E)+' J · 알짜일 '+fmt(z.Wnet)+' J = ΔK '+fmt(z.dK)+' J';
+ $('workline').textContent='중력의 일 '+fmt(z.Wg)+' J · 마찰의 일 '+fmt(z.Wf)+' J · 용수철의 일 '+fmt(z.Ws)+' J · 역학적 에너지 '+fmt(z.M)+' J';
+ $('modelNote').textContent=c.mode==='friction'?'μs ≥ tanθ이면 출발하지 않음. 정지 마찰은 운동 마찰 이상으로 유지. 수평면 8 m 또는 첫 정지까지 계산.':c.mode==='coaster'?'바닥 진입 속력은 이상적 낙하 높이 H에 해당합니다. 원형 레일 접촉 상실 이후 포물선 운동은 제외.':c.mode==='pendulum'?'질량 없는 줄·점질량·마찰 없음. 큰 각도의 비선형 주기를 계산하며 반복 진동.':c.mode==='spring'?'이상적 용수철에서 자연 길이 도달 시 물체가 분리됩니다. 수평으로 3 m 추가 이동.':'공기 저항 및 회전 에너지 제외. 경사면과 수평면의 연결부는 에너지 손실 없는 이상적 연결.';
+ $('now').textContent=fmt(t,2)+' s · '+(p.stuck?'정지 마찰':running?'진행 중':done?z.phase+' · 종료':'대기');$('seek').value=1000*z.t/p.T;$('start').disabled=running;$('pause').disabled=!running;$('start').textContent=running?'진행 중':done?'▶ 다시 시작':'▶ 시작 / 재개';$('mini').innerHTML=graph('energy');
+ }else if(view==='graph'){$('g1').innerHTML=graph('energy',true);$('g2').innerHTML=graph('work',true);$('g3').innerHTML=graph('velocity',true);$('legend').textContent='에너지: 주황 U · 파랑 K · 분홍 Q · 초록 전체 / 일: 주황 중력 · 파랑 마찰 · 분홍 용수철 · 초록 알짜일 · 흰 점선 ΔK. 저장 조건은 같은 실험의 K·알짜일·v를 표시.';$('graphStatus').textContent=fmt(t,2)+' s · '+(running?'진행 중':'정지/완료');compare()}
+}
+$('tabs').innerHTML=tabs.map(([m,l])=>'<button role="tab" data-mode="'+m+'" aria-selected="false">'+l+'</button>').join('');$('tabs').querySelectorAll('button').forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
+$('start').onclick=start;$('pause').onclick=()=>{stop();render()};$('step').onclick=()=>{stop();t=c.mode==='pendulum'?t+p.T/36:Math.min(p.T,t+.05);render()};$('restart').onclick=resetTime;$('reset').onclick=()=>{stop();modes=Object.fromEntries(Object.entries(defaults).map(([k,v])=>[k,{...v}]));c=modes.ramp;p=prepare(c);t=0;rate=1;view='experiment';saved={A:null,B:null};$('rate').value='1';$('prediction').value='';$('notice').textContent='';$('reveal').open=false;controls();render()};$('rate').onchange=e=>{rate=+e.target.value;last=0};$('seek').oninput=e=>{stop();t=p.T*e.target.value/1000;if(c.mode==='pendulum'&&t===p.T)t=p.T-1e-9;render()};
+for(const k of ['A','B']){$('save'+k).onclick=()=>{saved[k]={...c};$('notice').textContent='조건 '+k+' 저장 완료'};$('load'+k).onclick=()=>{if(!saved[k])return;stop();modes[saved[k].mode]={...saved[k]};c=modes[saved[k].mode];p=prepare(c);t=0;view='experiment';controls();render()}}$('clear').onclick=()=>{saved={A:null,B:null};render()};$('graphStart').onclick=start;$('graphPause').onclick=()=>{stop();render()};document.addEventListener('visibilitychange',()=>{if(document.hidden){stop();render()}});
+controls();render();
+</script></body></html>
