@@ -77,7 +77,7 @@ canvas{display:block;width:100%;height:100%;border-radius:7px;background:#081321
       <button class="action" id="meet">만남 1.5T</button>
       <button class="action" id="peak">진폭 2A 순간</button>
       <button class="action" id="oppositeMeet" title="180°로 설정하고 중앙에서 마루와 골이 만나는 순간을 표시">마루·골 만남 (180°)</button>
-      <button class="action" id="steady">정상파 11.75T</button>
+      <button class="action" id="steady">정상파 6.75T</button>
       <span class="readout" id="timeLabel">t = 0.00T</span>
       <span class="readout" title="파장 1m와 주기 1T이므로 1/4주기 동안 파형이 0.25m 진행합니다">¼T = 0.25 m 이동</span>
       <span class="readout accent" id="stageLabel">접근 중</span>
@@ -87,13 +87,13 @@ canvas{display:block;width:100%;height:100%;border-radius:7px;background:#081321
       <label>재생 속도 <select id="speed"><option value="0.5">느리게 (0.5T/s)</option><option value="0.8" selected>보통 (0.8T/s)</option><option value="1.6">빠르게 (1.6T/s)</option></select></label>
       <label>관측 위치 x = <output id="probeLabel">0.00λ</output> <input id="probe" type="range" min="-1" max="1" step="0.25" value="0" aria-label="시간 그래프 관측 위치 선택"></label>
       <label id="phaseControl">파원 B의 위상차 <select id="phaseValue"><option value="0">0° (같은 위상)</option><option value="45">45°</option><option value="90">90°</option><option value="135">135°</option><option value="180">180° (반대 위상)</option><option value="225">225°</option><option value="270">270°</option><option value="315">315°</option><option value="360">360°</option></select></label>
-      <span class="smallpush">각 파동 A=1 · 합성 최대 2A · λ=1 m · 큰 칸 1 m · 작은 눈금 0.25 m · 범위 −10~+10 m</span>
+      <span class="smallpush">각 파동 A=1 · 합성 최대 2A · λ=1 m · 큰 칸 1 m · 작은 눈금 0.25 m · 범위 −5~+5 m</span>
     </div>
 
     <div class="workspace" id="workspace">
       <section class="plotcard">
         <h2 id="mainTitle">공간에 따른 변위: 파동 A / B / 합성파</h2>
-        <p class="blurb" id="mainDesc">각 파동을 별도 줄에 표시합니다. 가로축 −10 m부터 +10 m까지, 중앙은 0 m입니다. 큰 칸은 1 m, 그 사이 ¼주기에 대응하는 0.25 m 눈금을 표시합니다. 연속파의 앞부분이 서로 만나면서 중첩 범위가 넓어집니다.</p>
+        <p class="blurb" id="mainDesc">각 파동을 별도 줄에 표시합니다. 가로축 −5 m부터 +5 m까지, 중앙은 0 m입니다. 큰 칸은 1 m, 그 사이 ¼주기에 대응하는 0.25 m 눈금을 표시합니다. 연속파의 앞부분이 서로 만나면서 중첩 범위가 넓어집니다.</p>
         <div class="canvas-wrap"><canvas id="mainCanvas" role="img" aria-label="두 연속파가 마주 오며 중첩되는 공간 그래프"></canvas></div>
         <div class="legend"><span class="item"><i class="bullet"></i>파동 A</span><span class="item b"><i class="bullet"></i>파동 B</span><span class="item s"><i class="bullet"></i>합성파</span><span class="item m"><i class="bullet"></i>보강점·마디·배 표시</span></div>
       </section>
@@ -111,7 +111,7 @@ canvas{display:block;width:100%;height:100%;border-radius:7px;background:#081321
   <section class="concept" id="conceptArea" hidden>
     <h2>개념 정리: 연속된 두 파동이 만나면 어떻게 될까?</h2>
     <div class="concept-grid">
-      <div><h3>1. 파원은 계속 진동한다</h3><p>왼쪽 파원 A(x = −10λ)는 오른쪽으로, 오른쪽 파원 B(x = +10λ)는 왼쪽으로 <b>같은 진폭 A, 파장 λ, 주기 T, 속력 v</b>의 정현파를 끊임없이 발생시킵니다. 처음에는 각 파동의 앞부분이 떨어져 있지만, t = 1.5T에 중앙에서 처음 만나고, t ≈ 11.5T 이후에는 두 파동이 전 영역에서 중첩됩니다.</p></div>
+      <div><h3>1. 파원은 계속 진동한다</h3><p>왼쪽 파원 A(x = −5λ)는 오른쪽으로, 오른쪽 파원 B(x = +5λ)는 왼쪽으로 <b>같은 진폭 A, 파장 λ, 주기 T, 속력 v</b>의 정현파를 끊임없이 발생시킵니다. 처음에는 각 파동의 앞부분이 떨어져 있지만, t = 1.5T에 중앙에서 처음 만나고, t ≈ 6.5T 이후에는 두 파동이 전 영역에서 중첩됩니다.</p></div>
       <div><h3>2. 합성파는 변위의 합이다</h3><p>같은 위치 x, 같은 시간 t에서 <b>각 파동의 변위를 부호까지 포함하여 더합니다.</b> 파동은 충돌해 반사되는 것이 아니라 서로 통과해 본래 진행 방향으로 계속 갑니다.</p></div>
       <div><h3>3. 보강점과 상쇄점</h3><p>같은 위상일 때 공간에 고정되는 <b>배(antinode)</b>에서는 진폭이 2A이고, <b>마디(node)</b>에서는 변위가 늘 0입니다. 2A는 항상 위로 2만큼 올라가 있다는 뜻이 아니라, 그 지점이 진동하며 도달할 수 있는 최대 변위의 크기를 의미합니다.</p></div>
       <div><h3>4. ¼주기로 움직여 관찰</h3><p>완전 중첩 상태에서 배의 순간 변위는 0 → +2A → 0 → −2A → 0 순서로 바뀔 수 있습니다. 반면 마디의 변위는 항상 0이며, 이 차이가 정상파의 핵심 특징입니다.</p></div>
@@ -126,7 +126,7 @@ y합(x,t) = 2A sin[2π(t/T − 1.5)] cos(2πx/λ)</div>
     <h3>마디와 배의 위치</h3>
     <p><b>배:</b> x = nλ/2 (n은 정수), 최대 진폭 2A. <b>마디:</b> x = (2n+1)λ/4, 항상 변위 0. 이웃한 마디 사이 거리와 이웃한 배 사이 거리는 모두 λ/2입니다.</p>
     <h3>확인 질문</h3>
-    <p>① t = 1.75T에 중앙 x = 0에서 yA, yB, y합을 비교해 보세요. ② t = 11.75T 이후 x = 0.25λ에서 합성파가 왜 움직이지 않는지 살펴보세요. ③ 탭 ④에서 파원 B를 180° 늦추거나 앞당기면 마디와 배의 위치가 어떻게 바뀌나요?</p>
+    <p>① t = 1.75T에 중앙 x = 0에서 yA, yB, y합을 비교해 보세요. ② t = 6.75T 이후 x = 0.25λ에서 합성파가 왜 움직이지 않는지 살펴보세요. ③ 탭 ④에서 파원 B를 180° 늦추거나 앞당기면 마디와 배의 위치가 어떻게 바뀌나요?</p>
     <p class="keyfoot">모형의 단위: λ = 1, T = 1, v = 1, A = 1. 이상적인 선형 매질을 가정하며, 두 파원은 동시에 파동을 방출하며 위상차가 달라도 파면의 속력과 도달 시점은 같습니다. 초기 짧은 과도 구간은 부드럽게 표시하고 도달 전 빈 공간은 파형 없이 둡니다.</p>
   </section>
 </div>
@@ -134,7 +134,7 @@ y합(x,t) = 2A sin[2π(t/T − 1.5)] cos(2πx/λ)</div>
 (()=>{
 'use strict';
 const C={bg:'#081321',grid:'#2b4158',axis:'#ccdeee',sub:'#a4bdd5',a:'#4bc6ff',b:'#ffba62',s:'#66efa5',mark:'#ff79d1',guide:'#8198ae'};
-const TAU=2*Math.PI, FROM=-10, TO=10, START_LEAD=8.5, FRONT_MEET=1.5, FULL=11.5;
+const TAU=2*Math.PI, FROM=-5, TO=5, START_LEAD=3.5, FRONT_MEET=1.5, FULL=6.5;
 const $=id=>document.getElementById(id);
 const main=$('mainCanvas'),side=$('sideCanvas');const g=main.getContext('2d'),h=side.getContext('2d');
 const state={tab:'approach',t:0,play:false,last:0,raf:null,speed:.8,probe:0,delta:0,extent:12};
@@ -276,7 +276,7 @@ function plotSpaceTriple(){
   const panelH=available*fractions[i];
   const r={x:l,y:panelTops[i]+23,w:width,h:Math.max(38,panelH-33)};
   overlapShading(g,r,xi,xa);
-  axes(g,r,xi,xa,-s.range,s.range,ticks(-10,10,.25),i===2?[-2,-1,0,1,2]:[-1,0,1],{xLabels:true,xNumbersOnAxis:true,xLabelStep:1,xText:v=>String(+v.toFixed(2)),xTitle:i===2?'위치 x (m) · −10 ~ +10 m / 큰 칸 1 m, 작은 눈금 0.25 m':undefined,yLabels:true});
+  axes(g,r,xi,xa,-s.range,s.range,ticks(-5,5,.25),i===2?[-2,-1,0,1,2]:[-1,0,1],{xLabels:true,xNumbersOnAxis:true,xLabelStep:1,xText:v=>String(+v.toFixed(2)),xTitle:i===2?'위치 x (m) · −5 ~ +5 m / 큰 칸 1 m, 작은 눈금 0.25 m':undefined,yLabels:true});
   if(i===2){
     g.save();dash(g,[5,5]);g.strokeStyle='rgba(255,121,209,.65)';
     for(let v of [-2,2]){const y=ymap(v,-s.range,s.range,r);g.beginPath();g.moveTo(r.x,y);g.lineTo(r.x+r.w,y);g.stroke()}g.restore();
@@ -385,7 +385,7 @@ function updateMessage(){
   const a=wave(0,t,0,0),b=wave(0,t,1,0);
   s=`중첩부를 확대했습니다. 중앙 x=0에서 현재 A=${fmt(a)}A, B=${fmt(b)}A, 합성=${fmt(a+b)}A입니다. 분홍 점선 ±2A는 진폭 한계이며 순간 변위는 시간에 따라 변합니다.`;
  } else if(tab==='standing'){
-  s=t<FULL?'정상파가 공간 전체에 자리 잡는 중입니다. [정상파 11.75T] 버튼으로 충분히 중첩된 뒤의 마디·배를 확인해 보세요.':'분홍색 점선은 정상파 진폭의 경계입니다. 배(x=0)는 +2A↔−2A로 진동하지만 마디(x=0.25λ)는 항상 변위 0을 유지합니다.';
+  s=t<FULL?'정상파가 공간 전체에 자리 잡는 중입니다. [정상파 6.75T] 버튼으로 충분히 중첩된 뒤의 마디·배를 확인해 보세요.':'분홍색 점선은 정상파 진폭의 경계입니다. 배(x=0)는 +2A↔−2A로 진동하지만 마디(x=0.25λ)는 항상 변위 0을 유지합니다.';
  } else if(tab==='phase'){
   const degree=Math.round(state.delta*180/Math.PI);
   s=degree===180
