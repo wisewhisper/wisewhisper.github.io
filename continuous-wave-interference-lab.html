@@ -365,7 +365,7 @@ function drawPhase(){
  plot(g,r,xi,xa,-2.25,2.25,x=>wave(x,state.t,0,delta),C.a,'dashed',2.6,true,0);
  plot(g,r,xi,xa,-2.25,2.25,x=>wave(x,state.t,1,delta),C.b,'dotted',2.9,true,1,delta);
  plot(g,r,xi,xa,-2.25,2.25,x=>sum(x,state.t,delta),C.s,'solid',3.8,true,2,delta);
- text(g,`A ${Math.round(state.phaseA*180/Math.PI)}° / B ${Math.round(delta*180/Math.PI)}° · 상대 위상차 ${Math.round(relativePhase(delta)*180/Math.PI)}°`,left+6,12,C.axis,'12px system-ui');
+ text(g,`A ${Math.round(state.phaseA*180/Math.PI)}° / B ${Math.round(delta*180/Math.PI)}° · 상대 위상차 ${((Math.round(relativePhase(delta)*180/Math.PI)%360)+360)%360}°`,left+6,12,C.axis,'12px system-ui');
 }
 function drawPhaseSide(){
  const left=52,right=15,top=16,bottom=42,r={x:left,y:top,w:SW-left-right,h:SH-top-bottom};
@@ -383,20 +383,22 @@ function updateMessage(){
  const t=state.t,tab=state.tab,probe=state.probe;
  let s='';
  if(tab==='approach'){
-  const deg=Math.round(state.delta*180/Math.PI);
+  const deg=((Math.round(relativePhase()*180/Math.PI)%360)+360)%360;
   if(t<FRONT_MEET)s=`A와 B는 아직 만나지 않았습니다. 각 파원이 계속 정현파를 내보내고 있으며, 가운데 빈 구간의 폭은 약 ${fmt(Math.max(0,2*FRONT_MEET-2*t))}λ입니다.`;
-  else if(t<FULL)s=`중앙에서 만나 파동의 중첩 구간이 넓어지고 있습니다. B의 위상차는 ${deg}°입니다. 0°일 때 t=1.25T에서 중앙 합성 변위가 +2A입니다.`;
-  else s=`양쪽 파동이 전체 영역에 도달했습니다. B의 위상차 ${deg}°에 따라 마디와 배의 위치가 이동합니다. 배의 진폭은 2A, 마디는 0입니다.`;
+  else if(t<FULL)s=`중앙에서 만나 파동의 중첩 구간이 넓어지고 있습니다. 두 파동의 상대 위상차는 ${deg}°입니다. A와 B가 모두 0°일 때 t=1.25T에서 중심 변위가 +2A입니다.`;
+  else s=`양쪽 파동이 전체 영역에 도달했습니다. 상대 위상차 ${deg}°에 따라 마디와 배의 위치가 이동합니다. 배의 진폭은 2A, 마디는 0입니다.`;
  } else if(tab==='zoom'){
-  const a=wave(0,t,0,0),b=wave(0,t,1,0);
+  const a=wave(0,t,0,state.delta),b=wave(0,t,1,state.delta);
   s=`중첩부를 확대했습니다. 중앙 x=0에서 현재 A=${fmt(a)}A, B=${fmt(b)}A, 합성=${fmt(a+b)}A입니다. 분홍 점선 ±2A는 진폭 한계이며 순간 변위는 시간에 따라 변합니다.`;
  } else if(tab==='standing'){
-  s=t<FULL?'정상파가 공간 전체에 자리 잡는 중입니다. [정상파 6.25T] 버튼으로 충분히 중첩된 뒤의 마디·배를 확인해 보세요.':'분홍색 점선은 정상파 진폭의 경계입니다. 배(x=0)는 +2A↔−2A로 진동하지만 마디(x=0.25λ)는 항상 변위 0을 유지합니다.';
+  s=t<FULL?'정상파가 공간 전체에 자리 잡는 중입니다. [정상파 6.25T] 버튼으로 충분히 중첩된 뒤의 마디·배를 확인하세요.':state.phaseA===0?'A와 B가 모두 0°일 때 중심 x=0은 배(최대 진폭 2A), x=0.25 m는 마디(항상 변위 0)입니다.':'A를 180° 반전하고 B를 0°로 두면 중심 x=0은 마디(변위 0), x=0.25 m는 배(최대 진폭 2A)입니다.';
  } else if(tab==='phase'){
-  const degree=Math.round(state.delta*180/Math.PI);
-  s=degree===180
-  ?`180° 반대 위상: 중앙 x=0에서 파동 A가 +A(마루)일 때 B는 −A(골)입니다. [마루·골 만남 (180°)]을 누르면 t=1.25T의 상쇄를 확인할 수 있습니다. 현재 yA=${fmt(wave(0,t,0,0))}A, yB=${fmt(wave(0,t,1,state.delta))}A, 합=${fmt(sum(0,t,state.delta))}A.`
-  :`B의 위상차 ${degree}° · 중심 x=0의 현재 변위: A=${fmt(wave(0,t,0,0))}A, B=${fmt(wave(0,t,1,state.delta))}A, 합=${fmt(sum(0,t,state.delta))}A. 반대 위상은 180°이며 90°는 ¼주기 차이입니다.`;
+  const degA=Math.round(state.phaseA*180/Math.PI),degB=Math.round(state.delta*180/Math.PI);
+  const relative=((degB-degA)%360+360)%360;
+  const ya=wave(0,t,0,state.delta),yb=wave(0,t,1,state.delta);
+  s=`A 초기 위상 ${degA}° · B 초기 위상 ${degB}° · 상대 위상차 ${relative}°. x=0 m에서 A=${fmt(ya)}A, B=${fmt(yb)}A, 합=${fmt(ya+yb)}A. `+
+    (relative===180?'서로 반대 위상이므로 중심은 상쇄되는 마디입니다.':relative===0?'같은 위상이며 중심은 최대 진폭 2A인 배입니다.':'위상차에 따라 정상파의 마디와 배가 이동합니다.');
+
  }
  const msg=$('message');msg.textContent=s;
 }
@@ -419,14 +421,14 @@ function draw(){
  g.clearRect(0,0,W,H);h.clearRect(0,0,SW,SH);
  g.fillStyle=C.bg;g.fillRect(0,0,W,H);h.fillStyle=C.bg;h.fillRect(0,0,SW,SH);
  if(state.tab==='approach'){plotSpaceTriple();plotSideTime()}
- else if(state.tab==='zoom'){drawOverlay(-1.5,1.5,0,true);plotSideTime()}
+ else if(state.tab==='zoom'){drawOverlay(-1.5,1.5,state.delta,true);plotSideTime()}
  else if(state.tab==='standing'){drawStanding();drawComparison()}
  else if(state.tab==='phase'){drawPhase();drawPhaseSide()}
 }
 const tabDesc={
  approach:['공간에서 본 연속파 A · B · 합성파','파란색 A와 주황색 B는 별도 줄에, 초록색 합성파는 아래 줄에 표시합니다. 가로축=위치, 세로축=변위.','관측점에서 기록한 시간-변위','가로축=시간 t · 세로축=변위 y. 관측 위치를 바꿔 파동이 도달하는 시점과 보강을 비교합니다.'],
  zoom:['중첩부 확대: 같은 좌표축에서 겹쳐 보기','가로축=위치 x · 세로축=변위 y. 분홍 ±2A 안내선과 마디·배 위치를 확인해 보세요.','관측점의 시간-변위 변화','A=0°, B=0°에서 t=1.25T에 중심의 보강(2A)을 확인하고, A=180°로 바꿔 상쇄(0)를 비교하세요.'],
- standing:['정상파의 마디·배와 진폭 경계','연속파가 충분히 도달한 뒤, 분홍 점선은 배의 최대 진폭 ±2A 및 마디의 0을 보여 줍니다.','배 vs. 마디의 시간-변위 비교','위: 배 x=0 · 아래: 마디 x=0.25λ. 두 곳을 같은 시간축에서 비교합니다.'],
+ standing:['정상파의 마디·배와 진폭 경계','연속파가 충분히 도달한 뒤, 분홍 점선은 배의 최대 진폭 ±2A 및 마디의 0을 보여 줍니다.','배 vs. 마디의 시간-변위 비교','A가 0°이면 중심이 배, A가 180°이면 중심이 마디입니다. 두 위치의 시간 변위를 비교합니다.'],
  phase:['파동 A·B 초기 위상 변화 실험','A의 0°/180°와 B의 0°~360°를 독립 설정해 두 파동의 상대 위상차와 마디·배 위치를 비교합니다.','중앙 x=0의 시간-변위 그래프','같은 파장과 속력에서 위상차에 따른 A+B 결과를 비교합니다.']
 };
 function switchTab(tab){
