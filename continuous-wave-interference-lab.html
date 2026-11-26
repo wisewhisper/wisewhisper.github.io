@@ -85,13 +85,13 @@ canvas{display:block;width:100%;height:100%;border-radius:7px;background:#081321
       <label>재생 속도 <select id="speed"><option value="0.5">느리게 (0.5T/s)</option><option value="0.8" selected>보통 (0.8T/s)</option><option value="1.6">빠르게 (1.6T/s)</option></select></label>
       <label>관측 위치 x = <output id="probeLabel">0.00λ</output> <input id="probe" type="range" min="-1" max="1" step="0.25" value="0" aria-label="시간 그래프 관측 위치 선택"></label>
       <label id="phaseControl">파원 B의 위상차 <select id="phaseValue"><option value="0">0° (같은 위상)</option><option value="45">45°</option><option value="90">90°</option><option value="135">135°</option><option value="180">180° (반대 위상)</option><option value="225">225°</option><option value="270">270°</option><option value="315">315°</option><option value="360">360°</option></select></label>
-      <span class="smallpush">각 파동 A=1 · 합성 최대 2A · 작은 눈금 λ/4 · 시간 눈금 T/4</span>
+      <span class="smallpush">각 파동 A=1 · 합성 최대 2A · λ=1 m · 작은 격자 0.25 m</span>
     </div>
 
     <div class="workspace" id="workspace">
       <section class="plotcard">
         <h2 id="mainTitle">공간에 따른 변위: 파동 A / B / 합성파</h2>
-        <p class="blurb" id="mainDesc">각 파동을 별도 줄에 표시합니다. 가로축은 위치 x, 세로축은 변위 y입니다. 연속파의 앞부분이 서로 만나면서 중첩 범위가 넓어집니다.</p>
+        <p class="blurb" id="mainDesc">각 파동을 별도 줄에 표시합니다. 가로축은 중앙 0 m를 기준으로 왼쪽 음수, 오른쪽 양수이며, 세로축은 변위 y입니다. 연속파의 앞부분이 서로 만나면서 중첩 범위가 넓어집니다.</p>
         <div class="canvas-wrap"><canvas id="mainCanvas" role="img" aria-label="두 연속파가 마주 오며 중첩되는 공간 그래프"></canvas></div>
         <div class="legend"><span class="item"><i class="bullet"></i>파동 A</span><span class="item b"><i class="bullet"></i>파동 B</span><span class="item s"><i class="bullet"></i>합성파</span><span class="item m"><i class="bullet"></i>보강점·마디·배 표시</span></div>
       </section>
@@ -250,7 +250,7 @@ function plotSpaceTriple(){
   const panelH=available*fractions[i];
   const r={x:l,y:panelTops[i]+23,w:width,h:Math.max(38,panelH-33)};
   overlapShading(g,r,xi,xa);
-  axes(g,r,xi,xa,-s.range,s.range,ticks(-5,5,.25),i===2?[-2,-1,0,1,2]:[-1,0,1],{xLabels:i===2,xLabelStep:1,xTitle:i===2?'위치 x (λ 단위) · 작은 눈금 λ/4':undefined,yLabels:true});
+  axes(g,r,xi,xa,-s.range,s.range,ticks(-5,5,.25),i===2?[-2,-1,0,1,2]:[-1,0,1],{xLabels:true,xLabelStep:1,xText:v=>String(v),xTitle:i===2?'위치 x (m) · 중심 0 m':undefined,yLabels:true});
   if(i===2){
     g.save();dash(g,[5,5]);g.strokeStyle='rgba(255,121,209,.65)';
     for(let v of [-2,2]){const y=ymap(v,-s.range,s.range,r);g.beginPath();g.moveTo(r.x,y);g.lineTo(r.x+r.w,y);g.stroke()}g.restore();
@@ -280,7 +280,7 @@ function plotSideTime(xprobe=state.probe){
 function drawOverlay(xi=-1.5,xa=1.5,phase=0,withGuides=true){
  const left=56,right=17,top=27,bottom=49,r={x:left,y:top,w:W-left-right,h:H-top-bottom};
  overlapShading(g,r,xi,xa);
- axes(g,r,xi,xa,-2.25,2.25,ticks(xi,xa,.25),[-2,-1,0,1,2],{xLabels:true,xLabelStep:.5,xTitle:'위치 x (λ 단위)',yTitle:'변위 y (A 단위)',xText:x=>Number.isInteger(x)?`${x}`:`${x.toFixed(2)}`});
+ axes(g,r,xi,xa,-2.25,2.25,ticks(xi,xa,.25),[-2,-1,0,1,2],{xLabels:true,xLabelStep:.5,xLabelStep:1,xTitle:'위치 x (m)',yTitle:'변위 y (A 단위)',xText:x=>String(x)});
  if(withGuides)markNodes(g,r,xi,xa,-2.25,2.25,phase,true);
  plot(g,r,xi,xa,-2.25,2.25,x=>wave(x,state.t,0,phase),C.a,'dashed',2.8,true,0);
  plot(g,r,xi,xa,-2.25,2.25,x=>wave(x,state.t,1,phase),C.b,'dotted',3.0,true,1,phase);
@@ -295,7 +295,7 @@ function drawOverlay(xi=-1.5,xa=1.5,phase=0,withGuides=true){
 function drawStanding(){
  const xi=-2.2,xa=2.2,left=54,right=15,top=22,bottom=46,r={x:left,y:top,w:W-left-right,h:H-top-bottom};
  overlapShading(g,r,xi,xa);
- axes(g,r,xi,xa,-2.25,2.25,ticks(-2,2,.25),[-2,-1,0,1,2],{xLabelStep:.5,xTitle:'위치 x (λ 단위)',yTitle:'변위 y (A 단위)',xText:v=>Number.isInteger(v)?String(v):v.toFixed(2)});
+ axes(g,r,xi,xa,-2.25,2.25,ticks(-2,2,.25),[-2,-1,0,1,2],{xLabelStep:1,xTitle:'위치 x (m)',yTitle:'변위 y (A 단위)',xText:v=>String(v)});
  markNodes(g,r,xi,xa,-2.25,2.25,0,true);
  if(state.t>=FULL){
   plot(g,r,xi,xa,-2.25,2.25,x=>2*Math.abs(Math.cos(TAU*x)),C.mark,'dashed',1.7);
@@ -324,7 +324,7 @@ function drawComparison(){
 function drawPhase(){
  const delta=state.delta,xi=-2,xa=2,left=53,right=14,top=29,bottom=47,r={x:left,y:top,w:W-left-right,h:H-top-bottom};
  overlapShading(g,r,xi,xa);
- axes(g,r,xi,xa,-2.25,2.25,ticks(-2,2,.25),[-2,-1,0,1,2],{xLabelStep:.5,xTitle:'위치 x (λ 단위)',yTitle:'변위 y (A 단위)',xText:v=>Number.isInteger(v)?String(v):v.toFixed(2)});
+ axes(g,r,xi,xa,-2.25,2.25,ticks(-2,2,.25),[-2,-1,0,1,2],{xLabelStep:1,xTitle:'위치 x (m)',yTitle:'변위 y (A 단위)',xText:v=>String(v)});
  markNodes(g,r,xi,xa,-2.25,2.25,delta,true);
  if(state.t>=8){
   plot(g,r,xi,xa,-2.25,2.25,x=>2*Math.abs(Math.cos(TAU*x+delta/2)),C.mark,'dashed',1.3);
