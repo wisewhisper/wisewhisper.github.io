@@ -76,6 +76,7 @@ canvas{display:block;width:100%;height:100%;border-radius:7px;background:#081321
       <button class="action" id="play">▶ 재생</button>
       <button class="action" id="meet">만남 1.5T</button>
       <button class="action" id="peak">진폭 2A 순간</button>
+      <button class="action" id="oppositeMeet" title="180°로 설정하고 중앙에서 마루와 골이 만나는 순간을 표시">마루·골 만남 (180°)</button>
       <button class="action" id="steady">정상파 6.75T</button>
       <span class="readout" id="timeLabel">t = 0.00T</span>
       <span class="readout accent" id="stageLabel">접근 중</span>
@@ -125,7 +126,7 @@ y합(x,t) = 2A sin[2π(t/T − 1.5)] cos(2πx/λ)</div>
     <p><b>배:</b> x = nλ/2 (n은 정수), 최대 진폭 2A. <b>마디:</b> x = (2n+1)λ/4, 항상 변위 0. 이웃한 마디 사이 거리와 이웃한 배 사이 거리는 모두 λ/2입니다.</p>
     <h3>확인 질문</h3>
     <p>① t = 1.75T에 중앙 x = 0에서 yA, yB, y합을 비교해 보세요. ② t = 6.75T 이후 x = 0.25λ에서 합성파가 왜 움직이지 않는지 살펴보세요. ③ 탭 ④에서 파원 B를 180° 늦추거나 앞당기면 마디와 배의 위치가 어떻게 바뀌나요?</p>
-    <p class="keyfoot">모형의 단위: λ = 1, T = 1, v = 1, A = 1. 이상적인 선형 매질을 가정하며, 파원은 첫 영점에서 연속파를 내기 시작한다고 가정하고, 도달 전의 빈 공간은 파형 없이 표시합니다.</p>
+    <p class="keyfoot">모형의 단위: λ = 1, T = 1, v = 1, A = 1. 이상적인 선형 매질을 가정하며, 두 파원은 동시에 파동을 방출하며 위상차가 달라도 파면의 속력과 도달 시점은 같습니다. 초기 짧은 과도 구간은 부드럽게 표시하고 도달 전 빈 공간은 파형 없이 둡니다.</p>
   </section>
 </div>
 <script>
@@ -139,20 +140,16 @@ const state={tab:'approach',t:0,play:false,last:0,raf:null,speed:.8,probe:0,delt
 let W=900,H=500,SW=450,SH=500;
 function clamp(x,a,b){return Math.max(a,Math.min(b,x))}
 function reached(x,time,which){return which===0 ? time+START_LEAD-(x-FROM) : time+START_LEAD-(TO-x)}
-// For all phases the finite wave train begins at a true zero crossing.
-// A separate drawing mask leaves untouched space blank, not a green baseline.
-function frontOnset(which,delta=state.delta){
- const phaseCycles=(which===1?delta:0)/TAU;
- return (1-phaseCycles%1)%1;
-}
+// A phase offset changes displacement, not the time when the wavefront arrives.
+// Both fronts start together; smooth source turn-on avoids a discontinuity.
 function activeWave(x,time,which,delta=state.delta){
- return x>=FROM-1e-8 && x<=TO+1e-8 &&
-   reached(x,time,which)>frontOnset(which,delta)+1e-10;
+ return x>=FROM-1e-8 && x<=TO+1e-8 && reached(x,time,which)>0;
 }
 function wave(x,time,which,delta=state.delta){
  if(!activeWave(x,time,which,delta))return 0;
  const age=reached(x,time,which);
- return Math.sin(TAU*(age-frontOnset(which,delta)));
+ const fade=age>=.20?1:.5-.5*Math.cos(Math.PI*age/.20);
+ return fade*Math.sin(TAU*age+(which===1?delta:0));
 }
 function sum(x,time,d=state.delta){return wave(x,time,0,d)+wave(x,time,1,d)}
 function xmap(x,x0,x1,r){return r.x+(x-x0)*(r.w/(x1-x0))}
@@ -211,15 +208,15 @@ function curveFromTime(ctx,r,ti,tf,yi,ya,fn,color,style='solid',width=2.4){
 function ticks(a,b,step){let out=[];for(let n=Math.ceil((a-1e-8)/step);n*step<=b+1e-8;n++)out.push(+((n*step).toFixed(6)));return out}
 function fmt(t){return (Math.round(t*100)/100).toFixed(2)}
 function drawSourceFronts(ctx,r,xi,xa,yi,ya,withLabels=true){
- const l=FROM+START_LEAD+state.t-frontOnset(0,0),
-       rr=TO-START_LEAD-state.t+frontOnset(1,state.delta);
+ const l=FROM+START_LEAD+state.t,
+       rr=TO-START_LEAD-state.t;
  // left/right emission fronts, clipped to domain; the front never disappears, it travels beyond the opposite source
  const valid=[{x:l,col:C.a,label:'A 파면 →'},{x:rr,col:C.b,label:'← B 파면'}];
  valid.forEach(o=>{if(o.x<xi||o.x>xa)return;const px=xmap(o.x,xi,xa,r);ctx.save();dash(ctx,[4,5]);ctx.strokeStyle=o.col;ctx.globalAlpha=.75;ctx.beginPath();ctx.moveTo(px,r.y);ctx.lineTo(px,r.y+r.h);ctx.stroke();ctx.restore();if(withLabels)text(ctx,o.label,px+3,r.y+9,o.col,'11px system-ui')});
 }
 function overlapShading(ctx,r,xi,xa){
- const left=Math.max(xi,TO-START_LEAD-state.t+frontOnset(1,state.delta)),
-       right=Math.min(xa,FROM+START_LEAD+state.t-frontOnset(0,0));
+ const left=Math.max(xi,TO-START_LEAD-state.t),
+       right=Math.min(xa,FROM+START_LEAD+state.t);
  if(right<=left)return;
  ctx.fillStyle='rgba(102,239,165,.07)';ctx.fillRect(xmap(left,xi,xa,r),r.y,xmap(right,xi,xa,r)-xmap(left,xi,xa,r),r.h)
 }
@@ -371,7 +368,9 @@ function updateMessage(){
   s=t<FULL?'정상파가 공간 전체에 자리 잡는 중입니다. [정상파 6.75T] 버튼으로 충분히 중첩된 뒤의 마디·배를 확인해 보세요.':'분홍색 점선은 정상파 진폭의 경계입니다. 배(x=0)는 +2A↔−2A로 진동하지만 마디(x=0.25λ)는 항상 변위 0을 유지합니다.';
  } else if(tab==='phase'){
   const degree=Math.round(state.delta*180/Math.PI);
-  s=`기본 실험에서는 두 파원이 같은 위상(0°)입니다. 이 탭에서만 B에 ${degree}° 위상차를 주었습니다. 마디·배는 기본 위치에서 왼쪽으로 ${fmt(degree/720)}λ 이동합니다.`;
+  s=degree===180
+  ?`180° 반대 위상: 중앙 x=0에서 파동 A가 +A(마루)일 때 B는 −A(골)입니다. [마루·골 만남 (180°)]을 누르면 t=1.75T의 상쇄를 확인할 수 있습니다. 현재 yA=${fmt(wave(0,t,0,0))}A, yB=${fmt(wave(0,t,1,state.delta))}A, 합=${fmt(sum(0,t,state.delta))}A.`
+  :`B의 위상차 ${degree}° · 중심 x=0의 현재 변위: A=${fmt(wave(0,t,0,0))}A, B=${fmt(wave(0,t,1,state.delta))}A, 합=${fmt(sum(0,t,state.delta))}A. 반대 위상은 180°이며 90°는 ¼주기 차이입니다.`;
  }
  const msg=$('message');msg.textContent=s;
 }
@@ -436,6 +435,7 @@ $('prev').onclick=()=>{stop();setTime(Math.floor(state.t*4+1e-7)/4-.25)};
 $('next').onclick=()=>{stop();setTime(Math.ceil(state.t*4-1e-7)/4+.25)};
 $('meet').onclick=()=>{stop();setTime(FRONT_MEET)};
 $('peak').onclick=()=>{stop();setTime(FRONT_MEET+.25)};
+$('oppositeMeet').onclick=()=>{stop();state.delta=Math.PI;$('phaseValue').value='180';switchTab('phase');setTime(FRONT_MEET+.25)};
 $('steady').onclick=()=>{stop();setTime(FULL+.25)};
 $('play').onclick=start;
 $('seek').oninput=e=>{const chosen=+e.target.value;stop();setTime(chosen)};
