@@ -1,0 +1,146 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>위치에너지 통합 실험실</title><style>
+*{box-sizing:border-box}html{color-scheme:dark}body{margin:0;background:#050910;color:#eaf3ff;font:15px/1.45 system-ui,-apple-system,sans-serif}main{max-width:1700px;margin:auto;padding:9px 15px}h1{font-size:clamp(20px,2vw,28px);margin:0}header{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}a{color:#92cdf8}small,.muted{color:#b6c7da}h2{font-size:17px;margin:0 0 7px}h3{font-size:16px;margin:8px 0}p{margin:5px 0}nav{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0;border-bottom:1px solid #31435b;padding-bottom:8px}button,select,input,textarea{font:inherit;color:#eaf4ff;background:#172b40;border:1px solid #4b6a85;border-radius:7px;padding:6px 10px}button{cursor:pointer;min-height:34px}button:disabled{opacity:.46;cursor:default}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid #ffd17b;outline-offset:2px}nav button[aria-selected=true],.primary{background:#145d90;border-color:#81c9f8;color:white}input[type=range]{accent-color:#6ac5ff;min-width:0;padding:0;width:100%;height:24px}input[type=number]{width:80px;padding:4px}textarea{width:100%;resize:vertical;min-height:44px}.layout{display:grid;grid-template-columns:minmax(0,2.05fr) minmax(290px,1fr);gap:9px;align-items:start}.panel{border:1px solid #30475c;background:#0d1826;border-radius:12px;padding:11px;min-width:0}.stage{display:flex;flex-direction:column;gap:6px}.scene{display:block;width:100%;height:clamp(245px,43vh,475px);background:#08121e;border:1px solid #2e475d;border-radius:9px}.toolbar{display:flex;align-items:center;gap:5px;flex-wrap:wrap}.toolbar button{padding:4px 8px}.toolbar select{padding:4px}.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}.metrics>div{background:#13273a;border:1px solid #324d64;border-radius:8px;padding:6px 8px}.metrics small{display:block;font-size:12px}.metrics b{font-size:clamp(15px,1.45vw,22px);font-variant-numeric:tabular-nums;display:block;overflow-wrap:anywhere}.readout{background:#11293b;color:#a6e2ff;border-radius:7px;padding:6px 9px;font-weight:600}.ctrl{margin-bottom:7px}.ctrl label{display:flex;justify-content:space-between;font-size:13px;font-weight:600}.ctrl label span{font-weight:400;color:#b9cadd}.ctrl>div{display:grid;grid-template-columns:1fr 80px;align-items:center;gap:8px}.presets{display:flex;gap:4px;flex-wrap:wrap;margin:6px 0}.presets button{font-size:13px;padding:3px 7px}.aside{display:flex;flex-direction:column;gap:7px}.mini{width:100%;height:clamp(125px,20vh,210px);display:block}.miniwrap h3{margin:0;font-size:14px}details{border:1px solid #344e64;border-radius:7px;padding:6px 9px}summary{cursor:pointer;color:#b6e1ff}#question{font-weight:600;color:#ffe1a4}.graphs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.graphs svg{width:100%;max-height:300px;display:block}table{border-collapse:collapse;width:100%;font-size:13px}td,th{border-bottom:1px solid #34465a;padding:5px;text-align:right}th:first-child{text-align:left;color:#c0d6e6}.lesson{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.lesson strong{color:#9fd6ff}.note{font-size:12px;color:#b6c9d9}.seek{display:flex;align-items:center;gap:7px}.seek input{flex:1}.seek span{font-size:12px;min-width:126px}section[hidden],div[hidden]{display:none!important}footer{margin-top:9px;font-size:12px;color:#9fb4c8}@media(min-width:1000px) and (max-height:820px){main{padding:6px 10px}.scene{height:39vh;min-height:230px}.panel{padding:8px}.mini{height:17vh;min-height:112px}.aside{gap:4px}.ctrl{margin:0 0 4px}.metrics>div{padding:4px 6px}nav{margin:5px 0;padding-bottom:5px}.note{font-size:11px}.toolbar button{min-height:30px}.aside .panel{padding:7px 9px}}@media(max-width:950px){.layout,.graphs,.lesson{grid-template-columns:1fr}.scene{height:auto;aspect-ratio:900/430;min-height:200px}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.mini{height:190px}nav button{min-height:39px}.toolbar button{min-height:38px}.ctrl input[type=range]{height:32px}}
+.energyrow{display:grid;grid-template-columns:64px minmax(0,1fr) 83px;gap:8px;align-items:center;font-size:12px;margin:3px 0}.energyrow b{text-align:right;font-variant-numeric:tabular-nums}.bartrack{height:10px;border-radius:7px;background:#263a4d;overflow:hidden}.bartrack i{height:100%;display:block;border-radius:7px}.stage .scene{height:clamp(260px,49vh,500px)}@media(min-width:1000px) and (max-height:820px){.stage .scene{height:42vh}.aside .ctrl label{font-size:12px}.aside .mini{height:15vh;min-height:100px}}@media(max-width:950px){.stage .scene{height:auto;aspect-ratio:900/430}}
+#scene{touch-action:none}.stage .scene{height:clamp(270px,49vh,510px)}.energyrow{grid-template-columns:70px minmax(0,1fr) 90px}.bartrack i{border-radius:0}.aside .ctrl{margin-bottom:3px}@media(min-width:1000px) and (max-height:820px){.stage .scene{height:41vh}.aside .mini{height:14vh;min-height:95px}.aside .panel{padding:6px 8px}.aside .ctrl{margin-bottom:2px}.aside input[type=range]{height:20px}.aside input[type=number]{padding:2px 5px}}@media(max-width:950px){.stage .scene{height:auto;aspect-ratio:900/430}.aside input[type=range]{height:32px}}
+</style></head><body><main><header><h1>위치에너지 통합 실험실</h1><a href="index.html">← 실험실 목록</a></header><nav id="tabs" role="tablist" aria-label="실험 선택"></nav><section id="experiment" class="layout"><div class="panel stage"><svg class="scene" id="scene" viewBox="0 0 900 430" role="img" aria-label="입체 승강 장치, 낙하 및 용수철 실험"></svg><div class="toolbar"><button id="start" class="primary">▶ 시작</button><button id="pause">Ⅱ 일시정지</button><button id="step">한 단계</button><button id="restart">처음부터</button><button id="reset">전체 초기화</button><label>재생 <select id="rate"><option value=".25">0.25배</option><option value=".5">0.5배</option><option value="1" selected>1배</option><option value="2">2배</option></select></label></div><div class="seek"><input id="seek" type="range" min="0" max="1000" step="1" value="0" aria-label="실험 시간 탐색"><span id="now"></span></div><div id="metrics" class="metrics"></div><div id="bars"></div><div class="readout" id="equation"></div><p class="note" id="modelNote"></p></div><aside class="aside"><div class="panel"><h2>조건 조작</h2><div id="params"></div><div id="presets" class="presets"></div><div class="toolbar"><button id="saveA">조건 A 저장</button><button id="saveB">조건 B 저장</button><small id="notice" aria-live="polite"></small></div></div><div class="panel miniwrap"><h3>실시간 관찰 그래프</h3><svg id="mini" class="mini" viewBox="0 0 620 228" role="img" aria-label="위치에너지 그래프"></svg></div><div class="panel"><h3>예측 → 조작 → 관찰</h3><p id="question"></p><textarea id="prediction" rows="1" placeholder="예측과 관찰 기록 (선택)"></textarea><details id="reveal"><summary>실험 후 원리 확인</summary><p id="answer"></p></details></div></aside></section><section id="graphPage" hidden><div class="toolbar"><button id="graphStart" class="primary">▶ 시작 / 재개</button><button id="graphPause">Ⅱ 일시정지</button><small id="graphStatus"></small><small id="legend"></small></div><div class="graphs"><div class="panel"><h2>위치에너지 관계</h2><svg id="g1" viewBox="0 0 620 228" role="img" aria-label="높이 또는 변형량과 위치에너지"></svg></div><div class="panel"><h2>힘의 관계</h2><svg id="g2" viewBox="0 0 620 228" role="img" aria-label="높이 또는 변형량과 힘"></svg></div><div class="panel"><h2>에너지–시간</h2><svg id="g3" viewBox="0 0 620 228" role="img" aria-label="시간별 에너지 변화"></svg><p class="note">자유 진동은 두 주기 구간을 반복 표시합니다. 축은 조건 변경 전까지 고정됩니다.</p></div><div class="panel"><h2>조건 A·B 비교</h2><table><thead><tr><th>물리량</th><th>현재</th><th>A</th><th>B</th></tr></thead><tbody id="compare"></tbody></table><div class="toolbar"><button id="loadA">A 불러오기</button><button id="loadB">B 불러오기</button><button id="clear">기록 지우기</button></div><p class="note">다른 영점의 U를 직접 비교할 때 주의하세요. ΔU는 동일한 기준면에서 계산한 물리적 변화입니다. 자유 진동 비교는 초기 조건입니다.</p></div></div></section><section id="lesson" class="lesson" hidden><article class="panel"><h2>1. 중력 위치에너지</h2><p><strong>U = mg(y−y₀), ΔU = mg(y₂−y₁), Wg = −ΔU</strong></p><p>물체와 천체 사이의 상호작용 에너지입니다. 기준면 y₀를 바꾸면 U의 값은 변하나 두 위치의 차이는 변하지 않습니다. 기준면 아래 U는 음수일 수 있습니다.</p><p>2 kg, g=9.8, y₁=2 m, y₂=5 m: ΔU=58.8 J. 기준면을 0→8 m로 이동해도 같습니다. 균일한 중력장을 가정합니다.</p></article><article class="panel"><h2>2. 자유낙하와 들어 올리기</h2><p>정지 출발, 공기저항이 없는 낙하에서 v²=2gΔh, U+K 일정. 바닥에 도달하기 직전까지만 계산합니다.</p><p>구동 장치가 들어 올리거나 내리는 경우 W외=ΔU+ΔK. 처음과 끝이 정지하면 W외=ΔU입니다. 높이 10 m에서 질량 2 kg이면 지구에서 K=196 J, 달에서는 K=32.4 J입니다.</p></article><article class="panel"><h2>3. 탄성 위치에너지</h2><p><strong>U=½kx², F=−kx</strong></p><p>자연 길이에서 U=0. 압축·늘림의 크기가 같으면 U는 같고 복원력 방향은 반대입니다. k=100 N/m에서 |x|=0.1 m→0.2 m이면 U=0.5→2 J.</p><p>외부에서 천천히 변형시킬 때 F외=kx이며, 힘–변형량 그래프의 부호 있는 면적은 ½kx²입니다. 복원력 그래프 면적은 용수철이 한 일입니다.</p></article><article class="panel"><h2>4. 용수철의 자유 진동</h2><p>x=A cos(ωt), ω=√(k/m), T=2π√(m/k). 자연 길이 통과 시 속력 최대, 양 끝에서 속력 0. 에너지 U와 K가 교환되며 이상적인 총 에너지 ½kA²는 일정합니다.</p><p>질량 4배 → 주기 2배, 용수철 상수 4배 → 주기 절반. 진폭은 이상적 주기에 영향을 주지 않습니다. 마찰 및 감쇠는 이 모형에서 제외됩니다.</p><details><summary>스스로 설명: 음의 위치에너지는 왜 가능한가?</summary><p>중력 위치에너지는 기준면 선택에 따라 음수가 될 수 있습니다. 반면 이 실험의 탄성 위치에너지는 자연 길이를 영점으로 정하여 항상 0 이상입니다.</p></details></article></section><footer>온라인 과학실험실 · 20261127-potential-v1 · 외부 라이브러리 없는 단일 HTML</footer></main><script>
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x)),fmt=(x,d=2)=>Math.abs(x)<1e-9?'0':Number(x.toFixed(d)).toString();
+const spring=c=>c.mode==='spring'||c.mode==='osc';
+const period=c=>2*Math.PI*Math.sqrt(c.m/c.k);
+const duration=c=>c.mode==='fall'?(c.g>0?Math.sqrt(2*c.y2/c.g):4):c.mode==='osc'?period(c):c.mode==='ref'?3:4;
+function sample(c,t){
+ if(spring(c)){
+  const w=Math.sqrt(c.k/c.m),phase=c.mode==='osc'?w*(t%period(c)):0,x=c.x*Math.cos(phase),v=-c.x*w*Math.sin(phase),U=.5*c.k*x*x,K=.5*c.m*v*v;
+  return{x,v,U,K,E:U+K,F:-c.k*x,dU:U-.5*c.k*c.x*c.x,W:-U+.5*c.k*c.x*c.x,T:period(c)};
+ }
+ const end=duration(c),q=clamp(t/end,0,1),u=q*q*(3-2*q),mg=c.m*c.g;
+ let y=c.y1,v=0,a=0,ref=c.y0;
+ if(c.mode==='lift'){y=c.y1+(c.y2-c.y1)*u;v=(c.y2-c.y1)*6*q*(1-q)/end;a=(c.y2-c.y1)*(6-12*q)/end**2}
+ else if(c.mode==='fall'){const tt=clamp(t,0,end);y=Math.max(0,c.y2-.5*c.g*tt*tt);v=-c.g*tt;a=-c.g}
+ else {y=c.y2;ref=c.y0+(c.ref2-c.y0)*u}
+ const start=c.mode==='fall'?c.y2:c.y1,U=mg*(y-ref),K=.5*c.m*v*v,dU=mg*(y-start);
+ return {y,v,a,ref,U,K,E:U+K,F:-mg,dU,W:-dU,Wext:dU+K,U1:mg*(start-ref),U2:mg*(c.y2-ref),delta:mg*(c.y2-c.y1)};
+}
+function poly(p,fill,stroke='#6b8ba2'){return '<polygon points="'+p.map(z=>z.join(',')).join(' ')+'" fill="'+fill+'" stroke="'+stroke+'"/>'}
+function ln(x,y,X,Y,col='#7697b4',w=2,dash=''){return '<path d="M'+x+' '+y+'L'+X+' '+Y+'" fill="none" stroke="'+col+'" stroke-width="'+w+'" '+(dash?'stroke-dasharray="'+dash+'"':'')+'/>'}
+function txt(x,y,s,col='#d9e9f8',size=17,anchor='start'){return '<text x="'+x+'" y="'+y+'" fill="'+col+'" font-size="'+size+'" text-anchor="'+anchor+'">'+s+'</text>'}
+function block(x,y,w,h,d,col){return poly([[x,y],[x+w,y],[x+w+d,y-d*.56],[x+d,y-d*.56]],'#a4d9ef')+poly([[x+w,y],[x+w+d,y-d*.56],[x+w+d,y+h-d*.56],[x+w,y+h]],'#20435d')+'<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="4" fill="'+col+'" stroke="#a1cce8"/>'}
+function wheel(x,y,a){return '<g transform="translate('+x+' '+y+') rotate('+a+')"><circle r="12" fill="#07121d" stroke="#93aebf" stroke-width="2"/><circle r="7" fill="#536c7e"/>'+ln(-7,0,7,0,'#cad9e3')+ln(0,-7,0,7,'#cad9e3')+'</g>'}
+function arrow(x,y,v,col,label){const l=Math.sign(v)*Math.min(115,20+Math.abs(v)*4),X=x+l;return Math.abs(v)<1e-9?txt(x,y-9,label+' = 0',col,14,'middle'):ln(x,y,X,y,col,3)+poly([[X,y],[X-Math.sign(l)*12,y-6],[X-Math.sign(l)*12,y+6]],col,col)+txt(clamp((x+X)/2,80,820),y-9,label,col,14,'middle')}
+
+function sceneSVG(c,t,id='potential'){
+ const z=sample(c,t),bg=id+'bg';
+ let h='<defs><linearGradient id="'+bg+'" x2="0" y2="1"><stop stop-color="#1c3146"/><stop offset="1" stop-color="#050a12"/></linearGradient></defs><rect width="900" height="430" fill="url(#'+bg+')"/>';
+ if(!spring(c)){
+  const Y=y=>345-15*(y+5),X=450;
+  h+=txt(20,24,c.mode==='lift'?'수직 구동 실험대 · 일정한 중력장':c.mode==='fall'?'자유낙하 실험대 · 공기 저항 없음':'두 물체의 위치와 에너지 영점','#d2eaff',18);
+  for(let y=-5;y<=15;y++){const yy=Y(y);h+=ln(112,yy,815,yy,'#30485a',y%5===0?1.4:.6);if(y%5===0)h+=txt(99,yy+5,y+' m','#bfdaec',14,'end')}
+  h+=ln(112,Y(-5),112,Y(15),'#8eb0c6',2);
+  const fy=Y(0)+18;h+=poly([[180,fy],[745,fy],[805,fy-35],[240,fy-35]],'#304d60')+poly([[180,fy],[745,fy],[745,fy+9],[180,fy+9]],'#192e40')+txt(810,fy+4,'y = 0','#9fbdd2',13,'end');
+  for(const xx of [240,710])h+=block(xx-8,42,15,320,10,'#3b5a70');
+  h+=block(219,32,520,15,15,'#536f83');
+  const plane=Y(z.ref);
+  h+='<g data-drag="ref" style="cursor:ns-resize"><polygon points="180,'+plane+' 735,'+plane+' 805,'+(plane-28)+' 250,'+(plane-28)+'" fill="#6ce1b4" opacity=".17"/>'+ln(180,plane,735,plane,'#74e2b7',2.5,'7 5')+txt(740,plane-7,'U = 0 · '+fmt(z.ref)+' m','#95f1cc',15,'end')+'<rect x="165" y="'+(plane-9)+'" width="660" height="18" fill="transparent"/></g>';
+  function mass(x,y,label,key,color,ghost=false){let yy=Y(y);return '<g data-drag="'+key+'" style="cursor:ns-resize" opacity="'+(ghost?.35:1)+'">'+block(x-36,yy-25,72,45,18,color)+txt(x,yy+3,fmt(c.m)+' kg','#fff',14,'middle')+txt(x,yy-43,label+' '+fmt(y)+' m','#d2e9fb',15,'middle')+'</g>'}
+  if(c.mode==='ref'){
+   h+=mass(360,c.y1,'①','y1','#268ac1')+mass(595,c.y2,'②','y2','#cf8b4c');
+   h+=txt(450,390,'U₁ = '+fmt(z.U1)+' J   ·   U₂ = '+fmt(z.U2)+' J   ·   ΔU = '+fmt(z.delta)+' J','#def0ff',18,'middle');
+  }else{
+   if(c.mode==='lift'){
+    h+=block(X-56,37,112,29,16,'#326889')+ln(X,68,X,Y(z.y)-25,'#b7d1e3',3);
+    h+=mass(X,c.y2,'목표','y2','#d39e65',true);
+   }else h+=mass(X,c.y2,'출발','y2','#d39e65',true);
+   h+=mass(X,z.y,c.mode==='fall'?'낙하 물체':'구동 물체',c.mode==='lift'?'y1':'y2','#268ac1');
+   if(c.g>0&&c.m>0){const y=Y(z.y);h+=ln(X+65,y,X+65,y+Math.min(38,18+c.m*c.g*.1),'#ff8d9f',3)+poly([[X+65,y+Math.min(38,18+c.m*c.g*.1)],[X+59,y+Math.min(38,18+c.m*c.g*.1)-9],[X+71,y+Math.min(38,18+c.m*c.g*.1)-9]],'#ff8d9f')+txt(X+78,y+18,'mg','#ffafbc',15);}
+   h+=txt(450,390,'y = '+fmt(z.y)+' m  ·  v = '+fmt(z.v)+' m/s  ·  U = '+fmt(z.U)+' J  ·  K = '+fmt(z.K)+' J','#def0ff',17,'middle');
+  }
+  h+=txt(20,419,'높이 축은 −5~15 m 고정 · 기준면과 물체를 직접 드래그할 수 있습니다.','#a9c5d9',13);
+ }else{
+  const X=x=>520+x*740,Y=284,x=X(z.x),end=x-43,start=180;
+  h+=txt(20,29,c.mode==='osc'?'수평 용수철 수레 · 이상적인 자유 진동':'수평 용수철 · 압축과 늘림','#d2eaff',19);
+  h+=poly([[84,Y],[840,Y],[880,Y-40],[124,Y-40]],'#304d60')+poly([[84,Y],[840,Y],[840,Y+13],[84,Y+13]],'#192e40');
+  h+=block(125,113,45,170,30,'#3a586e')+ln(520,65,520,Y+19,'#8ac4e6',1.8,'6 5')+txt(520,55,'자연 길이 x = 0','#b6dcf5',17,'middle');
+  for(let j=-3;j<=3;j++){let px=X(j*.1);h+=ln(px,Y,px,Y+8,'#c0d9e8',1)+txt(px,Y+31,fmt(j*.1,1),'#bbd1e1',14,'middle')}
+  let p=[];for(let i=0;i<=240;i++){let u=i/240,a=u*12*Math.PI*2;p.push([start+(end-start)*u,202+17*Math.sin(a)-5*Math.cos(a)])}
+  h+=ln(164,202,start,202,'#a5c7df',4)+'<path d="'+p.map(([a,b],i)=>(i?'L':'M')+a+' '+b).join(' ')+'" fill="none" stroke="#203e56" stroke-width="7"/><path d="'+p.map(([a,b],i)=>(i?'L':'M')+a+' '+b).join(' ')+'" fill="none" stroke="#92d7fb" stroke-width="3.3"/>';
+  h+='<g data-drag="x" style="cursor:ew-resize"><ellipse cx="'+x+'" cy="'+Y+'" rx="53" ry="8" fill="#02060a" opacity=".7"/>'+block(x-43,Y-64,86,42,21,'#287eaf')+block(x-21,Y-81,43,18,12,'#6f899c')+wheel(x-26,Y-12,z.x/.08*180/Math.PI)+wheel(x+26,Y-12,z.x/.08*180/Math.PI)+txt(x,Y-37,fmt(c.m)+' kg','#fff',15,'middle')+'</g>';
+  h+=arrow(x,115,z.F,'#ffbd73','복원력 '+fmt(z.F)+' N')+arrow(x,80,z.v,'#76dfb6','v '+fmt(z.v)+' m/s');
+  h+=txt(450,355,'x = '+fmt(z.x,3)+' m  ·  U = '+fmt(z.U,3)+' J  ·  K = '+fmt(z.K,3)+' J','#e4f3ff',18,'middle');
+  h+=txt(450,387,'T = '+fmt(z.T,3)+' s  ·  E = '+fmt(z.E,3)+' J','#a8e9cb',17,'middle');
+  h+=txt(20,417,'변형량 축 고정 · 자연 길이 0.40 m · 수레 드래그로 초기 변형량 설정','#a9c5d9',13);
+ }
+ return h;
+}
+function drawPlot({series,xmin=0,xmax,ymin,ymax,title,xlabel,ylabel,cursor,marks=[]}){
+ const l=70,r=600,top=32,b=184;let h='<rect width="620" height="228" rx="7" fill="#081522"/>'+txt(11,20,title,'#dceeff',15);
+ const X=x=>l+(r-l)*(x-xmin)/(xmax-xmin||1),Y=y=>b-(b-top)*(y-ymin)/(ymax-ymin||1);
+ for(let i=0;i<=4;i++){const x=xmin+(xmax-xmin)*i/4,y=ymin+(ymax-ymin)*i/4;h+=ln(l,Y(y),r,Y(y),'#2d465a',1)+txt(l-8,Y(y)+4,fmt(y,1),'#b9d0e1',12,'end')+ln(X(x),top,X(x),b,'#253b50',1)+txt(X(x),b+18,fmt(x,1),'#b9d0e1',12,'middle')}
+ if(ymin<=0&&ymax>=0)h+=ln(l,Y(0),r,Y(0),'#a0b6ca',1.4);
+ h+=txt(r,222,xlabel,'#d2e4ef',12,'end')+txt(15,40,ylabel,'#b9d0e1',11);
+ for(const s of series){h+='<path d="'+s.pts.map(([x,y],i)=>(i?'L':'M')+X(x)+' '+Y(y)).join(' ')+'" fill="none" stroke="'+s.color+'" stroke-width="'+(s.width||2.8)+'" stroke-dasharray="'+(s.dash||'')+'"/>'}
+ if(Number.isFinite(cursor))h+=ln(X(clamp(cursor,xmin,xmax)),top,X(clamp(cursor,xmin,xmax)),b,'#eaf3ff',1,'3 4');
+ for(const z of marks){h+='<circle cx="'+X(z.x)+'" cy="'+Y(z.y)+'" r="5" fill="'+z.color+'" stroke="#f2f7ff" stroke-width="1"/>'+txt(clamp(X(z.x)+8,l+4,r-20),clamp(Y(z.y)-9,top+12,b-3),z.label,z.color,12)}
+ return h;
+}
+
+const $=id=>document.getElementById(id);
+const defaults={lift:{mode:'lift',m:2,g:9.8,y1:2,y2:5,y0:0},fall:{mode:'fall',m:2,g:9.8,y1:0,y2:10,y0:0},ref:{mode:'ref',m:2,g:9.8,y1:2,y2:5,y0:0,ref2:8},spring:{mode:'spring',m:2,k:100,x:.1},osc:{mode:'osc',m:2,k:100,x:.2}};
+const tabs=[['lift','① 들어 올리기'],['fall','② 자유낙하'],['ref','③ 기준면 비교'],['spring','④ 압축·늘림'],['osc','⑤ 자유 진동'],['graph','⑥ 그래프·비교'],['lesson','⑦ 개념 설명']];
+const questions={lift:['같은 질량을 두 배의 높이만큼 들어 올리면 위치에너지 변화는?','ΔU = mgΔy이므로 높이 변화가 두 배이면 ΔU도 두 배입니다. 처음과 끝에서 정지하면 외부 구동력이 한 일은 ΔU입니다.'],fall:['높이가 같은 지구와 달에서 낙하 시간, 바닥 직전 속력은 어떻게 다를까요?','낙하 시간 √(2h/g), 속력 √(2gh)입니다. 질량을 바꾸어도 이상적인 낙하 시간은 같습니다.'],ref:['물체는 움직이지 않고 기준면만 올리면 U₁, U₂, ΔU는 각각 어떻게 될까요?','두 위치에너지는 함께 감소하지만 차이 ΔU와 중력이 한 일은 변하지 않습니다.'],spring:['압축과 늘림의 크기가 같으면 에너지와 복원력은 어떻게 다를까요?','U=½kx²로 에너지는 같고 F=−kx의 방향은 반대입니다. 변형량을 두 배로 하면 U는 네 배입니다.'],osc:['수레가 자연 길이를 통과할 때 운동에너지와 위치에너지는 어떨까요? 질량과 k를 바꾸면 주기는?','자연 길이에서 K 최대, U=0입니다. 양 끝에서 U 최대, K=0. 주기 T=2π√(m/k), 이상적인 총 에너지는 일정합니다.']};
+let modes=Object.fromEntries(Object.entries(defaults).map(([k,v])=>[k,{...v}])),c=modes.lift,t=0,view='experiment',running=false,last=0,raf=0,rate=1,saved={A:null,B:null},drag=null;
+function stop(){running=false;cancelAnimationFrame(raf);raf=0;last=0}
+function rewind(){stop();t=0;render()}
+function start(){if(running)return;if(c.mode==='spring'){modes.osc={mode:'osc',m:c.m,k:c.k,x:c.x};switchTab('osc')}if(c.mode!=='osc'&&t>=duration(c)-1e-8)t=0;if(c.mode==='osc'&&Math.abs(c.x)<1e-10){$('notice').textContent='초기 변형량을 0이 아닌 값으로 바꾸세요.';return}running=true;last=0;render();raf=requestAnimationFrame(frame)}
+function frame(ms){if(!running)return;t+=(last?Math.min(.05,(ms-last)/1000)*rate:0);last=ms;if(c.mode!=='osc'&&t>=duration(c)){t=duration(c);stop()}render();if(running)raf=requestAnimationFrame(frame)}
+function switchTab(m){if(m==='graph'||m==='lesson'){view=m;render();return}if(c.mode!==m){stop();t=0;c=modes[m];$('prediction').value='';$('reveal').open=false;}view='experiment';controls();render()}
+function change(k,v){stop();t=0;c[k]=v;render()}
+function control(k,label,min,max,step,unit){const d=document.createElement('div');d.className='ctrl';d.innerHTML='<label for="'+k+'r">'+label+' <span>'+unit+'</span></label><div><input id="'+k+'r" type="range" min="'+min+'" max="'+max+'" step="'+step+'" value="'+c[k]+'" aria-label="'+label+'"><input id="'+k+'n" type="number" min="'+min+'" max="'+max+'" step="'+step+'" value="'+c[k]+'" aria-label="'+label+' 수치"></div>';let a=d.querySelector('input[type=range]'),b=d.querySelector('input[type=number]');a.oninput=()=>{b.value=a.value;change(k,+a.value)};b.onchange=()=>{let n=b.value.trim()===''?c[k]:Number(b.value);n=Number.isFinite(n)?clamp(Number((Math.round(n/step)*step).toFixed(6)),min,max):c[k];a.value=b.value=n;change(k,n)};$('params').append(d)}
+function controls(){
+ $('params').replaceChildren();let p=[];
+ if(spring(c)){control('m','수레 질량',.5,10,.1,'kg');control('k','용수철 상수',10,500,1,'N/m');control('x','초기 변형량',-.3,.3,.005,'m');p=[['reverse','압축↔늘림'],['zero','자연 길이'],['double','변형량 2배']]}
+ else{control('m','질량',0,20,.1,'kg');control('g','중력 가속도',0,20,.01,'m/s²');if(c.mode!=='fall')control('y1','시작 위치 y₁',-5,15,.1,'m');control('y2',c.mode==='fall'?'낙하 시작 높이':'도착 위치 y₂',c.mode==='fall'?.5:-5,15,.1,'m');control('y0','기준면 y₀',-5,15,.1,'m');if(c.mode==='ref')control('ref2','이동할 기준면',-5,15,.1,'m');p=[['earth','지구'],['moon','달'],['mars','화성'],['zeroRef','기준면 = y₂']]}
+ $('presets').innerHTML=p.map(([a,b])=>'<button data-p="'+a+'">'+b+'</button>').join('');$('presets').querySelectorAll('button').forEach(b=>b.onclick=()=>preset(b.dataset.p));$('question').textContent=questions[c.mode][0];$('answer').textContent=questions[c.mode][1];$('start').textContent=c.mode==='spring'?'▶ 자유 진동 시작':'▶ 시작 / 재개';
+}
+function preset(p){stop();t=0;if(p==='earth')c.g=9.8;if(p==='moon')c.g=1.62;if(p==='mars')c.g=3.71;if(p==='zeroRef'){c.y0=c.y2;if(c.mode==='ref')c.ref2=c.y2}if(p==='reverse')c.x=-c.x;if(p==='zero')c.x=0;if(p==='double'){if(Math.abs(c.x*2)>.300001){$('notice').textContent='변형량 2배가 허용 범위를 벗어납니다.';render();return}c.x*=2}controls();render()}
+const cols=['#ffc16c','#6cc9ff','#76dfb5','#f18fa7'];
+function seriesGraph(kind,includeSaved){
+ const s=spring(c),sets=[{q:c,color:cols[0],label:'현재'}];
+ if(includeSaved)for(const [i,k]of ['A','B'].entries()){let q=saved[k];if(q&&spring(q)===s&&(kind!=='time'||q.mode===c.mode))sets.push({q,color:cols[2+i],label:k,dash:'6 4'})}
+ let arr=[],marks=[],xmin=0,xmax=1,ylabel='J',xlabel='',title='',cursor;
+ if(kind==='time'){
+  const q=c,end=q.mode==='osc'?2*period(q):duration(q),tm=q.mode==='osc'?t%end:Math.min(t,end);xmax=Math.max(end,...sets.map(o=>o.q.mode==='osc'?2*period(o.q):duration(o.q)));cursor=tm;title='위치·운동·전체 에너지';xlabel='시간 t (s)';
+  for(const o of sets){const e=o.q.mode==='osc'?2*period(o.q):duration(o.q),n=sample(o.q,0),keys=o.q.mode==='ref'?['U1','U2']:['U','K','E'];for(const [i,k]of keys.entries()){const pts=Array.from({length:151},(_,j)=>{let a=e*j/150;return[a,sample(o.q,a)[k]]});arr.push({pts,color:o.q===c?cols[i]:o.color,dash:o.q===c?(k==='E'?'5 4':''):o.dash,width:k==='E'?2:3});if(o.q===c)marks.push({x:tm,y:sample(c,tm)[k],color:cols[i],label:k})}}
+ }else{
+  xmin=s?-.3:-20;xmax=s?.3:20;title=kind==='force'?(s?'복원력 F = −kx':'중력 F = −mg'):(s?'탄성 위치에너지 U = ½kx²':'중력 위치에너지 U = mgh');xlabel=s?'변형량 x (m)':'기준면에 대한 높이 h (m)';if(kind==='force')ylabel='N';
+  for(const o of sets){const q=o.q,pts=Array.from({length:121},(_,i)=>{const x=xmin+(xmax-xmin)*i/120;return[x,kind==='force'?(s?-q.k*x:-q.m*q.g):(s?.5*q.k*x*x:q.m*q.g*x)]});arr.push({pts,color:o.color,dash:o.dash});const z=sample(q,o.q===c?t:0),xx=s?z.x:z.y-z.ref,yy=kind==='force'?z.F:z.U;marks.push({x:xx,y:yy,color:o.color,label:o.label});if(!s&&q.mode==='ref')marks.push({x:q.y1-z.ref,y:kind==='force'?z.F:z.U1,color:o.color,label:'①'})}
+ }
+ const ys=arr.flatMap(s=>s.pts.map(p=>p[1])).concat(marks.map(m=>m.y)),lo=Math.min(0,...ys),hi=Math.max(0,...ys),pad=Math.max(.05,(hi-lo)*.1);
+ return drawPlot({series:arr,xmin,xmax,ymin:lo-pad,ymax:hi+pad,title,xlabel,ylabel,cursor,marks});
+}
+function compare(){const labels=['실험','질량 (kg)','g (m/s²) 또는 k (N/m)','위치/변형량 (m)','기준면 (m)','최종 U (J)','최종 K (J)','ΔU 또는 비교 ΔU (J)','중력/용수철 일 (J)','주기/실험 시간 (s)'];function row(q){if(!q)return labels.map(()=> '—');let z=sample(q,q.mode==='osc'?0:duration(q));return [tabs.find(a=>a[0]===q.mode)[1],fmt(q.m),fmt(spring(q)?q.k:q.g),spring(q)?fmt(q.x,3):fmt(q.y1)+' → '+fmt(q.y2),spring(q)?'자연 길이':fmt(z.ref),fmt(z.U,3),fmt(z.K,3),fmt(q.mode==='ref'?z.delta:z.dU,3),fmt(z.W,3),fmt(duration(q),3)]}const rr=[c,saved.A,saved.B].map(row);$('compare').innerHTML=labels.map((l,i)=>'<tr><th>'+l+'</th>'+rr.map(r=>'<td>'+r[i]+'</td>').join('')+'</tr>').join('')}
+function render(){
+ const exp=view==='experiment',z=sample(c,t),s=spring(c),end=duration(c),osc=c.mode==='osc';
+ $('experiment').hidden=!exp;$('graphPage').hidden=view!=='graph';$('lesson').hidden=view!=='lesson';$('tabs').querySelectorAll('button').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.mode===(exp?c.mode:view))));
+ if(exp){
+  $('scene').innerHTML=sceneSVG(c,t);
+  let rows=s?[['탄성 위치에너지',fmt(z.U,3)+' J'],['운동에너지',fmt(z.K,3)+' J'],['복원력',fmt(z.F,2)+' N'],['총 에너지',fmt(z.E,3)+' J']]:c.mode==='ref'?[['U₁',fmt(z.U1)+' J'],['U₂',fmt(z.U2)+' J'],['ΔU',fmt(z.delta)+' J'],['중력이 한 일',fmt(-z.delta)+' J']]:[['중력 위치에너지',fmt(z.U)+' J'],['운동에너지',fmt(z.K)+' J'],['중력이 한 일',fmt(z.W)+' J'],[c.mode==='lift'?'구동력이 한 일':'총 역학 에너지',fmt(c.mode==='lift'?z.Wext:z.E)+' J']];
+  $('metrics').innerHTML=rows.map(([a,b])=>'<div><small>'+a+'</small><b>'+b+'</b></div>').join('');
+  let vals=c.mode==='ref'?[[z.U1,'U₁',cols[0]],[z.U2,'U₂',cols[1]]]:[[z.U,'위치 U',cols[0]],[z.K,'운동 K',cols[1]]];const range=s?Math.max(.01,.5*c.k*c.x*c.x):Math.max(1,c.m*c.g*20,c.m*30);$('bars').innerHTML=vals.map(([v,l,col])=>'<div class="energyrow"><span>'+l+'</span><div class="bartrack" style="position:relative"><i style="position:absolute;left:'+(v<0?50-50*Math.abs(v)/range:50)+'%;width:'+Math.min(50,50*Math.abs(v)/range)+'%;background:'+col+'"></i><i style="position:absolute;left:50%;width:1px;background:#edf5ff"></i></div><b>'+fmt(v,3)+' J</b></div>').join('');
+  $('equation').textContent=s?'U = ½kx² · F = −kx · T = '+fmt(z.T,3)+' s':c.mode==='ref'?'ΔU = mg(y₂−y₁) = '+fmt(z.delta)+' J · 영점과 무관':'U = mg(y−y₀) · ΔU = '+fmt(z.dU)+' J · Wg = '+fmt(z.W)+' J';
+  $('modelNote').textContent=s?'이상적인 훅의 법칙 · 용수철 질량, 마찰, 바퀴 회전 에너지 제외. 초기 변형량에서 정지 출발.':c.mode==='lift'?'양방향 구동 장치가 지정한 부드러운 경로를 만듭니다. 시작과 끝 속력은 0. 구동력이 한 일 = ΔU + ΔK.':c.mode==='fall'?'공기저항 없음. y=0 도달 직전까지 계산하며 충돌은 제외합니다. g=0이면 4초 동안 정지 관찰.':'물체는 고정하고 기준면만 이동합니다. 두 위치 간 ΔU와 중력이 한 일은 그대로입니다.';
+  $('now').textContent=osc?'t '+fmt(t,2)+' s · '+Math.floor(t/end)+'회 · T '+fmt(end,3)+' s':fmt(t,2)+' / '+fmt(end,2)+' s · '+(running?'진행 중':t>=end?'완료':'대기');$('seek').value=1000*(osc?t%end:t)/end;
+  $('start').disabled=running;$('pause').disabled=!running;$('start').textContent=running?'진행 중':c.mode==='spring'?'▶ 자유 진동 시작':!osc&&t>=end?'▶ 다시 시작':'▶ 시작 / 재개';
+  $('mini').innerHTML=seriesGraph(c.mode==='spring'||c.mode==='ref'?'relation':'time',false);
+ }else if(view==='graph'){
+  $('g1').innerHTML=seriesGraph('relation',true);$('g2').innerHTML=seriesGraph('force',true);$('g3').innerHTML=seriesGraph('time',true);$('legend').textContent=c.mode==='ref'?'시간 그래프: U₁·U₂ (기준면 변화) · 저장 조건은 같은 실험 유형만 표시':'시간 그래프: 주황 U · 파랑 K · 초록 E · 저장 조건은 같은 실험 유형만 표시';$('graphStatus').textContent=fmt(t,3)+' s · '+(running?'진행 중':'정지/완료');compare();
+ }
+}
+$('tabs').innerHTML=tabs.map(([m,l])=>'<button role="tab" data-mode="'+m+'" aria-selected="false">'+l+'</button>').join('');$('tabs').querySelectorAll('button').forEach(b=>b.onclick=()=>switchTab(b.dataset.mode));
+$('start').onclick=start;$('pause').onclick=()=>{stop();render()};$('step').onclick=()=>{stop();if(c.mode==='spring'){modes.osc={...c,mode:'osc'};switchTab('osc')}t=c.mode==='osc'?t+period(c)/24:Math.min(duration(c),t+.05);render()};$('restart').onclick=rewind;$('reset').onclick=()=>{stop();modes=Object.fromEntries(Object.entries(defaults).map(([k,v])=>[k,{...v}]));c=modes.lift;t=0;rate=1;saved={A:null,B:null};$('rate').value='1';$('prediction').value='';$('notice').textContent='';$('reveal').open=false;view='experiment';controls();render()};$('rate').onchange=e=>{rate=+e.target.value;last=0};$('seek').oninput=e=>{stop();t=duration(c)*e.target.value/1000;render()};
+for(const k of ['A','B'])$('save'+k).onclick=()=>{saved[k]={...c};$('notice').textContent='조건 '+k+' 저장 완료'};$('clear').onclick=()=>{saved={A:null,B:null};render()};for(const k of ['A','B'])$('load'+k).onclick=()=>{if(!saved[k])return;stop();modes[saved[k].mode]={...saved[k]};c=modes[saved[k].mode];t=0;view='experiment';controls();render()};
+$('graphPause').onclick=()=>{stop();render()};$('graphStart').onclick=start;document.addEventListener('visibilitychange',()=>{if(document.hidden){stop();render()}});
+function point(e){const svg=$('scene'),p=svg.createSVGPoint();p.x=e.clientX;p.y=e.clientY;return p.matrixTransform(svg.getScreenCTM().inverse())}
+$('scene').addEventListener('pointerdown',e=>{const target=e.target.closest('[data-drag]');if(!target)return;let k=target.dataset.drag;if(k==='ref')k='y0';stop();const p=point(e);drag={k,x:p.x,y:p.y,value:c[k]};t=0;$('scene').setPointerCapture(e.pointerId);e.preventDefault()});
+$('scene').addEventListener('pointermove',e=>{if(!drag)return;let p=point(e),k=drag.k;c[k]=k==='x'?clamp(Math.round((drag.value+(p.x-drag.x)/740)*200)/200,-.3,.3):clamp(Math.round((drag.value-(p.y-drag.y)/15)*10)/10,c.mode==='fall'&&k==='y2'?.5:-5,15);if(k==='y0'&&c.mode==='ref')c.ref2=c.y0;controls();render()});
+for(const ev of ['pointerup','pointercancel','lostpointercapture'])$('scene').addEventListener(ev,()=>{if(drag){drag=null;$('notice').textContent='드래그 완료 · 시작하여 관찰하세요.'}});
+controls();render();
+</script></body></html>
