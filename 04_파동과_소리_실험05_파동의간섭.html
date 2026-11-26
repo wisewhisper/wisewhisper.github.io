@@ -1,4 +1,15 @@
 <!doctype html>
+<!-- WISEWHISPER-COPYRIGHT
+© 2026 WiseWhisper 온라인 과학실험실
+제작: 최성규 (WiseWhisper)
+https://wisewhisper.github.io/
+
+이용 조건
+1. 교육 및 비영리 목적의 개인·학교 수업 이용, 원본 파일의 다운로드와 수업 참여자에게 필요한 복사를 허용합니다. 원본 사이트 링크 공유도 허용합니다.
+2. 저작권 및 제작자 표시를 유지해야 합니다. 권리자의 별도 허락 없이 공개 재배포(다른 사이트에 파일 재게시 포함), 상업적 이용 및 제작자 표시 삭제·변경을 금지합니다.
+3. 이 조건은 WiseWhisper가 직접 제작하고 권리를 보유한 콘텐츠에 적용됩니다. 제3자 자료·라이브러리·폰트 등은 각 원래의 라이선스와 권리자의 이용 조건이 우선합니다. 법령상 허용되는 이용은 제한하지 않습니다.
+-->
+
 <html lang="ko">
 <head>
 <meta charset="utf-8">
@@ -215,7 +226,7 @@ body.interference-v2 #field{aspect-ratio:1.75}
 <section class="card"><h2>관측점 분석</h2><div class="readouts"><div class="readout"><span class="label">파동의 속력 v</span><strong id="speedVal"></strong></div><div class="readout"><span class="label">시간 t</span><strong id="timeVal"></strong></div><div class="readout"><span class="label">거리 r₁ / r₂</span><strong id="distVal"></strong></div><div class="readout"><span class="label">경로차 Δr = r₂ − r₁</span><strong id="diffVal"></strong></div></div><div id="status" class="status" aria-live="polite"></div></section>
 <section class="card chartcard"><h2>관측점에서의 변위와 중첩</h2><canvas id="graph" aria-label="관측점의 두 파동 변위와 합성 파동 변위를 시간에 따라 그린 그래프"></canvas><div class="key"><span style="--c:#63b7ff">S₁ 파동</span><span style="--c:#ffad74">S₂ 파동</span><span style="--c:#8af0cf">합성 파동</span></div><small>가로축: 시간(현재 시각을 중심으로 약 2주기) · 세로축: 변위. 세로 눈금은 현재 진폭에 맞춰 조정됩니다.</small></section>
 <div class="lower"><section class="card"><h2>핵심 개념</h2><p>관측점에서 두 파동의 변위를 더하면 간섭이 일어납니다. 두 파원이 같은 위상(φ₂ = 0°)으로 출발할 때, 경로차가 다음 조건을 만족하면:</p><div class="formula"><b>보강 간섭</b>　|Δr| = mλ　(m = 0, 1, 2, …)</div><div class="formula"><b>상쇄 간섭</b>　|Δr| = (m + ½)λ　(m = 0, 1, 2, …)</div><p class="note">초기 위상차가 있으면 두 파동의 도착 위상차 δ = φ₂ − 2πΔr/λ를 사용합니다. δ가 2mπ이면 보강, (2m+1)π이면 상쇄입니다. 그 밖의 위치에서도 간섭 정도가 연속적으로 달라집니다. 화면의 파원은 진폭이 거리와 무관한 이상화된 파동입니다.</p></section><section class="card"><h2>학생 탐구 활동</h2><ol class="activity"><li>파원의 수직이등분선 위에 관측점을 놓고 r₁, r₂, Δr을 비교하세요.</li><li>관측점을 옮겨 |Δr|/λ가 ½에 가까운 점을 찾으세요. 합성 파형과 간섭 무늬를 확인하세요.</li><li>파장과 파원 간격을 각각 바꾼 뒤, 상쇄 간섭이 나타나는 위치가 어떻게 달라지는지 설명하세요.</li><li>S₂의 초기 위상을 180°로 바꾸면 수직이등분선에서 무엇이 나타날지 예측하고 확인하세요.</li></ol><p class="note"><b>생각해 보기:</b> 진동수를 바꾸면 간섭 무늬의 위치도 바뀔까요? 같은 매질에서는 속력이 일정하므로 진동수가 증가하면 파장이 짧아집니다.</p></section></div>
-</main><footer>모형: uᵢ(r,t) = A sin(2π(ft − r/λ)); 시간 평균 세기 표시는 (합성 진폭/2A)² = cos²(δ/2), δ = φ₂ − 2πΔr/λ. 파원은 점으로, 매질은 균일한 평면으로 가정합니다.</footer>
+</main><footer>모형: uᵢ(r,t) = A sin(2π(ft − r/λ)); 시간 평균 세기 표시는 (합성 진폭/2A)² = cos²(δ/2), δ = φ₂ − 2πΔr/λ. 파원은 점으로, 매질은 균일한 평면으로 가정합니다.<div data-ww-copyright="2026" style="font:11px/1.45 system-ui,sans-serif;color:inherit;opacity:.84;padding:4px 8px;text-align:center;max-width:100%;flex-basis:100%;box-sizing:border-box;overflow-wrap:anywhere">© 2026 WiseWhisper 온라인 과학실험실 · 제작: 최성규 (WiseWhisper) · 교육·비영리 이용 허용 · 저작권 표시 삭제·무단 공개 재배포·상업적 이용 금지 · <a href="https://wisewhisper.github.io/" target="_blank" rel="noopener" style="color:inherit">원본 사이트</a></div></footer>
 <script>
 (()=>{'use strict';
 const $=id=>document.getElementById(id), field=$('field'),ctx=field.getContext('2d'),graph=$('graph'),gx=graph.getContext('2d');
