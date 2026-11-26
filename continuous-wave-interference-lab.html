@@ -77,7 +77,7 @@ canvas{display:block;width:100%;height:100%;border-radius:7px;background:#081321
       <button class="action" id="meet">만남 1.5T</button>
       <button class="action" id="peak">진폭 2A 순간</button>
       <button class="action" id="oppositeMeet" title="180°로 설정하고 중앙에서 마루와 골이 만나는 순간을 표시">마루·골 만남 (180°)</button>
-      <button class="action" id="steady">정상파 6.75T</button>
+      <button class="action" id="steady">정상파 11.75T</button>
       <span class="readout" id="timeLabel">t = 0.00T</span>
       <span class="readout accent" id="stageLabel">접근 중</span>
       <input type="range" min="0" max="12" step="0.25" value="0" id="seek" aria-label="시간을 4분의 1주기 단위로 변경">
@@ -86,13 +86,13 @@ canvas{display:block;width:100%;height:100%;border-radius:7px;background:#081321
       <label>재생 속도 <select id="speed"><option value="0.5">느리게 (0.5T/s)</option><option value="0.8" selected>보통 (0.8T/s)</option><option value="1.6">빠르게 (1.6T/s)</option></select></label>
       <label>관측 위치 x = <output id="probeLabel">0.00λ</output> <input id="probe" type="range" min="-1" max="1" step="0.25" value="0" aria-label="시간 그래프 관측 위치 선택"></label>
       <label id="phaseControl">파원 B의 위상차 <select id="phaseValue"><option value="0">0° (같은 위상)</option><option value="45">45°</option><option value="90">90°</option><option value="135">135°</option><option value="180">180° (반대 위상)</option><option value="225">225°</option><option value="270">270°</option><option value="315">315°</option><option value="360">360°</option></select></label>
-      <span class="smallpush">각 파동 A=1 · 합성 최대 2A · λ=1 m · x축 눈금 1칸 = 1 m</span>
+      <span class="smallpush">각 파동 A=1 · 합성 최대 2A · λ=1 m · 큰 칸 1 m · 작은 눈금 0.25 m · 범위 −10~+10 m</span>
     </div>
 
     <div class="workspace" id="workspace">
       <section class="plotcard">
         <h2 id="mainTitle">공간에 따른 변위: 파동 A / B / 합성파</h2>
-        <p class="blurb" id="mainDesc">각 파동을 별도 줄에 표시합니다. 가로축은 중앙 0 m를 기준으로 왼쪽 음수, 오른쪽 양수이며, 세로축은 변위 y입니다. 연속파의 앞부분이 서로 만나면서 중첩 범위가 넓어집니다.</p>
+        <p class="blurb" id="mainDesc">각 파동을 별도 줄에 표시합니다. 가로축 −10 m부터 +10 m까지, 중앙은 0 m입니다. 큰 칸은 1 m, 그 사이 ¼주기에 대응하는 0.25 m 눈금을 표시합니다. 연속파의 앞부분이 서로 만나면서 중첩 범위가 넓어집니다.</p>
         <div class="canvas-wrap"><canvas id="mainCanvas" role="img" aria-label="두 연속파가 마주 오며 중첩되는 공간 그래프"></canvas></div>
         <div class="legend"><span class="item"><i class="bullet"></i>파동 A</span><span class="item b"><i class="bullet"></i>파동 B</span><span class="item s"><i class="bullet"></i>합성파</span><span class="item m"><i class="bullet"></i>보강점·마디·배 표시</span></div>
       </section>
@@ -110,7 +110,7 @@ canvas{display:block;width:100%;height:100%;border-radius:7px;background:#081321
   <section class="concept" id="conceptArea" hidden>
     <h2>개념 정리: 연속된 두 파동이 만나면 어떻게 될까?</h2>
     <div class="concept-grid">
-      <div><h3>1. 파원은 계속 진동한다</h3><p>왼쪽 파원 A(x = −5λ)는 오른쪽으로, 오른쪽 파원 B(x = +5λ)는 왼쪽으로 <b>같은 진폭 A, 파장 λ, 주기 T, 속력 v</b>의 정현파를 끊임없이 발생시킵니다. 처음에는 각 파동의 앞부분이 떨어져 있지만, t = 1.5T에 중앙에서 처음 만나고, t ≈ 6.5T 이후에는 두 파동이 전 영역에서 중첩됩니다.</p></div>
+      <div><h3>1. 파원은 계속 진동한다</h3><p>왼쪽 파원 A(x = −10λ)는 오른쪽으로, 오른쪽 파원 B(x = +10λ)는 왼쪽으로 <b>같은 진폭 A, 파장 λ, 주기 T, 속력 v</b>의 정현파를 끊임없이 발생시킵니다. 처음에는 각 파동의 앞부분이 떨어져 있지만, t = 1.5T에 중앙에서 처음 만나고, t ≈ 11.5T 이후에는 두 파동이 전 영역에서 중첩됩니다.</p></div>
       <div><h3>2. 합성파는 변위의 합이다</h3><p>같은 위치 x, 같은 시간 t에서 <b>각 파동의 변위를 부호까지 포함하여 더합니다.</b> 파동은 충돌해 반사되는 것이 아니라 서로 통과해 본래 진행 방향으로 계속 갑니다.</p></div>
       <div><h3>3. 보강점과 상쇄점</h3><p>같은 위상일 때 공간에 고정되는 <b>배(antinode)</b>에서는 진폭이 2A이고, <b>마디(node)</b>에서는 변위가 늘 0입니다. 2A는 항상 위로 2만큼 올라가 있다는 뜻이 아니라, 그 지점이 진동하며 도달할 수 있는 최대 변위의 크기를 의미합니다.</p></div>
       <div><h3>4. ¼주기로 움직여 관찰</h3><p>완전 중첩 상태에서 배의 순간 변위는 0 → +2A → 0 → −2A → 0 순서로 바뀔 수 있습니다. 반면 마디의 변위는 항상 0이며, 이 차이가 정상파의 핵심 특징입니다.</p></div>
@@ -121,11 +121,11 @@ canvas{display:block;width:100%;height:100%;border-radius:7px;background:#081321
 yB(x,t) = A sin[2π(t/T + x/λ − 1.5)]
 
 y합(x,t) = 2A sin[2π(t/T − 1.5)] cos(2πx/λ)</div>
-    <p>이 식은 두 파동이 <b>이미 도달해 겹친 영역</b>에 적용됩니다. 아직 파동이 도달하지 않은 지점의 변위는 0입니다. 시간의 기준은 양쪽 파동이 t = 0일 때 이미 파원에서 3.5λ만큼 진행한 상태로 잡았습니다.</p>
+    <p>이 식은 두 파동이 <b>이미 도달해 겹친 영역</b>에 적용됩니다. 아직 파동이 도달하지 않은 지점의 변위는 0입니다. 시간의 기준은 양쪽 파동이 t = 0일 때 이미 파원에서 8.5λ만큼 진행한 상태로 잡았습니다.</p>
     <h3>마디와 배의 위치</h3>
     <p><b>배:</b> x = nλ/2 (n은 정수), 최대 진폭 2A. <b>마디:</b> x = (2n+1)λ/4, 항상 변위 0. 이웃한 마디 사이 거리와 이웃한 배 사이 거리는 모두 λ/2입니다.</p>
     <h3>확인 질문</h3>
-    <p>① t = 1.75T에 중앙 x = 0에서 yA, yB, y합을 비교해 보세요. ② t = 6.75T 이후 x = 0.25λ에서 합성파가 왜 움직이지 않는지 살펴보세요. ③ 탭 ④에서 파원 B를 180° 늦추거나 앞당기면 마디와 배의 위치가 어떻게 바뀌나요?</p>
+    <p>① t = 1.75T에 중앙 x = 0에서 yA, yB, y합을 비교해 보세요. ② t = 11.75T 이후 x = 0.25λ에서 합성파가 왜 움직이지 않는지 살펴보세요. ③ 탭 ④에서 파원 B를 180° 늦추거나 앞당기면 마디와 배의 위치가 어떻게 바뀌나요?</p>
     <p class="keyfoot">모형의 단위: λ = 1, T = 1, v = 1, A = 1. 이상적인 선형 매질을 가정하며, 두 파원은 동시에 파동을 방출하며 위상차가 달라도 파면의 속력과 도달 시점은 같습니다. 초기 짧은 과도 구간은 부드럽게 표시하고 도달 전 빈 공간은 파형 없이 둡니다.</p>
   </section>
 </div>
@@ -133,23 +133,30 @@ y합(x,t) = 2A sin[2π(t/T − 1.5)] cos(2πx/λ)</div>
 (()=>{
 'use strict';
 const C={bg:'#081321',grid:'#2b4158',axis:'#ccdeee',sub:'#a4bdd5',a:'#4bc6ff',b:'#ffba62',s:'#66efa5',mark:'#ff79d1',guide:'#8198ae'};
-const TAU=2*Math.PI, FROM=-5, TO=5, START_LEAD=3.5, FRONT_MEET=1.5, FULL=6.5;
+const TAU=2*Math.PI, FROM=-10, TO=10, START_LEAD=8.5, FRONT_MEET=1.5, FULL=11.5;
 const $=id=>document.getElementById(id);
 const main=$('mainCanvas'),side=$('sideCanvas');const g=main.getContext('2d'),h=side.getContext('2d');
 const state={tab:'approach',t:0,play:false,last:0,raf:null,speed:.8,probe:0,delta:0,extent:12};
 let W=900,H=500,SW=450,SH=500;
 function clamp(x,a,b){return Math.max(a,Math.min(b,x))}
 function reached(x,time,which){return which===0 ? time+START_LEAD-(x-FROM) : time+START_LEAD-(TO-x)}
-// A phase offset changes displacement, not the time when the wavefront arrives.
-// Both fronts start together; smooth source turn-on avoids a discontinuity.
+// Finite wave train: draw the first exact sine zero crossing rather than
+// tapering a crest into a distorted bump. A and B share the same travel speed.
+// 0° and 180° both start at age=0, so their fronts meet simultaneously.
+// 90° begins at the first zero crossing (age=0.25T) without altering phase.
+function frontOnset(which,delta=state.delta){
+ if(which===0)return 0;
+ const phaseRemainder=((delta/Math.PI)%1+1)%1;
+ return ((1-phaseRemainder)%1)*.5;
+}
 function activeWave(x,time,which,delta=state.delta){
- return x>=FROM-1e-8 && x<=TO+1e-8 && reached(x,time,which)>0;
+ return x>=FROM-1e-8&&x<=TO+1e-8&&
+   reached(x,time,which)>frontOnset(which,delta)+1e-10;
 }
 function wave(x,time,which,delta=state.delta){
  if(!activeWave(x,time,which,delta))return 0;
  const age=reached(x,time,which);
- const fade=age>=.20?1:.5-.5*Math.cos(Math.PI*age/.20);
- return fade*Math.sin(TAU*age+(which===1?delta:0));
+ return Math.sin(TAU*age+(which===1?delta:0));
 }
 function sum(x,time,d=state.delta){return wave(x,time,0,d)+wave(x,time,1,d)}
 function xmap(x,x0,x1,r){return r.x+(x-x0)*(r.w/(x1-x0))}
@@ -160,7 +167,17 @@ function text(ctx,s,x,y,color=C.sub,font='12px system-ui',align='left'){
 function dash(ctx,arr){ctx.setLineDash(arr)}
 function axes(ctx,r,xi,xa,yi,ya,xt,yt,opts={}){
  ctx.strokeStyle=C.grid;ctx.lineWidth=1;
- xt.forEach(v=>{const x=xmap(v,xi,xa,r);ctx.save();ctx.globalAlpha=1;ctx.beginPath();ctx.moveTo(x,r.y);ctx.lineTo(x,r.y+r.h);ctx.stroke();ctx.restore()});
+ xt.forEach(v=>{
+ const x=xmap(v,xi,xa,r),major=Math.abs(v-Math.round(v))<1e-7;
+ ctx.save();ctx.strokeStyle=major?'#809dbb':'#59758f';
+ ctx.globalAlpha=major?1:.85;ctx.lineWidth=major?1.4:1;
+ ctx.beginPath();ctx.moveTo(x,r.y);ctx.lineTo(x,r.y+r.h);ctx.stroke();ctx.restore();
+ if(opts.xNumbersOnAxis&&yi<=0&&ya>=0){
+  const y=ymap(0,yi,ya,r);
+  ctx.save();ctx.strokeStyle=major?'#eef8ff':'#9abbd4';ctx.lineWidth=major?1.7:1.2;
+  ctx.beginPath();ctx.moveTo(x,y-(major?5:3));ctx.lineTo(x,y+(major?5:3));ctx.stroke();ctx.restore();
+ }
+});
  yt.forEach(v=>{const y=ymap(v,yi,ya,r);ctx.beginPath();ctx.moveTo(r.x,y);ctx.lineTo(r.x+r.w,y);ctx.stroke()});
  ctx.strokeStyle=C.axis;ctx.lineWidth=1.3;
  if(yi<=0&&ya>=0){let y=ymap(0,yi,ya,r);ctx.beginPath();ctx.moveTo(r.x,y);ctx.lineTo(r.x+r.w,y);ctx.stroke()}
@@ -169,11 +186,13 @@ function axes(ctx,r,xi,xa,yi,ya,xt,yt,opts={}){
  if(opts.xLabels!==false)xt.filter(v=>!opts.xLabelStep||Math.abs(v/opts.xLabelStep-Math.round(v/opts.xLabelStep))<1e-6).forEach(v=>{
  const px=xmap(v,xi,xa,r),py=opts.xNumbersOnAxis&&yi<=0&&ya>=0?ymap(0,yi,ya,r)+13:r.y+r.h+13;
  const label=opts.xText?opts.xText(v):String(v);
+ const major=Math.abs(v-Math.round(v))<1e-7;
+ if(!major&&opts.xNumbersOnAxis&&Math.abs(v)>1.001)return;
  if(opts.xNumbersOnAxis){
-  ctx.save();ctx.font='bold 11px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.save();ctx.font=(major?'bold 11px':'10px')+' system-ui';ctx.textAlign='center';ctx.textBaseline='middle';
   const tw=ctx.measureText(label).width;
   ctx.fillStyle='rgba(5,19,35,.88)';ctx.fillRect(px-tw/2-3,py-7,tw+6,14);
-  ctx.fillStyle=v===0?'#fff5ad':'#eef6ff';ctx.fillText(label,px,py);ctx.restore();
+  ctx.fillStyle=v===0?'#fff5ad':major?'#eef6ff':'#9fddff';ctx.fillText(label,px,py);ctx.restore();
  }else text(ctx,label,px,py,C.sub,'11px system-ui','center');
 });
  if(opts.xTitle)text(ctx,opts.xTitle,r.x+r.w/2,r.y+r.h+32,C.axis,'12px system-ui','center');
@@ -208,15 +227,15 @@ function curveFromTime(ctx,r,ti,tf,yi,ya,fn,color,style='solid',width=2.4){
 function ticks(a,b,step){let out=[];for(let n=Math.ceil((a-1e-8)/step);n*step<=b+1e-8;n++)out.push(+((n*step).toFixed(6)));return out}
 function fmt(t){return (Math.round(t*100)/100).toFixed(2)}
 function drawSourceFronts(ctx,r,xi,xa,yi,ya,withLabels=true){
- const l=FROM+START_LEAD+state.t,
-       rr=TO-START_LEAD-state.t;
+ const l=FROM+START_LEAD+state.t-frontOnset(0,0),
+       rr=TO-START_LEAD-state.t+frontOnset(1,state.delta);
  // left/right emission fronts, clipped to domain; the front never disappears, it travels beyond the opposite source
  const valid=[{x:l,col:C.a,label:'A 파면 →'},{x:rr,col:C.b,label:'← B 파면'}];
  valid.forEach(o=>{if(o.x<xi||o.x>xa)return;const px=xmap(o.x,xi,xa,r);ctx.save();dash(ctx,[4,5]);ctx.strokeStyle=o.col;ctx.globalAlpha=.75;ctx.beginPath();ctx.moveTo(px,r.y);ctx.lineTo(px,r.y+r.h);ctx.stroke();ctx.restore();if(withLabels)text(ctx,o.label,px+3,r.y+9,o.col,'11px system-ui')});
 }
 function overlapShading(ctx,r,xi,xa){
- const left=Math.max(xi,TO-START_LEAD-state.t),
-       right=Math.min(xa,FROM+START_LEAD+state.t);
+ const left=Math.max(xi,TO-START_LEAD-state.t+frontOnset(1,state.delta)),
+       right=Math.min(xa,FROM+START_LEAD+state.t-frontOnset(0,0));
  if(right<=left)return;
  ctx.fillStyle='rgba(102,239,165,.07)';ctx.fillRect(xmap(left,xi,xa,r),r.y,xmap(right,xi,xa,r)-xmap(left,xi,xa,r),r.h)
 }
@@ -256,7 +275,7 @@ function plotSpaceTriple(){
   const panelH=available*fractions[i];
   const r={x:l,y:panelTops[i]+23,w:width,h:Math.max(38,panelH-33)};
   overlapShading(g,r,xi,xa);
-  axes(g,r,xi,xa,-s.range,s.range,ticks(-5,5,1),i===2?[-2,-1,0,1,2]:[-1,0,1],{xLabels:true,xNumbersOnAxis:true,xLabelStep:1,xText:v=>String(v),xTitle:i===2?'위치 x (m) · 중심 0 m':undefined,yLabels:true});
+  axes(g,r,xi,xa,-s.range,s.range,ticks(-10,10,.25),i===2?[-2,-1,0,1,2]:[-1,0,1],{xLabels:true,xNumbersOnAxis:true,xLabelStep:W>=700?.25:1,xText:v=>String(+v.toFixed(2)),xTitle:i===2?'위치 x (m) · −10 ~ +10 m / 큰 칸 1 m, 작은 눈금 0.25 m':undefined,yLabels:true});
   if(i===2){
     g.save();dash(g,[5,5]);g.strokeStyle='rgba(255,121,209,.65)';
     for(let v of [-2,2]){const y=ymap(v,-s.range,s.range,r);g.beginPath();g.moveTo(r.x,y);g.lineTo(r.x+r.w,y);g.stroke()}g.restore();
@@ -286,7 +305,7 @@ function plotSideTime(xprobe=state.probe){
 function drawOverlay(xi=-1.5,xa=1.5,phase=0,withGuides=true){
  const left=56,right=17,top=27,bottom=49,r={x:left,y:top,w:W-left-right,h:H-top-bottom};
  overlapShading(g,r,xi,xa);
- axes(g,r,xi,xa,-2.25,2.25,ticks(xi,xa,1),[-2,-1,0,1,2],{xLabels:true,xNumbersOnAxis:true,xLabelStep:1,xTitle:'위치 x (m)',yTitle:'변위 y (A 단위)',xText:x=>String(x)});
+ axes(g,r,xi,xa,-2.25,2.25,ticks(xi,xa,.25),[-2,-1,0,1,2],{xLabels:true,xNumbersOnAxis:true,xLabelStep:.25,xTitle:'위치 x (m)',yTitle:'변위 y (A 단위)',xText:x=>String(+x.toFixed(2))});
  if(withGuides)markNodes(g,r,xi,xa,-2.25,2.25,phase,true);
  plot(g,r,xi,xa,-2.25,2.25,x=>wave(x,state.t,0,phase),C.a,'dashed',2.8,true,0);
  plot(g,r,xi,xa,-2.25,2.25,x=>wave(x,state.t,1,phase),C.b,'dotted',3.0,true,1,phase);
@@ -301,7 +320,7 @@ function drawOverlay(xi=-1.5,xa=1.5,phase=0,withGuides=true){
 function drawStanding(){
  const xi=-2.2,xa=2.2,left=54,right=15,top=22,bottom=46,r={x:left,y:top,w:W-left-right,h:H-top-bottom};
  overlapShading(g,r,xi,xa);
- axes(g,r,xi,xa,-2.25,2.25,ticks(-2,2,1),[-2,-1,0,1,2],{xNumbersOnAxis:true,xLabelStep:1,xTitle:'위치 x (m)',yTitle:'변위 y (A 단위)',xText:v=>String(v)});
+ axes(g,r,xi,xa,-2.25,2.25,ticks(-2,2,.25),[-2,-1,0,1,2],{xNumbersOnAxis:true,xLabelStep:.25,xTitle:'위치 x (m)',yTitle:'변위 y (A 단위)',xText:v=>String(+v.toFixed(2))});
  markNodes(g,r,xi,xa,-2.25,2.25,0,true);
  if(state.t>=FULL){
   plot(g,r,xi,xa,-2.25,2.25,x=>2*Math.abs(Math.cos(TAU*x)),C.mark,'dashed',1.7);
@@ -330,9 +349,9 @@ function drawComparison(){
 function drawPhase(){
  const delta=state.delta,xi=-2,xa=2,left=53,right=14,top=29,bottom=47,r={x:left,y:top,w:W-left-right,h:H-top-bottom};
  overlapShading(g,r,xi,xa);
- axes(g,r,xi,xa,-2.25,2.25,ticks(-2,2,1),[-2,-1,0,1,2],{xNumbersOnAxis:true,xLabelStep:1,xTitle:'위치 x (m)',yTitle:'변위 y (A 단위)',xText:v=>String(v)});
+ axes(g,r,xi,xa,-2.25,2.25,ticks(-2,2,.25),[-2,-1,0,1,2],{xNumbersOnAxis:true,xLabelStep:.25,xTitle:'위치 x (m)',yTitle:'변위 y (A 단위)',xText:v=>String(+v.toFixed(2))});
  markNodes(g,r,xi,xa,-2.25,2.25,delta,true);
- if(state.t>=8){
+ if(state.t>=FULL){
   plot(g,r,xi,xa,-2.25,2.25,x=>2*Math.abs(Math.cos(TAU*x+delta/2)),C.mark,'dashed',1.3);
   plot(g,r,xi,xa,-2.25,2.25,x=>-2*Math.abs(Math.cos(TAU*x+delta/2)),C.mark,'dashed',1.3);
  }
@@ -365,7 +384,7 @@ function updateMessage(){
   const a=wave(0,t,0,0),b=wave(0,t,1,0);
   s=`중첩부를 확대했습니다. 중앙 x=0에서 현재 A=${fmt(a)}A, B=${fmt(b)}A, 합성=${fmt(a+b)}A입니다. 분홍 점선 ±2A는 진폭 한계이며 순간 변위는 시간에 따라 변합니다.`;
  } else if(tab==='standing'){
-  s=t<FULL?'정상파가 공간 전체에 자리 잡는 중입니다. [정상파 6.75T] 버튼으로 충분히 중첩된 뒤의 마디·배를 확인해 보세요.':'분홍색 점선은 정상파 진폭의 경계입니다. 배(x=0)는 +2A↔−2A로 진동하지만 마디(x=0.25λ)는 항상 변위 0을 유지합니다.';
+  s=t<FULL?'정상파가 공간 전체에 자리 잡는 중입니다. [정상파 11.75T] 버튼으로 충분히 중첩된 뒤의 마디·배를 확인해 보세요.':'분홍색 점선은 정상파 진폭의 경계입니다. 배(x=0)는 +2A↔−2A로 진동하지만 마디(x=0.25λ)는 항상 변위 0을 유지합니다.';
  } else if(tab==='phase'){
   const degree=Math.round(state.delta*180/Math.PI);
   s=degree===180
