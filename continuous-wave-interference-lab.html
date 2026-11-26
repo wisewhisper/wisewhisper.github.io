@@ -43,7 +43,16 @@ canvas{display:block;width:100%;height:100%;border-radius:7px;background:#081321
 @media(max-width:940px){.app{padding:10px}.workspace{grid-template-columns:1fr;height:auto}.plotcard{height:360px}.plotcard:nth-child(2){height:330px}.title-legend{gap:8px}.subbar .smallpush{margin-left:0}.concept-grid{grid-template-columns:1fr}}
 @media(max-width:540px){.plotcard{height:315px}.plotcard:nth-child(2){height:315px}.toolbar{gap:5px}.toolbar .action{font-size:12px;padding:8px}.tabs button{font-size:12px;padding:8px 10px} .readout{font-size:12px}}
 </style>
-</head>
+<style id="wave-quartergrid-smoothfront-v2">
+@media(min-width:941px){
+ .workspace{height:clamp(490px,calc(100dvh - 246px),810px)}
+ .plotcard{padding:8px}
+ .plotcard .blurb{font-size:11px;line-height:1.32}
+}
+.plotcard{background:#09182b}
+.canvas-wrap canvas{background:#061322}
+.message{border-left-color:#70eabb}
+</style></head>
 <body>
 <div class="app">
   <header>
@@ -65,9 +74,9 @@ canvas{display:block;width:100%;height:100%;border-radius:7px;background:#081321
       <button class="action" id="prev">− ¼T</button>
       <button class="action primary" id="next">+ ¼T</button>
       <button class="action" id="play">▶ 재생</button>
-      <button class="action" id="meet">만남 3T</button>
+      <button class="action" id="meet">만남 1.5T</button>
       <button class="action" id="peak">진폭 2A 순간</button>
-      <button class="action" id="steady">정상파 8.25T</button>
+      <button class="action" id="steady">정상파 6.75T</button>
       <span class="readout" id="timeLabel">t = 0.00T</span>
       <span class="readout accent" id="stageLabel">접근 중</span>
       <input type="range" min="0" max="12" step="0.25" value="0" id="seek" aria-label="시간을 4분의 1주기 단위로 변경">
@@ -76,7 +85,7 @@ canvas{display:block;width:100%;height:100%;border-radius:7px;background:#081321
       <label>재생 속도 <select id="speed"><option value="0.5">느리게 (0.5T/s)</option><option value="0.8" selected>보통 (0.8T/s)</option><option value="1.6">빠르게 (1.6T/s)</option></select></label>
       <label>관측 위치 x = <output id="probeLabel">0.00λ</output> <input id="probe" type="range" min="-1" max="1" step="0.25" value="0" aria-label="시간 그래프 관측 위치 선택"></label>
       <label id="phaseControl">파원 B의 위상차 <select id="phaseValue"><option value="0">0° (같은 위상)</option><option value="45">45°</option><option value="90">90°</option><option value="135">135°</option><option value="180">180° (반대 위상)</option><option value="225">225°</option><option value="270">270°</option><option value="315">315°</option><option value="360">360°</option></select></label>
-      <span class="smallpush">A = B = 1 · λ = 1 · T = 1 · v = λ/T · 양쪽 동일 속력</span>
+      <span class="smallpush">각 파동 A=1 · 합성 최대 2A · 작은 눈금 λ/4 · 시간 눈금 T/4</span>
     </div>
 
     <div class="workspace" id="workspace">
@@ -93,29 +102,29 @@ canvas{display:block;width:100%;height:100%;border-radius:7px;background:#081321
         <div class="legend"><span class="item"><i class="bullet"></i>yA(t)</span><span class="item b"><i class="bullet"></i>yB(t)</span><span class="item s"><i class="bullet"></i>yA(t)+yB(t)</span></div>
       </section>
     </div>
-    <div class="message" id="message" role="status" aria-live="polite">처음에는 두 연속파의 앞부분이 떨어져 있습니다. ¼T 버튼을 누르면 각각 λ/4만큼 나아갑니다.</div>
+    <div class="message" id="message" role="status" aria-live="polite">파면 A(-1.5λ), B(+1.5λ)에서 출발합니다. 두 파동은 가운데로 이동합니다. ¼T 버튼을 누르면 각각 λ/4만큼 나아갑니다.</div>
     <p class="keyfoot">조작: ←/→ = ¼T씩 이동, 스페이스 = 재생·일시정지. 재생은 12T 이후에도 계속됩니다. 그래프에서 ±2A 눈금은 합성파의 최대 가능 진폭입니다.</p>
   </section>
 
   <section class="concept" id="conceptArea" hidden>
     <h2>개념 정리: 연속된 두 파동이 만나면 어떻게 될까?</h2>
     <div class="concept-grid">
-      <div><h3>1. 파원은 계속 진동한다</h3><p>왼쪽 파원 A(x = −5λ)는 오른쪽으로, 오른쪽 파원 B(x = +5λ)는 왼쪽으로 <b>같은 진폭 A, 파장 λ, 주기 T, 속력 v</b>의 정현파를 끊임없이 발생시킵니다. 처음에는 각 파동의 앞부분이 떨어져 있지만, t = 3T에 중앙에서 처음 만나고, t ≈ 8T 이후에는 두 파동이 전 영역에서 중첩됩니다.</p></div>
+      <div><h3>1. 파원은 계속 진동한다</h3><p>왼쪽 파원 A(x = −5λ)는 오른쪽으로, 오른쪽 파원 B(x = +5λ)는 왼쪽으로 <b>같은 진폭 A, 파장 λ, 주기 T, 속력 v</b>의 정현파를 끊임없이 발생시킵니다. 처음에는 각 파동의 앞부분이 떨어져 있지만, t = 1.5T에 중앙에서 처음 만나고, t ≈ 6.5T 이후에는 두 파동이 전 영역에서 중첩됩니다.</p></div>
       <div><h3>2. 합성파는 변위의 합이다</h3><p>같은 위치 x, 같은 시간 t에서 <b>각 파동의 변위를 부호까지 포함하여 더합니다.</b> 파동은 충돌해 반사되는 것이 아니라 서로 통과해 본래 진행 방향으로 계속 갑니다.</p></div>
       <div><h3>3. 보강점과 상쇄점</h3><p>같은 위상일 때 공간에 고정되는 <b>배(antinode)</b>에서는 진폭이 2A이고, <b>마디(node)</b>에서는 변위가 늘 0입니다. 2A는 항상 위로 2만큼 올라가 있다는 뜻이 아니라, 그 지점이 진동하며 도달할 수 있는 최대 변위의 크기를 의미합니다.</p></div>
       <div><h3>4. ¼주기로 움직여 관찰</h3><p>완전 중첩 상태에서 배의 순간 변위는 0 → +2A → 0 → −2A → 0 순서로 바뀔 수 있습니다. 반면 마디의 변위는 항상 0이며, 이 차이가 정상파의 핵심 특징입니다.</p></div>
     </div>
     <h3>수학적 관계 (동일 위상·양쪽 동일 진폭, 중첩 영역)</h3>
-    <div class="formula">yA(x,t) = A sin[2π(t/T − x/λ − 3)]
+    <div class="formula">yA(x,t) = A sin[2π(t/T − x/λ − 1.5)]
 
-yB(x,t) = A sin[2π(t/T + x/λ − 3)]
+yB(x,t) = A sin[2π(t/T + x/λ − 1.5)]
 
-y합(x,t) = 2A sin[2π(t/T − 3)] cos(2πx/λ)</div>
-    <p>이 식은 두 파동이 <b>이미 도달해 겹친 영역</b>에 적용됩니다. 아직 파동이 도달하지 않은 지점의 변위는 0입니다. 시간의 기준은 양쪽 파동이 t = 0일 때 이미 파원에서 2λ만큼 진행한 상태로 잡았습니다.</p>
+y합(x,t) = 2A sin[2π(t/T − 1.5)] cos(2πx/λ)</div>
+    <p>이 식은 두 파동이 <b>이미 도달해 겹친 영역</b>에 적용됩니다. 아직 파동이 도달하지 않은 지점의 변위는 0입니다. 시간의 기준은 양쪽 파동이 t = 0일 때 이미 파원에서 3.5λ만큼 진행한 상태로 잡았습니다.</p>
     <h3>마디와 배의 위치</h3>
     <p><b>배:</b> x = nλ/2 (n은 정수), 최대 진폭 2A. <b>마디:</b> x = (2n+1)λ/4, 항상 변위 0. 이웃한 마디 사이 거리와 이웃한 배 사이 거리는 모두 λ/2입니다.</p>
     <h3>확인 질문</h3>
-    <p>① t = 3.25T에 중앙 x = 0에서 yA, yB, y합을 비교해 보세요. ② t = 8.25T 이후 x = 0.25λ에서 합성파가 왜 움직이지 않는지 살펴보세요. ③ 탭 ④에서 파원 B를 180° 늦추거나 앞당기면 마디와 배의 위치가 어떻게 바뀌나요?</p>
+    <p>① t = 1.75T에 중앙 x = 0에서 yA, yB, y합을 비교해 보세요. ② t = 6.75T 이후 x = 0.25λ에서 합성파가 왜 움직이지 않는지 살펴보세요. ③ 탭 ④에서 파원 B를 180° 늦추거나 앞당기면 마디와 배의 위치가 어떻게 바뀌나요?</p>
     <p class="keyfoot">모형의 단위: λ = 1, T = 1, v = 1, A = 1. 이상적인 선형 매질을 가정하며, 파원 가동 직후 생기는 앞부분만 아주 짧게 부드럽게 처리했습니다.</p>
   </section>
 </div>
@@ -123,7 +132,7 @@ y합(x,t) = 2A sin[2π(t/T − 3)] cos(2πx/λ)</div>
 (()=>{
 'use strict';
 const C={bg:'#081321',grid:'#2b4158',axis:'#ccdeee',sub:'#a4bdd5',a:'#4bc6ff',b:'#ffba62',s:'#66efa5',mark:'#ff79d1',guide:'#8198ae'};
-const TAU=2*Math.PI, FROM=-5, TO=5, START_LEAD=2, FRONT_MEET=3, FULL=8;
+const TAU=2*Math.PI, FROM=-5, TO=5, START_LEAD=3.5, FRONT_MEET=1.5, FULL=6.5;
 const $=id=>document.getElementById(id);
 const main=$('mainCanvas'),side=$('sideCanvas');const g=main.getContext('2d'),h=side.getContext('2d');
 const state={tab:'approach',t:0,play:false,last:0,raf:null,speed:.8,probe:0,delta:0,extent:12};
@@ -133,7 +142,8 @@ function reached(x,time,which){return which===0 ? time+START_LEAD-(x-FROM) : tim
 function wave(x,time,which,delta=state.delta){
  if(x<FROM-1e-8||x>TO+1e-8)return 0;
  const age=reached(x,time,which);if(age<=0)return 0;
- const ramp=age>=.09?1:.5-.5*Math.cos(Math.PI*age/.09);
+ // Smooth front onset prevents a narrow kink in 90-degree phase examples.
+ const ramp=age>=.25?1:.5-.5*Math.cos(Math.PI*age/.25);
  return ramp*Math.sin(TAU*age+(which===1?delta:0));
 }
 function sum(x,time,d=state.delta){return wave(x,time,0,d)+wave(x,time,1,d)}
@@ -145,13 +155,13 @@ function text(ctx,s,x,y,color=C.sub,font='12px system-ui',align='left'){
 function dash(ctx,arr){ctx.setLineDash(arr)}
 function axes(ctx,r,xi,xa,yi,ya,xt,yt,opts={}){
  ctx.strokeStyle=C.grid;ctx.lineWidth=1;
- xt.forEach(v=>{const x=xmap(v,xi,xa,r);ctx.beginPath();ctx.moveTo(x,r.y);ctx.lineTo(x,r.y+r.h);ctx.stroke()});
+ xt.forEach(v=>{const x=xmap(v,xi,xa,r);ctx.save();ctx.globalAlpha=Math.abs(v*2-Math.round(v*2))<1e-6?.85:.35;ctx.beginPath();ctx.moveTo(x,r.y);ctx.lineTo(x,r.y+r.h);ctx.stroke();ctx.restore()});
  yt.forEach(v=>{const y=ymap(v,yi,ya,r);ctx.beginPath();ctx.moveTo(r.x,y);ctx.lineTo(r.x+r.w,y);ctx.stroke()});
  ctx.strokeStyle=C.axis;ctx.lineWidth=1.3;
  if(yi<=0&&ya>=0){let y=ymap(0,yi,ya,r);ctx.beginPath();ctx.moveTo(r.x,y);ctx.lineTo(r.x+r.w,y);ctx.stroke()}
  if(xi<=0&&xa>=0){let x=xmap(0,xi,xa,r);ctx.beginPath();ctx.moveTo(x,r.y);ctx.lineTo(x,r.y+r.h);ctx.stroke()}
  if(opts.yLabels!==false)yt.forEach(v=>text(ctx,`${v}`,r.x-8,ymap(v,yi,ya,r),C.sub,'11px system-ui','right'));
- if(opts.xLabels!==false)xt.forEach(v=>text(ctx,opts.xText?opts.xText(v):`${v}`,xmap(v,xi,xa,r),r.y+r.h+13,C.sub,'11px system-ui','center'));
+ if(opts.xLabels!==false)xt.filter(v=>!opts.xLabelStep||Math.abs(v/opts.xLabelStep-Math.round(v/opts.xLabelStep))<1e-6).forEach(v=>text(ctx,opts.xText?opts.xText(v):`${v}`,xmap(v,xi,xa,r),r.y+r.h+13,C.sub,'11px system-ui','center'));
  if(opts.xTitle)text(ctx,opts.xTitle,r.x+r.w/2,r.y+r.h+32,C.axis,'12px system-ui','center');
  if(opts.yTitle){ctx.save();ctx.translate(Math.max(10,r.x-34),r.y+r.h/2);ctx.rotate(-Math.PI/2);text(ctx,opts.yTitle,0,0,C.axis,'12px system-ui','center');ctx.restore()}
 }
@@ -159,7 +169,7 @@ function plot(ctx,r,xi,xa,yi,ya,fn,color,style='solid',width=2.7,onlyActive=fals
  ctx.save();ctx.lineWidth=width;ctx.lineJoin='round';ctx.lineCap='round';ctx.strokeStyle=color;
  if(style==='dashed')dash(ctx,[9,7]);else if(style==='dotted')dash(ctx,[3,6]);
  ctx.beginPath();let begun=false;
- const n=Math.max(600,Math.ceil(r.w*1.5));
+ const n=Math.max(1200,Math.ceil(r.w*2.5));
  for(let j=0;j<=n;j++){
   const x=xi+(xa-xi)*j/n;
   const active=!onlyActive || reached(x,state.t,which)>0;
@@ -217,26 +227,26 @@ function markNodes(ctx,r,xi,xa,yi,ya,delta=0,fullLabels=true){
 function plotSpaceTriple(){
  const xi=FROM,xa=TO,l=48,right=15,top=19,bottom=47;
  const width=W-l-right,available=H-top-bottom;
- const fractions=[.19,.19,.62];
- const panelTops=[top,top+available*.19,top+available*.38];
+ const fractions=[.28,.28,.44];
+ const panelTops=[top,top+available*.28,top+available*.56];
  const specs=[
-  {fn:x=>wave(x,state.t,0,0),color:C.a,label:'A → 오른쪽',range:1.22,which:0},
-  {fn:x=>wave(x,state.t,1,state.delta),color:C.b,label:'B ← 왼쪽',range:1.22,which:1},
-  {fn:x=>sum(x,state.t,state.delta),color:C.s,label:'합성파 A+B',range:2.25,which:2}
+  {fn:x=>wave(x,state.t,0,0),color:C.a,label:'A → 오른쪽',range:1.08,which:0},
+  {fn:x=>wave(x,state.t,1,state.delta),color:C.b,label:'B ← 왼쪽',range:1.08,which:1},
+  {fn:x=>sum(x,state.t,state.delta),color:C.s,label:'합성파 A+B',range:2.12,which:2}
  ];
  specs.forEach((s,i)=>{
   const panelH=available*fractions[i];
-  const r={x:l,y:panelTops[i]+24,w:width,h:Math.max(30,panelH-43)};
+  const r={x:l,y:panelTops[i]+23,w:width,h:Math.max(38,panelH-33)};
   overlapShading(g,r,xi,xa);
-  axes(g,r,xi,xa,-s.range,s.range,ticks(-5,5,1),i===2?[-2,-1,0,1,2]:[-1,0,1],{xLabels:i===2,xTitle:i===2?'위치 x (λ 단위)':undefined,yLabels:true});
+  axes(g,r,xi,xa,-s.range,s.range,ticks(-5,5,.25),i===2?[-2,-1,0,1,2]:[-1,0,1],{xLabels:i===2,xLabelStep:1,xTitle:i===2?'위치 x (λ 단위) · 작은 눈금 λ/4':undefined,yLabels:true});
   if(i===2){
     g.save();dash(g,[5,5]);g.strokeStyle='rgba(255,121,209,.65)';
     for(let v of [-2,2]){const y=ymap(v,-s.range,s.range,r);g.beginPath();g.moveTo(r.x,y);g.lineTo(r.x+r.w,y);g.stroke()}g.restore();
-    if(state.t>=3){let x=0,ya=wave(0,state.t,0,0),yb=wave(0,state.t,1,state.delta),v=ya+yb;
+    if(state.t>=FRONT_MEET){let x=0,ya=wave(0,state.t,0,0),yb=wave(0,state.t,1,state.delta),v=ya+yb;
       if(Math.abs(v)>1.8){const px=xmap(0,xi,xa,r),py=ymap(v,-s.range,s.range,r);g.beginPath();g.arc(px,py,6,0,TAU);g.fillStyle=C.mark;g.fill();text(g,`${fmt(v)}A`,px+10,py-12,C.mark,'bold 12px system-ui')}}
   }
   plot(g,r,xi,xa,-s.range,s.range,s.fn,s.color,'solid',i===2?5.2:2.8,i!==2,s.which);
-  if(i===2&&state.t>=3)markNodes(g,r,xi,xa,-s.range,s.range,state.delta,false);
+  if(i===2&&state.t>=FRONT_MEET)markNodes(g,r,xi,xa,-s.range,s.range,state.delta,false);
   if(i!==2)drawSourceFronts(g,r,xi,xa,-s.range,s.range,false);
   text(g,s.label+(i===2?'  |  최대 진폭 2A':''),l+8,panelTops[i]+11,s.color,i===2?'bold 16px system-ui':'bold 13px system-ui');
  });
@@ -246,8 +256,8 @@ function dynamicTimeWindow(){const width=4.5;return Math.max(0,state.t-2.15)}
 function plotSideTime(xprobe=state.probe){
  const left=54,right=15,top=16,bottom=46,r={x:left,y:top,w:SW-left-right,h:SH-top-bottom};
  let ti=dynamicTimeWindow(),tf=ti+4.5;
- const xlabels=ticks(ti,tf,.5);
- axes(h,r,ti,tf,-2.25,2.25,xlabels,[-2,-1,0,1,2],{xTitle:'시간 t (T 단위)',yTitle:'변위 y (A 단위)',xText:v=>Number.isInteger(v)?String(v):v.toFixed(1)});
+ const xlabels=ticks(ti,tf,.25);
+ axes(h,r,ti,tf,-2.25,2.25,xlabels,[-2,-1,0,1,2],{xTitle:'시간 t (T 단위)',yTitle:'변위 y (A 단위)',xText:v=>Number.isInteger(v)?String(v):v.toFixed(1),xLabelStep:.5});
  curveFromTime(h,r,ti,tf,-2.25,2.25,t=>wave(xprobe,t,0,0),C.a,'dashed',2.5);
  curveFromTime(h,r,ti,tf,-2.25,2.25,t=>wave(xprobe,t,1,state.delta),C.b,'dotted',2.8);
  curveFromTime(h,r,ti,tf,-2.25,2.25,t=>sum(xprobe,t,state.delta),C.s,'solid',4.5);
@@ -258,7 +268,7 @@ function plotSideTime(xprobe=state.probe){
 function drawOverlay(xi=-1.5,xa=1.5,phase=0,withGuides=true){
  const left=56,right=17,top=27,bottom=49,r={x:left,y:top,w:W-left-right,h:H-top-bottom};
  overlapShading(g,r,xi,xa);
- axes(g,r,xi,xa,-2.25,2.25,ticks(xi,xa,.25),[-2,-1,0,1,2],{xLabels:true,xTitle:'위치 x (λ 단위)',yTitle:'변위 y (A 단위)',xText:x=>Number.isInteger(x)?`${x}`:`${x.toFixed(2)}`});
+ axes(g,r,xi,xa,-2.25,2.25,ticks(xi,xa,.25),[-2,-1,0,1,2],{xLabels:true,xLabelStep:.5,xTitle:'위치 x (λ 단위)',yTitle:'변위 y (A 단위)',xText:x=>Number.isInteger(x)?`${x}`:`${x.toFixed(2)}`});
  if(withGuides)markNodes(g,r,xi,xa,-2.25,2.25,phase,true);
  plot(g,r,xi,xa,-2.25,2.25,x=>wave(x,state.t,0,phase),C.a,'dashed',2.8,true,0);
  plot(g,r,xi,xa,-2.25,2.25,x=>wave(x,state.t,1,phase),C.b,'dotted',3.0,true,1);
@@ -268,12 +278,12 @@ function drawOverlay(xi=-1.5,xa=1.5,phase=0,withGuides=true){
  g.save();dash(g,[7,6]);g.strokeStyle=C.mark;g.globalAlpha=.8;
  for(const val of [-2,2]){let py=ymap(val,-2.25,2.25,r);g.beginPath();g.moveTo(r.x,py);g.lineTo(r.x+r.w,py);g.stroke();text(g,val>0?'+2A':'−2A',r.x+7,py-10,C.mark,'bold 12px system-ui')}
  g.restore();
- if(state.t>=3){const ya=wave(0,state.t,0,phase),yb=wave(0,state.t,1,phase);text(g,`중심점 x=0:  A ${fmt(ya)}  +  B ${fmt(yb)}  =  ${fmt(ya+yb)}`,r.x+8,r.y+16,C.axis,'bold 13px system-ui')}
+ if(state.t>=FRONT_MEET){const ya=wave(0,state.t,0,phase),yb=wave(0,state.t,1,phase);text(g,`중심점 x=0:  A ${fmt(ya)}  +  B ${fmt(yb)}  =  ${fmt(ya+yb)}`,r.x+8,r.y+16,C.axis,'bold 13px system-ui')}
 }
 function drawStanding(){
  const xi=-2.2,xa=2.2,left=54,right=15,top=22,bottom=46,r={x:left,y:top,w:W-left-right,h:H-top-bottom};
  overlapShading(g,r,xi,xa);
- axes(g,r,xi,xa,-2.25,2.25,ticks(-2,2,.25),[-2,-1,0,1,2],{xTitle:'위치 x (λ 단위)',yTitle:'변위 y (A 단위)',xText:v=>Number.isInteger(v)?String(v):v.toFixed(2)});
+ axes(g,r,xi,xa,-2.25,2.25,ticks(-2,2,.25),[-2,-1,0,1,2],{xLabelStep:.5,xTitle:'위치 x (λ 단위)',yTitle:'변위 y (A 단위)',xText:v=>Number.isInteger(v)?String(v):v.toFixed(2)});
  markNodes(g,r,xi,xa,-2.25,2.25,0,true);
  if(state.t>=FULL){
   plot(g,r,xi,xa,-2.25,2.25,x=>2*Math.abs(Math.cos(TAU*x)),C.mark,'dashed',1.7);
@@ -287,7 +297,7 @@ function drawStanding(){
 function drawComparison(){
  const left=52,right=16,top=14,bottom=40;
  const hh=(SH-top-bottom-32)/2;
- let ti=Math.max(6.5,state.t-2.1),tf=ti+4.25;
+ let ti=Math.max(FULL,state.t-2.1),tf=ti+4.25;
  const stations=[{x:0,label:'배 x = 0 (최대 진폭 2A)',color:C.s},{x:.25,label:'마디 x = 0.25λ (진폭 0)',color:C.mark}];
  stations.forEach((s,i)=>{
   const r={x:left,y:top+i*(hh+30)+23,w:SW-left-right,h:hh-10};
@@ -302,7 +312,7 @@ function drawComparison(){
 function drawPhase(){
  const delta=state.delta,xi=-2,xa=2,left=53,right=14,top=29,bottom=47,r={x:left,y:top,w:W-left-right,h:H-top-bottom};
  overlapShading(g,r,xi,xa);
- axes(g,r,xi,xa,-2.25,2.25,ticks(-2,2,.25),[-2,-1,0,1,2],{xTitle:'위치 x (λ 단위)',yTitle:'변위 y (A 단위)',xText:v=>Number.isInteger(v)?String(v):v.toFixed(2)});
+ axes(g,r,xi,xa,-2.25,2.25,ticks(-2,2,.25),[-2,-1,0,1,2],{xLabelStep:.5,xTitle:'위치 x (λ 단위)',yTitle:'변위 y (A 단위)',xText:v=>Number.isInteger(v)?String(v):v.toFixed(2)});
  markNodes(g,r,xi,xa,-2.25,2.25,delta,true);
  if(state.t>=8){
   plot(g,r,xi,xa,-2.25,2.25,x=>2*Math.abs(Math.cos(TAU*x+delta/2)),C.mark,'dashed',1.3);
@@ -315,8 +325,8 @@ function drawPhase(){
 }
 function drawPhaseSide(){
  const left=52,right=15,top=16,bottom=42,r={x:left,y:top,w:SW-left-right,h:SH-top-bottom};
- const ti=Math.max(7,state.t-2),tf=ti+4;
- axes(h,r,ti,tf,-2.25,2.25,ticks(ti,tf,.5),[-2,-1,0,1,2],{xTitle:'시간 t (T 단위)',yTitle:'변위 y (A 단위)',xText:v=>Number.isInteger(v)?String(v):v.toFixed(1)});
+ const ti=Math.max(FULL,state.t-2),tf=ti+4;
+ axes(h,r,ti,tf,-2.25,2.25,ticks(ti,tf,.5),[-2,-1,0,1,2],{xTitle:'시간 t (T 단위)',yTitle:'변위 y (A 단위)',xText:v=>Number.isInteger(v)?String(v):v.toFixed(1),xLabelStep:.5});
  curveFromTime(h,r,ti,tf,-2.25,2.25,tm=>wave(0,tm,0,state.delta),C.a,'dashed',2.5);
  curveFromTime(h,r,ti,tf,-2.25,2.25,tm=>wave(0,tm,1,state.delta),C.b,'dotted',2.5);
  curveFromTime(h,r,ti,tf,-2.25,2.25,tm=>sum(0,tm,state.delta),C.s,'solid',3.2);
@@ -330,14 +340,14 @@ function updateMessage(){
  let s='';
  if(tab==='approach'){
   const deg=Math.round(state.delta*180/Math.PI);
-  if(t<3)s=`A와 B는 아직 만나지 않았습니다. 각 파원이 계속 정현파를 내보내고 있으며, 가운데 빈 구간의 폭은 약 ${fmt(Math.max(0,6-2*t))}λ입니다.`;
-  else if(t<8)s=`중앙에서 만나 파동의 중첩 구간이 넓어지고 있습니다. B의 위상차는 ${deg}°입니다. 0°일 때 t=3.25T에서 중앙 합성 변위가 +2A입니다.`;
+  if(t<FRONT_MEET)s=`A와 B는 아직 만나지 않았습니다. 각 파원이 계속 정현파를 내보내고 있으며, 가운데 빈 구간의 폭은 약 ${fmt(Math.max(0,2*FRONT_MEET-2*t))}λ입니다.`;
+  else if(t<FULL)s=`중앙에서 만나 파동의 중첩 구간이 넓어지고 있습니다. B의 위상차는 ${deg}°입니다. 0°일 때 t=1.75T에서 중앙 합성 변위가 +2A입니다.`;
   else s=`양쪽 파동이 전체 영역에 도달했습니다. B의 위상차 ${deg}°에 따라 마디와 배의 위치가 이동합니다. 배의 진폭은 2A, 마디는 0입니다.`;
  } else if(tab==='zoom'){
   const a=wave(0,t,0,0),b=wave(0,t,1,0);
   s=`중첩부를 확대했습니다. 중앙 x=0에서 현재 A=${fmt(a)}A, B=${fmt(b)}A, 합성=${fmt(a+b)}A입니다. 분홍 점선 ±2A는 진폭 한계이며 순간 변위는 시간에 따라 변합니다.`;
  } else if(tab==='standing'){
-  s=t<8?'정상파가 공간 전체에 자리 잡는 중입니다. [정상파 8.25T] 버튼으로 충분히 중첩된 뒤의 마디·배를 확인해 보세요.':'분홍색 점선은 정상파 진폭의 경계입니다. 배(x=0)는 +2A↔−2A로 진동하지만 마디(x=0.25λ)는 항상 변위 0을 유지합니다.';
+  s=t<FULL?'정상파가 공간 전체에 자리 잡는 중입니다. [정상파 6.75T] 버튼으로 충분히 중첩된 뒤의 마디·배를 확인해 보세요.':'분홍색 점선은 정상파 진폭의 경계입니다. 배(x=0)는 +2A↔−2A로 진동하지만 마디(x=0.25λ)는 항상 변위 0을 유지합니다.';
  } else if(tab==='phase'){
   const degree=Math.round(state.delta*180/Math.PI);
   s=`기본 실험에서는 두 파원이 같은 위상(0°)입니다. 이 탭에서만 B에 ${degree}° 위상차를 주었습니다. 마디·배는 기본 위치에서 왼쪽으로 ${fmt(degree/720)}λ 이동합니다.`;
@@ -368,7 +378,7 @@ function draw(){
 }
 const tabDesc={
  approach:['공간에서 본 연속파 A · B · 합성파','파란색 A와 주황색 B는 별도 줄에, 초록색 합성파는 아래 줄에 표시합니다. 가로축=위치, 세로축=변위.','관측점에서 기록한 시간-변위','가로축=시간 t · 세로축=변위 y. 관측 위치를 바꿔 파동이 도달하는 시점과 보강을 비교합니다.'],
- zoom:['중첩부 확대: 같은 좌표축에서 겹쳐 보기','가로축=위치 x · 세로축=변위 y. 분홍 ±2A 안내선과 마디·배 위치를 확인해 보세요.','관측점의 시간-변위 변화','x=0을 선택하고 t=3.25T로 이동해 yA=1, yB=1, 합성파=2를 비교해 보세요.'],
+ zoom:['중첩부 확대: 같은 좌표축에서 겹쳐 보기','가로축=위치 x · 세로축=변위 y. 분홍 ±2A 안내선과 마디·배 위치를 확인해 보세요.','관측점의 시간-변위 변화','x=0을 선택하고 t=1.75T로 이동해 yA=1, yB=1, 합성파=2를 비교해 보세요.'],
  standing:['정상파의 마디·배와 진폭 경계','연속파가 충분히 도달한 뒤, 분홍 점선은 배의 최대 진폭 ±2A 및 마디의 0을 보여 줍니다.','배 vs. 마디의 시간-변위 비교','위: 배 x=0 · 아래: 마디 x=0.25λ. 두 곳을 같은 시간축에서 비교합니다.'],
  phase:['파원 B의 위상차 변화 실험','기본 상태는 같은 위상(0°)입니다. 이 탭에서만 B의 위상을 바꿔 마디·배의 위치 이동을 탐색합니다.','중앙 x=0의 시간-변위 그래프','같은 파장과 속력에서 위상차에 따른 A+B 결과를 비교합니다.']
 };
@@ -379,7 +389,7 @@ function switchTab(tab){
  if(tab!=='concept'){
   const [a,b,c,d]=tabDesc[tab];$('mainTitle').textContent=a;$('mainDesc').textContent=b;$('sideTitle').textContent=c;$('sideDesc').textContent=d;
   if(tab==='standing'||tab==='phase'){
-   if(state.t<8.01)state.t=8.25;
+   if(state.t<FULL+.01)state.t=FULL+.25;
   }
   requestAnimationFrame(resize);
  }
@@ -403,9 +413,9 @@ function resize(){if(state.tab==='concept')return;[W,H]=canvasSize(main,g);[SW,S
 $('reset').onclick=()=>{stop();state.extent=12;setTime(0);switchTab('approach')};
 $('prev').onclick=()=>{stop();setTime(Math.floor(state.t*4+1e-7)/4-.25)};
 $('next').onclick=()=>{stop();setTime(Math.ceil(state.t*4-1e-7)/4+.25)};
-$('meet').onclick=()=>{stop();setTime(3)};
-$('peak').onclick=()=>{stop();setTime(3.25)};
-$('steady').onclick=()=>{stop();setTime(8.25)};
+$('meet').onclick=()=>{stop();setTime(FRONT_MEET)};
+$('peak').onclick=()=>{stop();setTime(FRONT_MEET+.25)};
+$('steady').onclick=()=>{stop();setTime(FULL+.25)};
 $('play').onclick=start;
 $('seek').oninput=e=>{const chosen=+e.target.value;stop();setTime(chosen)};
 $('speed').onchange=e=>{state.speed=+e.target.value};
