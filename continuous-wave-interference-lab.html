@@ -79,6 +79,7 @@ canvas{display:block;width:100%;height:100%;border-radius:7px;background:#081321
       <button class="action" id="oppositeMeet" title="180°로 설정하고 중앙에서 마루와 골이 만나는 순간을 표시">마루·골 만남 (180°)</button>
       <button class="action" id="steady">정상파 11.75T</button>
       <span class="readout" id="timeLabel">t = 0.00T</span>
+      <span class="readout" title="파장 1m와 주기 1T이므로 1/4주기 동안 파형이 0.25m 진행합니다">¼T = 0.25 m 이동</span>
       <span class="readout accent" id="stageLabel">접근 중</span>
       <input type="range" min="0" max="12" step="0.25" value="0" id="seek" aria-label="시간을 4분의 1주기 단위로 변경">
     </div>
@@ -187,7 +188,7 @@ function axes(ctx,r,xi,xa,yi,ya,xt,yt,opts={}){
  const px=xmap(v,xi,xa,r),py=opts.xNumbersOnAxis&&yi<=0&&ya>=0?ymap(0,yi,ya,r)+13:r.y+r.h+13;
  const label=opts.xText?opts.xText(v):String(v);
  const major=Math.abs(v-Math.round(v))<1e-7;
- if(!major&&opts.xNumbersOnAxis&&Math.abs(v)>1.001)return;
+ if(!major&&opts.xNumbersOnAxis&&!opts.showQuarterNumbers)return;
  if(opts.xNumbersOnAxis){
   ctx.save();ctx.font=(major?'bold 11px':'10px')+' system-ui';ctx.textAlign='center';ctx.textBaseline='middle';
   const tw=ctx.measureText(label).width;
@@ -275,7 +276,7 @@ function plotSpaceTriple(){
   const panelH=available*fractions[i];
   const r={x:l,y:panelTops[i]+23,w:width,h:Math.max(38,panelH-33)};
   overlapShading(g,r,xi,xa);
-  axes(g,r,xi,xa,-s.range,s.range,ticks(-10,10,.25),i===2?[-2,-1,0,1,2]:[-1,0,1],{xLabels:true,xNumbersOnAxis:true,xLabelStep:W>=700?.25:1,xText:v=>String(+v.toFixed(2)),xTitle:i===2?'위치 x (m) · −10 ~ +10 m / 큰 칸 1 m, 작은 눈금 0.25 m':undefined,yLabels:true});
+  axes(g,r,xi,xa,-s.range,s.range,ticks(-10,10,.25),i===2?[-2,-1,0,1,2]:[-1,0,1],{xLabels:true,xNumbersOnAxis:true,xLabelStep:1,xText:v=>String(+v.toFixed(2)),xTitle:i===2?'위치 x (m) · −10 ~ +10 m / 큰 칸 1 m, 작은 눈금 0.25 m':undefined,yLabels:true});
   if(i===2){
     g.save();dash(g,[5,5]);g.strokeStyle='rgba(255,121,209,.65)';
     for(let v of [-2,2]){const y=ymap(v,-s.range,s.range,r);g.beginPath();g.moveTo(r.x,y);g.lineTo(r.x+r.w,y);g.stroke()}g.restore();
@@ -305,7 +306,7 @@ function plotSideTime(xprobe=state.probe){
 function drawOverlay(xi=-1.5,xa=1.5,phase=0,withGuides=true){
  const left=56,right=17,top=27,bottom=49,r={x:left,y:top,w:W-left-right,h:H-top-bottom};
  overlapShading(g,r,xi,xa);
- axes(g,r,xi,xa,-2.25,2.25,ticks(xi,xa,.25),[-2,-1,0,1,2],{xLabels:true,xNumbersOnAxis:true,xLabelStep:.25,xTitle:'위치 x (m)',yTitle:'변위 y (A 단위)',xText:x=>String(+x.toFixed(2))});
+ axes(g,r,xi,xa,-2.25,2.25,ticks(xi,xa,.25),[-2,-1,0,1,2],{xLabels:true,xNumbersOnAxis:true,xLabelStep:.25,showQuarterNumbers:true,xTitle:'위치 x (m)',yTitle:'변위 y (A 단위)',xText:x=>String(+x.toFixed(2))});
  if(withGuides)markNodes(g,r,xi,xa,-2.25,2.25,phase,true);
  plot(g,r,xi,xa,-2.25,2.25,x=>wave(x,state.t,0,phase),C.a,'dashed',2.8,true,0);
  plot(g,r,xi,xa,-2.25,2.25,x=>wave(x,state.t,1,phase),C.b,'dotted',3.0,true,1,phase);
@@ -320,7 +321,7 @@ function drawOverlay(xi=-1.5,xa=1.5,phase=0,withGuides=true){
 function drawStanding(){
  const xi=-2.2,xa=2.2,left=54,right=15,top=22,bottom=46,r={x:left,y:top,w:W-left-right,h:H-top-bottom};
  overlapShading(g,r,xi,xa);
- axes(g,r,xi,xa,-2.25,2.25,ticks(-2,2,.25),[-2,-1,0,1,2],{xNumbersOnAxis:true,xLabelStep:.25,xTitle:'위치 x (m)',yTitle:'변위 y (A 단위)',xText:v=>String(+v.toFixed(2))});
+ axes(g,r,xi,xa,-2.25,2.25,ticks(-2,2,.25),[-2,-1,0,1,2],{xNumbersOnAxis:true,xLabelStep:.25,showQuarterNumbers:true,xTitle:'위치 x (m)',yTitle:'변위 y (A 단위)',xText:v=>String(+v.toFixed(2))});
  markNodes(g,r,xi,xa,-2.25,2.25,0,true);
  if(state.t>=FULL){
   plot(g,r,xi,xa,-2.25,2.25,x=>2*Math.abs(Math.cos(TAU*x)),C.mark,'dashed',1.7);
@@ -349,7 +350,7 @@ function drawComparison(){
 function drawPhase(){
  const delta=state.delta,xi=-2,xa=2,left=53,right=14,top=29,bottom=47,r={x:left,y:top,w:W-left-right,h:H-top-bottom};
  overlapShading(g,r,xi,xa);
- axes(g,r,xi,xa,-2.25,2.25,ticks(-2,2,.25),[-2,-1,0,1,2],{xNumbersOnAxis:true,xLabelStep:.25,xTitle:'위치 x (m)',yTitle:'변위 y (A 단위)',xText:v=>String(+v.toFixed(2))});
+ axes(g,r,xi,xa,-2.25,2.25,ticks(-2,2,.25),[-2,-1,0,1,2],{xNumbersOnAxis:true,xLabelStep:.25,showQuarterNumbers:true,xTitle:'위치 x (m)',yTitle:'변위 y (A 단위)',xText:v=>String(+v.toFixed(2))});
  markNodes(g,r,xi,xa,-2.25,2.25,delta,true);
  if(state.t>=FULL){
   plot(g,r,xi,xa,-2.25,2.25,x=>2*Math.abs(Math.cos(TAU*x+delta/2)),C.mark,'dashed',1.3);
