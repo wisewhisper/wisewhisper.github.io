@@ -56,7 +56,7 @@ function makeCurves(p,k){return k==='angles'?[30,45,60].map(a=>model(p.v,a,0,p.g
 function scaleFor(cs){return {xMax:Math.max(5,...cs.map(p=>p.R))*1.12,yMax:Math.max(5,...cs.map(p=>p.apex))*1.15}}
 function maxT(){return Math.max(...curves.map(p=>p.T))}
 function point(p,at){at=clamp(at,0,p.T);return {x:p.vx*at,y:Math.max(0,p.h+p.vy*at-.5*p.g*at*at),vx:p.vx,vy:p.vy-p.g*at};}
-function fmt(n,dec=2){return Number.isFinite(n)?n.toFixed(dec):'—'}
+function fmt(n,dec=2){return Number.isFinite(n)?(Math.abs(n)<.5*10**(-dec)?0:n).toFixed(dec):'—'}
 function status(){let labels={ready:'발사 준비',running:'운동 중',paused:'일시정지',done:'지면 도착'};$('status').textContent=labels[state];$('start').textContent=state==='paused'?'▶ 계속':'▶ 발사';$('pause').disabled=state!=='running'}
 function refreshNumbers(){let p=point(curves[0],t);$('velx').textContent=fmt(p.vx);$('vel').textContent=fmt(Math.hypot(p.vx,p.vy));$('time').textContent=fmt(t);$('posx').textContent=fmt(p.x);$('posy').textContent=fmt(p.y);$('vely').textContent=fmt(p.vy);$('flight').textContent=fmt(params.T)+' s';$('peak').textContent=fmt(params.apex)+' m';$('range').textContent=fmt(params.R)+' m';status()}
 function cancel(){cancelAnimationFrame(raf);raf=0;lastFrame=null}
