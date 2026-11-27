@@ -1,0 +1,259 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>빛의 분산과 대기 광학 통합 실험실</title><style>:root{color-scheme:dark;--bg:#080d15;--panel:#101b29;--line:#30455d;--fg:#eaf3ff;--mint:#69e7dc;--gold:#ffd37c;--muted:#b7c9dc}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.45 system-ui,sans-serif}header{padding:8px 14px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px}h1{font-size:22px;margin:0}header p{font-size:12px;margin:2px 0;color:var(--muted)}a{color:var(--mint);text-decoration:none}main{max-width:1800px;margin:auto;padding:8px 12px}nav{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}button,select,input{font:inherit}button,select{min-height:36px;padding:6px 10px;background:#1a2b40;border:1px solid #44617a;border-radius:7px;color:var(--fg);cursor:pointer}nav button{flex:0 0 auto;white-space:nowrap}nav{overflow-x:auto;flex-wrap:nowrap;scrollbar-width:thin}button[aria-selected=true],button.primary{background:#155d66;border-color:#66ded3}button:disabled{opacity:.45;cursor:default}button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:2px solid var(--gold);outline-offset:2px}.layout{display:grid;grid-template-columns:minmax(0,1fr) 283px;gap:9px;align-items:start}.scene,aside,#learn{padding:9px;background:var(--panel);border:1px solid var(--line);border-radius:11px;min-width:0}.scenehead{display:flex;justify-content:space-between;gap:6px;align-items:baseline;margin-bottom:5px}.scenehead h2{margin:0;font-size:17px}.scenehead span{font-size:12px;color:var(--muted)}canvas{display:block;width:100%;height:clamp(325px,calc(100dvh - 300px),740px);border-radius:8px;background:#060b13}.transport{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:6px}.transport span{margin-left:auto;font-size:12px;color:var(--muted)}.summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:7px}.summary div{border:1px solid #344d64;background:#122237;border-radius:7px;padding:6px 8px}.summary b{color:var(--gold);font-size:12px}.summary p{font-size:12px;line-height:1.4;margin:2px 0;word-break:keep-all;color:#dceafa}aside{max-height:calc(100dvh - 120px);overflow:auto;scrollbar-width:thin}aside h2{font-size:15px;margin:2px 0 6px}.control{margin-bottom:7px}.control label{display:flex;justify-content:space-between;gap:4px;font-size:13px}.control output{color:var(--gold)}.control input{width:100%;height:24px;margin:1px 0;accent-color:var(--mint)}.control select{width:100%;padding:4px 8px}.metrics{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:6px 0}.metric{background:#080f19;border:1px solid #2c3e53;border-radius:7px;padding:6px;overflow-wrap:anywhere}.metric small{display:block;color:#b9cce0;font-size:11px}.metric strong{display:block;color:var(--mint);font-size:16px;margin-top:3px}.note{font-size:12px;color:#c5d8e9;margin:7px 0}.question{color:var(--gold);font-size:13px;border-top:1px solid var(--line);padding-top:7px}.learn{max-width:1050px;margin:auto}#learn h2{margin-top:0}#learn article{border-bottom:1px solid var(--line);padding:6px 0}#learn h3{color:var(--mint);margin:10px 0 4px}#learn p{margin:4px 0 9px}[hidden]{display:none!important}@media(max-width:950px){.layout{grid-template-columns:1fr}aside{max-height:none;overflow:visible}canvas{height:clamp(570px,74dvh,830px)}.summary{grid-template-columns:1fr}.summary p{font-size:13px}nav button{flex:0 0 auto;font-size:13px;padding:6px}header h1{font-size:19px}main{padding:7px}.scenehead{flex-wrap:wrap}.transport span{margin-left:0}}@media(max-width:950px){.observation canvas{height:clamp(560px,76dvh,760px)}}
+</style></head><body><header><div><h1 id="labname"></h1><p>빛과 광학 · 대기 광학 v4</p></div><a href="index.html">← 실험 목록</a></header><main><nav id="tabs" role="tablist" aria-label="실험 선택"></nav><div class="layout" id="experiment" role="tabpanel"><section class="scene"><div class="scenehead"><h2 id="title"></h2><span id="subtitle">광선 · 측정값 실시간 연동</span></div><canvas id="cv" role="img" aria-label="광학 실험 모형"></canvas><div class="transport"><button id="play" class="primary">▶ 시작</button><button id="pause">일시정지</button><button id="reset">초기화</button><button id="full" type="button">전체화면</button><a href="optics-dispersion-atmosphere-unified.html" download>HTML 다운로드</a><span id="status">준비</span></div><div class="summary"><div><b>핵심 원리</b><p id="principle"></p></div><div><b>관찰 방법</b><p id="observe"></p></div><div><b>모형의 가정</b><p id="assume"></p></div></div></section><aside><h2>실험 조작</h2><div id="controls"></div><h2>실시간 결과</h2><div id="metrics" class="metrics"></div><p class="question" id="question"></p><p class="note" id="info"></p></aside></div><section id="learn" class="learn" role="tabpanel" hidden></section></main><script id="optics-helpers">'use strict';
+const $=id=>document.getElementById(id),cv=$('cv'),c=cv.getContext('2d'),PI=Math.PI,rad=x=>x*PI/180,deg=x=>x*180/PI,clamp=(x,a,b)=>Math.max(a,Math.min(b,x)),fmt=(x,d=2)=>Number.isFinite(x)?Number(x).toFixed(d):'∞',norm=v=>Math.hypot(...v),dot=(a,b)=>a[0]*b[0]+a[1]*b[1],add=(a,b)=>[a[0]+b[0],a[1]+b[1]],sub=(a,b)=>[a[0]-b[0],a[1]-b[1]],mul=(v,k)=>[v[0]*k,v[1]*k],unit=v=>mul(v,1/(norm(v)||1)),rot=(v,a)=>[v[0]*Math.cos(a)-v[1]*Math.sin(a),v[0]*Math.sin(a)+v[1]*Math.cos(a)],cross=(a,b)=>a[0]*b[1]-a[1]*b[0];
+const GOLD='#ffd37c',MINT='#69e7dc',BLUE='#6fb9fd',MUTED='#b6c9dd',WHITE='#ebf5ff';
+function light(w){if(w<440)return '#a477ff';if(w<480)return '#648aff';if(w<500)return '#35caff';if(w<570)return '#51e68b';if(w<590)return '#ffe35e';if(w<620)return '#ff9a4d';return '#ff5656'}
+function spectralRGB(w){let r=0,g=0,b=0;if(w<440){r=(440-w)/60;b=1}else if(w<490){g=(w-440)/50;b=1}else if(w<510){g=1;b=(510-w)/20}else if(w<580){r=(w-510)/70;g=1}else if(w<645){r=1;g=(645-w)/65}else r=1;let k=w<420?.35+.65*(w-380)/40:w>690?1-.65*(w-690)/70:1;return [r,g,b].map(x=>Math.max(0,x*k))}
+function txt(x,y,t,col=WHITE,sz=13,align='left',bold=false){c.fillStyle=col;c.font=(bold?700:500)+' '+sz+'px system-ui,sans-serif';c.textAlign=align;c.textBaseline='middle';c.fillText(String(t),x,y)}
+function rect(x,y,w,h,fill,stroke){if(fill){c.fillStyle=fill;c.fillRect(x,y,w,h)}if(stroke){c.strokeStyle=stroke;c.lineWidth=1;c.strokeRect(x,y,w,h)}}
+function line(a,b,col=MUTED,width=1,dash=[]){c.beginPath();c.setLineDash(dash);c.strokeStyle=col;c.lineWidth=width;c.moveTo(...a);c.lineTo(...b);c.stroke();c.setLineDash([])}
+function circ(x,y,r,fill,stroke,width=1){c.beginPath();c.arc(x,y,Math.max(0,r),0,2*PI);if(fill){c.fillStyle=fill;c.fill()}if(stroke){c.strokeStyle=stroke;c.lineWidth=width;c.stroke()}}
+function poly(p,col,width=1.6,dash=[]){if(p.length<2)return;c.beginPath();c.setLineDash(dash);c.strokeStyle=col;c.lineWidth=width;p.forEach((a,i)=>i?c.lineTo(...a):c.moveTo(...a));c.stroke();c.setLineDash([])}
+function polygon(p,fill,stroke){c.beginPath();p.forEach((a,i)=>i?c.lineTo(...a):c.moveTo(...a));c.closePath();if(fill){c.fillStyle=fill;c.fill()}if(stroke){c.strokeStyle=stroke;c.lineWidth=1.4;c.stroke()}}
+function arrow(a,b,col=GOLD,w=2){line(a,b,col,w);const d=unit(sub(b,a));if(norm(sub(b,a))<5)return;polygon([b,add(b,rot(mul(d,-9),.45)),add(b,rot(mul(d,-9),-.45))],col)}
+function glow(p,col,r=4){c.save();c.shadowColor=col;c.shadowBlur=10;circ(...p,r,col);c.restore()}
+function ray(points,p,col=GOLD,width=2.5){if(points.length<2)return;poly(points,col,1,[4,5]);const len=points.slice(1).map((b,i)=>norm(sub(b,points[i]))),total=len.reduce((a,b)=>a+b,0);let remain=clamp(p,0,1)*total,pos=points[0];for(let i=0;i<len.length;i++){const a=points[i],b=points[i+1],l=len[i];if(l<1e-8)continue;const f=Math.min(1,remain/l);pos=add(a,mul(sub(b,a),f));if(f>0)line(a,pos,col,width);remain-=l;if(remain<0)break}glow(pos,col,3.5)}
+function panel(x,y,w,h,title,fn){c.save();c.translate(x,y);let k=Math.min(w/460,h/380);c.translate((w-460*k)/2,(h-380*k)/2);c.scale(k,k);rect(0,0,460,380,'#0a1421','#2c4158');txt(12,18,title,WHITE,16,'left',true);c.save();c.beginPath();c.rect(4,32,452,344);c.clip();fn();c.restore();c.restore()}
+function panels(a,b,f,g){if(W<650){const h=(H-6)/2;panel(0,0,W,h,a,f);panel(0,h+6,W,h,b,g)}else{const w=(W-6)/2;panel(0,0,w,H,a,f);panel(w+6,0,w,H,b,g)}}
+function plot(fn,xmin,xmax,ymin,ymax,xlabel,ylabel,col=MINT,markers=[]){const x=47,y=52,w=393,h=258;for(let i=0;i<=4;i++){const xx=x+w*i/4,yy=y+h*i/4;line([x,yy],[x+w,yy],'#2b4056',.8);line([xx,y],[xx,y+h],'#2b4056',.8);txt(xx,y+h+15,fmt(xmin+(xmax-xmin)*i/4,Math.abs(xmax-xmin)<10?1:0),MUTED,11,'center');txt(x-5,yy,fmt(ymax-(ymax-ymin)*i/4,ymax-ymin<=2?2:0),MUTED,10,'right')}const X=v=>x+(v-xmin)/(xmax-xmin)*w,Y=v=>y+h-(v-ymin)/(ymax-ymin)*h;line([x,y],[x,y+h],MUTED);line([x,y+h],[x+w,y+h],MUTED);c.save();c.beginPath();c.rect(x,y,w,h);c.clip();let p=[];for(let i=0;i<=600;i++){let v=xmin+(xmax-xmin)*i/600,z=fn(v);if(Number.isFinite(z))p.push([X(v),Y(z)]);else{poly(p,col,2);p=[]}}poly(p,col,2);for(const m of markers)if(m.x>=xmin&&m.x<=xmax&&Number.isFinite(m.y)){line([X(m.x),y],[X(m.x),y+h],m.color||GOLD,1,[4,4]);circ(X(m.x),Y(m.y),4,m.color||GOLD)}c.restore();txt(245,344,xlabel,MUTED,12,'center');txt(7,39,ylabel,MUTED,11)}
+function lens(x,y,h,type=1){const p=[[x,y-h],[x+(type>0?12:-8),y-h*.70],[x+(type>0?16:-11),y],[x+(type>0?12:-8),y+h*.70],[x,y+h],[x-(type>0?12:-8),y+h*.70],[x-(type>0?16:-11),y],[x-(type>0?12:-8),y-h*.70]];polygon(p,'#69cffa26','#82c9eb');line([x,y-h],[x,y+h],BLUE,.8,[3,3])}
+function interfaceRay(d,n,n1,n2){const u=unit(d),nn=unit(n);const eta=n1/n2,cos=dot(u,nn),t=sub(u,mul(nn,cos)),tt=mul(t,eta),q=1-dot(tt,tt);return q<0?null:unit(add(tt,mul(nn,Math.sqrt(Math.max(0,q)))))}
+function reflect(d,n){return sub(d,mul(n,2*dot(d,n)))}
+function intersectRay(o,d,a,b){const e=sub(b,a),den=cross(d,e);if(Math.abs(den)<1e-9)return null;const ao=sub(a,o),t=cross(ao,e)/den,u=cross(ao,d)/den;return t>1e-5&&u>=-1e-7&&u<=1+1e-7?{t,p:add(o,mul(d,t))}:null}
+const R=(key,label,min,max,step,value,unit='')=>({key,label,min,max,step,value,unit});const Q=(key,label,value,options)=>({key,label,value,options});
+</script><script id="optics-model">
+const prismLAB=(()=>{
+function glass(w,kind){const u=w/1000;return kind==='flint'?1.59+.012/u**2:1.495+.0042/u**2}
+function prismTrace(A,I,w,kind){const h=136,half=h*Math.tan(rad(A/2)),tri=[[0,-h/2],[-half,h/2],[half,h/2]],edges=tri.map((a,i)=>[a,tri[(i+1)%3]]),entry=add(mul(tri[0],.48),mul(tri[1],.52)),normal=unit([h,half]),incoming=rot(normal,-rad(I)),n=glass(w,kind),d0=interfaceRay(incoming,normal,1,n);let path=[sub(entry,mul(incoming,110)),entry],d=d0,o=entry,exit=null,bounces=0;
+for(let step=0;step<8;step++){let best=null;for(let i=0;i<edges.length;i++){let q=intersectRay(o,d,...edges[i]);if(q&&(!best||q.t<best.t))best={...q,i}}if(!best)break;path.push(best.p);const e=sub(...edges[best.i].slice().reverse());let outward=unit([e[1],-e[0]]);if(dot(d,outward)<0)outward=mul(outward,-1);let x=interfaceRay(d,outward,n,1);if(x){exit=x;path.push(add(best.p,mul(x,140)));break}d=reflect(d,outward);o=best.p;bounces++}
+return {tri,path,n,bounces,exit, deviation:exit?deg(Math.acos(clamp(dot(incoming,exit),-1,1))):NaN,incoming}}
+
+const common=[R('A','프리즘 꼭지각',35,65,1,60,'°'),R('I','입사각',0,75,1,45,'°'),Q('glass','유리 종류','flint',[['crown','크라운 유리 (모형)'],['flint','플린트 유리 (고분산 모형)']])];
+const view=Q('view','스크린 표시 범위','50',[['10','고정 ±10 cm'],['25','고정 ±25 cm'],['50','고정 ±50 cm'],['100','고정 ±100 cm'],['auto','자동 맞춤']]);const screen=R('L','출사면 뒤 스크린 거리',.5,3,.1,1.5,'m'),waves=[700,650,620,590,570,540,510,490,470,450,430,400],unitM=.0005;
+function spectrum(s){
+ const center=prismTrace(s.A,s.I,550,s.glass),rays=Array.from({length:151},(_,j)=>400+j*2).map(w=>({w,...prismTrace(s.A,s.I,w,s.glass)}));
+ if(!center.exit)return {rays,hits:[],width:NaN,spread:NaN};const axis=center.exit,side=rot(axis,PI/2),plane=add(mul(center.path.at(-2),unitM),mul(axis,s.L||1.5)),hits=[];
+ for(const q of rays){if(!q.exit)continue;const o=mul(q.path.at(-2),unitM),den=dot(q.exit,axis);if(den<=1e-6)continue;const t=dot(sub(plane,o),axis)/den;if(t<=0)continue;const pos=dot(sub(add(o,mul(q.exit,t)),plane),side);if(Number.isFinite(pos))hits.push({w:q.w,pos,bounces:q.bounces,angle:deg(Math.atan2(cross(axis,q.exit),dot(axis,q.exit)))})}
+ return {rays,hits,width:hits.length>=2?Math.max(...hits.map(q=>q.pos))-Math.min(...hits.map(q=>q.pos)):NaN,spread:hits.length>=2?Math.max(...hits.map(q=>q.angle))-Math.min(...hits.map(q=>q.angle)):NaN}
+}
+function rgb(w){return 'rgb('+spectralRGB(w).map(x=>Math.round(255*Math.pow(x,.48))).join(',')+')'}
+function clipEnd(o,d){const a=[];if(d[0]>1e-8)a.push((442-o[0])/d[0]);if(d[0]<-1e-8)a.push((18-o[0])/d[0]);if(d[1]>1e-8)a.push((318-o[1])/d[1]);if(d[1]<-1e-8)a.push((45-o[1])/d[1]);return add(o,mul(d,Math.max(0,Math.min(...a.filter(x=>x>=0)))))}
+function screenDraw(s,p,d){
+ const h=d.hits;if(h.length<2){txt(230,170,'스크린에 도달하는 빛이 부족합니다.',GOLD,15,'center');txt(230,195,'입사각이나 유리 종류를 바꾸세요.',MUTED,13,'center');return}
+ const lim=s.view==='auto'?Math.max(.15,Math.ceil(Math.max(...h.map(q=>Math.abs(q.pos)))/.05)*.05+.01):Number(s.view||50)/100,X=v=>230+v/lim*207;
+ txt(230,54,'550 nm 출사 방향에 수직인 스크린',WHITE,14,'center',true);txt(230,77,'거리 '+fmt(s.L,1)+' m · 위치 (cm)',MUTED,13,'center');
+ rect(22,102,416,148,'#03060b','#60788e');
+ c.save();c.globalAlpha=.3+.7*clamp((p-.35)/.65,0,1);
+ c.beginPath();c.rect(22,102,416,148);c.clip();for(let j=0;j<h.length-1;j++){const a=h[j],b=h[j+1];if(b.w-a.w>2.01||a.bounces!==b.bounces||Math.abs(a.angle-b.angle)>1.5)continue;const x1=X(a.pos),x2=X(b.pos);rect(Math.min(x1,x2),104,Math.max(.7,Math.abs(x2-x1)+.5),144,rgb((a.w+b.w)/2))}
+ for(const q of h)line([X(q.pos),104],[X(q.pos),248],rgb(q.w),.65);c.restore();
+ for(let j=-2;j<=2;j++){const v=j*lim/2,x=X(v);line([x,250],[x,258],MUTED,1);txt(x,270,fmt(v*100,1),MUTED,11,'center')}
+ const left=Math.min(...h.map(q=>q.pos)),right=Math.max(...h.map(q=>q.pos));line([X(left),293],[X(right),293],GOLD,1.5);for(const v of [left,right])line([X(v),287],[X(v),299],GOLD,1.5);
+ for(const q of [h[0],h.at(-1)])txt(clamp(X(q.pos),43,417),91,q.w+' nm',rgb(q.w),11,'center',true);
+ txt(230,322,'분산 폭 '+fmt(d.width*100,2)+' cm',GOLD,19,'center',true);txt(230,348,s.view==='auto'?'자동 축척':'고정 축척 ±'+lim*100+' cm',MUTED,12,'center');txt(230,366,h.some(q=>Math.abs(q.pos)>lim)?'일부 파장이 화면 밖 · 넓은 범위를 선택하세요':'색과 밝기는 표시용 근사',MUTED,11,'center')
+}
+function prismDraw(i,s,p){
+ const ws=i===0?[s.w]:waves,q=ws.map(w=>prismTrace(s.A,s.I,w,s.glass)),d=i===0?null:spectrum(s);
+ const bounds=q.flatMap(a=>a.path.slice(0,a.exit?-1:undefined).concat(a.tri)),minx=Math.min(...bounds.map(a=>a[0])),maxx=Math.max(...bounds.map(a=>a[0])),miny=Math.min(...bounds.map(a=>a[1])),maxy=Math.max(...bounds.map(a=>a[1])),k=Math.min(215/Math.max(1,maxx-minx),207/Math.max(1,maxy-miny),1.4),P=a=>[22+(a[0]-minx)*k,175+(a[1]-(miny+maxy)/2)*k];
+ const paths=q.map(a=>{const z=a.path.slice(0,a.exit?-1:undefined).map(P);if(a.exit)z.push(clipEnd(z.at(-1),a.exit));return z});
+ panels('프리즘의 굴절과 출사',i===0?'굴절률과 파장':i===1?'스크린의 연속 스펙트럼':'파장에 따른 편향각',()=>{
+ polygon(q[0].tri.map(P),'#67b8d835','#a6d4e9');
+ if(i===0)ray(paths[0],p,light(ws[0]),2.7);
+ else{ray(paths[0].slice(0,2),Math.min(1,p/.25),WHITE,3.8);for(let j=0;j<q.length;j++)ray(paths[j].slice(1),clamp((p-.25)/.75,0,1),rgb(ws[j]),1.7)}
+ txt(230,340,q.some(a=>a.bounces)?'일부 파장에서 전반사 발생':'입사 → 굴절 → 분산된 출사광',GOLD,14,'center',true);txt(230,361,'실제 굴절각 유지 · 출사 광선 길게 표시',MUTED,11,'center')
+ },()=>{
+ if(i===1){screenDraw(s,p,d);return}
+ if(i===2){const vs=d.rays.filter(q=>Number.isFinite(q.deviation)).map(q=>q.deviation);let lo=0,hi=180;plot(w=>prismTrace(s.A,s.I,w,s.glass).deviation,400,700,lo,hi,'파장 (nm)','전체 편향각 (°)',MINT,ws.map((w,j)=>({x:w,y:q[j].deviation,color:rgb(w)})));txt(230,369,'스크린 분산 폭 '+(Number.isFinite(d.width)?fmt(d.width*100,2)+' cm':'—'),GOLD,12,'center')}
+ else{plot(w=>glass(w,s.glass),400,700,1.48,1.68,'파장 (nm)','굴절률',MINT,[{x:s.w,y:glass(s.w,s.glass),color:light(s.w)}]);txt(230,369,'정상 분산: 짧은 파장의 굴절률이 큼',MUTED,12,'center')}
+ })
+}
+const LAB={name:'프리즘과 빛의 분산',tabs:[
+{name:'단색광 굴절',controls:[...common,R('w','파장',400,700,5,550,'nm')],principle:'스넬 법칙 n₁sinθ₁=n₂sinθ₂. 두 경계에서 굴절한다.',observe:'입사각과 꼭지각을 바꾸어 출사 방향을 비교한다.',assume:'균질 유리, 기하광학.',question:'출사 방향이 달라지는 조건은?'},
+{name:'백색광 분산',controls:[...common,screen,view],principle:'정상 분산에서 짧은 파장의 굴절률이 더 크다.',observe:'고분산 유리와 스크린 거리로 색의 분리 폭을 바꾼다.',assume:'400–700 nm 연속광 근사, 실제 출사 방향 사용.',question:'스크린이 멀어지면 분산각과 분산 폭 중 무엇이 달라질까?'},
+{name:'분산 스펙트럼',controls:[...common,screen,view],principle:'파장별 편향각이 달라 스펙트럼이 분리된다.',observe:'편향각 그래프와 스크린 분산 폭을 비교한다.',assume:'스크린은 550 nm 출사 방향에 수직; 스크린 범위는 고정 또는 자동 선택.',question:'유리 종류가 달라지면 각 분산 폭은?'}],
+draw:prismDraw,metrics:(i,s)=>{const w=i===0?s.w:550,q=prismTrace(s.A,s.I,w,s.glass);if(i===0)return [['굴절률',fmt(q.n,4)],['편향각',q.exit?fmt(q.deviation,1)+'°':'출사 없음'],['내부 반사',q.bounces+'회']];const d=spectrum(s);return [['각 분산 폭',Number.isFinite(d.spread)?fmt(d.spread,2)+'°':'—'],['스크린 분산 폭',Number.isFinite(d.width)?fmt(d.width*100,2)+' cm':'—'],['스크린 거리',fmt(s.L,1)+' m'],['도달 파장 표본',d.hits.length+' / 151']]},
+detail:'유리 굴절률 n=A+B/λ² (λ: μm)의 예시 모형이며 특정 제품의 실측값은 아니다. 프리즘 높이 68 mm, 스크린은 550 nm 출사점을 기준으로 그 방향에 수직이다. 스크린 거리를 바꾸어도 분산각은 변하지 않는다. 내부 반사에 따라 일부 파장은 스크린에 도달하지 않을 수 있다. 색과 밝기는 교육용 근사이다.'};
+
+return LAB})();
+const atmosLAB=(()=>{
+function water(w){return 1.322+.0031/(w/1000)**2}
+function rain(i,w,angle){let n=water(w),a=rad(angle),r=Math.asin(Math.sin(a)/n),k=i+1,D=k*PI+2*a-2*(k+1)*r;return {n,a,r,D,view:deg(Math.abs(PI-D))}}
+function rainbowAngle(i,w){let n=water(w),k=i+1,a=Math.acos(Math.sqrt((n*n-1)/((k+1)**2-1)));return rain(i,w,deg(a)).view}
+function drop(i,s,w){let q=rain(i,w,s.angle),o=[-Math.cos(q.a),-Math.sin(q.a)],d=interfaceRay([1,0],mul(o,-1),1,q.n),pts=[[-1.9,o[1]],o];for(let j=0;j<=i+1;j++){let x=add(o,mul(d,-2*dot(o,d)));pts.push(x);if(j===i+1){let out=interfaceRay(d,unit(x),q.n,1);if(out)pts.push(add(x,mul(out,1.1)));break}d=reflect(d,unit(x));o=x}return pts}
+function mirage(s){const n0=1.00027,g=s.grad*1e-6,C=(n0+g*s.h)*Math.cos(rad(s.angle)),turn=(C-n0)/g,dx=.4;let path=[[0,s.h]],y=s.h,sg=-1,turned=false;for(let x=dx;x<=300;x+=dx){let slope=Math.sqrt(Math.max(0,((n0+g*y)/C)**2-1)),yy=y+sg*slope*dx;if(sg<0&&yy<=turn&&turn>0){sg=1;turned=true;yy=turn}if(yy<=0){path.push([x,0]);break}if(turned&&slope<1e-8)yy+=g*dx*dx/(2*C);y=yy;path.push([x,y]);if(y>5)break}return {path,turned,min:Math.min(...path.map(a=>a[1]))}}
+function air(s,w){let t=s.tau*(550/w)**4,m=1/Math.max(.12,Math.sin(rad(s.sun)));return {T:Math.exp(-t*m),S:1-Math.exp(-t)}}
+function airColor(s,direct){let z=[0,0,0],tot=[0,0,0];for(let w=400;w<=700;w+=5){let rgb=spectralRGB(w),q=air(s,w),f=direct?q.T:q.S;for(let k=0;k<3;k++){z[k]+=rgb[k]*f;tot[k]+=rgb[k]}}z=z.map((x,k)=>x/tot[k]);let max=Math.max(.001,...z);return 'rgb('+z.map(x=>Math.round(232*Math.sqrt(x/max))).join(',')+')'}
+function atmos(i,s,p){if(i<2){panels('물방울 내부 '+(i+1)+'회 반사','입사각과 반태양 방향 관측각',()=>{const P=a=>[230+a[0]*100,191+a[1]*100];circ(230,191,100,'#5ca2d22b','#9acbe7',1.8);for(let w of [700,s.w,400])ray(drop(i,s,w).map(P),p,light(w),2);txt(230,350,'굴절 → 내부 반사 → 출사',GOLD,14,'center');txt(230,368,'파장에 따라 출사 방향이 달라짐',MUTED,11,'center')},()=>{plot(x=>rain(i,s.w,x).view,0,89,0,180,'입사각 (°)','관측각 (°)',MINT,[{x:s.angle,y:rain(i,s.w,s.angle).view}]);txt(230,367,'대표 각: 빨강 '+fmt(rainbowAngle(i,700),1)+'° · 보라 '+fmt(rainbowAngle(i,400),1)+'°',GOLD,11,'center')});return}if(i===2){let q=mirage(s);panels('뜨거운 지표 위 굴절률 층','높이별 굴절률',()=>{for(let j=0;j<12;j++)rect(12,50+j*23,436,23,'rgba(255,130,65,'+(.025+j*.012)+')');rect(12,326,436,21,'#635648');ray(q.path.map(([x,y])=>[22+x/300*420,326-y/5*265]),p,GOLD,2.4);txt(230,336,'뜨거운 지면',WHITE,12,'center');txt(230,365,q.turned?'광선이 위로 휘어짐':'지면 또는 계산 범위에 도달',MINT,12,'center')},()=>{plot(y=>270+s.grad*y,0,5,0,800,'높이 (m)','(n−1) × 10⁶',MINT)});return}daylightDraw(s,p)}
+
+function skyMix(a,b,k){return 'rgb('+a.map((v,j)=>Math.round(v+(b[j]-v)*clamp(k,0,1))).join(',')+')'}
+function sunlight(s){const r=air(s,650).T,g=air(s,550).T,b=air(s,450).T,max=Math.max(r,g,b,1e-8);return {T:[r,g,b],color: 'rgb('+[r,g,b].map(v=>Math.round(255*Math.pow(v/max,.55))).join(',')+')',warm:clamp(1-b/Math.max(r,1e-8),0,1)}}
+function skyLandscape(s,p,x,y,B,H){
+ c.save();c.translate(x,y);c.beginPath();c.rect(0,0,B,H);c.clip();
+ const z=sunlight(s),warm=z.warm,low=clamp((35-s.sun)/30,0,1),amount=warm*low;
+ const horizon=H-32,sx=B*.73,sy=horizon-18-(horizon-39)*s.sun/90;
+ const grad=c.createLinearGradient(0,0,0,horizon);
+ grad.addColorStop(0,skyMix([28,91,160],[69,77,123],amount));
+ grad.addColorStop(.56,skyMix([86,153,215],[163,105,120],amount*.86));
+ grad.addColorStop(1,skyMix([191,221,240],[255,136,59],amount));
+ rect(0,0,B,H,grad);
+ const glowGrad=c.createRadialGradient(sx,sy,0,sx,sy,B*.37);
+ glowGrad.addColorStop(0,z.color);glowGrad.addColorStop(1,'rgba(255,202,133,0)');
+ c.save();c.globalAlpha=.19+.28*amount;rect(0,0,B,horizon,glowGrad);c.restore();
+ c.save();c.globalAlpha=.24;for(const a of [[.17,.25,.16],[.37,.40,.14],[.89,.21,.11]]){for(let j=0;j<5;j++){c.beginPath();c.ellipse(B*(a[0]+j*a[2]/6),H*(a[1]+Math.sin(j*2.1)*.013),B*a[2]/5,H*.016,0,0,2*PI);c.fillStyle=skyMix([248,252,255],[255,181,137],amount);c.fill()}}c.restore();
+ circ(sx,sy,Math.max(13,B*.031),z.color,'#fff0c2',1.5);
+ polygon([[0,horizon],[B*.10,horizon-17],[B*.20,horizon-6],[B*.33,horizon-26],[B*.47,horizon-8],[B*.61,horizon-20],[B*.74,horizon-3],[B*.87,horizon-16],[B,horizon-4],[B,H],[0,H]],'#253c48');
+ polygon([[0,horizon+10],[B*.20,horizon+1],[B*.44,horizon+13],[B*.71,horizon+1],[B,horizon+7],[B,H],[0,H]],'#233d35');
+ line([0,horizon],[B,horizon],'#cad9df88',.7);
+ rect(9,9,Math.min(B-18,210),47,'#081322bf');
+ txt(18,22,s.sun>=40?'높은 태양 · 낮':s.sun<=15?'낮은 태양 · 노을':'태양 고도 변화',WHITE,15,'left',true);
+ txt(18,42,'태양 고도 '+s.sun+'° · 색상은 근사',WHITE,12);
+ const O=[B*.40,horizon-1],top=[sx,sy],v=sub(O,top);
+ if(s.mode==='rays'){
+  ray([top,O],p,z.color,3);
+  for(let j=1;j<=3;j++){const q=add(top,mul(v,j/4));const len=20+j*9;arrow(q,add(q,[-len,-len*.55]),'#7ccaff',2);arrow(q,add(q,[len*.7,-len*.85]),'#8bbcff',1.3)}
+  circ(O[0],O[1]-4,4,WHITE);txt(O[0]+9,O[1]-15,'관찰자',WHITE,11);
+  rect(7,H-27,Math.min(B-14,320),22,'#101b2dbc');txt(15,H-16,'파란빛이 더 많이 산란 · 직접광은 붉어짐',WHITE,11);
+ }else{rect(7,H-27,Math.min(B-14,275),22,'#101b2dbc');txt(15,H-16,'태양을 보는 방향의 하늘 색 모식도',WHITE,11)}
+ c.restore()
+}
+function solarComparison(s,B,H){
+ rect(0,0,B,H,'#101e30','#344e64');txt(12,16,'같은 대기에서 낮과 노을 비교',WHITE,14,'left',true);
+ const configs=[{...s,sun:70},{...s,sun:5}],labels=['낮 70°','노을 5°'],bw=(B-30)/2;
+ for(let j=0;j<2;j++){const x=10+j*(bw+10),a=configs[j],z=sunlight(a);
+  rect(x,31,bw,50,'#0b1523','#405970');circ(x+23,53,13,z.color,'#d8caba');txt(x+45,44,labels[j],WHITE,12,'left',true);
+  const sublabel='파란빛 '+fmt(air(a,450).T*100,0)+'% · 빨간빛 '+fmt(air(a,650).T*100,0)+'%';
+  txt(x+7,71,sublabel,MUTED,B<410?10:11);
+ }
+ txt(B/2,H-11,'실제 투과율 계산값 · 태양 색은 RGB 근사',GOLD,11,'center')
+}
+function daylightGraph(s,B,H){
+ rect(0,0,B,H,'#0a1421','#324c65');txt(12,17,'파장별 투과율 비교',WHITE,15,'left',true);
+ const G={x:40,y:54,w:B-55,h:H*.55},X=w=>G.x+(w-380)/400*G.w,Y=t=>G.y+G.h*(1-t);
+ for(let j=0;j<=4;j++){line([G.x,Y(j/4)],[G.x+G.w,Y(j/4)],'#2c4056',.8);txt(G.x-4,Y(j/4),j*25+'%',MUTED,10,'right')}
+ for(let w of [380,480,580,680,780]){line([X(w),G.y],[X(w),G.y+G.h],'#2c4056',.8);txt(X(w),G.y+G.h+12,w,MUTED,10,'center')}
+ poly(Array.from({length:101},(_,i)=>{const w=380+i*4;return [X(w),Y(air({...s,sun:70},w).T)]}),'#aec3d5',1.5,[4,3]);
+ poly(Array.from({length:101},(_,i)=>{const w=380+i*4;return [X(w),Y(air(s,w).T)]}),GOLD,2.5);
+ for(let w of [450,650]){const col=w===450?'#6bb8ff':'#ff7272';circ(X(w),Y(air(s,w).T),4.5,col,WHITE,1)}
+ const y=G.y+G.h+33;
+ line([G.x,y],[G.x+23,y],GOLD,2.5);txt(G.x+30,y,'현재 '+s.sun+'°',WHITE,11);
+ line([B*.54,y],[B*.54+22,y],'#aec3d5',1.5,[4,3]);txt(B*.54+29,y,'낮 70°',WHITE,11);
+ const bar=(w,label,col,yy)=>{const T=air(s,w).T;txt(12,yy,label,col,12,'left',true);rect(99,yy-7,B-160,14,'#263b4f');rect(99,yy-7,(B-160)*T,14,col);txt(B-9,yy,fmt(T*100,1)+'%',WHITE,12,'right')};
+ bar(450,'파란빛 450', '#6bb8ff',H-66);bar(650,'빨간빛 650','#ff7272',H-42);
+ txt(B/2,H-14,'레이리 산란: 짧은 파장이 더 강하게 산란',MUTED,10,'center')
+}
+function daylightDraw(s,p){
+ const mob=W<650,B=mob?460:960,LH=mob?680:390,k=Math.min(W/B,H/LH);
+ c.save();c.translate((W-B*k)/2,(H-LH*k)/2);c.scale(k,k);
+ if(mob){skyLandscape(s,p,0,0,B,255);c.save();c.translate(0,260);solarComparison(s,B,100);c.restore();c.save();c.translate(0,366);daylightGraph(s,B,314);c.restore()}
+ else{skyLandscape(s,p,0,0,620,282);c.save();c.translate(0,288);solarComparison(s,620,102);c.restore();c.save();c.translate(626,0);daylightGraph(s,334,390);c.restore()}
+ c.restore()
+}
+
+const rc=[R('angle','입사각',0,89,1,59,'°'),R('w','파장',400,700,5,550,'nm')];
+
+const rainbowSamples=Array.from({length:201},(_,j)=>380+j*2).map(w=>({w,angles:[rainbowAngle(0,w),rainbowAngle(1,w)]}));
+const edges=[{inner:rainbowAngle(0,380),outer:rainbowAngle(0,780)},{inner:rainbowAngle(1,780),outer:rainbowAngle(1,380)}];
+// Keep the actual outer angular edge fixed, widening the visible band inward.
+function bandFactor(order,s){const z=clamp(Number(s.band)||3,1,4);return order===0?z:Math.min(1+(z-1)*.5,2,(edges[1].outer-edges[0].outer-2)/(edges[1].outer-edges[1].inner))}
+function displayAngle(order,r,s){return edges[order].outer-(edges[order].outer-r)*bandFactor(order,s)}
+function displayEdges(order,s){return {inner:displayAngle(order,edges[order].inner,s),outer:edges[order].outer}}
+function rainbowColor(w){return 'rgb('+spectralRGB(w).map(v=>Math.round(255*Math.pow(clamp(v,0,1),.42))).join(',')+')'}
+function skyPoint(rho,phi,sun){const r=rad(rho),h=rad(sun),x=Math.sin(r)*Math.cos(phi),y=-Math.sin(h)*Math.cos(r)+Math.cos(h)*Math.sin(r)*Math.sin(phi),z=Math.cos(h)*Math.cos(r)+Math.sin(h)*Math.sin(r)*Math.sin(phi);return [deg(Math.atan2(x,z)),deg(Math.asin(clamp(y,-1,1)))]}
+function skyArc(r,sun,P){return Array.from({length:97},(_,j)=>P(skyPoint(r,j*PI/96,sun)))}
+function skyBand(r1,r2,sun,P,fill){if(sun>=Math.max(r1,r2))return;polygon([...skyArc(r1,sun,P),...skyArc(r2,sun,P).reverse()],fill)}
+function skyInner(r,sun,P,fill){if(sun>=r)return;const arc=skyArc(r,sun,P);polygon([...arc,[arc.at(-1)[0],P([0,-90])[1]],[arc[0][0],P([0,-90])[1]]],fill)}
+function rainbowSky(s,p,dual,B,H){
+ const horizon=H-34,scale=Math.min((B-16)/138,(horizon-16)/59),P=([az,el])=>[B/2+az*scale,horizon-el*scale];
+ const grad=c.createLinearGradient(0,0,0,horizon);grad.addColorStop(0,'#345e91');grad.addColorStop(.58,'#638eb5');grad.addColorStop(1,'#b1ccd9');rect(0,0,B,H,'#172f40');rect(0,0,B,horizon,grad);
+ // procedural clouds stay behind the optical bands
+ c.save();c.globalAlpha=.20;for(const [x,y,ww,hh] of [[.18,.24,.28,.07],[.80,.16,.31,.06],[.83,.63,.32,.05],[.17,.70,.35,.04]]){for(let j=0;j<6;j++){c.beginPath();c.ellipse(B*(x+(j-2.5)*ww/7),horizon*(y+Math.sin(j*2)*.017),B*ww/7,horizon*hh,0,0,2*PI);c.fillStyle='#e5eff5';c.fill()}}c.restore();
+ c.save();c.beginPath();c.rect(0,0,B,horizon);c.clip();
+ const shown0=displayEdges(0,s),shown1=displayEdges(1,s);
+ skyInner(shown0.inner,s.sun,P,'rgba(226,239,249,.13)');
+ if(dual)skyBand(shown0.outer,shown1.inner,s.sun,P,'rgba(16,30,49,.25)');
+ const modes=dual?[1,0]:[0],fade=s.mode==='rays'?.47:1;
+ for(const order of modes){
+  const a=(order===0?.98:.62)*fade*(.94+.06*p);
+  c.save();c.globalAlpha=a;
+  for(let j=0;j<rainbowSamples.length-1;j+=2){const lo=rainbowSamples[j],hi=rainbowSamples[Math.min(j+2,rainbowSamples.length-1)],r1=displayAngle(order,lo.angles[order],s),r2=displayAngle(order,hi.angles[order],s),diff=r2-r1;
+   const e=order===0?shown0:shown1;
+   skyBand(clamp(r1-diff*.045,e.inner,e.outer),clamp(r2+diff*.045,e.inner,e.outer),s.sun,P,rainbowColor((lo.w+hi.w)/2));
+  }c.restore();
+ }
+ if(s.mode!=='sky'){
+  for(const order of modes){const r=rainbowAngle(order,s.w);if(s.sun>=r)continue;const phi0=Math.asin(clamp(Math.tan(rad(s.sun))/Math.tan(rad(r)),0,1));const arc=skyArc(r,s.sun,P);poly(arc,'#fff9dc90',.9,[4,4]);
+   for(let j=0;j<7;j++){const phi=phi0+(PI-2*phi0)*(j+.5)/7,pt=P(skyPoint(r,phi,s.sun));circ(...pt,3,'#ffffff99',rainbowColor(s.w),1.1);}
+   const apex=P([0,r-s.sun]);circ(...apex,4,'#ffffff',rainbowColor(s.w),1.5);
+  }
+ }
+ c.restore();
+ rect(0,horizon,B,H-horizon,'#294d43');polygon([[0,horizon+14],[B*.16,horizon+4],[B*.31,horizon+13],[B*.49,horizon+3],[B*.67,horizon+15],[B*.84,horizon+7],[B,horizon+11],[B,H],[0,H]],'#204539');line([0,horizon],[B,horizon],'#c2d5d9',1);
+ const labels=[];
+ for(const order of modes){const top=edges[order].outer-s.sun;if(top>0){const y=P([0,top])[1];labels.push([order,y]);const x=B*.5;line([x+5,Math.max(14,y-3)],[x+28,Math.max(14,y-17)],'#f7f7f5',.8);txt(x+32,Math.max(14,y-19),(order+1)+'차', '#ffffff',12,'left',true)}}
+ if(dual&&s.sun<shown1.inner){const e=(shown0.outer+shown1.inner)/2-s.sun;if(e>1){const y=P([0,e])[1];if(B>=620&&y>12)txt(B-14,Math.max(24,y),'알렉산더의 암대','#e4edf4',11,'right');}}
+ if(!labels.length){rect(B*.13,horizon*.32,B*.74,54,'#172b41b9');txt(B/2,horizon*.32+17,'무지개가 지평선 아래에 있습니다.',WHITE,15,'center',true);txt(B/2,horizon*.32+36,'태양 고도를 낮춰 보세요.',WHITE,12,'center')}
+ else if(s.mode!=='sky')txt(B/2,12,'선택 파장 '+s.w+' nm · 점선과 점은 실제 계산 각도',WHITE,11,'center');
+ if(labels.length&&bandFactor(0,s)>1)txt(10,14,dual?'색띠 표시 '+fmt(bandFactor(0,s),1)+'배 / '+fmt(bandFactor(1,s),1)+'배':'색띠 표시 '+fmt(bandFactor(0,s),1)+'배',WHITE,11,'left');
+ txt(10,H-15,'지평선 · 태양은 관찰자의 뒤쪽',WHITE,11);txt(B-10,H-15,'태양 고도 '+s.sun+'°',WHITE,11,'right');
+}
+function observerDiagram(s,p,dual,B,H){
+ rect(0,0,B,H,'#0a1421','#334d64');const L=9,R=B-9;txt(B/2,17,'관찰자와 물방울 · 측면도',WHITE,14,'center',true);
+ const O=[B*.23,H*.73],len=Math.min(B*.67,H*.57),sun=rad(s.sun),rho=rainbowAngle(0,s.w),top=rho-s.sun,baseY=O[1];
+ line([L,baseY],[R,baseY],MUTED,1,[4,4]);
+ const anti=add(O,[len*Math.cos(sun),len*Math.sin(sun)]);line(O,anti,'#8ca3ba',1,[4,4]);
+ circ(O[0],O[1]-8,6,'#c5e5ed');line([O[0],O[1]-1],[O[0],O[1]+15],WHITE,2);txt(O[0],Math.min(H-11,O[1]+25),'관찰자',WHITE,11,'center');
+ const sx=O[0]-Math.min(B*.18,42),sy=O[1]-Math.min(H*.30,45+Math.sin(sun)*40);circ(sx,sy,12,'#ffe2a1','#ffefc6');txt(sx,sy-18,'태양',GOLD,11,'center');
+ const nn=dual?[0,1]:[0];
+ for(const order of nn){const rr=rainbowAngle(order,s.w),el=rr-s.sun;if(el<=0)continue;const d=[Math.cos(rad(el)),-Math.sin(rad(el))],Q=add(O,mul(d,len*(order===0?.81:1))),start=add(Q,[-Math.cos(sun)*Math.min(B*.3,64),-Math.sin(sun)*Math.min(B*.3,64)]);circ(...Q,5,'#91c9e18c','#cee8ff',1);arrow(start,Q,GOLD,1.3);ray([Q,O],p<.22?0:clamp((p-.22)/.78,0,1),rainbowColor(s.w),1.6);txt(Q[0],Q[1]-11,(order+1)+'차 물방울',WHITE,10,'center')}
+ txt(B/2,H-36,'반태양 방향과 관측 방향 사이 각도',MUTED,10,'center');txt(B/2,H-19,dual?'1차 '+fmt(rho,1)+'° · 2차 '+fmt(rainbowAngle(1,s.w),1)+'°':'선택 파장 '+s.w+' nm · '+fmt(rho,1)+'°',GOLD,12,'center',true);
+}
+function rainbowStrip(s,dual,B,H){
+ rect(0,0,B,H,'#101f31','#38516a');const x=15,y=19,w=B-30,h=19,X=a=>x+(a-380)/400*w;
+ for(let j=0;j<200;j++){const a=380+j*2;rect(X(a),y,w/200+.4,h,rainbowColor(a+1))}
+ const sx=X(s.w);line([sx,y-5],[sx,y+h+3],WHITE,1.5);
+ for(const a of [380,480,580,680,780])txt(X(a),y+h+13,a,MUTED,10,a===380?'left':a===780?'right':'center');
+ txt(x,8,'가시광선 연속 스펙트럼 (nm)',WHITE,10);txt(B-15,8,'선택 '+s.w+' nm',GOLD,10,'right');
+ txt(B/2,H-12,dual?'1차: 보라 안쪽 · 빨강 바깥쪽 / 2차: 빨강 안쪽 · 보라 바깥쪽':'1차: 보라 안쪽 · 빨강 바깥쪽',WHITE,11,'center')
+}
+function observationDraw(i,s,p){
+ const dual=i===3, mobile=W<650,B=mobile?460:960,LH=mobile?(s.mode==='sky'?460:720):390,k=Math.min(W/B,H/LH);
+ c.save();c.translate((W-B*k)/2,(H-LH*k)/2);c.scale(k,k);
+ if(mobile){
+  if(s.mode==='sky'){
+   rainbowSky(s,p,dual,B,373);
+   c.save();c.translate(0,379);rainbowStrip(s,dual,B,81);c.restore();
+  }else{
+   rainbowSky(s,p,dual,B,350);
+   c.save();c.translate(0,356);observerDiagram(s,p,dual,B,277);c.restore();
+   c.save();c.translate(0,639);rainbowStrip(s,dual,B,81);c.restore();
+  }
+ }else{
+  const skyW=s.mode==='sky'?B:Math.round(B*.72);
+  rainbowSky(s,p,dual,skyW,308);
+  if(s.mode!=='sky'){c.save();c.translate(skyW+6,0);observerDiagram(s,p,dual,B-skyW-6,308);c.restore()}
+  c.save();c.translate(0,314);rainbowStrip(s,dual,B,76);c.restore();
+ }
+ c.restore();
+}
+const observerControls=[R('sun','태양 고도',0,65,1,8,'°'),R('w','관찰할 파장',380,780,2,550,'nm'),R('band','색띠 표시 확대 (1차 기준)',1,4,.5,3,'배'),Q('mode','화면 보기','sky',[['sky','자연 풍경'],['both','무지개 + 광선 경로'],['rays','광선 경로 강조']])];
+function observeMetrics(i,s){const dual=i===3,top0=edges[0].outer-s.sun,top1=edges[1].outer-s.sun,show=x=>x>0?fmt(x,1)+'°':'지평선 아래';return [['반태양점 고도','−'+s.sun+'°'],['1차 관측각 범위',fmt(edges[0].inner,1)+'–'+fmt(edges[0].outer,1)+'°'],['1차 최고 고도',show(top0)],['색띠 표시 배율',dual?fmt(bandFactor(0,s),1)+' / '+fmt(bandFactor(1,s),1)+'배':fmt(bandFactor(0,s),1)+'배'],...(dual?[['2차 관측각 범위',fmt(edges[1].inner,1)+'–'+fmt(edges[1].outer,1)+'°'],['2차 최고 고도',show(top1)],['암대 각폭',fmt(edges[1].inner-edges[0].outer,1)+'°']]:[['선택 파장 관측각',fmt(rainbowAngle(0,s.w),2)+'°']])]}
+
+const LAB={name:'무지개와 대기 광학',tabs:[{name:'무지개 형성 원리',controls:rc,principle:'구형 물방울에서 두 번 굴절하고 한 번 내부 반사한다.',observe:'빨강과 보라의 대표 관측각을 비교한다.',assume:'구형 물방울의 기하광학.',question:'1차 무지개 바깥쪽 색은?'},{name:'쌍무지개 형성 원리',controls:rc.map(k=>k.key==='angle'?{...k,value:72}:k),principle:'두 번 내부 반사하면 2차 무지개가 생기고 색 순서가 바뀐다.',observe:'1차와 2차의 관측각을 비교한다.',assume:'밝기와 편광 생략.',question:'2차 무지개의 색 순서는?'},{name:'실제 무지개 관찰',controls:observerControls,principle:'1차 무지개는 반태양점을 중심으로 파장마다 다른 관측각에 있는 수많은 물방울이 만드는 원호이다. 빨강이 바깥쪽이다.',observe:'태양 고도를 바꾸어 무지개 높이를 관찰하고 광선 경로 보기에서 한 파장의 물방울을 확인한다.',assume:'구형 물방울의 실제 계산 각과 표시 폭을 구분한다. 1배는 계산 각도 비례, 확대는 표시용이다.',question:'태양 고도가 높아지면 무지개가 왜 낮아질까?'},{name:'실제 쌍무지개 관찰',controls:observerControls,principle:'2차 무지개는 물방울 내부에서 두 번 반사된 빛으로 생긴다. 색 순서는 반대이며 두 무지개 사이 알렉산더의 암대가 나타난다.',observe:'태양 고도에 따른 두 원호와 암대 위치를 비교하고 선택 파장의 광선을 확인한다.',assume:'색띠 확대는 표시용이며 2차 폭은 최대 2배로 제한하여 암대가 유지되게 한다. 실제 관측각·최고 고도는 그대로이다.',question:'1차 무지개가 지평선 아래로 사라져도 2차가 일부 보일 수 있을까?'},{name:'신기루',controls:[R('grad','수직 굴절률 구배',1,100,1,25,'×10⁻⁶/m'),R('h','초기 높이',1,4,.1,2,'m'),R('angle','아래 방향 초기 각',.1,1.5,.05,.35,'°')],principle:'높이에 따른 굴절률 차이로 광선이 연속적으로 휘어진다.',observe:'구배와 입사각을 바꾸어 광선의 방향 반전을 확인한다.',assume:'선형 굴절률·2차원 적분·지면 반사 없음.',question:'뜨거운 지면에서 빛은 왜 위로 휘는가?'},{name:'하늘과 노을',controls:[R('sun','태양 고도',5,90,1,8,'°'),R('tau','550 nm 수직 광학 두께',.01,.4,.01,.22),Q('mode','보기 방식','sky',[['sky','자연 풍경'],['rays','빛의 진행 및 산란']])],principle:'레이리 산란은 λ⁻⁴에 비례하여 파란빛을 더 강하게 산란시킨다.',observe:'태양 고도를 바꾸어 실제 색 모식도와 낮·노을 비교, 파장별 직접광 투과율을 함께 관찰한다.',assume:'평면 대기 근사, 직접광 투과율 계산. 하늘의 색과 명암은 시각적 근사이며 실제 하늘의 산란 스펙트럼을 완전히 재현하지 않는다.',question:'노을에서 붉은빛이 강한 이유는?'}],draw:(i,s,p)=>i===2||i===3?observationDraw(i,s,p):atmos(i>=4?i-2:i,s,p),metrics:(i,s)=>{if(i===2||i===3)return observeMetrics(i,s);if(i>=4)i-=2;if(i<2){let q=rain(i,s.w,s.angle);return [['굴절률',fmt(q.n,4)],['굴절각',fmt(deg(q.r))+'°'],['광선 관측각',fmt(q.view)+'°'],['대표 무지개 각',fmt(rainbowAngle(i,s.w))+'°']]}if(i===2){let q=mirage(s);return [['최소 높이',fmt(q.min)+' m'],['방향 반전',q.turned?'있음':'없음'],['굴절률 구배',s.grad+' ×10⁻⁶/m'],['추적 거리',fmt(q.path[q.path.length-1][0],1)+' m']]}return [['450 nm 투과율',fmt(air(s,450).T*100,1)+'%'],['650 nm 투과율',fmt(air(s,650).T*100,1)+'%'],['상대 경로 길이',fmt(1/Math.max(.12,Math.sin(rad(s.sun))))],['550 nm 광학 두께',fmt(s.tau)]]},detail:'무지개는 스넬 법칙과 구형 경계의 반사를 계산한다. 물의 굴절률은 n=1.322+0.0031/λ² (λ는 μm)인 예시 분산식으로 실제 관측각과 약간 차이가 난다. 신기루는 n cosθ 불변량의 근사 적분이다. 대기 색은 지구 곡률, 구름, 에어로졸을 제외한 교육용 근사이다. 하늘과 노을 탭의 투과율은 T=exp(−τm), τ=τ₅₅₀(550/λ)⁴, m=1/max(0.12,sin h)로 계산한다. 태양 색은 650·550·450 nm 투과율을 RGB로 근사하고 하늘 배경과 산란 화살표는 모식 표현한다. 낮과 노을의 비교는 동일한 수직 광학 두께에서 태양 고도 70°와 5°를 적용한다. 관찰 탭은 380~780 nm의 201개 파장 표본에 대한 대표 무지개 각을 구면상의 관측 방향으로 계산하여 방위각-고도 좌표에 투영한다. 1차 밝기·2차 약한 밝기·암대는 시각적 모형이며 실제 산란 강도나 색도 측정값이 아니다. 평탄한 지평선 위에 보이는 부분만 표현한다. 측면도에서 태양은 관찰자 뒤쪽이며 광선은 물방울에서 눈으로 향한다. 색띠 확대는 바깥 경계의 실제 각을 고정하고 안쪽으로 폭을 늘리는 시각화이다. 1차는 1~4배, 2차는 1~2배이며 암대가 남도록 제한한다. 확대 모드에서 선택 파장의 점선·물방울은 실제 각도에 위치하므로 확대된 색띠 위치와 다를 수 있다. 실제 관측각에 따른 색 위치를 비교하려면 1배로 설정한다.'};
+
+return LAB})();
+
+const rgbControls=[R('red','빨강 광원 상대 세기',0,100,1,100,'%'),R('green','초록 광원 상대 세기',0,100,1,100,'%'),R('blue','파랑 광원 상대 세기',0,100,1,100,'%')];
+function rgbValue(s){return [s.red,s.green,s.blue].map(v=>Math.round(255*(v/100)**(1/2.2)))}
+function mixDraw(s,p){panels('빛의 삼원색 · 가산 혼합','혼합 결과와 광원 세기',()=>{const centers=[[184,137],[276,137],[230,218]],rr=96,vals=[s.red,s.green,s.blue];rect(18,40,424,284,'#000000','#4c657c');c.save();c.globalCompositeOperation='lighter';for(let j=0;j<3;j++){let v=Math.round(255*(vals[j]/100)**(1/2.2)*(.3+.7*p)),ch=[0,0,0];ch[j]=v;circ(...centers[j],rr,'rgb('+ch.join(',')+')')}c.restore();txt(111,62,'R','#fca0a0',14,'center',true);txt(347,62,'G','#9bf2bd',14,'center',true);txt(230,310,'B','#a4bcff',14,'center',true);txt(230,348,'빨강+초록+파랑 → 가산 혼합',WHITE,13,'center',true);txt(230,367,'광원 세기 0~100% · 화면 RGB 모형',MUTED,11,'center')},()=>{let rgb=rgbValue(s);rect(50,48,360,125,'rgb('+rgb.join(',')+')','#9db2c9');txt(230,192,'혼합색 RGB ('+rgb.join(', ')+')',WHITE,13,'center',true);const vals=[s.red,s.green,s.blue],col=['#ef6363','#54d68a','#669dff'];for(let j=0;j<3;j++){let y=223+j*39;txt(19,y+7,['R','G','B'][j],col[j],14);rect(45,y,330,15,'#25364a');rect(45,y,330*vals[j]/100,15,col[j]);txt(438,y+7,vals[j]+'%',WHITE,12,'right')}txt(230,365,'물감의 감산 혼합과 구별',MUTED,12,'center')})}
+const rgbTab={name:'빛의 삼원색',controls:rgbControls,principle:'빨강·초록·파랑 빛의 가산 혼합으로 다양한 색을 표현한다. 세 광원이 같은 최대 세기이면 이 모형에서 흰색이다.',observe:'세 광원의 세기를 각각 바꾸고 겹친 영역의 색을 관찰한다.',assume:'이상화된 RGB 디스플레이의 색채 모형. 실제 스펙트럼과 색도는 다를 수 있다.',question:'노란빛처럼 보이는 색을 만들려면 어떤 두 광원을 켜야 할까?'};
+const groups=[prismLAB,atmosLAB],entries=groups.flatMap(g=>g.tabs.map((t,j)=>({g,j,t})));
+const LAB={name:'빛의 분산과 대기 광학 통합 실험실',tabs:[...entries.map(e=>e.t),rgbTab],draw:(i,s,p)=>{if(i===entries.length)return mixDraw(s,p);const e=entries[i];e.g.draw(e.j,s,p)},metrics:(i,s)=>{if(i===entries.length)return [['빨강',s.red+'%'],['초록',s.green+'%'],['파랑',s.blue+'%'],['화면 RGB',rgbValue(s).join(', ')]];const e=entries[i];return e.g.metrics(e.j,s)},detail:groups.map(g=>g.detail).join(' · ')+' 빛의 삼원색은 화면 RGB 가산 혼합 모형이며 단색광의 파장과 RGB 혼합색은 같은 개념이 아니다.'};
+</script><script id="optics-engine">let W=980,H=460,tab=0,running=false,last=null;const states=LAB.tabs.map(t=>Object.fromEntries(t.controls.map(k=>[k.key,k.value]))),progress=LAB.tabs.map(()=>0);
+function draw(){if(tab===LAB.tabs.length)return;c.clearRect(0,0,W,H);LAB.draw(tab,states[tab],progress[tab])}
+function resize(){const r=cv.getBoundingClientRect();if(!r.width||!r.height)return;W=r.width;H=r.height;const d=Math.min(window.devicePixelRatio||1,2);cv.width=Math.round(W*d);cv.height=Math.round(H*d);c.setTransform(d,0,0,d,0,0);draw()}
+function stop(){running=false;last=null}
+function controls(){const root=$('controls');root.replaceChildren();const t=LAB.tabs[tab],s=states[tab];for(const k of t.controls){const row=document.createElement('div');row.className='control';const l=document.createElement('label');l.htmlFor='ctl_'+k.key;l.textContent=k.label;row.append(l);const el=document.createElement(k.options?'select':'input');el.id='ctl_'+k.key;if(k.options){for(const [v,t] of k.options){const o=document.createElement('option');o.value=v;o.textContent=t;el.append(o)}}else{el.type='range';el.min=k.min;el.max=k.max;el.step=k.step;const out=document.createElement('output');out.id='out_'+k.key;l.append(out)}el.value=s[k.key];row.append(el);root.append(row);el.addEventListener(k.options?'change':'input',()=>{s[k.key]=k.options?el.value:+el.value;stop();progress[tab]=1;refresh();draw()})}}
+function refresh(){if(tab===LAB.tabs.length)return;const t=LAB.tabs[tab],s=states[tab],p=progress[tab];for(const k of t.controls){const e=$('out_'+k.key);if(e)e.textContent=s[k.key]+(k.unit?' '+k.unit:'')}const data=LAB.metrics(tab,s,p);$('metrics').replaceChildren();for(const [k,v] of data){const b=document.createElement('div');b.className='metric';const small=document.createElement('small'),strong=document.createElement('strong');small.textContent=k;strong.textContent=v;b.append(small);b.append(strong);$('metrics').append(b)}$('status').textContent=running?'진행 중 '+Math.round(p*100)+'%':p===1?'완료 · 결과 유지':p>0?'일시정지':'준비';$('play').textContent=p===1?'▶ 다시 실행':p>0?'▶ 계속':'▶ 시작';$('pause').disabled=!running}
+function selectTab(i,focus=false){stop();tab=i;const n=LAB.tabs.length;document.querySelectorAll('#tabs button').forEach((b,j)=>{b.setAttribute('aria-selected',String(i===j));b.tabIndex=i===j?0:-1;if(i===j){if(focus)b.focus();b.scrollIntoView({block:'nearest',inline:'nearest'})}});$('experiment').hidden=i===n;$('learn').hidden=i!==n;$(i===n?'learn':'experiment').setAttribute('aria-labelledby','tab_'+i);$('experiment').classList.toggle('observation',i===5||i===6||i===8);if(i===n)return;const t=LAB.tabs[i];$('title').textContent=t.name;$('principle').textContent=t.principle;$('observe').textContent=t.observe;$('assume').textContent=t.assume;$('question').textContent='탐구 질문 · '+t.question;$('info').textContent='표시된 수치는 이상적 모형의 계산값입니다. 광선 재생 속도와 무지개 밝기는 교육용 표현입니다.';controls();refresh();resize()}
+function boot(){document.title=LAB.name+' · 빛과 광학';$('labname').textContent=LAB.name;const learn=$('learn');const h=document.createElement('h2');h.textContent='개념 설명 · '+LAB.name;learn.append(h);for(const t of LAB.tabs){const a=document.createElement('article'),h=document.createElement('h3'),p=document.createElement('p'),q=document.createElement('p'),r=document.createElement('p');h.textContent=t.name;p.textContent=t.principle;q.textContent=t.observe;r.textContent='가정 및 한계: '+t.assume;a.append(h);a.append(p);a.append(q);a.append(r);learn.append(a)}const note=document.createElement('p');note.textContent=LAB.detail;learn.append(note);[...LAB.tabs.map(t=>t.name),'개념 설명'].forEach((name,i)=>{const b=document.createElement('button');b.id='tab_'+i;b.textContent=name;b.type='button';b.setAttribute('role','tab');b.setAttribute('aria-controls',i===LAB.tabs.length?'learn':'experiment');b.onclick=()=>selectTab(i);b.onkeydown=e=>{const n=LAB.tabs.length+1;if(['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();selectTab(e.key==='Home'?0:e.key==='End'?n-1:(i+(e.key==='ArrowRight'?1:n-1))%n,true)}};$('tabs').append(b)});$('play').onclick=()=>{if(tab===LAB.tabs.length)return;if(progress[tab]===1)progress[tab]=0;running=true;last=null;refresh();draw()};$('pause').onclick=()=>{stop();refresh()};$('reset').onclick=()=>{stop();progress[tab]=0;states[tab]=Object.fromEntries(LAB.tabs[tab].controls.map(k=>[k.key,k.value]));progress[tab]=1;controls();refresh();draw()};if(typeof ResizeObserver!=='undefined')new ResizeObserver(resize).observe(cv);else window.addEventListener('resize',resize);document.addEventListener('visibilitychange',()=>last=null);progress.fill(1);selectTab(0);requestAnimationFrame(frame)}
+let lastUI=0;function frame(now){if(running&&tab!==LAB.tabs.length){const dt=last===null?0:Math.min(.05,Math.max(0,(now-last)/1000));last=now;progress[tab]=Math.min(1,progress[tab]+dt/4);if(progress[tab]===1)stop();draw();if(!running||now-lastUI>120){refresh();lastUI=now}}requestAnimationFrame(frame)}
+boot();$('full').onclick=()=>{if(document.fullscreenElement)document.exitFullscreen?.();else if(document.documentElement.requestFullscreen)document.documentElement.requestFullscreen().catch(()=>{});};</script><footer style="text-align:center;font-size:11px;color:#b7c9dc;padding:6px">© 2026 WiseWhisper 온라인 과학실험실 · 교육·비영리 이용 허용 · 저작권 표시 삭제·무단 공개 재배포·상업적 이용 금지 · <a href="https://wisewhisper.github.io/">원본 사이트</a></footer></body></html>
