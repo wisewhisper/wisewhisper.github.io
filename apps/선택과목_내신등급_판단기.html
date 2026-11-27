@@ -27,4 +27,8 @@ const tabButtons=[...document.querySelectorAll('[data-tab]')];
 function selectTab(button){tabButtons.forEach(b=>{const active=b===button;b.setAttribute('aria-selected',String(active));b.tabIndex=active?0:-1});document.querySelectorAll('[data-panel]').forEach(p=>p.classList.toggle('active',p.dataset.panel===button.dataset.tab))}
 tabButtons.forEach((b,i)=>{b.onclick=()=>selectTab(b);b.onkeydown=e=>{let next;if(e.key==='ArrowRight')next=(i+1)%3;if(e.key==='ArrowLeft')next=(i+2)%3;if(e.key==='Home')next=0;if(e.key==='End')next=2;if(next!==undefined){e.preventDefault();selectTab(tabButtons[next]);tabButtons[next].focus()}}});
 $('toggleInputs').onclick=()=>{const collapsed=document.querySelector('.controls').classList.toggle('collapsed');$('toggleInputs').textContent=collapsed?'입력 펼치기':'입력 접기';$('toggleInputs').setAttribute('aria-expanded',String(!collapsed))};render();
-</script></body></html>
+</script>
+<!-- WiseWhisper catalogue navigation -->
+<a id="ww-catalogue-return" href="../index.html?unit=09_%EC%9E%AC%EB%AF%B8%EC%9E%88%EB%8A%94_%EC%96%B4%ED%94%8C%EB%93%A4#catalogue" aria-label="목록으로 돌아가기" style="position:fixed;bottom:calc(10px + env(safe-area-inset-bottom,0px));right:calc(10px + env(safe-area-inset-right,0px));z-index:100000;display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 13px;border:1px solid #8298a8;border-radius:10px;background:#183344;color:#fff;font:700 13px/1.3 system-ui,sans-serif;text-decoration:none;box-shadow:0 3px 12px #0005;white-space:nowrap">← 목록으로 돌아가기</a>
+<script src="../catalogue-return.js?v=20261127-nav1"></script>
+</body></html>

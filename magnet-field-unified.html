@@ -44,4 +44,8 @@ function extraControls(){if(mode===5){choice('pieces','분할 개수',[[1,'분�
 function extraMetric(){let label,metric,detail,note;if(mode===5){label='분할 후 자기극';metric=s.pieces+' N극 · '+s.pieces+' S극';detail='조각당 자기 모멘트 '+(2/s.pieces).toFixed(2)+' A·m²';note='균일 자화, 같은 부피의 조각 가정. 자석을 잘라도 단독 자기극은 생기지 않습니다.'}else if(mode===6){label='상대 자화 M';metric=s.rem.toFixed(2);detail='외부장 H='+s.Hext.toFixed(2)+' · '+(s.Hext===0&&Math.abs(s.rem)>1e-9?'잔류 자화 있음':Math.abs(s.rem)<1e-9?'알짜 자화 0':'자화 진행');note='정성적 이력 모형. 실제 재료의 M-H 곡선이나 보자력을 예측하지 않습니다.'}else{let k=shieldFactor(s);label='차폐 내부 자기장';metric=(s.shieldB/k).toFixed(2)+' μT';detail='외부 '+s.shieldB+' μT · 차폐 계수 '+k.toFixed(2)+' · 감소 비율 '+(100*(1-1/k)).toFixed(1)+'%';note='무한히 긴 선형 원통형 껍질에 축과 수직인 균일 정자기장. 끝 효과·포화·구멍 제외.'}$('metricLabel').textContent=label;$('metric').textContent=metric;$('detail').textContent=detail;$('model').textContent=note}
 
 new ResizeObserver(resize).observe(c);select(0);
-</script></body></html>
+</script>
+<!-- WiseWhisper catalogue navigation -->
+<a id="ww-catalogue-return" href="index.html?unit=07_%EC%9E%90%EA%B8%B0%EC%99%80_%EC%A0%84%EC%9E%90%EA%B8%B0%EC%9C%A0%EB%8F%84#catalogue" aria-label="목록으로 돌아가기" style="position:fixed;bottom:calc(10px + env(safe-area-inset-bottom,0px));right:calc(10px + env(safe-area-inset-right,0px));z-index:100000;display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 13px;border:1px solid #8298a8;border-radius:10px;background:#183344;color:#fff;font:700 13px/1.3 system-ui,sans-serif;text-decoration:none;box-shadow:0 3px 12px #0005;white-space:nowrap">← 목록으로 돌아가기</a>
+<script src="catalogue-return.js?v=20261127-nav1"></script>
+</body></html>
