@@ -73,8 +73,8 @@ const defaults=()=>({I:3,r:10,R:10,N:20,L:40,B:.4,f:220,amp:.6,volume:30,motorSp
 const defs=[['I','전류 I',-6,6,.5,' A'],['r','측정 거리 r',5,25,1,' cm'],['R','코일 반지름 R',5,20,1,' cm'],['N','감은 수 N',10,60,5,' 회'],['L','코일 길이 L',20,70,5,' cm'],['B','외부 자기장 B',.1,1,.1,' T'],['f','실제 소리 주파수',80,800,10,' Hz'],['amp','신호 진폭',0,1,.05,''],['volume','소리 음량',0,100,1,' %'],['motorSpeed','회전 관찰 속도',.2,3,.2,' 배'],['slow','화면 느린 재생',20,200,10,' 배']];
 function controls(){let keys=mode===0?['I','r']:mode===1?['I','R']:mode===2?['I','N','L']:mode===3?['I','B','motorSpeed']:['amp','f','B','volume','slow'];$('#controls').innerHTML=keys.map(k=>{let d=defs.find(a=>a[0]===k);return `<div class="control"><label for="${k}">${d[1]}<output id="out_${k}">${s[k]}${d[5]}</output></label><input type="range" id="${k}" min="${d[2]}" max="${d[3]}" step="${d[4]}" value="${s[k]}"></div>`}).join('');keys.forEach(k=>$('#'+k).oninput=e=>{s[k]=+e.target.value;$('#out_'+k).textContent=s[k]+defs.find(a=>a[0]===k)[5];dirty=true;updateAudio();updateText()});$('#audio').style.display=mode===4?'block':'none';$('#reverse').style.display=mode===4?'none':'';$('#play').style.display=mode<3?'none':'';}
 names.forEach((name,i)=>{let b=document.createElement('button');b.textContent=name;b.onclick=()=>setMode(i);if(i<3||i>=5)$('.modes').append(b)});
-function setMode(i){if(i===5||i===6){mode=i===5?2:0;setMode(mode);openExtra(i);return}closeExtra();mode=i;running=false;$('#play').textContent='▶ 시작';speakerCycles=0;$('#viewtools').style.display=i<3?'flex':'none';time=0;angle=.55;dirty=true;stopAudio();document.querySelectorAll('.modes button').forEach((b,j)=>b.classList.toggle('active',i===j));controls();updateText()}
-document.querySelectorAll('[data-page]').forEach(b=>b.onclick=()=>{page=b.dataset.page;document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===page));document.querySelectorAll('[data-page]').forEach(q=>q.classList.toggle('active',q===b));if(page!=='lab')stopAudio();dirty=true;resize()});
+function setMode(i){if(i===5||i===6){mode=i===5?2:0;setMode(mode);openExtra(i);return}closeExtra();mode=i;running=false;$('#play').textContent='▶ 시작';speakerCycles=0;$('#viewtools').style.display=i<3?'flex':'none';time=0;angle=.55;dirty=true;stopAudio();document.querySelectorAll('.modes button').forEach((b,j)=>b.classList.toggle('active',b.textContent===names[i]));controls();updateText()}
+document.querySelectorAll('[data-page]').forEach(b=>b.onclick=()=>{page=b.dataset.page;document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===page));document.querySelectorAll('[data-page]').forEach(q=>q.classList.toggle('active',q===b));if(page!=='lab')stopAudio();dirty=true;resize();if(page==='lab'&&extraPaint)requestAnimationFrame(extraPaint)});
 $('#reverse').onclick=()=>{s.I=-s.I;dirty=true;controls();updateText()};$('#reset').onclick=()=>{s=defaults();time=0;speakerCycles=0;angle=.55;running=false;$('#play').textContent='▶ 시작';stopAudio();dirty=true;controls();updateText()};$('#play').onclick=()=>{running=!running;$('#play').textContent=running?'❚❚ 일시정지':'▶ 재생';if(!running)stopAudio();updateText()};
 function stopAudio(){audioRequest++;if(osc){osc.stop();osc.disconnect();osc=null}sound=false;$('#audio').textContent='소리 켜기'}
 function updateAudio(){if(osc){$('#audio').textContent='소리 끄기 · '+s.f+' Hz';osc.frequency.setTargetAtTime(s.f,ac.currentTime,.02);gain.gain.setTargetAtTime(s.amp*s.B*s.volume/100*.25,ac.currentTime,.02)}}
@@ -150,10 +150,10 @@ seg(-.012+dx,-.078,-.012+dx,-.22,'#cc7845',2);seg(.042+dx,-.078,.042+dx,-.22,'#c
 for(let k=0;k<3;k++){let p=P(.31+k*.035,0);ctx.beginPath();ctx.ellipse(...p,sc*(.015+k*.008),sc*(.07+k*.025),0,-1,1);ctx.strokeStyle='#8dbcd1';ctx.lineWidth=2;ctx.stroke()}
 text('영구자석·철제 요크 (고정)',...P(-.10,.205),'#506f86',14);text('보이스코일 (왕복)',...P(.025,-.183),'#a56736',13);text('진동판',...P(.27,.215),'#506f86',15);text('공기의 진동 → 소리',...P(.29,-.24),'#3c86a2',13);
 let yy=H*.86;line(25,yy,W-25,yy,'#bfd0df');ctx.beginPath();for(let q=0;q<W-50;q++){let y=yy-20*A*Math.sin(phase+q/(W-50)*Math.PI*2*s.f*.01);q?ctx.lineTo(25+q,y):ctx.moveTo(25+q,y)}ctx.strokeStyle='#d46e4a';ctx.lineWidth=2;ctx.stroke();text('단면 구조 · 자석은 고정, 코일과 진동판은 함께 이동',W/2,25,'#59738b',13);text('화면 초당 '+(s.f/s.slow).toFixed(1)+'회 · 실제 소리 '+s.f+' Hz · '+s.slow+'배 느린 재생',W/2,H-14,'#59738b',12);text('전류 파형 · 현재부터 실제 시간 10 ms',W/2,yy-31,'#9e6842',12);for(let k=0;k<=2;k++){let xx=25+(W-50)*k/2;line(xx,yy-4,xx,yy+4,'#a5b8c8',1);text(k*5+' ms',xx,yy+20,'#7890a5',11)}}
-function frame(t){let dt=Math.min((t-last)/1000||0,.04);last=t;if(running&&page==='lab'){time+=dt;if(mode===4)speakerCycles=(speakerCycles+dt*s.f/s.slow)%1;if(mode===3&&s.I!==0)angle-=dt*Math.sign(s.I)*1.1*s.motorSpeed}if(page==='lab'){ctx.clearRect(0,0,W,H);const bg=ctx.createLinearGradient(0,0,W,H);bg.addColorStop(0,'#132f47');bg.addColorStop(1,'#08182a');ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);ctx.strokeStyle='#ffffff09';ctx.lineWidth=1;for(let u=0;u<W;u+=42){ctx.beginPath();ctx.moveTo(u,0);ctx.lineTo(u,H);ctx.stroke()}for(let v=0;v<H;v+=42){ctx.beginPath();ctx.moveTo(0,v);ctx.lineTo(W,v);ctx.stroke()}if(mode<3)drawField();else if(mode===3)drawMotor();else drawSpeaker()}requestAnimationFrame(frame)}
+function frame(t){let dt=Math.min((t-last)/1000||0,.04);last=t;if(running&&page==='lab'){time+=dt;if(mode===4)speakerCycles=(speakerCycles+dt*s.f/s.slow)%1;if(mode===3&&s.I!==0)angle-=dt*Math.sign(s.I)*1.1*s.motorSpeed}if(page==='lab'&&!extra){ctx.clearRect(0,0,W,H);const bg=ctx.createLinearGradient(0,0,W,H);bg.addColorStop(0,'#132f47');bg.addColorStop(1,'#08182a');ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);ctx.strokeStyle='#ffffff09';ctx.lineWidth=1;for(let u=0;u<W;u+=42){ctx.beginPath();ctx.moveTo(u,0);ctx.lineTo(u,H);ctx.stroke()}for(let v=0;v<H;v+=42){ctx.beginPath();ctx.moveTo(0,v);ctx.lineTo(W,v);ctx.stroke()}if(mode<3)drawField();else if(mode===3)drawMotor();else drawSpeaker()}requestAnimationFrame(frame)}
 // Additional field comparison modes, preserving the original numerical field model.
-let extra=null;
-function closeExtra(){if(extra){extra.remove();extra=null}$('.workspace').style.display='';}
+let extra=null,extraPaint=null;
+function closeExtra(){extraPaint=null;if(extra){extra.remove();extra=null}$('.workspace').style.display='';}
 function openExtra(which){
  $('.workspace').style.display='none';
  document.querySelectorAll('.modes button').forEach(b=>b.classList.toggle('active',b.textContent===names[which]));
@@ -168,9 +168,9 @@ function openExtra(which){
  }
  extra.querySelectorAll('input,select').forEach(e=>e.oninput=()=>{if(e.id==='gm')saved=[null,null];paint()});
  if(which===6){$('#ga').onclick=()=>{saved[0]=+$('#gic').value;paint()};$('#gb').onclick=()=>{saved[1]=+$('#gic').value;paint()}}
- requestAnimationFrame(paint);
+ extraPaint=paint;requestAnimationFrame(paint);
 }
-window.addEventListener('resize',()=>{if(extra){const i=extra.querySelector('#gm')?6:5;const e=extra.querySelector('input');if(e)e.dispatchEvent(new Event('input'))}});
+window.addEventListener('resize',()=>{if(extraPaint)extraPaint()});
 
 setMode(0);resize();requestAnimationFrame(frame);
 </script></body></html>
