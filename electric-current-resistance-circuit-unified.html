@@ -21,7 +21,7 @@ function actualType(){return mode==='meter'?s.base:mode}
 function meterError(){return mode==='meter'?(s.amp==='parallel'?'전류계를 저항 양단에 병렬 연결하면 단락 위험이 있습니다. 가상 전원을 차단했습니다.':s.volt==='series'?'전압계를 직렬 연결하면 이상적인 전압계는 회로를 개방합니다. 가상 전원을 차단했습니다.':''):''}
 function data(){const a=meterError()?{...s,closed:false}:s;return circuit(a,actualType())}
 function micro(a,time){const I=a.sign*a.Q/a.T,q=I*clamp(time,0,a.T),drift=Math.abs(I)/(8.5e28*1.602176634e-19*a.area*1e-6);return {I,q,drift}}
-function snap(){return {type:lastExperiment==='meter'?s.base:lastExperiment,s:{...s,closed:meterError()?false:s.closed}}}
+function snap(){const type=mode==='graphs'?(graphType==='current'?'current':lastExperiment==='current'?'ohm':lastExperiment==='meter'?s.base:lastExperiment):lastExperiment==='meter'?s.base:lastExperiment;const bad=lastExperiment==='meter'&&(s.amp==='parallel'||s.volt==='series');return {type,s:{...s,closed:bad?false:s.closed}}}
 function resetRun(msg='조건 변경 · 시작을 누르세요.'){running=false;ended=false;t=0;flowTime=0;notice=msg;dirty=true}
 function changeMode(m){if(mode===m)return;mode=m;if(m==='graphs')graphType=lastExperiment==='current'?'current':'iv';else if(m!=='concept')lastExperiment=m;resetRun('준비 · 시작을 누르세요.');build()}
 for(const [id,label] of modes){const b=document.createElement('button');b.dataset.mode=id;b.textContent=label;b.setAttribute('role','tab');b.onclick=()=>changeMode(id);$('tabs').append(b)}
