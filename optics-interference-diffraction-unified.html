@@ -31,7 +31,7 @@ function params(i,s){let gr=i>=4,N=i===1?1:i===2?2:s.N;const d=gr?1/(s.g*1000):s
 const waves=[420,460,490,530,580,620,680];
 function intensity(q,x,w=q.w){return slitIntensity(x,q.L,w,q.a,q.d,q.N)}
 function spectral(q,x){let rgb=[0,0,0];for(const w of waves){let v=intensity(q,x,w*1e-9),r=spectralRGB(w);for(let k=0;k<3;k++)rgb[k]+=v*r[k]/3}return rgb}
-function beamColor(i,s,q,x){if(i===5)return 'rgb('+spectral(q,x).map(v=>Math.round(255*Math.sqrt(clamp(v,0,1)))).join(',')+')';let r=spectralRGB(s.w),v=Math.sqrt(intensity(q,x));return 'rgb('+r.map(z=>Math.round(255*z*v)).join(',')+')'}
+function beamColor(i,s,q,x,dx=0){const samples=dx?5:1;let rgb=[0,0,0];for(let j=0;j<samples;j++){let z=x+dx*((j+.5)/samples-.5);let v=i===5?spectral(q,z):spectralRGB(s.w).map(c=>c*intensity(q,z));for(let k=0;k<3;k++)rgb[k]+=v[k]/samples}return 'rgb('+rgb.map(v=>Math.round(255*Math.sqrt(clamp(v,0,1)))).join(',')+')'}
 function laser(x,y,col){let g=c.createLinearGradient(x,y-12,x,y+12);g.addColorStop(0,'#627d91');g.addColorStop(.5,'#1b2e42');g.addColorStop(1,'#839cad');rect(x,y-12,52,24,g,'#9db8cc');circ(x+52,y,5,col);rect(x+10,y+13,33,7,'#34495c')}
 function waveDraw(i,s,p){const a=rad(s.phase),r=(1+Math.cos(a))/2;panels('두 파동의 위상과 합성','위상차와 상대 세기',()=>{for(let j=0;j<3;j++){const y=85+j*104;line([20,y],[440,y],MUTED,1,[4,4]);let pts=[];for(let k=0;k<=320;k++){const t=k/320*4*PI-p*2*PI,yy=j===0?Math.sin(t):j===1?Math.sin(t+a):Math.sin(t)+Math.sin(t+a);pts.push([20+k/320*420,y-24*yy])}poly(pts,[GOLD,BLUE,MINT][j],2);txt(22,y-41,['파동 A','파동 B','합성 파동'][j],[GOLD,BLUE,MINT][j],12)}txt(230,366,'같은 진폭·진동수 · 합성 진폭 '+fmt(2*Math.abs(Math.cos(a/2)),2)+' A',MUTED,12,'center')},()=>{plot(x=>(1+Math.cos(rad(x)))/2,0,360,0,1,'위상차 (°)','상대 세기',MINT,[{x:s.phase,y:r}]);txt(230,367,'I/Imax = cos²(Δφ/2)',GOLD,13,'center')})}
 let probeGeo=null;
@@ -55,7 +55,7 @@ function drawSlits(i,s,p){
  rect(xe,top,19,bot-top,'#101d2a','#a3bfd3');
  // Each visible screen pixel samples several subpixels, avoiding point-sampling spikes.
  const screenGain=Math.min(1,.25+p*.75);
- for(let yy=Math.ceil(top+1);yy<bot;yy++){const x=(mid-yy)/half*q.range;c.save();c.globalAlpha=screenGain;rect(xe+1,yy,17,1,beamColor(i,s,q,x));c.restore()}
+ for(let yy=Math.ceil(top+1);yy<bot;yy++){const x=(mid-yy)/half*q.range;c.save();c.globalAlpha=screenGain;rect(xe+1,yy,17,1,beamColor(i,s,q,x,q.range/half));c.restore()}
  const yy=mid-q.x/q.range*half;line([xe-10,yy],[xe+28,yy],MINT,1.5);txt(xe+32,yy,fmt(q.x*1000,1),MINT,11);txt(xe+32,top+10,'mm',MUTED,10);txt(xs,rail-12,N+'개 · 확대',MUTED,11,'center');txt(xe,rail-12,'스크린',MUTED,11,'center');
  txt(12,sceneH-14,'장치 길이·슬릿 폭·파면 간격은 교육용 확대 모식도',MUTED,11);
  // Screen stripe and graph share exactly the same physical x coordinates.
@@ -64,7 +64,7 @@ function drawSlits(i,s,p){
  txt(graphX+12,graphY+19,'스크린 무늬 · 상대 세기',WHITE,15,'left',true);
  const sy=graphY+35,sh=Math.max(25,Math.min(48,graphH*.12));
  rect(gx,sy,gw,sh,'#05090e','#526b82');
- for(let j=0;j<Math.ceil(gw);j++){let x=(j/gw*2-1)*q.range;rect(gx+j,sy+1,1.1,sh-2,beamColor(i,s,q,x))}
+ for(let j=0;j<Math.ceil(gw);j++){let x=(j/gw*2-1)*q.range;rect(gx+j,sy+1,1.1,sh-2,beamColor(i,s,q,x,2*q.range/gw))}
  for(let j=0;j<=4;j++){let v=j/4;line([gx,Y(v)],[gx+gw,Y(v)],'#2d4359',.8);txt(gx-6,Y(v),fmt(v,2),MUTED,10,'right');let x=-q.range+j/4*2*q.range;line([X(x),gy],[X(x),gy+gh],'#25394e',.8);txt(X(x),gy+gh+15,fmt(x*1000,q.range<.1?1:0),MUTED,10,'center')}
  c.save();c.beginPath();c.rect(gx,gy,gw,gh);c.clip();
  const plotWaves=i===5?waves:[s.w];
@@ -82,12 +82,12 @@ const slitBase=[wave,Lctl,width,nearView,probe],multi=[wave,Lctl,width,gap,num,n
 const LAB={name:'빛의 간섭과 회절 통합 실험실',tabs:[
  {name:'파동의 중첩',controls:[R('phase','위상차',0,360,5,0,'°')],principle:'동일 진폭의 두 파동은 위상에 따라 보강하거나 상쇄한다.',observe:'0°, 90°, 180°에서 합성 진폭과 상대 세기를 비교한다.',assume:'동일 진폭·진동수의 결맞는 두 파동.',question:'위상차 180°이면 합성 진폭은?'},
  {name:'단일 슬릿',controls:slitBase,principle:'최소 조건 a sinθ=mλ (m≠0). 중앙 밝은 무늬는 두 첫 최소 사이이다.',observe:'슬릿 폭을 줄이고 중앙 무늬 폭을 측정한다.',assume:'프라운호퍼 회절, 균일 조명.',question:'슬릿이 좁아지면 무늬는?'},
- {name:'이중 슬릿',controls:[wave,Lctl,width,gap,nearView,probe],principle:'간섭무늬 간격 Δx≈λL/d, 단일 슬릿 회절 포락선이 곱해진다.',observe:'슬릿 간격과 폭을 따로 조절해 간격과 포락선을 비교한다.',assume:'프라운호퍼 근사, 두 슬릿의 동일 조명.',question:'슬릿 간격을 두 배로 하면 무늬 간격은?'},
+ {name:'이중 슬릿',controls:[wave,Lctl,width,gap,nearView,probe],principle:'간섭무늬 간격 Δx≈λL/d, 단일 슬릿 회절 포락선이 곱해진다. 실제 세기 최대는 포락선에 의해 약간 이동할 수 있다.',observe:'슬릿 간격과 폭을 따로 조절해 간격과 포락선을 비교한다.',assume:'프라운호퍼 근사, 두 슬릿의 동일 조명.',question:'슬릿 간격을 두 배로 하면 무늬 간격은?'},
  {name:'다중 슬릿',controls:multi,principle:'슬릿 수 N 증가 시 주극대 위치는 유지되고 폭은 감소한다.',observe:'N을 2부터 16까지 바꾸어 비교한다.',assume:'동일 폭, 동일 간격과 위상.',question:'슬릿 수만 바꾸면 주극대 위치가 달라질까?'},
  {name:'회절격자',controls:gr,principle:'주극대 d sinθ=mλ. 격자 간격은 밀도의 역수이다.',observe:'격자 밀도와 유효 슬릿 수에 따른 각도와 폭을 비교한다.',assume:'유한한 이상적 격자, 원거리 회절.',question:'격자 밀도가 커지면 회절각은?'},
  {name:'분광기',controls:gr,principle:'같은 차수에서 긴 파장의 회절각이 더 크다.',observe:'7개 파장의 무늬를 비교한다. 파장 선택은 측정 기준을 지정한다.',assume:'백색광을 7개 대표 파장으로 근사. 색 표현은 표시용.',question:'같은 차수에서 빨강과 보라 중 어느 쪽이 더 멀까?'},
  {name:'마이컬슨 간섭계',controls:[wave,R('move','거울 이동량',-2,2,.025,0,'μm'),R('phase','초기 위상차',0,360,5,0,'°')],principle:'거울이 Δx 움직이면 왕복 경로 차는 2Δx 변화한다.',observe:'거울을 λ/2 이동할 때 검출 세기의 한 주기를 확인한다.',assume:'동일 진폭, 이상적인 빔 분할기, 위상 오프셋 조절.',question:'550 nm 빛에서 한 주기당 거울 이동량은?'}
-],draw:(i,s,p)=>{probeGeo=null;if(i===0)waveDraw(i,s,p);else if(i===6)micDraw(i,s,p);else drawSlits(i,s,p)},metrics:(i,s)=>{if(i===0)return [['합성 진폭/A',fmt(2*Math.abs(Math.cos(rad(s.phase)/2)),3)],['상대 세기',fmt((1+Math.cos(rad(s.phase)))/2,3)]];if(i===6)return [['왕복 경로차 변화',fmt(2*s.move,3)+' μm'],['지나간 무늬 수',fmt(Math.abs(2*s.move*1000/s.w),2)],['상대 세기',fmt(michelson(s.w*1e-9,s.move*1e-6,rad(s.phase)),3)],['한 주기 이동',fmt(s.w/2,1)+' nm']];let q=params(i,s),z=position(1,q.w,q.N===1?q.a:q.d,q.L),min=position(1,q.w,q.a,q.L);return [['관찰 위치',fmt(q.x*1000,2)+' mm'],['선택 파장 상대 세기',fmt(intensity(q,q.x),3)],['첫 '+(q.N===1?'최소':'주극대')+' 위치',z===null?'존재 안 함':fmt(z*1000,2)+' mm'],[q.N===1?'중앙 폭':'근축 무늬 간격',q.N===1?(min===null?'—':fmt(2*min*1000,2)+' mm'):fmt(q.w*q.L/q.d*1000,3)+' mm'],['개별 폭',fmt(q.a*1e6,2)+' μm'],['슬릿 수',String(q.N)]]},
+],draw:(i,s,p)=>{probeGeo=null;if(i===0)waveDraw(i,s,p);else if(i===6)micDraw(i,s,p);else drawSlits(i,s,p)},metrics:(i,s)=>{if(i===0)return [['합성 진폭/A',fmt(2*Math.abs(Math.cos(rad(s.phase)/2)),3)],['상대 세기',fmt((1+Math.cos(rad(s.phase)))/2,3)]];if(i===6)return [['왕복 경로차 변화',fmt(2*s.move,3)+' μm'],['지나간 무늬 수',fmt(Math.abs(2*s.move*1000/s.w),2)],['상대 세기',fmt(michelson(s.w*1e-9,s.move*1e-6,rad(s.phase)),3)],['한 주기 이동',fmt(s.w/2,1)+' nm']];let q=params(i,s),z=position(1,q.w,q.N===1?q.a:q.d,q.L),min=position(1,q.w,q.a,q.L);return [['관찰 위치',fmt(q.x*1000,2)+' mm'],['선택 파장 상대 세기',fmt(intensity(q,q.x),3)],[q.N===1?'첫 최소 위치':'간섭 1차 위치',z===null?'존재 안 함':fmt(z*1000,2)+' mm'],[q.N===1?'중앙 폭':'근축 무늬 간격',q.N===1?(min===null?'—':fmt(2*min*1000,2)+' mm'):fmt(q.w*q.L/q.d*1000,3)+' mm'],['개별 폭',fmt(q.a*1e6,2)+' μm'],['슬릿 수',String(q.N)]]},
 detail:'세기 모델: I/I₀ = sinc²(πa sinθ/λ) × [sin(Nβ)/(N sinβ)]², β=πd sinθ/λ. x=L tanθ. 단일 슬릿의 최소 방향에는 밝은 광선을 그리지 않는다. 그래프·스크린은 동일한 정규화 함수로 계산하되 픽셀 해상도에 따라 매우 좁은 무늬는 일부 생략될 수 있다. 파면은 실제 파장을 확대해 표현한다. 마이컬슨 검출 세기는 (1+cos(4πΔx/λ+φ₀))/2. 실제 광속·절대 밝기·광원의 결맞음 길이는 재현하지 않는다.'};
 </script><script id="optics-engine">let W=980,H=460,tab=0,running=false,last=null;const states=LAB.tabs.map(t=>Object.fromEntries(t.controls.map(k=>[k.key,k.value]))),progress=LAB.tabs.map(()=>0);
 function draw(){if(tab===LAB.tabs.length)return;c.clearRect(0,0,W,H);LAB.draw(tab,states[tab],progress[tab])}
